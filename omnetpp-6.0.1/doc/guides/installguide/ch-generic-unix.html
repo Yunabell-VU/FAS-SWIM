@@ -1,0 +1,717 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Generic Unix &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Build Options" href="ch-build-options.html" />
+    <link rel="prev" title="OpenSUSE" href="ch-opensuse.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#installguide/ch-generic-unix" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Generic Unix </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">Installation Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../userguide/index.html" class="md-nav__link">User Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">Installation Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-intro.html" class="md-nav__link">General Information</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-windows-omnetpp.html" class="md-nav__link">Windows - Using the MinGW64 Compiler Toolchain</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-windows-omnetpp.html#windows-using-windows-subsystem-for-linux-wsl-version-2" class="md-nav__link">Windows - Using Windows Subsystem for Linux (WSL) version 2</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-macos.html" class="md-nav__link">macOS</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-supported-linux.html" class="md-nav__link">Linux</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-ubuntu.html" class="md-nav__link">Ubuntu</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-fedora.html" class="md-nav__link">Fedora 33</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-redhat.html" class="md-nav__link">Red Hat</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-opensuse.html" class="md-nav__link">OpenSUSE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Generic Unix </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Generic Unix</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#installguide-ch-generic-unix--page-root" class="md-nav__link">Generic Unix</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#dependencies" class="md-nav__link">Dependencies</a>
+        </li>
+        <li class="md-nav__item"><a href="#determining-package-names" class="md-nav__link">Determining Package Names</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#qt" class="md-nav__link">Qt</a>
+        </li>
+        <li class="md-nav__item"><a href="#mpi" class="md-nav__link">MPI</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#downloading-and-unpacking" class="md-nav__link">Downloading and Unpacking</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-and-building-omnet" class="md-nav__link">Configuring and Building OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#verifying-the-installation" class="md-nav__link">Verifying the Installation</a>
+        </li>
+        <li class="md-nav__item"><a href="#starting-the-ide" class="md-nav__link">Starting the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#optional-packages" class="md-nav__link">Optional Packages</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#akaroa" class="md-nav__link">Akaroa</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/installguide/ch-generic-unix.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-build-options.html" class="md-nav__link">Build Options</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#installguide-ch-generic-unix--page-root" class="md-nav__link">Generic Unix</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#dependencies" class="md-nav__link">Dependencies</a>
+        </li>
+        <li class="md-nav__item"><a href="#determining-package-names" class="md-nav__link">Determining Package Names</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#qt" class="md-nav__link">Qt</a>
+        </li>
+        <li class="md-nav__item"><a href="#mpi" class="md-nav__link">MPI</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#downloading-and-unpacking" class="md-nav__link">Downloading and Unpacking</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-and-building-omnet" class="md-nav__link">Configuring and Building OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#verifying-the-installation" class="md-nav__link">Verifying the Installation</a>
+        </li>
+        <li class="md-nav__item"><a href="#starting-the-ide" class="md-nav__link">Starting the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#optional-packages" class="md-nav__link">Optional Packages</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#akaroa" class="md-nav__link">Akaroa</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/installguide/ch-generic-unix.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="generic-unix">
+<h1 id="installguide-ch-generic-unix--page-root">Generic Unix<a class="headerlink" href="#installguide-ch-generic-unix--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This chapter provides additional information for installing OMNeT++ on Unix-like operating systems not specifically
+covered by this Installation Guide. The list includes FreeBSD, Solaris, and Linux distributions not covered in other
+chapters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In addition to Windows and macOS, the Simulation IDE will only work on Linux x86/arm 64-bit platforms. Other operating
+systems (FreeBSD, Solaris, etc.) and architectures may still be used as simulation platforms, without the IDE.</p>
+</div>
+</section>
+<section id="dependencies">
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The following packages are required for OMNeT++ to work:</p>
+<dl class="simple">
+<dt>build-essential, GNU make, gcc, g++, bison (3.0+), flex, perl, python3, xdg-utils</dt><dd><p>These packages are needed for compiling OMNeT++ and simulation models, and also for certain OMNeT++ tools to
+work.</p>
+</dd>
+</dl>
+<p>It is also recommended to install the <em>clang</em> and <em>lld</em> package as they provide faster compilation and linking.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may opt to use gcc instead of the clang compiler and/or use the system default linker instead of <em>lld</em> by setting
+the <code class="docutils literal notranslate"><span class="pre">PREFER_CLANG</span></code> and <code class="docutils literal notranslate"><span class="pre">PREFER_LLD</span></code> variables in the <em>configure.user</em> file. If you do not need the 3D
+visualization capabilities, you can disable them in the <em>configure.user</em> file, too.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The IDE requires GLIBC 2.28 version or later, so you will need at least Debian 10, RedHat 8 or Ubuntu 18.10 to run the IDE.</p>
+</div>
+<p>The following packages are strongly recommended, because their absence results in severe feature loss:</p>
+<dl class="simple">
+<dt>Qt 5.9 or later</dt><dd><p>Required by the Qtenv simulation runtime environment. You need the <em>devel</em> packages that include header files as
+well.</p>
+</dd>
+<dt>OpenSceneGraph (3.4+) and osgEarth (2.9+)</dt><dd><p>These packages will enable 3D visualization in Qtenv. You need the <em>devel</em> packages that include header files as
+well.</p>
+</dd>
+</dl>
+<p>The following packages are required if you want to take advantage of some advanced OMNeT++ features:</p>
+<dl class="simple">
+<dt>LibXML2</dt><dd><p>LibXML2 is needed for OMNeT++ to be able to DTD validate an XML file. The <em>devel</em> packages (that include the header
+files) are needed.</p>
+</dd>
+<dt>GraphViz, Doxygen</dt><dd><p>These packages are used by the NED documentation generation feature of the IDE. When they are missing, documentation
+will have less content.</p>
+</dd>
+<dt>MPI</dt><dd><p>openmpi or some other MPI implementation is required to support parallel simulation execution.</p>
+</dd>
+<dt>Akaroa</dt><dd><p>Implements Multiple Replications In Parallel (MRIP). Akaroa can be downloaded from the project’s website.</p>
+</dd>
+</dl>
+<p>The exact names of these packages may differ across distributions.</p>
+</section>
+<section id="determining-package-names">
+<h2 id="determining-package-names">Determining Package Names<a class="headerlink" href="#determining-package-names" title="Permalink to this headline">¶</a></h2>
+<p>If you have a distro unrelated to the ones covered in this Installation Guide, you need to figure out what is the
+established way of installing packages on your system, and what are the names of the packages you need.</p>
+<section id="qt">
+<h3 id="qt">Qt<a class="headerlink" href="#qt" title="Permalink to this headline">¶</a></h3>
+<p>If your platform does not have suitable Qt packages, you may still use OMNeT++ to run simulations from the command
+line. To disable the Qtenv runtime environment, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure WITH_QTENV=no
+</pre></div>
+</div>
+<p>This will prevent the build system to link with Qt libraries. It is also recommended if you are installing OMNeT++
+from a remote terminal session.</p>
+</section>
+<section id="mpi">
+<h3 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permalink to this headline">¶</a></h3>
+<p>OMNeT++ is not sensitive to the particular MPI implementation. You may use OpenMPI, or any other standards-compliant
+MPI package.</p>
+</section>
+</section>
+<section id="downloading-and-unpacking">
+<h2 id="downloading-and-unpacking">Downloading and Unpacking<a class="headerlink" href="#downloading-and-unpacking" title="Permalink to this headline">¶</a></h2>
+<p>Download OMNeT++ from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select to download
+the generic archive, <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-core.tgz</span></code>.</p>
+<p>Copy the archive to the directory where you want to install it. This is usually your home directory, <code class="docutils literal notranslate"><span class="pre">/home/&lt;you&gt;</span></code>.
+Open a terminal, and extract the archive using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvfz omnetpp-6.0.1-core.tgz
+</pre></div>
+</div>
+<p>This will create an <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> subdirectory with the OMNeT++ files in it.</p>
+</section>
+<section id="environment-variables">
+<h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>In general OMNeT++ requires that certain environment variables are set and the
+<code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/bin</span></code> directory is in the PATH. Source the <code class="docutils literal notranslate"><span class="pre">setenv</span></code>
+script to set up all these variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd omnetpp-6.0.1
+$ source setenv
+</pre></div>
+</div>
+<p>To set the environment variables permanently, edit <code class="docutils literal notranslate"><span class="pre">.profile</span></code> or <code class="docutils literal notranslate"><span class="pre">.zprofile</span></code> in your home directory and
+add a line something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="s2">"$HOME/omnetpp-6.0.1/setenv"</span> <span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">source</span> <span class="s2">"$HOME/omnetpp-6.0.1/setenv"</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use a shell other than bash, consult the man page of that shell to find out which startup file to edit, and
+how to set and export variables.</p>
+</div>
+</section>
+<section id="configuring-and-building-omnet">
+<h2 id="configuring-and-building-omnet">Configuring and Building OMNeT++<a class="headerlink" href="#configuring-and-building-omnet" title="Permalink to this headline">¶</a></h2>
+<p>In the top-level OMNeT++ directory, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script detects installed software and configuration of your system. It writes the results into the
+<code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> file, which will be read by the makefiles during the build process.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/terminal-configuration.png"><img alt="../_images/terminal-configuration.png" src="../_images/terminal-configuration.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 151 </span><span class="caption-text">Configuring OMNeT++</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there is an error during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, the output may give hints about what went wrong. Scroll up to see the
+messages. (Use Shift+PgUp; you may need to increase the scrollback buffer size of the terminal and re-run
+<code class="docutils literal notranslate"><span class="pre">./configure</span></code>.) The script also writes a very detailed log of its operation into <code class="docutils literal notranslate"><span class="pre">config.log</span></code> to help track down
+errors. Since <code class="docutils literal notranslate"><span class="pre">config.log</span></code> is very long, it is recommended that you open it in an editor and search for phrases
+like <em>error</em> or the name of the package associated with the problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script tries to build and run small test programs that are using specific libraries or features of
+the system. You can check the <code class="docutils literal notranslate"><span class="pre">config.log</span></code> file to see which test program has failed and why. In most cases the
+problem is that the script cannot figure out the location of a specific library. Specifying the include file or
+library location in the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file and then re-running the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script usually solves the
+problem.</p>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">./configure</span></code> has finished, you can compile OMNeT++. Type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/terminal-make.png"><img alt="../_images/terminal-make.png" src="../_images/terminal-make.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 152 </span><span class="caption-text">Building OMNeT++</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To take advantage of multiple processor cores, add the <code class="docutils literal notranslate"><span class="pre">-j8</span></code> option (for 8 cores) to the <code class="docutils literal notranslate"><span class="pre">make</span></code> command line.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The build process will not write anything outside its directory, so no special privileges are needed.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The make command will seemingly compile everything twice. This is because both debug and optimized versions of the
+libraries are built. If you only want to build one set of the libraries, specify <code class="docutils literal notranslate"><span class="pre">MODE=debug</span></code> or <code class="docutils literal notranslate"><span class="pre">MODE=release</span></code>:</p>
+</div>
+</section>
+<section id="verifying-the-installation">
+<h2 id="verifying-the-installation">Verifying the Installation<a class="headerlink" href="#verifying-the-installation" title="Permalink to this headline">¶</a></h2>
+<p>You can now verify that the sample simulations run correctly. For example, the aloha simulation is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the Qtenv environment. You should see nice gui windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2 id="starting-the-ide">Starting the IDE<a class="headerlink" href="#starting-the-ide" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The IDE is supported only on 64-bit versions of Windows, macOS and Linux.</p>
+</div>
+<p>You can run the IDE by typing the following command in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/ide-initial.png"><img alt="../_images/ide-initial.png" src="../_images/ide-initial.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 153 </span><span class="caption-text">The Simulation IDE</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>If you would like to be able to access the IDE from the application launcher or via a desktop shortcut, run one or both
+of the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install-menu-item
+$ make install-desktop-icon
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above commands assume that your system has the <code class="docutils literal notranslate"><span class="pre">xdg</span></code> commands, which most modern distributions do.</p>
+</div>
+</section>
+<section id="optional-packages">
+<h2 id="optional-packages">Optional Packages<a class="headerlink" href="#optional-packages" title="Permalink to this headline">¶</a></h2>
+<section id="akaroa">
+<h3 id="akaroa">Akaroa<a class="headerlink" href="#akaroa" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to use Akaroa, it must be downloaded, compiled, and installed manually before installing OMNeT++.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of version 2.7.9, Akaroa only supports Linux and Solaris.</p>
+</div>
+<p>Download Akaroa 2.7.9 from: <a class="reference external" href="http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml">http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml</a></p>
+<p>Extract it into a temporary directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xfz akaroa-2.7.9.tar.gz
+</pre></div>
+</div>
+<p>Configure, build and install the Akaroa library. By default, it will be installed into the <code class="docutils literal notranslate"><span class="pre">/usr/local/akaroa</span></code>
+directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make
+$ sudo make install
+</pre></div>
+</div>
+<p>Go to the OMNeT++ directory, and (re-)run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script. Akaroa will be automatically detected if you
+installed it to the default location.</p>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="ch-opensuse.html" title="OpenSUSE"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> OpenSUSE </span>
+              </div>
+            </a>
+          
+          
+            <a href="ch-build-options.html" title="Build Options"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Build Options </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

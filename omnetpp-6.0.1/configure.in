@@ -1,0 +1,1315 @@
+# NOTE1: to do a proper Win64 cross compile from Linux use ./configure --host=x86_64-w64-mingw32
+#
+# NOTE2: $build refers to the platform where this script is running
+#        $host refers to the platform where the final code will run
+
+dnl Process this file with autoconf to produce a configure script.
+
+dnl
+dnl OPP_CHECK_LIB(      -- macro to check availability of a library
+dnl   $1: LIBRARY-NAME, -- descriptive name (only for printout)
+dnl   $2: HEADER,       -- optional: header file to #include
+dnl   $3: FUNCTION,     -- optional: function WITH ARG LIST, e.g. floor(0.5)
+dnl   $4: CFLAGS,       -- optional: compiler flags
+dnl   $5: LDFLAGS,      -- optional: linker flags
+dnl   $6: RESULT-VAR    -- will contain "yes" or "no"
+dnl   $7: ACTION-IF-FOUND
+dnl   $8: ACTION-IF-NOT-FOUND
+dnl )
+dnl
+AC_DEFUN(OPP_CHECK_LIB,[
+   save_CXXFLAGS=$CXXFLAGS
+   save_LIBS=$LIBS
+
+   CXXFLAGS="$4"
+   LIBS="$5"
+
+   AC_MSG_CHECKING(for $1 with CFLAGS="$4" LIBS="$5")
+
+   AC_LINK_IFELSE(
+     [AC_LANG_PROGRAM([[#include <$2>]], [[$3;]])],
+     [AC_MSG_RESULT(yes); $6=yes; $7],
+     [AC_MSG_RESULT(no); $6=no; $8])
+
+   CXXFLAGS=$save_CXXFLAGS
+   LIBS=$save_LIBS
+])
+
+dnl
+dnl Same as OPP_CHECK_LIB(), but also tries to run the program (uses
+dnl AC_RUN_IFELSE instead of AC_LINK_IFELSE).
+dnl
+dnl OPP_CHECK_AND_RUN_LIB(      -- macro to check availability of a library
+dnl   $1: LIBRARY-NAME, -- descriptive name (only for printout)
+dnl   $2: HEADER,       -- optional: header file to #include
+dnl   $3: FUNCTION,     -- optional: function WITH ARG LIST, e.g. floor(0.5)
+dnl   $4: CFLAGS,       -- optional: compiler flags
+dnl   $5: LDFLAGS,      -- optional: linker flags
+dnl   $6: RESULT-VAR    -- will contain "yes" or "no"
+dnl   $7: ACTION-IF-FOUND
+dnl   $8: ACTION-IF-NOT-FOUND
+dnl )
+dnl
+AC_DEFUN(OPP_CHECK_AND_RUN_LIB,[
+   save_CXXFLAGS=$CXXFLAGS
+   save_LIBS=$LIBS
+
+   CXXFLAGS="$4"
+   LIBS="$5"
+
+   AC_MSG_CHECKING(for $1 with CFLAGS="$4" LIBS="$5")
+
+   AC_RUN_IFELSE(
+     [AC_LANG_PROGRAM([[#include <$2>]], [[$3;]])],
+     [AC_MSG_RESULT(yes); $6=yes; $7],
+     [AC_MSG_RESULT(no); $6=no; $8])
+
+   CXXFLAGS=$save_CXXFLAGS
+   LIBS=$save_LIBS
+])
+
+dnl
+dnl OPP_CHECK_LIB_NOLINK(      -- macro to check availability of a library
+dnl   $1: LIBRARY-NAME, -- descriptive name (only for printout)
+dnl   $2: HEADER,       -- optional: header file to #include
+dnl   $3: FUNCTION,     -- optional: function WITH ARG LIST, e.g. floor(0.5)
+dnl   $4: CFLAGS,       -- optional: compiler flags
+dnl   $5: RESULT-VAR    -- will contain "yes" or "no"
+dnl   $6: ACTION-IF-FOUND
+dnl   $7: ACTION-IF-NOT-FOUND
+dnl )
+dnl
+AC_DEFUN(OPP_CHECK_LIB_NOLINK,[
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$4"
+
+   AC_MSG_CHECKING(for $1 with CFLAGS="$4")
+
+   AC_TRY_COMPILE(
+     [#include <$2>], [$3;],
+     [AC_MSG_RESULT(yes); $5=yes; $6],
+     [AC_MSG_RESULT(no); $5=no; $7])
+
+   CXXFLAGS=$save_CXXFLAGS
+])
+
+# usage: AC_PROG_CXX_OPTION(--compiler-option, if-supported, if-unsupported)
+AC_DEFUN([AC_PROG_CXX_OPTION], [
+    AC_MSG_CHECKING([whether $CXX supports $1])
+    ac_save_CXX="$CXX"
+    CXX="$CXX $1"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],[
+        AC_MSG_RESULT([yes])
+        CXX="$ac_save_CXX"
+        $2
+    ], [
+        AC_MSG_RESULT([no])
+        CXX="$ac_save_CXX"
+        $3
+    ])
+])
+
+#
+# Autoconf initialization
+#
+AC_INIT
+
+#
+# OMNeT++/OMNEST version number
+#
+OMNETPP_PRODUCT="OMNeT++"
+OMNETPP_RELEASE=$(cat Version)
+OMNETPP_VERSION=$(cat Version | sed 's/^.*-//')
+OMNETPP_BUILDID="220831-e4f07d04b8"
+
+#
+# Edition identifier in banner: Academic / Commercial / Evaluation
+OMNETPP_EDITION="Academic Public License -- NOT FOR COMMERCIAL USE"
+
+# We'll collect in this variable the components we've detected problems with
+OPP_PROBLEM_PACKAGES=
+
+# check if 'setenv' was correctly sourced
+OMNETPP_ROOT_DIR=$(cd $(dirname "$0"); pwd)
+if test "$__omnetpp_root_dir" = "$OMNETPP_ROOT_DIR" -a -z "${PATH##*${OMNETPP_ROOT_DIR}/bin:*}" -a -z "${PYTHONPATH##*${OMNETPP_ROOT_DIR}/python*}"; then  # this uses magic substring matching with parameter expansion
+  AC_MSG_NOTICE([Environment variables (PATH and PYTHONPATH) are correctly set.])
+else
+  AC_MSG_ERROR([Before running 'configure', please use 'source setenv' to set up your environment.])
+fi
+
+# Check if configure.user exists. If not, copy the default one there.
+if test ! -f ./configure.user ; then
+  AC_MSG_WARN(['configure.user' is not present in the installation root. Creating a default version.])
+  cp ./configure.user.dist ./configure.user
+fi
+
+#----------------------
+# Read user settings (and allow override the above settings)
+#----------------------
+AC_MSG_NOTICE(Reading configure.user for your custom settings.)
+. ./configure.user
+
+# force MS-ABI / x64 compatible target if requested by the user
+if test "$USE_MS_ABI" = "yes"; then
+  CFLAGS="$CFLAGS --target=x86_64-windows-msvc"
+  CXXFLAGS="$CXXFLAGS --target=x86_64-windows-msvc"
+  LDFLAGS="$LDFLAGS --target=x86_64-windows-msvc"
+fi
+
+AC_CONFIG_SRCDIR(include/omnetpp.h)
+AC_LANG(C++)
+AC_CONFIG_AUX_DIR(src/utils)
+AC_CANONICAL_HOST()
+
+# check command line arguments and override the values set in configure.user with them
+for arg in $ac_configure_args
+do
+  stripped_arg=$(echo $arg | sed "s/^\([']\)\(.*\)\1\$/\2/g")
+  case $stripped_arg in
+    -*  ) continue ;;
+    *=* ) eval $stripped_arg ;;
+  esac
+done
+
+#------------------------------------
+# set default library suffixes. May be already defined
+# with system/arch specific values
+#------------------------------------
+A_LIB_SUFFIX=${A_LIB_SUFFIX:-".a"}
+SO_LIB_SUFFIX=${SO_LIB_SUFFIX:-".so"}
+DLL_LIB_SUFFIX=${DLL_LIB_SUFFIX:-".dll"}
+IMPLIB_SUFFIX=${IMPLIB_SUFFIX:-".dll.a"}
+IMPDEF_SUFFIX=${IMPDEF_SUFFIX:-".def"}
+EXE_SUFFIX=
+SHARED_LIB_SUFFIX='$(SO_LIB_SUFFIX)'
+LIB_PREFIX="lib"
+
+
+#----------------------
+# Default flags for values for other variables that come from configure.user.
+#----------------------
+
+#----------------------
+# Set variables to defaults if not already set.
+# Note: ${VAR:-defaultvalue} used below appears to be a POSIX syntax.
+#----------------------
+SANITIZE_FLAGS=${SANITIZE_FLAGS:- -fsanitize=leak,address,undefined}
+CFLAGS_DEBUG=${CFLAGS_DEBUG:- -O0 -Wall}
+CFLAGS_RELEASE=${CFLAGS_RELEASE:- -O3 -DNDEBUG=1 -ffp-contract=off}
+CFLAGS=${CFLAGS:-}
+DEPENDFLAGS=${DEPENDFLAGS:- -MMD -MP -MF \$@.d}
+CXXFLAGS=${CXXFLAGS:-}
+DEFINES=${DEFINES:-}
+PREFER_CLANG=${PREFER_CLANG:-yes}
+PREFER_LLD=${PREFER_LLD:-yes}
+USE_MS_ABI=${USE_MS_ABI:-no}
+WITH_QTENV=${WITH_QTENV:-yes}
+WITH_PARSIM=${WITH_PARSIM:-no}
+MSGC=${MSGC:-opp_msgc}
+NEDTOOL=${NEDTOOL:-opp_nedtool}
+LN=${LN:-ln -f}
+MKPATH=${MKPATH:-mkdir -p}
+SHLIB_POSTPROCESS=${SHLIB_POSTPROCESS:-opp_shlib_postprocess}
+JNI_LIB_SUFFIX=${JNI_LIB_SUFFIX:-'$(SHARED_LIB_SUFFIX)'}
+
+# Build shared library by default
+SHARED_LIBS=${SHARED_LIBS:-yes}
+
+# No SystemC support by default
+WITH_SYSTEMC=${WITH_SYSTEMC:-no}
+
+# No Akaroa support by default
+WITH_AKAROA=${WITH_AKAROA:-no}
+
+LDFLAG_LIBPATH=${LDFLAG_LIBPATH:--L}
+LDFLAG_INCLUDE=${LDFLAG_INCLUDE:--Wl,-u,}
+LDFLAG_LIB=${LDFLAG_LIB:--l}
+LDFLAG_IMPLIB=${LDFLAG_IMPLIB:--Wl,--out-implib,}
+LDFLAG_IMPDEF=${LDFLAG_IMPDEF:--Wl,--output-def,}
+ARFLAG_OUT=${ARFLAG_OUT:-}
+WHOLE_ARCHIVE_ON=
+WHOLE_ARCHIVE_OFF=
+
+#----------------------
+# Check compiler
+#----------------------
+
+if test "$TOOLCHAIN" = "mingw"; then
+    cc_candidates="i586-mingw32msvc-gcc"
+    cxx_candidates="i586-mingw32msvc-g++"
+else
+    # icc, icpc: Intel compiler (further ones: Sun Studio: cxx, IBM: xlC)
+    cc_candidates="icc gcc clang cc xlc"
+    cxx_candidates="icpc g++ clang++ clang c++ cxx xlC"
+    if test "$PREFER_CLANG" = "yes"; then
+      # if we prefer clang over gcc put it at the beginning so it will be detected first
+      cc_candidates="clang $cc_candidates"
+      cxx_candidates="clang++ $cxx_candidates"
+    fi
+fi
+
+# the below macros should be present only ONCE in the whole file (otherwise bad things will happen)
+AC_PROG_CC($cc_candidates)
+AC_PROG_CXX($cxx_candidates)
+
+AC_CHECK_PROG(tmp_CXX, $CXX, $CXX, not found)
+if test "$tmp_CXX" = "not found"; then
+   OPP_PROBLEM_PACKAGES="$OPP_PROBLEM_PACKAGES g++"
+   AC_MSG_ERROR([No C++ compiler found -- one is required to build OMNeT++/OMNEST, and also for model development.])
+fi
+
+
+#------------------------------------
+# check whether compiler supports c++14 mode by default and try to enforce if it does not
+#------------------------------------
+AC_MSG_CHECKING([for c++14 support])
+AC_COMPILE_IFELSE(
+     [AC_LANG_PROGRAM([[
+      #if __cplusplus < 201402L
+      #error
+      #endif]])],
+     [AC_MSG_RESULT(yes)],
+     [CXXFLAGS="-std=c++14 $CXXFLAGS";
+      AC_COMPILE_IFELSE(
+         [AC_LANG_PROGRAM([[
+          #if __cplusplus < 201402L
+          #error
+          #endif]])],
+         AC_MSG_RESULT(yes (forced by -std=c++14)),
+         AC_MSG_RESULT(no); AC_MSG_ERROR([Please adjust CXXFLAGS in configure.user to enable C++14 compilation or install a C++14-capable compiler (e.g. clang 3.4+ or gcc 6.1+)]))]
+)
+
+if test "$TOOLCHAIN" = "mingw"; then
+    AS=${AS:-i586-mingw32msvc-as}
+    AR_CR="${AR:-i586-mingw32msvc-ar} cr"
+    SHLIB_LD=${SHLIB_LD:-$CXX -shared}
+    DLLTOOL=${DLLTOOL:-i586-mingw32msvc-dlltool}
+    STRIP=${STRIP:-i586-mingw32msvc-strip}
+    RANLIB=${RANLIB:-i586-mingw32msvc-ranlib}
+else
+    if test "$CXX" = "icpc"; then
+        # disable useless warnings and 'remarks' with the Intel compiler:
+        #
+        # warning #654: overloaded virtual function "NEDElement::setAttribute" is only partially overridden
+        # warning #177: label "yyerrlab1" was declared but never referenced
+        # remark #869: parameter "node" was never referenced
+        # remark #981: operands are evaluated in unspecified order
+        # remark #279: controlling expression is constant  (occurs in unfinished cppmsggenerator.cc code)
+        # remark #1572: floating-point equality and inequality comparisons are unreliable
+        # remark #424: extra ";" ignored
+        # remark #1682: implicit conversion of a 64-bit integral type to a smaller integral type (potential portability..
+        # remark #1683: explicit conversion of a 64-bit integral type to a smaller integral type (potential portability..
+        # remark #810: conversion from "unsigned int" to "char" may lose significant bits
+        # remark #810: conversion from "long" to "double" may lose significant bits
+        # remark #1418: external definition with no prior declaration
+        # remark #1419: external declaration in primary source file
+        # remark #383: value copied to temporary, reference to temporary used
+        #
+        #CFLAGS="$CFLAGS -wd654 -wd177 -wd869 -wd981 -wd279 -wd1572 -wd424 -wd1682 -wd1683 -wd810 -wd1418 -wd1419"
+
+        # -w1 disables all remarks
+        CFLAGS_ARCH="$CFLAGS_ARCH -w1 -wd654 -wd177"
+    fi
+    AS=${AS:-${ac_tool_prefix}as}
+    AR_CR="${AR:-ar} cr"
+    if test "$PLATFORM" = "macos"; then
+        SHLIB_LD=${SHLIB_LD:-$CXX -dynamiclib}
+    else
+        SHLIB_LD=${SHLIB_LD:-$CXX -shared}
+    fi
+    DLLTOOL=${DLLTOOL:-${ac_tool_prefix}dlltool}
+    STRIP=${STRIP:-${ac_tool_prefix}strip}
+    AC_PROG_RANLIB
+fi
+
+# toolchain name: compiler ($CC) without path
+# note: doubling the brackets is needed, otherwise M4 swallows them!
+TOOLCHAIN_NAME=`echo $CC | sed 's!^.*/!!g' | sed 's![[ :]]!_!'g`
+
+#-------------------------------
+#  Figure out the host platform
+#-------------------------------
+if test "$TOOLCHAIN" = "mingw"; then
+    # cross compiling for mingw
+    mingw=yes
+    PLATFORM=win32.x86
+    EXE_SUFFIX=".exe"
+    SHARED_LIB_SUFFIX='$(DLL_LIB_SUFFIX)'
+    LDFLAGS_ARCH="$LDFLAGS_ARCH -shared-libgcc"
+else
+    case $host in
+    x86_64-*-mingw*)
+        mingw=yes
+        PLATFORM=win32
+        ARCH=x86_64
+        EXE_SUFFIX=".exe"
+        SHARED_LIB_SUFFIX='$(DLL_LIB_SUFFIX)'
+        # special values for MS ABI compatible build is selected and clang is used
+        if test "$TOOLCHAIN_NAME" = "clang" -a "$USE_MS_ABI" = "yes"; then
+            TOOLCHAIN_NAME="clang-msabi"
+            echo "checking whether we are using MS ABI compatible libraries... yes"
+            DEFINES="$DEFINES -D_MT -D_WINDOWS -D_WIN32 -DWIN32 -DWIN64 -D_USRDLL -D_WINDLL -D_DLL"
+            CFLAGS_ARCH="$CFLAGS_ARCH -Wno-deprecated-declarations -isystem /opt/visualc/include"
+            CXXFLAGS="-fcxx-exceptions"
+            LDFLAG_LIBPATH="-Wl,-libpath:"
+            LDFLAG_INCLUDE="-Wl,-include:"
+            LDFLAG_IMPLIB="-Wl,-implib:"
+            LDFLAGS_ARCH="$LDFLAGS_ARCH -Wl,-DEBUG -Wl,-libpath:/opt/visualc/lib -Wl,-nodefaultlib:libcmt -lmsvcrt -loldnames -lmsvcprt"
+            AR_CR="lib -nologo"
+            ARFLAG_OUT="-out:"
+            RANLIB="test"
+            A_LIB_SUFFIX=".lib"
+            IMPLIB_SUFFIX=".lib"
+            LIB_PREFIX=""
+        else # mingw compiler (clang or gcc) with GCC compatible ABI
+            # on MinGW dll auto importing MUST be used with shared gcc and stdc++
+            # otherwise exceptions can't be thrown across dll boundaries
+            LDFLAGS_ARCH="$LDFLAGS_ARCH -L/usr/bin"
+
+            # If we are building on windows (native compile) we have to add the /usr/lib and
+            # /usr/include directories as they are not added by default, but they are needed
+            # to properly find the LibXML2 libraries.
+            if test "$cross_compiling" = no ; then
+                CFLAGS_ARCH="$CFLAGS_ARCH -isystem /opt/mingw64/include"
+                LDFLAGS_ARCH="$LDFLAGS_ARCH -L/opt/mingw64/lib"
+            fi
+            # NOTE: if we are cross-compiling we may need to add the lib and include path
+            # to the cross-compiled Xml libs here. They should NOT reside in the default
+            # /usr/lib directory as that would interfere with the native build.
+        fi
+        ;;
+    x86_64-*-linux*)
+        PLATFORM=linux
+        ARCH=x86_64
+        ;;
+    aarch64-*-linux*)
+        PLATFORM=linux
+        ARCH=aarch64
+        ;;
+    x86_64-*-darwin*)
+        PLATFORM=macos
+        ARCH=x86_64
+        OMNETPP_TOOLS_DIR=$OMNETPP_ROOT_DIR/tools/$PLATFORM.$ARCH
+        CFLAGS_ARCH="$CFLAGS_ARCH -isystem \$(OMNETPP_TOOLS_DIR)/include"
+        CFLAGS_TOOLS_MACOSX="-isystem $OMNETPP_TOOLS_DIR/include"
+        LDFLAGS_ARCH="$LDFLAGS_ARCH -L/usr/lib -L\$(OMNETPP_TOOLS_DIR)/lib -F\$(OMNETPP_TOOLS_DIR)/lib"
+        LDFLAGS_TOOLS_MACOSX="-L$OMNETPP_TOOLS_DIR/lib -F$OMNETPP_TOOLS_DIR/lib"
+        SO_LIB_SUFFIX=".dylib"
+        JNI_LIB_SUFFIX=".jnilib"
+        ;;
+    arm-*-darwin*)
+        PLATFORM=macos
+        ARCH=aarch64
+        OMNETPP_TOOLS_DIR=$OMNETPP_ROOT_DIR/tools/$PLATFORM.$ARCH
+        CFLAGS_ARCH="$CFLAGS_ARCH -isystem \$(OMNETPP_TOOLS_DIR)/include"
+        CFLAGS_TOOLS_MACOSX="-isystem $OMNETPP_TOOLS_DIR/include"
+        LDFLAGS_ARCH="$LDFLAGS_ARCH -L/usr/lib -L\$(OMNETPP_TOOLS_DIR)/lib -F\$(OMNETPP_TOOLS_DIR)/lib"
+        LDFLAGS_TOOLS_MACOSX="-L$OMNETPP_TOOLS_DIR/lib -F$OMNETPP_TOOLS_DIR/lib"
+        SO_LIB_SUFFIX=".dylib"
+        JNI_LIB_SUFFIX=".jnilib"
+        ;;
+    *)
+        ;;
+    esac
+fi
+
+#----------------------
+# Check whether LLD linker is available and preferred as it is a much faster than the system one.
+#----------------------
+if test "$PREFER_LLD" = "yes"; then
+  AC_MSG_CHECKING(whether LLD linker is available)
+  LDFLAGS_SAVE="$LDFLAGS"
+  LDFLAGS="$LDFLAGS -fuse-ld=lld"
+  AC_LINK_IFELSE(
+     [AC_LANG_PROGRAM()],
+     [AC_MSG_RESULT(yes)],
+     [AC_MSG_RESULT(no); LDFLAGS="$LDFLAGS_SAVE"])
+fi
+
+# test if we are running on mingw using gcc as we have to force the use of shared libgcc
+if test "$mingw" = yes -a "$CC" = "gcc"; then
+  LDFLAGS_ARCH="$LDFLAGS_ARCH -shared-libgcc"
+fi
+
+#----------------------
+# check if clang is used as we want to avoid warnings from generated code
+#----------------------
+if test "$CC" = "clang"; then
+  CFLAGS_ARCH="$CFLAGS_ARCH -Wno-deprecated-register -Wno-unused-function"
+fi
+
+#----------------------
+# check and disable frame pointer omission for better debugging support
+#----------------------
+AC_PROG_CXX_OPTION(-fno-omit-frame-pointer, CFLAGS_ARCH="$CFLAGS_ARCH -fno-omit-frame-pointer")
+
+#----------------------
+# check for debugger specific debug info generation for better debugging support
+#----------------------
+AC_PROG_CXX_OPTION(-glldb, CFLAGS_DEBUG="$CFLAGS_DEBUG -glldb",
+   AC_PROG_CXX_OPTION(-ggdb3, CFLAGS_DEBUG="$CFLAGS_DEBUG -ggdb3", CFLAGS_DEBUG="$CFLAGS_DEBUG -g")
+)
+
+# if supported, generate debug info for standallone debugging (i.e. typeinfo for std:: classes)
+AC_PROG_CXX_OPTION(-fstandalone-debug, CFLAGS_DEBUG="$CFLAGS_DEBUG -fstandalone-debug",
+   AC_PROG_CXX_OPTION(-fno-limit-debug-info, CFLAGS_DEBUG="$CFLAGS_DEBUG -fno-limit-debug-info")
+)
+
+#----------------------
+# check for support of --no-as-needed  linker option. GCC 4.6 has changed not to link with a shared lib
+# if the program does not reference a symbol from the lib. The MS linker does not support this, but accept it
+# so we exclude it from testing.
+#----------------------
+if test "$TOOLCHAIN_NAME" != "clang-msabi"; then
+  AS_NEEDED_OFF=-Wl,--no-as-needed
+  AC_PROG_CXX_OPTION($AS_NEEDED_OFF, ,AS_NEEDED_OFF="")
+  AS_NEEDED_ON=-Wl,--as-needed
+  AC_PROG_CXX_OPTION($AS_NEEDED_ON, ,AS_NEEDED_ON="")
+fi
+
+#----------------------
+# check if swapcontext() call is available (used for coroutines)
+# NOTE: we should explicitly exclude MAC OS because AC_CHECK_FUNC reports that swapcontext()
+# is present, but it is uninmplemented (and deprecated) on OS X 10.6 and later. We use the
+# original 'portable' implementation on MAC.
+#----------------------
+if test "$PLATFORM" != "macos"; then
+AC_CHECK_FUNCS(swapcontext, [DEFINES="$DEFINES -DHAVE_SWAPCONTEXT"])
+fi
+#----------------------
+# Test if "-fPIC" is needed for shared libs (there's a performance penalty if we use it unnecessarily)
+#----------------------
+# To test, we try to compile the following code into a shared library:
+#      int x;
+#      int getX() {return x;}
+#
+
+AC_MSG_CHECKING(if shared libs need -fPIC)
+echo 'int x;' >conftest.cc
+echo 'int getX() {return x;}' >>conftest.cc
+fpic="x"
+if echo $CFLAGS | grep -i -- "-fPIC" >/dev/null 2>/dev/null; then
+    AC_MSG_RESULT([skip (already in CFLAGS)])
+    fpic=""
+    PIC_FLAGS=-fPIC
+fi
+if test "$fpic" = "x" && \
+   $CXX $CFLAGS -c conftest.cc >/dev/null 2>/dev/null && \
+   $SHLIB_LD $LDFLAGS -o conftest.so conftest.o >/dev/null 2>/dev/null; \
+then
+   AC_MSG_RESULT(no)
+   fpic=""
+fi
+if test "$fpic" = "x" && \
+   $CXX $CFLAGS -fPIC -c conftest.cc >/dev/null 2>/dev/null && \
+   $SHLIB_LD $LDFLAGS -fPIC -o conftest.so conftest.o >/dev/null 2>/dev/null; \
+then
+   AC_MSG_RESULT(yes)
+   fpic="-fPIC"
+fi
+if test "$fpic" = "x" && \
+   $CXX $CFLAGS -fpic -c conftest.cc >/dev/null 2>/dev/null && \
+   $SHLIB_LD $LDFLAGS -fpic -o conftest.so conftest.o >/dev/null 2>/dev/null; \
+then
+   AC_MSG_RESULT(-fpic)
+   fpic="-fpic"
+fi
+if test "$fpic" = "x"; then
+   AC_MSG_RESULT(failure)
+   AC_MSG_WARN([COULD NOT FIGURE OUT HOW TO BUILD SHARED LIBRARY -- reverting to static libs])
+   SHARED_LIBS="no"
+else
+   CFLAGS="$CFLAGS $fpic"
+   SHLIB_LD="$SHLIB_LD $fpic"
+   PIC_FLAGS="$fpic"
+fi
+rm -f conftest.*
+
+
+#----------------------
+# Test if --export-dynamic or -E linker option is accepted and/or needed
+#----------------------
+# We want to be able to dynamically load extensions into simulation executables,
+# so we need to ensure that all symbols in the executable are visible to
+# dynamically loaded libraries. However, not all linkers need or support
+# --export-dynamic.
+# Strategy: we'll compile the following program into a shared library:
+#      void function_from_main();
+#      void some_func() {func_from_main();}
+# Then we *independently* compile with the following program:
+#      #include <dlfcn.h>
+#      void func_from_main() {}
+#      int main() {return dlopen("libconftest_a.so",RTLD_NOW)==0;}
+# And we expect to be able to run the program successfully.
+#
+
+# first check if we need "-ldl" for dlopen() [Laura Marie Feeney suggests it's not needed for FreeBSD]
+OPP_CHECK_LIB(dlopen, dlfcn.h, dlopen("",0), , , ldl_not_needed, ldl="", ldl="-ldl")
+
+# then go ahead
+AC_MSG_CHECKING(if --export-dynamic linker option is supported/needed)
+echo 'void func_from_main();' >conftest_a.cc
+echo 'void some_func() {func_from_main();}' >>conftest_a.cc
+echo '#include <dlfcn.h>' >conftest_m.cc
+echo '#include <stdio.h>' >>conftest_m.cc
+echo 'void func_from_main() {}' >>conftest_m.cc
+echo 'int main() {if (dlopen("./libconftest_a.so",RTLD_NOW)!=0) return 0; printf("%s",dlerror()); return 1;}' >>conftest_m.cc
+if $CXX -c conftest_a.cc >/dev/null 2>/dev/null && \
+   $CXX -c conftest_m.cc >/dev/null 2>/dev/null && \
+   $SHLIB_LD -o libconftest_a.so conftest_a.o >/dev/null 2>/dev/null; \
+then
+   silly_ok="no"
+   # 1st try.
+   if $CXX -o conftest conftest_m.o $ldl >/dev/null 2>/dev/null; then
+      if ./conftest >/dev/null 2>/dev/null; then
+         AC_MSG_RESULT(not needed)
+         silly_ok="yes"
+      fi
+   fi
+   # 2nd try.
+   if test $silly_ok = "no" && \
+      $CXX -o conftest -Wl,--export-dynamic conftest_m.o $ldl >/dev/null 2>/dev/null; \
+   then
+      if ./conftest >/dev/null 2>/dev/null; then
+         AC_MSG_RESULT(both)
+         LDFLAGS_ARCH="$LDFLAGS_ARCH -Wl,--export-dynamic"
+         silly_ok="yes"
+      fi
+   fi
+   # no solution found
+   if test $silly_ok = "no"; then
+      AC_MSG_RESULT(no solution found)
+      AC_MSG_WARN([No way was detected to export symbols from executables to shared])
+      AC_MSG_WARN([libraries. You probably will not be able to dynamically load])
+      AC_MSG_WARN([simple modules or other extensions written in C++ into simulation])
+      AC_MSG_WARN([programs like INET.])
+   fi
+else
+   # note: expected failure on MinGW, because there's no dlopen().
+   # fixing this would mean overturning and re-testing the whole configure script
+   AC_MSG_RESULT(test failed)
+fi
+rm -f conftest_a.* conftest_m.* libconftest_a.so conftest
+
+#----------------------
+# Test for "-z allextract" (Sun) or "--whole-archive" (GNU) linker option,
+#----------------------
+# Goal: to eliminate "silly linker problem", that is, to convince the linker
+# to include constructors of static C++ objects in statically linked libraries.
+# To test, we'll compile the following code into a static library:
+#      #include <stdio.h>
+#      class A { public: A() {printf("=WORKS=");} };
+#      static A a;
+# Then we link it with the following program:
+#      int main() {return 0;}
+# And check if the executable prints '=WORKS=' when run.
+#
+AC_MSG_CHECKING(for flags needed to link with static libs containing simple modules)
+echo '#include <stdio.h>' >conftest_a.cc
+# NOTE: do not write "=WORKS=\n" because sh on OS X resolves it
+echo 'class A { public: A() {printf("=WORKS=");} };' >>conftest_a.cc
+echo 'static A a;' >> conftest_a.cc
+echo 'int main() {return 0;}' >> conftest_m.cc
+if $CXX -c conftest_a.cc >/dev/null 2>/dev/null && \
+   $CXX -c conftest_m.cc >/dev/null 2>/dev/null && \
+   $AR_CR libconftest_a.a conftest_a.o >/dev/null 2>/dev/null && \
+   $RANLIB libconftest_a.a >/dev/null 2>/dev/null; \
+then
+   silly_ok="no"
+   # 1st try.
+   if $CXX -o conftest conftest_m.o libconftest_a.a >/dev/null 2>/dev/null; then
+      if ./conftest 2>/dev/null | grep '=WORKS=' >/dev/null; then
+         AC_MSG_RESULT(none)
+         silly_ok="yes"
+      fi
+   fi
+
+   # 2nd try.
+   silly1=-Wl,--whole-archive
+   silly2=-Wl,--no-whole-archive
+   if test $silly_ok = "no" && \
+      $CXX -o conftest conftest_m.o $silly1 libconftest_a.a $silly2 >/dev/null 2>/dev/null && \
+      ./conftest 2>/dev/null | grep '=WORKS=' >/dev/null; \
+   then
+      AC_MSG_RESULT(--whole-archive)
+      AC_MSG_NOTICE([NOTE: Use the following syntax when linking with static libraries])
+      AC_MSG_NOTICE([containing simple modules and other dynamically registered components:])
+      AC_MSG_NOTICE([   $CXX ... $silly1 <libs> $silly2 ...])
+      silly_ok="yes"
+      WHOLE_ARCHIVE_ON=$silly1
+      WHOLE_ARCHIVE_OFF=$silly2
+   fi
+
+   # 3rd try.
+   silly1=-Wl,-z,allextract
+   silly2=-Wl,-z,defaultextract
+   if test $silly_ok = "no" && \
+      $CXX -o conftest conftest_m.o $silly1 libconftest_a.a $silly2 >/dev/null 2>/dev/null && \
+      ./conftest 2>/dev/null | grep '=WORKS=' >/dev/null; \
+   then
+      AC_MSG_RESULT([-z,allextract])
+      AC_MSG_NOTICE([NOTE: Use the following syntax when linking with static libraries])
+      AC_MSG_NOTICE([containing simple modules and other dynamically registered components:])
+      AC_MSG_NOTICE([   $CXX ... $silly1 <libs> $silly2 ...])
+      silly_ok="yes"
+      WHOLE_ARCHIVE_ON=$silly1
+      WHOLE_ARCHIVE_OFF=$silly2
+   fi
+
+   # 4th try.
+   silly1=-Wl,-all_load
+   silly2=
+   if test $silly_ok = "no" && \
+      $CXX -o conftest conftest_m.o $silly1 libconftest_a.a $silly2 >/dev/null 2>/dev/null && \
+      ./conftest 2>/dev/null | grep '=WORKS=' >/dev/null; \
+   then
+      AC_MSG_RESULT([-all_load])
+      AC_MSG_NOTICE([NOTE: Use the following syntax when linking with static libraries])
+      AC_MSG_NOTICE([containing simple modules and other dynamically registered components:])
+      AC_MSG_NOTICE([   $CXX ... $silly1 <libs> $silly2 ...])
+      silly_ok="yes"
+      WHOLE_ARCHIVE_ON=$silly1
+      WHOLE_ARCHIVE_OFF=$silly2
+   fi
+   # no solution found
+   if test $silly_ok = "no"; then
+      AC_MSG_RESULT(no solution found)
+      AC_MSG_WARN([Avoid linking with static libraries containing simple modules])
+      AC_MSG_WARN([and other dynamically registered components. Those components])
+      AC_MSG_WARN([will not be found by the simulation program, because the linker])
+      AC_MSG_WARN([leaves them out from the executable.])
+   fi
+else
+   AC_MSG_RESULT(test failed)
+fi
+rm -f conftest_a.* conftest_m.* libconftest_a.a conftest
+
+
+#----------------------
+# Check for rpath
+#----------------------
+# add RUNTIME_PATH option if supported, so that setting LD_LIBRARY_PATH is no longer needed when using shared libs.
+# Also, we add "." to rpath so that opp_run -L option does not need full path of the library
+AC_MSG_CHECKING(whether linker supports -rpath)
+LDFLAGS_SAVE="$LDFLAGS"
+LDFLAGS="$LDFLAGS -Wl,-rpath,\$(OMNETPP_LIB_DIR) -Wl,-rpath,\$(OMNETPP_TOOLS_DIR)/lib -Wl,-rpath,."
+AC_LINK_IFELSE(
+     [AC_LANG_PROGRAM()],
+     [AC_MSG_RESULT(yes)],
+     [AC_MSG_RESULT(no); RPATH_UNSUPPORTED="true"; LDFLAGS="$LDFLAGS_SAVE"])
+
+
+#----------------------
+# Checks for programs.
+#----------------------
+
+AC_PROG_YACC
+if test "$YACC" = "yacc"; then
+   AC_MSG_ERROR([Bison not found, needed to build OMNeT++/OMNEST -- please install it!])
+fi
+BISON_VER_LINE=`$YACC --version | grep "bison.* [[34]]\\."`
+if test -z "$BISON_VER_LINE"; then
+   AC_MSG_ERROR([At least bison version 3.0 required -- type '$YACC --version' to see the version number])
+fi
+# disable some bison warnings
+YACC="$YACC -Wno-yacc"
+
+AC_PROG_LEX(noyywrap)
+if test "$LEX" != "flex"; then
+   AC_MSG_ERROR([Flex not found, needed to build OMNeT++/OMNEST -- please install it!])
+fi
+FLEX_VER_LINE=`$LEX --version | grep "flex.* 2\\.[[5-9]]"`
+if test -z "$FLEX_VER_LINE"; then
+   AC_MSG_ERROR([At least flex version 2.5 required -- type '$LEX --version' to see the version number])
+fi
+
+# make must be GNU make
+AC_CHECK_PROG(MAKE, make , make, not found)
+if test "$MAKE" = "not found"; then
+   OPP_PROBLEM_PACKAGES="$OPP_PROBLEM_PACKAGES make"
+   AC_MSG_ERROR(make program not found -- it is required to build OMNeT++/OMNEST, and also for model development.)
+else
+   if "$MAKE" --version 2>/dev/null | grep -i GNU >/dev/null; then :; else
+       AC_MSG_ERROR(GNU Make is required to build OMNeT++/OMNEST.)
+   fi
+fi
+
+# perl is needed for opp_makemake and some other scripts
+AC_ARG_VAR(PERL, The Perl interpreter)
+AC_CHECK_PROG(PERL, perl, perl, not found)
+if test "$PERL" = "not found"; then
+   OPP_PROBLEM_PACKAGES="$OPP_PROBLEM_PACKAGES  perl"
+   AC_MSG_ERROR(Perl not found -- please install it! Perl is required by opp_makemake and some other programs.)
+fi
+
+# swig is used for building the ui support libs
+AC_ARG_VAR(SWIG, The Swig interface generator)
+AC_CHECK_PROG(SWIG, swig, swig, not found)
+
+#---------------------------
+# Check for python3 and its modules
+#---------------------------
+
+# Python 3 is used for many command line tools, and in the IDE for result analysis
+AC_ARG_VAR(PYTHON3, The Python 3 interpreter)
+AC_CHECK_PROG(PYTHON3, python3, python3, not found)
+if test "$PYTHON3" = "not found"; then
+   AC_MSG_ERROR(Python (python3) not found -- please install it! Python is required by many command-line tools and by the Analysis Tool in the IDE.)
+fi
+
+AC_MSG_CHECKING(if all necessary Python modules are available)
+
+PYTHON_PACKAGE_CHECK_CODE=$(cat <<-EOT
+
+# These should always be available by default, but just as a sanity check:
+import argparse, pickle, math, io, sys, os, platform, mmap, pprint, json, \
+       re, itertools, importlib, inspect, glob, functools, csv, string, \
+       struct, socket, subprocess, time, traceback, threading, types, copy, \
+       tempfile, select, shlex, unittest, weakref, logging, multiprocessing, xml
+
+failed = list()
+
+def try_import(name):
+  global failed
+  try:
+    importlib.import_module(name)
+  except:
+    failed.append(name)
+
+try_import("difflib") # for opp_test and scave python tester
+
+# for the Analysis Tool:
+try_import("omnetpp")
+try_import("numpy")
+try_import("scipy")
+try_import("pandas")
+try_import("matplotlib")
+
+if os.name == 'posix':
+  try_import("posix_ipc")
+  try_import("fcntl")
+else:
+  try_import("msvcrt")
+
+if failed:
+  print(" ".join(failed))
+  exit(1)
+
+# The utils module checks the versions of some Python packages when imported
+from omnetpp.scave import utils
+
+EOT
+)
+
+if output=$(python3 -c "$PYTHON_PACKAGE_CHECK_CODE") ; then
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+    if test -d ide; then
+      AC_MSG_ERROR([Some Python modules required by the IDE were not found: $output])
+    else
+      OPP_PROBLEM_PACKAGES="$OPP_PROBLEM_PACKAGES  Python modules ($output)"
+      AC_MSG_WARN([Some Python modules required by the IDE were not found: $output])
+    fi
+fi
+
+# The following ones are optional, and are used only by some sample ANF scripts:
+#   import pylab
+#   import prettyplotlib
+#   import seaborn
+
+
+#----------------------
+# Checks for standard libraries.
+#----------------------
+
+SYS_LIBS=""
+
+if test "$TOOLCHAIN_NAME" != "clang-msabi"; then
+  # math functions
+  OPP_CHECK_LIB(math, math.h, floor(0), $CFLAGS, , math_ok)
+  if test $math_ok = no; then
+     OPP_CHECK_LIB(math, math.h, floor(0), $CFLAGS, -lm, math_ok, SYS_LIBS="-lm $SYS_LIBS")
+  fi
+  if test $math_ok = no; then
+     AC_MSG_ERROR([Standard C math library -lm not found])
+  fi
+
+  # Check for standard C++ library
+  OPP_CHECK_LIB(standard C++ lib, iostream, /**/, $CFLAGS, -lstdc++, stdcpp_ok, SYS_LIBS="-lstdc++ $SYS_LIBS")
+  # standard C++ library for clang on Mac
+  if test $stdcpp_ok = no; then
+      OPP_CHECK_LIB(standard C++ lib, iostream, /**/, $CFLAGS, -lc++, stdcpp_ok, SYS_LIBS="-lc++ $SYS_LIBS")
+  fi
+  # standard C++ library for the intel compiler
+  if test $stdcpp_ok = no; then
+      OPP_CHECK_LIB(standard C++ lib, iostream, /**/, $CFLAGS, -lcxa, stdcpp_ok, SYS_LIBS="-lcxa $SYS_LIBS")
+  fi
+  if test $stdcpp_ok = no; then
+     AC_MSG_ERROR([Standard C++ library -lstdc++_s or -lstdc++ or -lcxx or -lcxa or -lc++ not found])
+  fi
+fi # end clang-msabi
+
+# dlopen()
+OPP_CHECK_LIB(dlopen, dlfcn.h, dlopen("",0), $CFLAGS, , dl_ok)
+if test $dl_ok = no; then
+   OPP_CHECK_LIB(dlopen, dlfcn.h, dlopen("",0), $CFLAGS, -ldl, dl_ok, SYS_LIBS="-ldl $SYS_LIBS")
+fi
+if test $dl_ok = yes; then
+   HAVE_DLOPEN=1
+else
+   HAVE_DLOPEN=0
+   AC_MSG_WARN([no dlopen(): dynamic loading of libs not possible])
+fi
+
+#-----------------------------
+# Check for Qt cflags and libs
+#-----------------------------
+if test "$WITH_QTENV" = "yes"; then
+    if test "$QMAKE" = ""; then
+        # Check for qmake variants on path if the user did not specify the QMAKE variable to use its own Qt installation.
+        # first try qt5 specific variants to force qt5 in case either qt4 or qt6 is installed on the user's system
+        AC_PATH_PROGS(QMAKE, qmake-qt5 qmake5 qmake, nope)
+    elif test ! -x "$QMAKE"; then
+        AC_MSG_ERROR([Qtenv cannot find qmake specified in the QMAKE variable (or it is not executable) -- $QMAKE])
+    fi
+
+    if test "$QMAKE" = nope; then
+        AC_MSG_ERROR([Qtenv cannot find qmake -- maybe it is not in the PATH or has some exotic name (tested names were: qmake-qt5 qmake5 qmake) - You can disable Qtenv by setting the WITH_QTENV variable to "no" in configure.user, or try setting the QMAKE variable to point your Qt installation's qmake file.])
+    else
+        QT_INSTALL_BINS=$(cd $($QMAKE -query QT_INSTALL_BINS) ; pwd) # this cd/pwd trick is required to return valid unix sytle path even on mingw
+        QT_INSTALL_HEADERS=$(cd $($QMAKE -query QT_INSTALL_HEADERS) ; pwd)
+        QT_INSTALL_LIBS=$(cd $($QMAKE -query QT_INSTALL_LIBS) ; pwd)
+        AC_PATH_PROGS(MOC, moc-qt5 moc5 moc, nope, path = $QT_INSTALL_BINS$PATH_SEPARATOR$QT_INSTALL_LIBS)
+        AC_PATH_PROGS(UIC, uic-qt5 uic5 uic, nope, path = $QT_INSTALL_BINS$PATH_SEPARATOR$QT_INSTALL_LIBS)
+        AC_PATH_PROGS(RCC, rcc-qt5 rcc5 rcc, nope, path = $QT_INSTALL_BINS$PATH_SEPARATOR$QT_INSTALL_LIBS)
+
+        if [test "$MOC" = nope] || [test "$UIC" = nope] || [test "$RCC" = nope] ; then
+          AC_MSG_ERROR([Could not find all of moc, rcc, and uic for Qt5 -- $MOC, $RCC, $UIC])
+        fi
+
+        QT_CFLAGS=${QT_CFLAGS:-"-isystem $QT_INSTALL_HEADERS"}
+        QT_LIBS=${QT_LIBS:-"-lQt5Gui -lQt5Core -lQt5Widgets -lQt5PrintSupport -lQt5OpenGL $LDFLAG_LIBPATH$QT_INSTALL_LIBS"}
+        if test -z "$RPATH_UNSUPPORTED"; then
+            QTENV_LDFLAGS="-Wl,-rpath=$QT_INSTALL_LIBS"
+        fi
+
+QT_VERSIONCHECK_CODE=$(cat <<-EOT
+    qVersion();
+    #if QT_VERSION < QT_VERSION_CHECK(5,9,0) || QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    #error
+    #endif
+EOT
+)
+        OPP_CHECK_LIB(Qt5, QtCore/QtGlobal, $QT_VERSIONCHECK_CODE, $CXXFLAGS $CFLAGS $QT_CFLAGS, $QT_LIBS, qt_ok)
+
+        # Test on Windows/MinGW toolchain
+        if test $qt_ok = no; then
+            QT_LIBS="-lQtGui5 -lQtCore5 -lQtWidgets5 -lQtPrintSupport5 -lQtOpenGL5"
+            QTENV_LDFLAGS=""
+            OPP_CHECK_LIB(Qt5, QtCore/QtGlobal, $QT_VERSIONCHECK_CODE, $CXXFLAGS $CFLAGS $QT_CFLAGS, $QT_LIBS, qt_ok)
+        fi
+
+        # Test on Mac OS X using the local Qt framework
+        if test $qt_ok = no; then
+            QT_LIBS="-framework QtGui -framework QtCore -framework QtWidgets -framework QtPrintSupport -framework QtOpenGL -F $QT_INSTALL_LIBS"
+            QTENV_LDFLAGS=""
+            OPP_CHECK_LIB(Qt5, QtCore/QtGlobal, $QT_VERSIONCHECK_CODE, $CXXFLAGS $CFLAGS $QT_CFLAGS, $QT_LIBS $LDFLAGS_TOOLS_MACOSX, qt_ok)
+        fi
+
+        if test $qt_ok = no; then
+            AC_MSG_ERROR([Cannot build Qt apps, probably due to missing or too old Qt 5 packages. Make sure Qt 5 development packages are installed and is version Qt 5.9 or newer. You can disable Qtenv by setting the WITH_QTENV variable to "no" in configure.user, or try setting the QMAKE variable to point your Qt installation's qmake file.])
+        fi
+    fi
+fi # WITH_QTENV
+
+#-----------------------------
+# Detecting OpenSceneGraph (libopenscenegraph-dev)
+# and osgEarth (openscenegraph-plugin-osgearth and libosgearth-dev)
+#-----------------------------
+OSG_VERSIONCHECK_CODE=$(cat <<-EOT
+#if OSG_VERSION_LESS_THAN(3, 2, 0)
+  #error Requires OpenSceneGraph 3.2 or later
+#else
+  osgGetVersion();
+#endif
+EOT
+)
+OSGEARTH_VERSIONCHECK_CODE=$(cat <<-EOT
+#if OSGEARTH_VERSION_LESS_THAN(2, 7, 0)
+  #error Requires osgEarth 2.7 or later
+#else
+  osgEarthGetVersion();
+#endif
+EOT
+)
+if test "$WITH_OSG" = "yes"; then
+  OSG_LIBS=${OSG_LIBS:-"-losg -losgDB -losgGA -losgViewer -losgUtil -lOpenThreads"}
+  OPP_CHECK_LIB(OpenSceneGraph, osg/Version, $OSG_VERSIONCHECK_CODE, $CFLAGS $CFLAGS_ARCH $OSG_CFLAGS $CFLAGS_TOOLS_MACOSX, $LDFLAGS_ARCH $LDFLAGS_TOOLS_MACOSX $OSG_LIBS, osg_ok)
+  if test $osg_ok = no; then
+    AC_MSG_ERROR([Cannot find OpenSceneGraph 3.2 or later - 3D view in Qtenv will not be available. Set WITH_OSG=no in configure.user to disable this feature or install the development package for OpenSceneGraph.])
+  else
+      # detect osgEarth, too
+      if test "$WITH_OSGEARTH" = "yes"; then
+        OSGEARTH_LIBS=${OSGEARTH_LIBS:-"-losgEarth -losgEarthUtil"}
+        OPP_CHECK_LIB(osgEarth, osgEarth/Version, $OSGEARTH_VERSIONCHECK_CODE, $CFLAGS $CFLAGS_ARCH $OSGEARTH_CFLAGS $CFLAGS_TOOLS_MACOSX, $LDFLAGS_ARCH $LDFLAGS_TOOLS_MACOSX $OSGEARTH_LIBS, osgearth_ok)
+        if test $osgearth_ok = no; then
+          AC_MSG_ERROR([Cannot find osgEarth 2.7 or later. Set WITH_OSGEARTH=no in configure.user to disable this feature or install an up to date version of osgEarth.])
+        fi
+      fi # WITH_OSGEARTH
+  fi
+fi # WITH_OSG
+
+#----------------------
+# Check for optional OpenMP compiler/linker flag.
+#----------------------
+
+AC_OPENMP()
+
+#----------------------
+# Check for MPI.
+#----------------------
+if test "$WITH_PARSIM" = "yes"; then
+  if test -n "$MPI_LIBS"; then
+      OPP_CHECK_LIB(MPI, mpi.h, MPI_Init(0,0), $CFLAGS $MPI_CFLAGS, $LDFLAGS $MPI_LIBS, mpi_ok)
+  else
+      mpi_ok=no
+      # LAM and OpenMPI support mpic++ -showme
+      # NOTE: on some systems (e.g. RHEL and Fedora), "module load openmpi_i386" or similar command may be additionally needed to make MPI accessible
+      AC_CHECK_PROG(MPICPP, mpic++, mpic++, not found)
+      if test "$MPICPP" != "not found"; then
+          MPI_CFLAGS=$(mpic++ -showme:compile)
+          MPI_LIBS=$(mpic++ -showme:link)
+          # see bug: https://bugs.launchpad.net/ubuntu/+source/openmpi/+bug/1941786
+          MPI_LIBS="$MPI_LIBS -lopen-pal"
+          OPP_CHECK_LIB(MPI, mpi.h, MPI_Init(0,0), $CFLAGS $MPI_CFLAGS, $LDFLAGS $MPI_LIBS, mpi_ok)
+      fi
+
+      if test $mpi_ok = no; then
+            # MPICH2 has mpicxx -compile-info and -link-info, slightly broken
+            # (both print the same string, which includes the compiler name too)
+            AC_CHECK_PROG(MPICXX, mpicxx, mpicxx, not found)
+            if test "$MPICXX" != "not found"; then
+                MPI_CFLAGS=`mpicxx -showme:compile | sed 's/^[^ ]*//'`
+                MPI_LIBS=`mpicxx -showme:link | sed 's/^[^ ]*//'`
+                OPP_CHECK_LIB(MPI, mpi.h, MPI_Init(0,0), $CFLAGS $MPI_CFLAGS, $LDFLAGS $MPI_LIBS, mpi_ok)
+            fi
+      fi
+
+      if test $mpi_ok = no; then
+         mpilibs="-lmpi"   #SGI and mingw (on MinGW modify mpi.h and insert #include <wchar.h> at the top of the file)
+         OPP_CHECK_LIB(MPI, mpi.h, MPI_Init(0,0), $CFLAGS $MPI_CFLAGS, $LDFLAGS $mpilibs, mpi_ok, MPI_LIBS="$mpilibs")
+      fi
+  fi
+
+  if test $mpi_ok = yes; then
+     DEFINES="$DEFINES -DWITH_MPI"
+  else
+     MPI_LIBS=""
+     MPI_CFLAGS=""
+     OPP_PROBLEM_PACKAGES="$OPP_PROBLEM_PACKAGES  MPI (optional)"
+     AC_MSG_WARN([Optional package MPI (needed for parallel simulation) not found.])
+  fi
+fi
+
+#----------------------
+# Check for PTHREAD.
+# On MinGW/gcc, add "-mthread" to PTHREAD_CFLAGS and PTHREAD_LIBS to force using
+# the multithreaded standard libraries.
+#----------------------
+
+if test -n "$PTHREAD_LIBS"; then
+    OPP_CHECK_LIB(PTHREAD, pthread.h, pthread_rwlock_rdlock(0), $CFLAGS $PTHREAD_CFLAGS, $PTHREAD_LIBS, pthread_ok)
+else
+    PTHREAD_LIBS="-lpthread"
+    OPP_CHECK_LIB(PTHREAD, pthread.h, pthread_rwlock_rdlock(0), $CFLAGS $PTHREAD_CFLAGS, $PTHREAD_LIBS, pthread_ok)
+fi
+if test $pthread_ok = yes; then
+    if test "$mingw" = yes; then
+        if test "$CC" = gcc; then
+            PTHREAD_CFLAGS="$PTHREAD_CFLAGS -mthreads" # add mthread only for GCC but not for clang
+        fi
+        PTHREAD_LIBS="$PTHREAD_LIBS -mthreads"
+    fi
+else
+    PTHREAD_CFLAGS=""
+    PTHREAD_LIBS=""
+fi
+
+#----------------------
+# Check for LibXML2
+#----------------------
+if test "$WITH_LIBXML" = "yes"; then
+  if test -n "$LIBXML_LIBS"; then
+      OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS $LIBXML_CFLAGS, $LIBXML_LIBS, libxml_ok)
+  else
+      OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS $LIBXML_CFLAGS, -lxml2,
+                    libxml_ok, LIBXML_LIBS="-lxml2")
+
+      if test $libxml_ok = no; then
+          OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS -I/usr/include/libxml2, -lxml2,
+                        libxml_ok, LIBXML_CFLAGS="-I/usr/include/libxml2" LIBXML_LIBS="-lxml2")
+      fi
+
+      # test also in the /mingw32 directory because on MSYS2 this is the default
+      if test $libxml_ok = no; then
+          OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS -I/mingw32/include/libxml2, -lxml2,
+                        libxml_ok, LIBXML_CFLAGS="-I/mingw32/include/libxml2" LIBXML_LIBS="-lxml2")
+      fi
+      if test $libxml_ok = no; then
+          OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS -I/mingw64/include/libxml2, -lxml2,
+                        libxml_ok, LIBXML_CFLAGS="-I/mingw64/include/libxml2" LIBXML_LIBS="-lxml2")
+      fi
+      # msys/visualc version
+      if test $libxml_ok = no; then
+          OPP_CHECK_LIB(LibXML XML parser, libxml/parser.h, xmlInitParser(), $CFLAGS_ARCH $CFLAGS -I/visualc/include/libxml2, $LDFLAGS_ARCH -llibxml2,
+                        libxml_ok, LIBXML_CFLAGS="-I/visualc/include/libxml2" LIBXML_LIBS="-llibxml2")
+      fi
+  fi
+
+  if test $libxml_ok = yes; then
+      AC_MSG_NOTICE([Found LibXML])
+  else
+      AC_MSG_ERROR([LibXML or the LibXML header file not found, please install it])
+  fi
+
+  # zlib is required by the XML parsers
+  if test $libxml_ok = yes ; then
+      if test "$ZLIB_LIBS" = ""; then
+          ZLIB_LIBS=-lz
+      fi
+      OPP_CHECK_LIB(zlib, zlib.h, gzopen("",""), $CFLAGS $ZLIB_CFLAGS, $ZLIB_LIBS, zlib_ok)
+      # on mingw/msys try a different library name
+      if test $zlib_ok = no -a "$mingw" = yes; then
+          ZLIB_LIBS="-lzlib1"
+          OPP_CHECK_LIB(zlib, zlib.h, gzopen("",""), $CFLAGS $ZLIB_CFLAGS, $ZLIB_LIBS, zlib_ok)
+      fi
+      # on clang-msabi with msys try a different library name
+      if test $zlib_ok = no; then
+          ZLIB_LIBS="-lzlib"
+          OPP_CHECK_LIB(zlib, zlib.h, gzopen("",""), $CFLAGS_ARCH $CFLAGS $ZLIB_CFLAGS, $LDFLAGS_ARCH $ZLIB_LIBS, zlib_ok)
+      fi
+      if test $zlib_ok = no; then
+          AC_MSG_ERROR([zlib or zlib header file not found, please install it])
+      fi
+  fi
+fi
+
+#----------------------
+# Check for Akaroa header and lib
+#----------------------
+if test "$WITH_AKAROA" = "yes"; then
+  AKAROA_CFLAGS=${AKAROA_CFLAGS:-"-I/usr/local/akaroa/include"}
+  AKAROA_LIBS=${AKAROA_LIBS:-"-L/usr/local/akaroa/lib -lakaroa -lfl"}
+
+  OPP_CHECK_LIB(Akaroa, akaroa.H, AkObservation(0.0), $CFLAGS $AKAROA_CFLAGS, $AKAROA_LIBS, akaroa_ok)
+  if test $akaroa_ok = yes; then
+    CFLAGS="$CFLAGS $AKAROA_CFLAGS"
+    DEFINES="$DEFINES -DWITH_AKAROA"
+    SYS_LIBS="$SYS_LIBS $AKAROA_LIBS"
+  else
+    AC_MSG_ERROR([Cannot find Akaroa. Set WITH_AKAROA=no in configure.user to disable this feature or install an up to date version of Akaroa and specify AKAROA_CFLAGS and AKAROA_LIBS.])
+  fi
+fi
+
+#----------------------
+# set final CFLAGS and LDFLAGS variable to be used in Makefile.inc
+#----------------------
+CFLAGS="$DEPENDFLAGS $CFLAGS $CFLAGS_ARCH \$(DEFINES)"
+LDFLAGS="$LDFLAGS $LDFLAGS_ARCH \$(LDFLAG_LIBPATH)\$(OMNETPP_LIB_DIR)"
+
+#----------------------
+# Files to be generated
+#----------------------
+AC_CONFIG_FILES(
+  Makefile.inc
+  src/qtenv/qtenv.pri
+)
+
+#----------------------
+# Substitutions.
+#----------------------
+
+AC_SUBST(OMNETPP_PRODUCT)
+AC_SUBST(OMNETPP_RELEASE)
+AC_SUBST(OMNETPP_VERSION)
+AC_SUBST(OMNETPP_BUILDID)
+AC_SUBST(OMNETPP_EDITION)
+
+AC_SUBST(QMAKE)
+AC_SUBST(PERL)
+AC_SUBST(YACC)
+AC_SUBST(LEX)
+AC_SUBST(CC)
+AC_SUBST(CXX)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(SANITIZE_FLAGS)
+AC_SUBST(CFLAGS_DEBUG)
+AC_SUBST(CFLAGS_RELEASE)
+AC_SUBST(CFLAGS)
+AC_SUBST(DEFINES)
+AC_SUBST(LDFLAGS)
+AC_SUBST(LDFLAG_LIBPATH)
+AC_SUBST(LDFLAG_INCLUDE)
+AC_SUBST(LDFLAG_LIB)
+AC_SUBST(LDFLAG_IMPLIB)
+AC_SUBST(LDFLAG_IMPDEF)
+AC_SUBST(WHOLE_ARCHIVE_ON)
+AC_SUBST(WHOLE_ARCHIVE_OFF)
+AC_SUBST(AS_NEEDED_ON)
+AC_SUBST(AS_NEEDED_OFF)
+AC_SUBST(PIC_FLAGS)
+AC_SUBST(TOOLCHAIN_NAME)
+AC_SUBST(MSGC)
+AC_SUBST(NEDTOOL)
+AC_SUBST(AS)
+AC_SUBST(AR_CR)
+AC_SUBST(ARFLAG_OUT)
+AC_SUBST(RANLIB)
+AC_SUBST(SHLIB_LD)
+AC_SUBST(DLLTOOL)
+AC_SUBST(STRIP)
+AC_SUBST(LN)
+AC_SUBST(MKPATH)
+AC_SUBST(SHLIB_POSTPROCESS)
+
+AC_SUBST(SHARED_LIBS)
+AC_SUBST(A_LIB_SUFFIX)
+AC_SUBST(SHARED_LIB_SUFFIX)
+AC_SUBST(JNI_LIB_SUFFIX)
+AC_SUBST(SO_LIB_SUFFIX)
+AC_SUBST(DLL_LIB_SUFFIX)
+AC_SUBST(IMPLIB_SUFFIX)
+AC_SUBST(IMPDEF_SUFFIX)
+AC_SUBST(EXE_SUFFIX)
+AC_SUBST(LIB_PREFIX)
+
+AC_SUBST(HAVE_DLOPEN)
+AC_SUBST(HAVE_SWAPCONTEXT)
+AC_SUBST(QT_CFLAGS)
+AC_SUBST(QT_LIBS)
+AC_SUBST(QTENV_LDFLAGS)
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
+AC_SUBST(OSG_CFLAGS)
+AC_SUBST(OSG_LIBS)
+AC_SUBST(OSGEARTH_CFLAGS)
+AC_SUBST(OSGEARTH_LIBS)
+AC_SUBST(ZLIB_CFLAGS)
+AC_SUBST(ZLIB_LIBS)
+AC_SUBST(OPENMP_FLAGS)
+AC_SUBST(MPI_CFLAGS)
+AC_SUBST(MPI_LIBS)
+AC_SUBST(SYS_LIBS)
+AC_SUBST(PTHREAD_CFLAGS)
+AC_SUBST(PTHREAD_LIBS)
+AC_SUBST(AKAROA_CFLAGS)
+AC_SUBST(AKAROA_LIBS)
+
+AC_SUBST(WITH_NETBUILDER)
+AC_SUBST(WITH_LIBXML)
+AC_SUBST(WITH_PARSIM)
+AC_SUBST(WITH_QTENV)
+AC_SUBST(WITH_OSG)
+AC_SUBST(WITH_OSGEARTH)
+AC_SUBST(WITH_AKAROA)
+AC_SUBST(WITH_SYSTEMC)
+AC_SUBST(PREFER_SQLITE_RESULT_FILES)
+
+AC_SUBST(SWIG)
+AC_SUBST(PLATFORM)
+AC_SUBST(ARCH)
+
+#
+# Generate files
+#
+AC_OUTPUT
+
+(
+cd src/common && cp ver.h.base ver.h && \
+echo "#define OMNETPP_PRODUCT \"$OMNETPP_PRODUCT\"" >>ver.h && \
+echo "#define OMNETPP_RELEASE \"$OMNETPP_RELEASE\"" >>ver.h && \
+echo "#define OMNETPP_VERSION_STR \"$OMNETPP_VERSION\"" >>ver.h && \
+echo "#define OMNETPP_BUILDID \"$OMNETPP_BUILDID\"" >>ver.h && \
+echo "#define OMNETPP_EDITION \"$OMNETPP_EDITION\"" >>ver.h
+)
+
+#---------------------------
+# Check for SystemC settings
+#---------------------------
+
+#if test -d src/systemc; then
+#  if test "$WITH_SYSTEMC" = "yes"; then
+#    if test "$PLATFORM" != "linux"; then
+#        AC_MSG_ERROR([SystemC is enabled, but it is not supported on this platform. Set WITH_SYSTEMC=no in configure.user])
+#    fi
+#  else
+#    if test "$PLATFORM" = "linux"; then
+#        AC_MSG_NOTICE([SystemC is disabled. You can enable it by setting WITH_SYSTEMC=yes in configure.user])
+#    fi
+#  fi
+#fi
+
+#----------------------
+# Check $OPP_PROBLEM_PACKAGES
+#----------------------
+
+if test "$OPP_PROBLEM_PACKAGES" != ""; then
+  cat 1>&2 << EOT
+
+WARNING: The configuration script could not detect the following packages:
+
+  $OPP_PROBLEM_PACKAGES
+
+Scroll up to see the warning messages (use shift+PgUp), and search config.log
+for more details. While you can use $OMNETPP_PRODUCT in the current configuration,
+be aware that some functionality may be unavailable or incomplete.
+
+EOT
+  if module avail >/dev/null 2>/dev/null; then
+    cat 1>&2 << EOT
+NOTE: Some packages like MPI may need to be loaded explicitly using a
+"module load <MODULENAME>" command  prior to running ./configure.
+Enter "module avail" to see the list of available modules on your system.
+
+EOT
+  fi
+fi
+
+#--------------
+# Qtenv warning
+#--------------
+if test "$WITH_QTENV" != "yes"; then
+
+    cat << EOT
+
+$OMNETPP_PRODUCT was configured with \$WITH_QTENV = no. The Qt-based graphical
+runtime environment (Qtenv) will not be available.
+EOT
+
+fi
+
+#---------------------------
+# Check for ccache
+#---------------------------
+
+if ccache -V >/dev/null 2>/dev/null; then
+  if which "$CXX" | grep ccache >/dev/null 2>/dev/null; then
+    : # using ccache's compiler wrapper, OK
+  elif echo "$CXX" | grep ccache >/dev/null 2>/dev/null; then
+    : # compiler command prefixed with ccache, OK
+  else
+    cat << EOT
+
+Note: ccache is installed, but it is apparently not used by your current setup.
+To activate it, add /usr/lib/ccache at the front of your PATH, or prefix the
+compiler commands with "ccache" in configure.user (e.g., CXX="ccache clang++"),
+and re-run configure.
+EOT
+  fi
+fi
+
+cat << EOT
+
+Configuration phase finished. Use 'make' to build $OMNETPP_PRODUCT.
+EOT

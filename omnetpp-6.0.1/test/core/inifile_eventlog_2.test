@@ -1,0 +1,92 @@
+%description:
+test module eventlog recording
+
+%file: test.ned
+
+simple Node {
+}
+
+network Test {
+    submodules:
+        enabled: Node;
+        disabled: Node;
+}
+
+%file: test.cc
+
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace @TESTNAME@ {
+
+class Node : public cSimpleModule
+{
+  public:
+    virtual void initialize(int stage) override {
+        scheduleAt(simTime() + 1, new cMessage());
+    }
+
+    virtual void handleMessage(cMessage *msg) override {
+        delete msg;
+        scheduleAt(simTime() + 1, new cMessage());
+    }
+};
+
+Define_Module(Node);
+
+}
+
+%inifile: omnetpp.ini
+[General]
+network = Test
+record-eventlog = true
+sim-time-limit = 3s
+*.enabled.module-eventlog-recording = true
+*.disabled.module-eventlog-recording = false
+
+%subst: /^SB .*/SB .../m
+
+%subst: /omnetpp:://
+%contains: results/General-#0.elog
+SB ...
+
+E # 0 t 0 m 1 ce -1 msg -1
+MC id 1 c cModule t Test n Test cm 1
+MDC id 1 d ""
+MC id 2 c inifile_eventlog_2::Node t Node pid 1 n enabled
+MDC id 2 d ""
+MC id 3 c inifile_eventlog_2::Node t Node pid 1 n disabled
+MDC id 3 d ""
+CMB sm 1 tm 2 m initialize(0)
+CM id 0 tid 0 eid 0 etid 0 c cMessage n "" pe -1
+BS id 0 tid 0 eid 0 etid 0 c cMessage n "" sm 2 st 0 am 2 at 1 pe 0
+ES id 0 tid 0 eid 0 etid 0 c cMessage n "" sm 2 st 0 am 2 at 1 pe 0
+CME
+CMB sm 1 tm 3 m initialize(0)
+CM id 1 tid 1 eid 1 etid 1 c cMessage n "" pe -1
+BS id 1 tid 1 eid 1 etid 1 c cMessage n "" sm 3 st 0 am 3 at 1 pe 0
+ES id 1 tid 1 eid 1 etid 1 c cMessage n "" sm 3 st 0 am 3 at 1 pe 0
+CME
+
+E # 1 t 1 m 2 ce 0 msg 0
+DM id 0 tid 0 eid 0 etid 0 c cMessage n "" m 2 pe 1
+CM id 2 tid 2 eid 2 etid 2 c cMessage n "" pe -1
+BS id 2 tid 2 eid 2 etid 2 c cMessage n "" sm 2 st 1 am 2 at 2 pe 1
+ES id 2 tid 2 eid 2 etid 2 c cMessage n "" sm 2 st 1 am 2 at 2 pe 1
+
+E # 3 t 2 m 2 ce 1 msg 2
+DM id 2 tid 2 eid 2 etid 2 c cMessage n "" m 2 pe 3
+CM id 4 tid 4 eid 4 etid 4 c cMessage n "" pe -1
+BS id 4 tid 4 eid 4 etid 4 c cMessage n "" sm 2 st 2 am 2 at 3 pe 3
+ES id 4 tid 4 eid 4 etid 4 c cMessage n "" sm 2 st 2 am 2 at 3 pe 3
+
+E # 5 t 3 m 2 ce 3 msg 4
+DM id 4 tid 4 eid 4 etid 4 c cMessage n "" m 2 pe 5
+CM id 6 tid 6 eid 6 etid 6 c cMessage n "" pe -1
+BS id 6 tid 6 eid 6 etid 6 c cMessage n "" sm 2 st 3 am 2 at 4 pe 5
+ES id 6 tid 6 eid 6 etid 6 c cMessage n "" sm 2 st 3 am 2 at 4 pe 5
+
+
+SE e 0 c 38 m "Simulation time limit reached -- at t=3s, event #7"
+

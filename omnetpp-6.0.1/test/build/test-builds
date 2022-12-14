@@ -1,0 +1,267 @@
+#!/bin/sh
+#
+# Test the build process with different configurations
+#
+# The toolchain used for testing (default is clang)
+# $TOOLCHAIN=clang or gcc
+#
+
+
+cd $(dirname $0)
+TEST_DIR=$(pwd)
+LOG_DIR=$TEST_DIR/_buildlog
+cd $TEST_DIR/../..
+OMNETPP_ROOT=$(pwd)
+
+# storing PID so we can exit from this shell in case of failure even if we are running inside a subshell
+trap "exit 1" TERM
+export MY_PID=$$
+
+export TEST_PROG="opp_run -h all"
+export WITH_NETBUILDER=yes
+export WITH_PARSIM=no
+export SHARED_LIBS=yes
+export WITH_QTENV=yes
+export WITH_LIBXML=no
+export WITH_OSG=yes
+export WITH_OSGEARTH=no
+export WITH_SYSTEMC=no
+export PREFER_CLANG=yes
+export PREFER_LLD=yes
+export MPI_LIBS=
+export CFLAGS_DEBUG=
+export CFLAGS_RELEASE=
+
+export TWEAKCONFIG="perl $TEST_DIR/tweakconfigfile.pl"
+
+# opsystem detection (assume windows by default)
+export PLATFORM=windows
+if [ $(uname -s) = Linux ]; then
+    export PLATFORM=linux
+fi
+if [ $(uname -s) = Darwin ]; then
+    export PLATFORM=macosx
+fi
+
+# default toolchain is clang
+if [ "$TOOLCHAIN" = "" ]; then
+    export TOOLCHAIN=clang
+fi
+
+export MAKE_PROG=make
+
+echo "Testing on $PLATFORM using the $TOOLCHAIN toolchain."
+
+######################################################
+#
+# test functions...
+#
+
+failure() {
+    echo "FAILED: $1"
+    # As this function might be used inside a subshell, but we want to exit the top level script, we will send
+    # a TERM signal instead to the top level shell.
+    kill -s TERM $MY_PID
+}
+
+contains() {
+    if $TEST_PROG | grep -- "$1" >/dev/null 2>/dev/null; then
+        if [ "$2" = "no" ]; then
+            failure "$TEST_PROG - contains $1"
+        fi
+    else
+        if [ "$2" = "yes" ]; then
+            failure "$TEST_PROG - does not contain $1"
+        fi
+    fi
+}
+
+
+#######################################################
+#
+# Compile functions
+#
+
+compile() {
+    if [ "$TOOLCHAIN" = "gcc" ]; then
+        export PREFER_CLANG=no
+    else
+        export PREFER_CLANG=yes
+    fi
+
+    echo "*** Compiling with $TOOLCHAIN: $CFG"
+
+    # tweak
+    $TWEAKCONFIG setoradd configure.user PREFER_CLANG "$PREFER_CLANG" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user PREFER_LLD "$PREFER_LLD" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user SHARED_LIBS  "$SHARED_LIBS" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_NETBUILDER  "$WITH_NETBUILDER" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_PARSIM  "$WITH_PARSIM" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_QTENV  "$WITH_QTENV" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_LIBXML  "$WITH_LIBXML" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_OSG  "$WITH_OSG" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_OSGEARTH  "$WITH_OSGEARTH" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user WITH_SYSTEMC  "$WITH_SYSTEMC" || failure $CFG
+    $TWEAKCONFIG setoradd configure.user MPI_LIBS  "$MPI_LIBS" || failure $CFG
+
+    echo "    Configuring..."
+    cp configure.user "$LOG_DIR/$CFG-configure.user"
+    ./configure >"$LOG_DIR/$CFG-configure.out" 2>"$LOG_DIR/$CFG-configure.err"
+    cp Makefile.inc "$LOG_DIR/$CFG-Makefile.inc"
+
+    $TWEAKCONFIG assert Makefile.inc SHARED_LIBS  "$SHARED_LIBS" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_NETBUILDER  "$WITH_NETBUILDER" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_PARSIM  "$WITH_PARSIM" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_QTENV  "$WITH_QTENV" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_LIBXML  "$WITH_LIBXML" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_OSG  "$WITH_OSG" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_OSGEARTH  "$WITH_OSGEARTH" || failure $CFG
+    $TWEAKCONFIG assert Makefile.inc WITH_SYSTEMC  "$WITH_SYSTEMC" || failure $CFG
+
+    echo "    Building..."
+    $MAKE_PROG cleanall >"$LOG_DIR/$CFG-makeclean.out" 2>"$LOG_DIR/$CFG-makeclean.err" || failure "make cleanall failed - $CFG"
+    $MAKE_PROG -j16 >"$LOG_DIR/$CFG-make.out" 2>"$LOG_DIR/$CFG-make.err" || failure "make failed - $CFG"
+    samples/aloha/aloha -v >"$LOG_DIR/$CFG-buildinfo.out" 2>"$LOG_DIR/$CFG-buildinfo.err"
+}
+
+
+###############################################
+#
+# unit test runner
+#
+
+runtest() {
+    outputfile="$LOG_DIR/$CFG-$1-test.out"
+    echo "    Running $1 tests..."
+    cd test && $MAKE_PROG test_$1 >$outputfile 2>"$LOG_DIR/$CFG-$1-test.err"
+}
+
+################################################
+
+rm -rf $LOG_DIR
+mkdir -p $LOG_DIR
+
+########################################
+# run tests on precompield binaries
+#
+if [ "$PLATFORM" = "windows" -a -f bin/opp_run.exe ]; then
+
+  CFG=precompiled-binaries
+  (runtest core)
+  (runtest common)
+  (runtest envir)
+  (runtest makemake)
+fi
+
+########################################
+#
+# Compile tests
+#
+
+###########################################
+CFG=default
+(compile)
+
+contains "Cmdenv : command-line user interface" yes
+contains "Qtenv : Qt-based graphical user interface" yes
+
+(TEST_PROG="opp_run -v" contains "CLANG" yes)
+(TEST_PROG="opp_run -v" contains "WITH_NETBUILDER" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSG" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSGEARTH" no)
+(runtest core)
+(runtest common)
+(runtest envir)
+(runtest makemake)
+
+###########################################
+CFG=with_libxml
+(WITH_LIBXML=yes compile)
+
+contains "Cmdenv : command-line user interface" yes
+contains "Qtenv : Qt-based graphical user interface" yes
+
+(TEST_PROG="opp_run -v" contains "WITH_LIBXML" yes)
+(TEST_PROG="opp_run -v" contains "WITH_NETBUILDER" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSG" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSGEARTH" no)
+(runtest core)
+(runtest common)
+(runtest envir)
+(runtest makemake)
+
+# check building with gcc
+CFG=default-gcc
+(TOOLCHAIN=gcc compile)
+contains "Cmdenv : command-line user interface" yes
+contains "Qtenv : Qt-based graphical user interface" yes
+
+(TEST_PROG="opp_run -v" contains "GCC" yes)
+(TEST_PROG="opp_run -v" contains "WITH_NETBUILDER" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSG" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSGEARTH" no)
+(runtest core)
+(runtest common)
+(runtest envir)
+(runtest makemake)
+
+#########################################
+# check building with OSGEARTH
+CFG=with_osgearth
+(WITH_OSG=yes WITH_OSGEARTH=yes compile)
+(TEST_PROG="opp_run -v" contains "WITH_OSG" yes)
+(TEST_PROG="opp_run -v" contains "WITH_OSGEARTH" yes)
+(runtest makemake)
+
+#########################################
+# check building without OSG and OSGEARTH
+CFG=without_osg
+(WITH_OSG=no WITH_OSGEARTH=no compile)
+(TEST_PROG="opp_run -v" contains "WITH_OSG" no)
+(TEST_PROG="opp_run -v" contains "WITH_OSGEARTH" no)
+(runtest makemake)
+
+########################################
+# Run SystemC compile tests on Linux
+# Other platforms / compilers are not supported
+if [ "$PLATFORM" = "linux" ]; then
+    if [ -d src/systemc ]; then
+        CFG=systemc
+        (WITH_SYSTEMC=yes compile)
+  fi
+fi
+
+########################################
+# check the static build
+CFG=default_static
+(SHARED_LIBS=no compile)
+
+# the static build does not contain opp_run so we must use the aloha sample
+(TEST_PROG="samples/aloha/aloha -h all" contains "Qtenv : Qt-based graphical user interface" yes)
+(TEST_PROG="samples/aloha/aloha -h all" contains "Cmdenv : command-line user interface" yes)
+(TEST_PROG="samples/aloha/aloha -v" contains "WITH_NETBUILDER" yes)
+(TEST_PROG="samples/aloha/aloha -v" contains "WITH_OSG" yes)
+(TEST_PROG="samples/aloha/aloha -v" contains "WITH_OSGEARTH" no)
+
+########################################
+# Test MPI/parsim only on linux where MPI libs are available
+# On Mac and Windows the user must install MPI libs manually.
+if [ "$PLATFORM" = "linux" ]; then
+  ########################################
+  CFG=parsim_with_mpi
+  (WITH_PARSIM=yes compile)
+  (TEST_PROG="opp_run -v" contains "WITH_PARSIM" yes)
+  contains cParsimPartition yes
+  contains cMPICommunications yes
+  (runtest makemake)
+
+  ########################################
+  # test if disabling MPI is working
+  CFG=no_mpi
+  (WITH_PARSIM=yes MPI_LIBS=-lbubu compile)
+  (TEST_PROG="opp_run -v" contains "WITH_PARSIM" yes)
+  contains cParsimPartition yes
+  contains cMPICommunications no
+  (runtest makemake)
+
+fi

@@ -1,0 +1,83 @@
+<RCC>
+    <qresource prefix="/logo">
+        <file alias="logo128m">icons/logo/logo128m.png</file>
+    </qresource>
+    <qresource prefix="/objects">
+        <file alias="none">icons/objects/none.svg</file>
+        <file alias="placeholder">icons/objects/placeholder.svg</file>
+        <file alias="simple">icons/objects/simple.svg</file>
+        <file alias="compound">icons/objects/compound.svg</file>
+        <file alias="cogwheel">icons/objects/cogwheel.svg</file>
+        <file alias="event">icons/objects/event.svg</file>
+        <file alias="message">icons/objects/message.svg</file>
+        <file alias="packet">icons/objects/packet.svg</file>
+        <file alias="container">icons/objects/container.svg</file>
+        <file alias="queue">icons/objects/queue.svg</file>
+        <file alias="gate">icons/objects/gate.svg</file>
+        <file alias="param">icons/objects/param.svg</file>
+        <file alias="chan">icons/objects/chan.svg</file>
+        <file alias="outvect">icons/objects/outvect.svg</file>
+        <file alias="stat">icons/objects/stat.svg</file>
+        <file alias="filter">icons/objects/filter.svg</file>
+        <file alias="listener">icons/objects/listener.svg</file>
+        <file alias="figure">icons/objects/figure.svg</file>
+        <file alias="canvas">icons/objects/canvas.svg</file>
+        <file alias="fes">icons/objects/fes.svg</file>
+        <file alias="list">icons/objects/list.svg</file>
+        <file alias="watch">icons/objects/watch.svg</file>
+
+        <file alias="unknown">icons/objects/unknown.svg</file>
+
+        <file alias="defaulticon">icons/objects/defaulticon.svg</file>
+    </qresource>
+
+    <qresource prefix="/tools">
+        <file alias="3dscene">icons/tools/3dscene.svg</file>
+        <file alias="back">icons/tools/back.svg</file>
+        <file alias="config">icons/tools/config.svg</file>
+        <file alias="copy">icons/tools/copy.svg</file>
+        <file alias="copyptr">icons/tools/copyptr.svg</file>
+        <file alias="debugger">icons/tools/debugger.svg</file>
+        <file alias="debugnextevent">icons/tools/debugnextevent.svg</file>
+        <file alias="express">icons/tools/express.svg</file>
+        <file alias="fast">icons/tools/fast.svg</file>
+        <file alias="fes">icons/tools/fes.svg</file>
+        <file alias="filter">icons/tools/filter.svg</file>
+        <file alias="find">icons/tools/find.svg</file>
+        <file alias="findobj">icons/tools/findobj.svg</file>
+        <file alias="finish">icons/tools/finish.svg</file>
+        <file alias="forward">icons/tools/forward.svg</file>
+        <file alias="horizontal">icons/tools/horizontal.svg</file>
+        <file alias="inspectas">icons/tools/inspectas.svg</file>
+        <file alias="layers">icons/tools/layers.svg</file>
+        <file alias="loadned">icons/tools/loadned.svg</file>
+        <file alias="log">icons/tools/log.svg</file>
+        <file alias="mfast">icons/tools/mfast.svg</file>
+        <file alias="modulegraphics">icons/tools/modulegraphics.svg</file>
+        <file alias="mrun">icons/tools/mrun.svg</file>
+        <file alias="newrun">icons/tools/newrun.svg</file>
+        <file alias="parent">icons/tools/parent.svg</file>
+        <file alias="pkheader">icons/tools/pkheader.svg</file>
+        <file alias="props">icons/tools/props.svg</file>
+        <file alias="recordeventlog">icons/tools/recordeventlog.svg</file>
+        <file alias="recordvideo">icons/tools/recordvideo.svg</file>
+        <file alias="redraw">icons/tools/redraw.svg</file>
+        <file alias="reset">icons/tools/reset.svg</file>
+        <file alias="run">icons/tools/run.svg</file>
+        <file alias="save">icons/tools/save.svg</file>
+        <file alias="step">icons/tools/step.svg</file>
+        <file alias="stop">icons/tools/stop.svg</file>
+        <file alias="until">icons/tools/until.svg</file>
+        <file alias="vertical">icons/tools/vertical.svg</file>
+        <file alias="winconfig">icons/tools/winconfig.svg</file>
+        <file alias="zoomin">icons/tools/zoomin.svg</file>
+        <file alias="zoomout">icons/tools/zoomout.svg</file>
+        <file alias="treemode_children">icons/tools/treemode_children.svg</file>
+        <file alias="treemode_flat">icons/tools/treemode_flat.svg</file>
+        <file alias="treemode_grouped">icons/tools/treemode_grouped.svg</file>
+        <file alias="treemode_inher">icons/tools/treemode_inher.svg</file>
+        <file alias="treemode_packet">icons/tools/treemode_packet.svg</file>
+        <file alias="rebuild">icons/tools/rebuild.svg</file>
+        <file alias="setupbins">icons/tools/setupbins.svg</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,164 @@
+Name	Type	Description
+SB		// mandatory first line of the eventlog file, followed by an empty line
+ov	integer	
+ev	integer	
+rid	string	
+SE		// optional last non-empty line of the eventlog file, followed by an empty line
+e	boolean	
+c	integer	
+m	string	
+E		// an event that is processing a message, terminated by an empty line
+#	event number	
+t	simulation time	
+m	integer	
+ce	event number	
+msg	msg id	
+f	string	
+S		// a snapshot of the current simulation state, followed by state entries, and terminated by an emtpy line
+f	int64_t	
+#	event number	
+t	simulation time	
+I		// incremental snapshot specifying additional and removed entries with an event number and a line index, followed by an empty line
+f	int64_t	
+i	int64_t	
+s	int64_t	
+#	event number	
+t	simulation time	
+abstract		// base class for index entry references
+#	event number	
+b	integer	
+e	integer	
+RF		// specifies an eventlog entry found in the snapshot
+RA		// specifies an eventlog entry added to the index
+RR		// specifies an eventlog entry removed from the index
+abstract		// base class for entries referring to a module
+id	integer	
+abstract		// base class for entries referring to a gate
+m	integer	
+g	integer	
+abstract		// base class for entries referring to a connection
+sm	integer	
+sg	integer	
+abstract		// base class for entries referring to a message
+id	msg id	
+abstract		// base class for entries describing a module
+c	string	
+t	string	
+pid	integer	
+n	string	
+cm	boolean	
+abstract		// base class for entries describing a gate
+n	string	
+i	integer	
+o	boolean	
+abstract		// base class for entries describing a connection
+dm	integer	
+dg	integer	
+abstract		// base class for entries describing a message
+tid	msg id	
+eid	msg id	
+etid	msg id	
+c	string	
+n	string	
+k	short	
+p	short	
+l	int64_t	
+er	boolean	
+m	integer	
+sm	integer	
+sg	integer	
+st	simulation time	
+am	integer	
+ag	integer	
+at	simulation time	
+d	string	
+pe	event number	
+abstract		// base class for entries describing a module display string
+d	string	
+abstract		// base class for entries describing a gate display string
+d	string	
+abstract		// base class for entries describing a connection display string
+d	string	
+abstract		// base class for entries describing a message display string
+d	string	
+CMB		// beginning of a call to another module
+sm	integer	
+tm	integer	
+m	string	
+CME		// end of a call to another component
+MC		// creating a module
+MD		// deleting a module
+GC		// creating a gate
+GD		// deleting a gate
+CC		// creating a connection
+CD		// deleting a connection
+MDC		// a module display string change
+GDC		// a gate display string change
+CDC		// a connection display string change
+EDC		// a message display string change
+CM		// creating a message
+CL		// cloning a message either via the copy constructor or by dup
+cid	msg id	
+DM		// deleting a message
+EN		// encapsulating a packet
+cid	msg id	
+DE		// decapsulating a packet
+cid	msg id	
+BS		// beginning to send a message
+sd	simulation time	
+up	boolean	
+tx	tx id	
+ES		// prediction of the arrival of a message, only a message reference because can't be alone
+i	boolean	
+SD		// sending a message directly to a destination gate
+sm	integer	
+dm	integer	
+dg	integer	
+pd	simulation time	
+td	simulation time	
+rd	simulation time	
+SH		// sending a message through a connection identified by its source module and gate id
+sm	integer	
+sg	integer	
+pd	simulation time	
+td	simulation time	
+rd	simulation time	
+d	boolean	
+CE		// canceling an event caused by sending a self message
+MF		// a module found in the simulation while traversing the modules (used in snapshots)
+#	event number	
+ei	integer	
+GF		// a gate found in the simulation while traversing the modules (used in snapshots)
+#	event number	
+ei	integer	
+CF		// a connection found in the simulation while traversing the modules (used in snapshots)
+#	event number	
+ei	integer	
+EF		// a message found in the future event queue (FES) or while traversing the modules (used in snapshots)
+MDF		// a module display string found (used in snapshots)
+#	event number	
+ei	integer	
+GDF		// a gate display string found (used in snapshots)
+#	event number	
+ei	integer	
+CDF		// a connection display string found (used in snapshots)
+#	event number	
+ei	integer	
+EDF		// a message display string found (used in snapshots)
+#	event number	
+ei	integer	
+BU		// display a bubble message
+id	integer	
+txt	string	
+abstract		// custom data reference provided by OMNeT users
+t	string	
+k	integer	
+abstract		// custom data provided by OMNeT users
+c	string	
+CUC		// created a custom data object
+CUD		// deleted a custom data object
+CUM		// changed a custom data object
+CUF		// found a custom data object (used in snapshots)
+#	event number	
+ei	integer	
+CU		// custom data provided by OMNeT users

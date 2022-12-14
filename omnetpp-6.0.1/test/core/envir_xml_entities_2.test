@@ -1,0 +1,22 @@
+%description:
+Entities declared within the DOCTYPE are substituted.
+
+%file: test.xml
+<?xml version="1.0"?>
+<!DOCTYPE foo [
+  <!ELEMENT foo (#PCDATA)>
+  <!ENTITY greeting "Hello!">
+]>
+<foo>&greeting;</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%contains: stdout
+<foo>Hello!</foo>

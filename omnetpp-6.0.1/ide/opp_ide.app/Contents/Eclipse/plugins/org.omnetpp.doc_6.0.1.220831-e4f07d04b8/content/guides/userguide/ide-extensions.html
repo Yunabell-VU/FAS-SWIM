@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Extending the IDE</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation Guide" href="../installguide/index.html" />
+    <link rel="prev" title="NED Documentation Generator" href="neddoc.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="extending-the-ide">
+<h1>Extending the IDE</h1>
+<p>There are several ways to extend the functionality of the OMNeT++ IDE. The Simulation IDE is based on the Eclipse
+platform, but extends it with new editors, views, wizards, and other functionality.</p>
+<section id="installing-new-features">
+<h2>Installing New Features</h2>
+<p>Because the IDE is based on the Eclipse platform, it is possible to add additional features that are available for
+Eclipse. The installation procedure is exactly the same as with a standard Eclipse distribution. Choose the
+<span class="menuselection">Help ‣ Install New Software</span> menu item and select an existing Update Site to work with or add a new Site
+(using the site URL) to the Available Software Sites. After the selection, you can browse and install the packages the
+site offers.</p>
+<p>To read about installing new software into your IDE, please visit the <span class="guilabel">Updating and installing software</span> topic
+in the <span class="guilabel">Workbench User Guide</span>. You can find the online help system in the <span class="menuselection">Help ‣ Help Contents</span>
+menu.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>There are thousands of useful components and extensions for Eclipse. The best places to start looking for extensions
+are the Eclipse Marketplace (<a class="reference external" href="http://marketplace.eclipse.org/">http://marketplace.eclipse.org/</a>) and the Eclipse Plugins info site
+(<a class="reference external" href="http://www.eclipse-plugins.info">http://www.eclipse-plugins.info</a>).</p>
+</div>
+</section>
+<section id="adding-new-wizards">
+<h2>Adding New Wizards</h2>
+<p>The Simulation IDE makes it possible to contribute new wizards into the wizard dialogs under the <span class="menuselection">File ‣ New</span>
+menu without writing Java code or requiring any knowledge of Eclipse internals. Wizards can create new simulation
+projects, new simulations, new NED files or other files by using templates, or perform export/import functions. Wizard
+code is placed under the <code class="file docutils literal notranslate"><span class="pre">templates</span></code> folder of an OMNeT++ project, which makes it easy to distribute wizards
+with the model. When the user imports and opens a project which contains wizards, the wizards will automatically become
+available.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The way to create wizards is documented in the <a class="reference internal" href="../ide-customization-guide/ide-customization-guide.html#ide-customization-guide"><span class="std std-ref">IDE Customization Guide</span></a>.</p>
+</div>
+</section>
+<section id="project-specific-extensions">
+<h2>Project-Specific Extensions</h2>
+<p>It is possible to install an Eclipse plug-in by creating a <code class="file docutils literal notranslate"><span class="pre">plugins</span></code> folder in an OMNeT++ project and copying
+the plug-in JAR file to that folder (this mechanism is implemented as part of the Simulation IDE and does not work in
+generic Eclipse installations or with non-OMNeT++ projects). This extension mechanism allows the distribution of
+model-specific IDE extensions together with a simulation project without requiring the end user to do extra deployment
+steps to install the plug-in. Plugins and wizards that are distributed with a project are automatically activated when
+the host project is opened.</p>
+<p>Eclipse plug-in JAR files can be created using the <a class="reference external" href="https://eclipse.org/pde">Plug-in Development Environment</a>. The OMNeT++ IDE does not
+contain the PDE by default; however, it can be easily installed, if necessary.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Read the <a class="reference internal" href="../ide-developersguide/ide-developersguide.html#ide-developers-guide"><span class="std std-ref">IDE Developers Guide</span></a> for more information about how to install the PDE and how to
+develop plug-in extensions for the IDE.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/userguide/ide-extensions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

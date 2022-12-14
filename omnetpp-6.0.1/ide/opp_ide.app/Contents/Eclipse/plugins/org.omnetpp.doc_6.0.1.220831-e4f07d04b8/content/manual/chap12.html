@@ -1,0 +1,1170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta name="copyright" content="OpenSim Ltd.">
+  <meta NAME="Author" CONTENT="Andras Varga">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="STYLESHEET" href="../book.css"  type="text/css">
+  <title>OMNeT++ - Simulation Manual</title>
+</head>
+<style type="text/css">
+  hr.pgbr { color: #f5f5f5; margin-top: 40px; margin-bottom: 10px; }
+  ul.dl { padding-left: 30px; text-indent: -30px; list-style: none; }
+  pre { margin: 4px 8px 4px 2px; padding: 8px 10px; background:#fffff4; border: 1px solid #dddddd; }
+  pre.ned { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.msg { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.cpp { background:#f5f5f5; border-left: 4px solid #ccccff; }
+  pre.inifile { background:#fffff0; border-left: 4px solid #e5e533; }
+  pre.filelisting { background:#f0f0f0; border-left: 4px solid #d9d9d9; }
+  pre.xml { background:#fff0f0; border-left: 4px solid #ffa0a0; }
+  pre.commandline { background:#fffff0; border-left: 4px solid #606060; }
+  td,th { text-align:left; vertical-align:top; border:1px solid; padding:3pt; border-color:#000000; }
+  div.caption { margin-top: 10px; }
+  a[href] { color: #202080; text-decoration: none; }
+  a:visited { text-decoration: none; }
+  # a:hover { text-decoration: underline; }
+
+  table.matrix { display:inline-block; vertical-align: middle; position: relative; border: 0px; background:#ffffff; margin-left:8pt; margin-right:8pt; }
+  table.matrix:before, table.matrix:after { content: ""; position: absolute; top: 0; border: 1px solid #000; width: 6px; height: 100%; }
+  table.matrix:before { left: -6px; border-right: 0px; }
+  table.matrix:after { right: -6px; border-left: 0px; }
+  table.matrix td { padding: 5px; text-align: center; border: 0px; }
+
+  a.headerlink { visibility: hidden; }
+</style>
+<body>
+
+<p><hr><b><a href="chap11.html">[Prev]</A>&nbsp;<a href="chap13.html">[Next]</A>&nbsp;<a href="toc.html#toc_12.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p><h1><a name="cha:ana-sim"/>12 Result Recording and Analysis<a class="headerlink" href="#cha:ana-sim" title="Permalink to this headline">¶</a></h1>
+
+<p><h2><a name="sec:ana-sim:result-recording"/>12.1 Result Recording<a class="headerlink" href="#sec:ana-sim:result-recording" title="Permalink to this headline">¶</a></h2>
+
+<p>OMNeT++ provides built-in support for recording simulation results, via
+<i>output vectors</i> and <i>output scalars</i>. Output vectors are
+time series data, recorded from simple modules or channels. You can use
+output vectors to record end-to-end delays or round trip times of packets,
+queue lengths, queueing times, module state, link utilization, packet
+drops, etc. -- anything that is useful to get a full picture of what
+happened in the model during the simulation run.
+
+<p>Output scalars are summary results, computed during the simulation and
+written out when the simulation completes. A scalar result may be an
+(integer or real) number, or may be a statistical summary comprised of
+several fields such as count, mean, standard deviation, sum, minimum,
+maximum, etc., and optionally histogram data.
+
+<p>Results may be collected and recorded in two ways:
+
+<p><ol>
+  <li> Based on the signal mechanism, using declared statistics;
+  <li> Directly from C++ code, using the simulation library
+</ol>
+
+<p>The second method has been the traditional way of recording results. The
+first method, based on signals and declared statistics, was introduced in
+OMNeT++ 4.1, and it is preferable because it allows you to always record the
+results in the form you need, without requiring heavy instrumentation or
+continuous tweaking of the simulation model.
+
+<p><h3><a name="sec:ana-sim:signals-and-statistics"/>12.1.1 Using Signals and Declared Statistics<a class="headerlink" href="#sec:ana-sim:signals-and-statistics" title="Permalink to this headline">¶</a></h3>
+
+<p>This approach combines the signal mechanism (see
+<a href="chap4.html#sec:simple-modules:signals">[4.14]</a>) and NED properties (see
+<a href="chap3.html#sec:ned-lang:properties">[3.12]</a>) in order to de-couple the generation of
+results from their recording, thereby providing more flexibility in what to
+record and in which form. The details of the solution have been described
+in section <a href="chap4.html#sec:simple-modules:signal-based-statistics">[4.15]</a> in detail; here we
+just give a short overview.
+
+<p>Statistics are declared in the NED files with the <tt>@statistic</tt> property,
+and modules emit values using the signal mechanism. The simulation framework
+records data by adding special result file writer listeners to the signals.
+By being able to choose what listeners to add, the user can control what to
+record in the result files and what computations to apply before recording.
+The aforementioned section <a href="chap4.html#sec:simple-modules:signal-based-statistics">[4.15]</a>
+also explains how to instrument simple modules and channels for signals-based
+result recording.
+
+<p>The signals approach allows for calculation of aggregate statistics (such as the
+total number of packet drops in the network) and for implementing a warm-up
+period without support from module code. It also allows you to write
+dedicated statistics collection modules for the simulation, also without
+touching existing modules.
+
+<p>The same configuration options that were used to control result recording
+with <tt><a href="../api/classomnetpp_1_1cOutVector.html">cOutVector</a></tt> and <tt>recordScalar()</tt> also work when utilizing
+the signals approach, and there are extra configuration options to make
+the additional possibilities accessible.
+
+<p><h3><a name="sec:ana-sim:direct-result-recording"/>12.1.2 Direct Result Recording<a class="headerlink" href="#sec:ana-sim:direct-result-recording" title="Permalink to this headline">¶</a></h3>
+
+<p>With this approach, scalar and statistics results are collected in class
+variables inside modules, then recorded in the finalization phase via
+<tt>recordScalar()</tt> calls. Vectors are recorded using
+<tt><a href="../api/classomnetpp_1_1cOutVector.html">cOutVector</a></tt> objects. Use <tt><a href="../api/classomnetpp_1_1cStdDev.html">cStdDev</a></tt> to record summary statistics
+like mean, standard deviation, minimum/maximum, and histogram-like classes
+(<tt><a href="../api/classomnetpp_1_1cHistogram.html">cHistogram</a></tt>, <tt><a href="../api/classomnetpp_1_1cPSquare.html">cPSquare</a></tt>, <tt><a href="../api/classomnetpp_1_1cKSplit.html">cKSplit</a></tt>) to record the
+distribution. These classes are described in sections
+<a href="chap7.html#sec:sim-lib:statistics">[7.9]</a> and <a href="chap7.html#sec:sim-lib:result-recording">[7.10]</a>.
+Recording of individual vectors, scalars and statistics can be enabled or
+disabled via the configuration (ini file), and it is also the place to set
+up recording intervals for vectors.
+
+<p>The drawback of recording results directly from modules is that result
+recording is hardcoded in modules, and even simple requirement changes
+(e.g. record the average delay instead of each delay value, or vice versa)
+requires either code change or an excessive amount of result collection
+code in the modules.
+
+<p>
+
+<p><h2><a name="sec:ana-sim:config-results"/>12.2 Configuring Result Collection<a class="headerlink" href="#sec:ana-sim:config-results" title="Permalink to this headline">¶</a></h2>
+
+<p><h3><a name="sec:ana-sim:result-file-names"/>12.2.1 Result File Names<a class="headerlink" href="#sec:ana-sim:result-file-names" title="Permalink to this headline">¶</a></h3>
+
+<p>Simulation results are recorded into <i>output scalar files</i> that
+actually hold statistics results as well, and <i>output vector
+files</i>. The usual file extension for scalar files is <tt>.sca</tt>, and
+for vector files <tt>.vec</tt>.
+
+<p>Every simulation run generates a single scalar file and a vector file.
+The file names can be controlled with the <b><tt>output-vector-file</tt></b>
+and <b><tt>output-scalar-file</tt></b> options. These options rarely need
+to be used, because the default values are usually fine. The defaults
+are:
+
+<pre class="inifile">
+output-vector-file = "${resultdir}/${configname}-${runnumber}.vec"
+output-scalar-file = "${resultdir}/${configname}-${runnumber}.sca"
+</pre>
+<p>
+Here, <tt>${resultdir}</tt> is the value of the <b><tt>result-dir</tt></b>
+configuration option which defaults to <tt>results/</tt>, and
+<tt>${configname}</tt> and <tt>${runnumber}</tt> are the name of
+the configuration name in the ini file (e.g. <tt>[Config PureAloha]</tt>),
+and the run number. Thus, the above defaults generate file names
+like <tt>results/PureAloha-0.vec</tt>, <tt>results/PureAloha-1.vec</tt>,
+and so on.
+
+<p><ul class="note"><b>NOTE</b><br>
+  In OMNeT++ 3.x, the default result file names were <tt>omnetpp.vec</tt> and
+  <tt>omnetpp.sca</tt>, and scalar files were always appended to, rather than
+  being overwritten as in the 4.x version. When needed, the old behavior
+  for scalar files can be turned back on by setting
+  <tt>output-scalar-file-append=true</tt> in the configuration.
+</ul>
+
+<p>
+<h3><a name="sec:ana-sim:disabling-result-items"/>12.2.2 Enabling/Disabling Result Items<a class="headerlink" href="#sec:ana-sim:disabling-result-items" title="Permalink to this headline">¶</a></h3>
+
+<p>The recording of simulation results can be enabled/disabled at multiple levels
+with various configuration options:
+
+<p><ul>
+  <li> All recording from a <b><tt>@statistic</tt></b> can be enabled/disabled together
+        using the <b><tt>statistic-recording</tt></b> option;
+  <li> Recording of a scalar or a statistic object can be controlled with the
+        <b><tt>scalar-recording</tt></b> option;
+  <li> Recording of an output vector can be controlled with the <b><tt>vector-recording</tt></b>
+        option;
+  <li> Recording of the bins of a histogram object can be controlled with the
+        <b><tt>bin-recording</tt></b> option.
+</ul>
+
+<p>All the above options are boolean per-object options, thus, they have similar syntaxes:
+
+<p><ul>
+<li> <i>&lt;module-path&gt;.&lt;statistic-name&gt;.</i><b><tt>statistic-recording</tt></b><tt> = true/false</tt>
+<li> <i>&lt;module-path&gt;.&lt;scalar-name&gt;.</i><b><tt>scalar-recording</tt></b><tt> = true/false</tt>
+<li> <i>&lt;module-path&gt;.&lt;vector-name&gt;.</i><b><tt>vector-recording</tt></b><tt> = true/false</tt>
+<li> <i>&lt;module-path&gt;.&lt;histogram-name&gt;.</i><b><tt>bin-recording</tt></b><tt> = true/false</tt>
+</ul>
+
+<p>For example, all recording from the following statistic
+
+<pre class="ned">
+@statistic[queueLength](record=max,timeavg,vector);
+</pre>
+<p>
+can disabled with this ini file line:
+
+<pre class="inifile">
+**.queueLength.statistic-recording = false
+</pre>
+<p>
+When a scalar, vector, or histogram is recorded using a <b><tt>@statistic</tt></b>,
+its name is derived from the statistic name, by appending the recording
+mode after a semicolon. For example, the above statistic will generate 	the
+scalars named <tt>queueLength:max</tt> and <tt>queueLength:timeavg</tt>, and the
+vector named <tt>queueLength:vector</tt>. Their recording can be individually
+disabled with the following lines:
+
+<pre class="inifile">
+**.queueLength:max.scalar-recording = false
+**.queueLength:timeavg.scalar-recording = false
+**.queueLength:vector.vector-recording = false
+</pre>
+<p>
+The statistic, scalar or vector name part in the key may also contain
+wildcards. This can be used, for example, to handle result items with
+similar names together, or, by using <tt>*</tt> as name, for filtering by
+module or to disable all recording. The following example turns off
+recording of all scalar results except those called <tt>latency</tt>, and those
+produced by modules named <tt>tcp</tt>:
+
+<pre class="inifile">
+**.tcp.*.scalar-recording = true
+**.latency.scalar-recording = true
+**.scalar-recording = false
+</pre>
+<p>
+To disable all result recording, use the following three lines:
+
+<pre class="inifile">
+**.statistic-recording = false
+**.scalar-recording = false
+**.vector-recording = false
+</pre>
+<p>
+The first line is not strictly necessary. However, it may improve runtime
+performance because it causes result recorders not to be added, instead of
+adding and then disabling them.
+
+<p>
+<h3><a name="sec:ana-sim:configuring-recording-modes"/>12.2.3 Selecting Recording Modes for Signal-Based Statistics<a class="headerlink" href="#sec:ana-sim:configuring-recording-modes" title="Permalink to this headline">¶</a></h3>
+
+<p>Signal-based statistics recording has been designed so that it can be
+easily configured to record a &#8220;default minimal&#8221; set of results, a
+&#8220;detailed&#8221; set of results, and a custom set of results (by modifying
+the previous ones, or defined from scratch).
+
+<p>Recording can be tuned with the <b><tt>result-recording-modes</tt></b>
+per-object configuration option. The &#8220;object&#8221; here is the statistic,
+which is identified by the full path (hierarchical name) of the module or
+connection channel object in question, plus the name of the statistic
+(which is the &#8220;index&#8221; of <b><tt>@statistic</tt></b> property, i.e. the name in
+the square brackets). Thus, configuration keys have the syntax
+<i>&lt;module-path&gt;.&lt;statistic-name&gt;.</i><tt>result-recording-modes=</tt>.
+
+<p>The <b><tt>result-recording-modes</tt></b> option accepts one or more items as value,
+separated by comma. An item may be a result recording mode (surprise!), and
+two words with a special meaning, <tt>default</tt> and <tt>all</tt>:
+
+<p><ul>
+<li> A <i>result recording mode</i> means any item that may occur in the
+      <tt>record</tt> key of the <b><tt>@statistic</tt></b> property; for example,
+      <tt>count</tt>, <tt>sum</tt>, <tt>mean</tt>, <tt>vector((count-1)/2)</tt>.
+<li> <b><tt>default</tt></b> stands for the set of non-optional items from
+      the <b><tt>@statistic</tt></b> property's <tt>record</tt> list, that is, those
+      without question marks.
+<li> <b><tt>all</tt></b> means all items from the <b><tt>@statistic</tt></b> property's
+      <tt>record</tt> list, including the ones with question marks.
+</ul>
+
+<p>The default value is <tt>default</tt>.
+
+<p>A lone &#8220;-&#8221; as option value disables all recording modes.
+
+<p><i>Recording mode</i> items in the list may be prefixed with &#8220;+&#8221; or
+&#8220;-&#8221; to add/remove them from the set of result recording modes. The
+initial set of result recording modes is <tt>default</tt>; if the first item
+is prefixed with &#8220;+&#8221; or &#8220;-&#8221;, then that and all subsequent items are
+understood as modifying the set; if the first item does not start with with
+&#8220;+&#8221; or &#8220;-&#8221;, then it replaces the set, and further items are understood
+as modifying the set.
+
+<p>This sounds more complicated than it is; an example will make it clear.
+Suppose we are configuring the following statistic:
+
+<pre class="ned">
+@statistic[foo](record=count,mean,max?,vector?);
+</pre>
+<p>
+With the following the ini file lines (see results in comments):
+
+<pre class="inifile">
+**.result-recording-modes = default  # --&gt; count, mean
+**.result-recording-modes = all      # --&gt; count, mean, max, vector
+**.result-recording-modes = -        # --&gt; none
+**.result-recording-modes = mean     # --&gt; only mean (disables 'default')
+**.result-recording-modes = default,-vector,+histogram # --&gt; count,mean,histogram
+**.result-recording-modes = -vector,+histogram         # --&gt; same as the previous
+**.result-recording-modes = all,-vector,+histogram  # --&gt; count,mean,max,histogram
+</pre>
+<p>
+Here is another example which shows how to write a more specific option
+key. The following line applies to <tt>queueLength</tt> statistics of
+<tt>fifo[]</tt> submodule vectors anywhere in the network:
+
+<pre class="inifile">
+**.fifo[*].queueLength.result-recording-modes = +vector  # default plus vector
+</pre>
+<p>
+In the result file, the recorded scalars will be suffixed with the recording mode,
+i.e. the mean of <tt>queueingTime</tt> will be recorded as <tt>queueingTime:mean</tt>.
+
+<p>
+<h3><a name="sec:ana-sim:warmup-period"/>12.2.4 Warm-up Period<a class="headerlink" href="#sec:ana-sim:warmup-period" title="Permalink to this headline">¶</a></h3>
+
+<p>The <b><tt>warmup-period</tt></b> option specifies the length of the initial
+warm-up period. When set, results belonging to the first <i>x</i> seconds
+of the simulation will not be recorded into output vectors, and will
+not be counted into the calculation of output scalars.
+This option is useful for steady-state simulations. The default is 0s
+(no warmup period).
+
+<p>Example:
+
+<pre class="inifile">
+warmup-period = 20s
+</pre>
+<p>
+
+<p><h4><a name="sec:ana-sim:refining-warmup-period-handling"/>12.2.4.1 Refining Warm-up Period Handling<a class="headerlink" href="#sec:ana-sim:refining-warmup-period-handling" title="Permalink to this headline">¶</a></h4>
+
+<p>Warm-up period handling works by inserting a special filter, a <i>warm-up
+period filter</i> into the filter/recorder chain if a warm-up period is requested.
+This filter acts like a timed switch: it discards values during the specified warm-up
+period, and allows them to pass through afterwards.
+
+<p>OMNeT++ allows you to disable the automatic adding of warm-up filters by
+specifying <tt>autoWarmupFilter=false</tt> in the <tt>@statistic</tt> as an attribute,
+and manually placing such filters (<tt>warmup</tt>) instead.
+
+<p>Why is this necessary? By default, the filter is inserted at the front of the
+filter/recorder chain of every statistic. However, the front is not always the
+correct place for the warm-up period filter. Consider for example, computing the
+number of packets in a (compound) queue as the difference between the number of
+arrivals and departures from the queue. This can be achieved using
+<tt>@statistic</tt> as follows:
+
+<pre class="ned">
+@signal[pkIn](type=<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a>);
+@signal[pkOut](type=<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a>);
+@statistic[queueLen](source=count(pkIn)-count(pkOut);record=vector);
+</pre>
+<p>
+When a warm-up period is configured, the necessary warm-up period filters are
+inserted right before the <i>count</i> filters. This can be expressed as the
+following expression for the statistic's <tt>source</tt> attribute:
+
+<pre class="ned">
+count(warmup(pkIn)) - count(warmup(pkOut))
+</pre>
+<p>
+which is apparently incorrect, because the <i>count</i> filters only start
+counting when the warm-up period is over. Thus, the measured queue length will
+start from zero when the warm-up period is over, even though the queue might not
+be empty! In fact, if the first event after the warm-up period is a departure,
+the measured queue length will even go negative.
+
+<p>The right solution would be put the <tt>warmup</tt> filter at the end, like so:
+
+<pre class="ned">
+warmup(count(pkIn)-count(pkOut))
+</pre>
+<p>
+Thus, the correct form of the queue length statistic is the following:
+
+<pre class="ned">
+@statistic[queueLen](source=warmup(count(pkIn)-count(pkOut));
+                     autoWarmupFilter=false;
+                     record=vector);
+</pre>
+<p>
+
+<p><h4><a name="sec:ana-sim:warmup-period-manual-result-recording"/>12.2.4.2 Manual Result Recording<a class="headerlink" href="#sec:ana-sim:warmup-period-manual-result-recording" title="Permalink to this headline">¶</a></h4>
+
+<p>Results recorded via signal-based statistics automatically obey the warm-up
+period setting, but modules that compute and record scalar results
+manually (via <tt>recordScalar()</tt>) need to be modified so that they take
+the warm-up period into account.
+
+<p><ul class="note"><b>NOTE</b><br>
+When configuring a warm-up period, make sure that modules that compute and
+record scalar results manually via <tt>recordScalar()</tt> actually obey the
+warm-up period in the C++ code.
+</ul>
+
+<p>The warm-up period is available via the <tt>getWarmupPeriod()</tt> method of
+the simulation manager object, so the C++ code that updates the corresponding
+state variables needs to be surrounded with an <i>if</i> statement:
+
+<p>Old:
+
+<pre class="cpp">
+dropCount++;
+</pre>
+<p>
+New:
+
+<pre class="cpp">
+if (simTime() &gt;= getSimulation()-&gt;getWarmupPeriod())
+    dropCount++;
+</pre>
+<p>
+
+<p><h3><a name="sec:ana-sim:vector-recording-intervals"/>12.2.5 Output Vectors Recording Intervals<a class="headerlink" href="#sec:ana-sim:vector-recording-intervals" title="Permalink to this headline">¶</a></h3>
+
+<p>The size of output vector files can easily reach several gigabytes,
+but very often, only some of the recorded statistics are
+interesting to the analyst. In addition to selecting which vectors to
+record, OMNeT++ also allows one to specify one or more collection intervals.
+
+<p>The latter can be configured with the <b><tt>vector-recording-intervals</tt></b>
+per-object option. The syntax of the configuration option is
+<i>&lt;module-path&gt;.&lt;vector-name&gt;.</i><tt>vector-recording-intervals=</tt><i>&lt;intervals&gt;</i>,
+where both <i>&lt;module-path&gt;</i> and <i>&lt;vector-name&gt;</i> may
+contain wildcards (see <a href="chap10.html#sec:config-sim:wildcards">[10.3.1]</a>).
+<i>&lt;vector-name&gt;</i> is the vector name, or the name string of the
+<tt><a href="../api/classomnetpp_1_1cOutVector.html">cOutVector</a></tt> object. By default, all output vectors are turned
+on for the whole duration the simulation.
+
+<p>One can specify one or more intervals in the <i>&lt;startTime&gt;..&lt;stopTime&gt;</i>
+syntax, separated by comma. <i>&lt;startTime&gt;</i> or <i>&lt;stopTime&gt;</i> need
+to be given with measurement units, and both can be omitted to denote
+the beginning and the end of the simulation, respectively.
+
+<p>The following example limits all vectors to three intervals, except
+<tt>dropCount</tt> vectors which will be recorded during the whole
+simulation run:
+
+<pre class="inifile">
+**.dropCount.vector-recording-intervals = 0..
+**.vector-recording-intervals = 0..1000s, 5000s..6000s, 9000s..
+</pre>
+<p>
+<h3><a name="sec:ana-sim:vector-eventnum-recording"/>12.2.6 Recording Event Numbers in Output Vectors<a class="headerlink" href="#sec:ana-sim:vector-eventnum-recording" title="Permalink to this headline">¶</a></h3>
+
+<p>A third per-vector configuration option is <b><tt>vector-record-eventnumbers</tt></b>,
+which specifies whether to record event numbers for an output vector.
+(Simulation time and value are always recorded. Event numbers are needed
+by the Sequence Chart Tool, for example.) Event number recording is enabled
+by default; it may be turned off to save disk space.
+
+<pre class="inifile">
+**.vector-record-eventnumbers = false
+</pre>
+<p>
+If the (default) <tt>cIndexedFileOutputVectorManager</tt> class is used to
+record output vectors, there are two more options to fine-tune its resource
+usage. <tt>output-vectors-memory-limit</tt> specifies the total memory that
+can be used for buffering output vectors. Larger values produce less
+fragmented vector files (i.e. cause vector data to be grouped into larger
+chunks), and therefore allow more efficient processing later.
+<tt>vector-max-buffered-values</tt> specifies the maximum number of values to
+buffer per vector, before writing out a block into the output vector file.
+The default is no per-vector limit (i.e. only the total memory limit is in
+effect.)
+
+<p>
+<h3><a name="sec:ana-sim:saving-parameters-as-scalars"/>12.2.7 Saving Parameters as Scalars<a class="headerlink" href="#sec:ana-sim:saving-parameters-as-scalars" title="Permalink to this headline">¶</a></h3>
+
+<p>When you are running several simulations with different parameter
+settings, you will usually want to refer to selected
+input parameters in the result analysis as well -- for example when
+drawing a throughput (or response time) versus load (or network
+background traffic) plot. Average throughput or response time numbers
+are saved into the output scalar files, and it is useful for the input
+parameters to get saved into the same file as well.
+
+<p>For convenience, OMNeT++ automatically saves the iteration variables
+into the output scalar file if they have numeric value, so they can
+be referred to during result analysis.
+
+<p><ul class="warning"><b>WARNING</b><br>
+    If an iteration variable has non-numeric value, it will not be recorded
+    automatically and cannot be used during analysis. This can happen
+    unintentionally if you specify units inside an iteration variable list:
+<pre class="inifile">
+**.param = exponential( ${mean=0.2s, 0.4s, 0.6s} )  #WRONG!
+**.param = exponential( ${mean=0.2, 0.4, 0.6}s )    #OK
+</pre>
+</ul>
+
+<p>Module parameters can also be saved, but this has to be
+requested by the user, by configuring <tt>param-record-as-scalar=true</tt> for the
+parameters in question. The configuration key is a pattern that
+identifies the parameter, plus <tt>.param-record-as-scalar</tt>. An example:
+
+<pre class="inifile">
+**.host[*].networkLoad.param-record-as-scalar = true
+</pre>
+<p>
+This looks simple enough, however there are three pitfalls:
+non-numeric parameters, too many matching parameters, and
+random-valued volatile parameters.
+
+<p>First, the scalar file only holds numeric results, so non-numeric
+parameters cannot be recorded -- that will result in a runtime
+error.
+
+<p>Second, if wildcards in the pattern match too many parameters, that
+might unnecessarily increase the size of the scalar file. For example,
+if the <tt>host[]</tt> module vector size is 1000 in the example below, then the
+same value (3) will be saved 1000 times into the scalar file, once for
+each host.
+
+<pre class="inifile">
+**.host[*].startTime = 3
+**.host[*].startTime.param-record-as-scalar = true  # saves "3" once for each host
+</pre>
+<p>
+Third, recording a random-valued volatile parameter will just save a
+random number from that distribution. This is rarely what you need, and
+the simulation kernel will also issue a warning if this happens.
+
+<pre class="inifile">
+**.interarrivalTime = exponential(1s)
+**.interarrivalTime.param-record-as-scalar = true  # wrong: saves random values!
+</pre>
+<p>
+These pitfalls are quite common in practice, so it is usually better
+to rely on the iteration variables in the result analysis.
+That is, one can rewrite the above example as
+
+<pre class="inifile">
+**.interarrivalTime = exponential( ${mean=1}s )
+</pre>
+<p>
+and refer to the <tt>$mean</tt> iteration variable instead of the
+interarrivalTime module parameter(s) during result analysis.
+<tt>param-record-as-scalar=true</tt> is not needed, because iteration variables are
+automatically saved into the result files.
+
+<p>
+<h3><a name="sec:ana-sim:outputfile-precision"/>12.2.8 Recording Precision<a class="headerlink" href="#sec:ana-sim:outputfile-precision" title="Permalink to this headline">¶</a></h3>
+
+<p>Output scalar and output vector files are text files, and floating point
+values (<tt>double</tt>s) are recorded into it using <tt>fprintf()</tt>'s
+<tt>"%g"</tt> format. The number of significant digits can be configured
+using the <b><tt>output-scalar-precision</tt></b> and <b><tt>output-vector-precision</tt></b>
+configuration options.
+
+<p>The default precision is 12 digits. The following has to be considered when
+setting a different value:
+
+<p>IEEE-754 doubles are 64-bit numbers. The mantissa is 52 bits, which is
+roughly equivalent to 16 decimal places (52*log(2)/log(10)). However, due
+to rounding errors, usually only 12..14 digits are correct, and the rest is
+pretty much random garbage which should be ignored. However, when you
+convert the decimal representation back into a <tt>double</tt> for result
+processing, an additional small error will occur, because 0.1, 0.01, etc.
+cannot be accurately represented in binary. This conversion error is
+usually smaller than what that the <tt>double</tt> variable already had
+before recording into the file. However, if it is important, you can
+eliminate this error by setting the recording precision to 16 digits or
+more (but again, be aware that the last digits are garbage). The practical
+upper limit is 17 digits, setting it higher doesn't make any difference in
+<tt>fprintf()</tt>'s output.
+
+
+Errors resulting from converting to/from decimal representation can be
+eliminated by choosing an output vector/output scalar manager class
+which stores <tt>double</tt>s in their native binary form.
+The appropriate configuration options are <b><tt>outputvectormanager-class</tt></b>
+and <b><tt>outputvectormanager-class</tt></b>. For example,
+<tt>cMySQLOutputScalarManager</tt> and <tt>cMySQLOutputScalarManager</tt>
+provided in <tt>samples/database</tt> fulfill this requirement.
+
+<p>However, before worrying too much about rounding and conversion errors,
+consider the <i>real</i> accuracy of your results:
+
+<p><ul>
+  <li> In real life, it is very difficult to measure quantities (weight, distance,
+     even time) with more than a few digits of precision. What precision
+     are your input data? For example, if you approximate inter-arrival
+     time as <i>exponential(0.153)</i> when the mean is really
+     <i>0.152601...</i> and the distribution is not even exactly exponential,
+     you are already starting out with a bigger error than rounding can cause.
+
+<p>  <li> The simulation model is itself an approximation of real life. How much
+     error do the (known and unknown) simplifications cause in the results?
+</ul>
+
+<p>
+
+<p><h2><a name="sec:ana-sim:result-files"/>12.3 Result Files<a class="headerlink" href="#sec:ana-sim:result-files" title="Permalink to this headline">¶</a></h2>
+
+<p><h3><a name="sec:ana-sim:omnetpp-result-file-format"/>12.3.1 The OMNeT++ Result File Format<a class="headerlink" href="#sec:ana-sim:omnetpp-result-file-format" title="Permalink to this headline">¶</a></h3>
+
+<p>By default, OMNeT++ saves simulation results into textual, line-oriented files.
+The advantage of a text-based, line-oriented format is that it is very
+accessible and easy to parse with a wide range of tools and languages, and
+still provides enough flexibility to be able to represent the data it
+needs to (in contrast to e.g. CSV). This section provides an overview of
+these file formats (output vector and output scalar files); the precise
+specification is available in the Appendix (<a href="chap28.html#cha:result-file-formats">[28]</a>).
+
+
+By default, each file contains data from one run only.
+
+<p>Result files start with a header that contains several attributes of the
+simulation run: a reasonably globally unique run ID, the network NED type
+name, the experiment-measurement-replication labels, the values of
+iteration variables and the repetition counter, the date and time, the host
+name, the process id of the simulation, random number seeds, configuration
+options, and so on. These data can be useful during result processing, and
+increase the reproducibility of the results.
+
+<p>
+Vectors are recorded into a separate file for practical reasons: vector
+data usually consume several magnitudes more disk space than scalars.
+
+<p>
+<h4><a name="sec:ana-sim:output-vector-files"/>12.3.1.1 Output Vector Files<a class="headerlink" href="#sec:ana-sim:output-vector-files" title="Permalink to this headline">¶</a></h4>
+
+<p>All output vectors from a simulation run are recorded into the same file.
+The following sections describe the format of the file, and
+how to process it.
+
+<p>An example file fragment (without header):
+
+<pre class="filelisting">
+...
+vector 1   net.host[12]  responseTime  TV
+1  12.895  2355.66
+1  14.126  4577.66664666
+vector 2   net.router[9].ppp[0] queueLength  TV
+2  16.960  2
+1  23.086  2355.66666666
+2  24.026  8
+...
+</pre>
+<p>
+There two types of lines: vector declaration lines (beginning with the word
+<tt>vector</tt>), and data lines. A <i>vector declaration line</i>
+introduces a new output vector, and its columns are: vector Id, module of
+creation, name of <tt><a href="../api/classomnetpp_1_1cOutVector.html">cOutVector</a></tt> object, and multiplicity (usually 1).
+Actual data recorded in this vector are on <i>data lines</i> which begin
+with the vector Id. Further columns on data lines are the simulation time
+and the recorded value.
+
+<p>
+Since OMNeT++ 4.0, vector data are recorded into the file clustered by
+output vectors, which, combined with index files, allows much more
+efficient processing. Using the index file, tools can extract particular
+vectors by reading only those parts of the file where the desired data are
+located, and do not need to scan through the whole file linearly.
+
+<p>
+<h4><a name="sec:ana-sim:scalar-result-files"/>12.3.1.2 Scalar Result Files<a class="headerlink" href="#sec:ana-sim:scalar-result-files" title="Permalink to this headline">¶</a></h4>
+
+<p>Fragment of an output scalar file (without header):
+
+<pre class="filelisting">
+...
+scalar "lan.hostA.mac" "frames sent"  99
+scalar "lan.hostA.mac" "frames rcvd"  3088
+scalar "lan.hostA.mac" "bytes sent"   64869
+scalar "lan.hostA.mac" "bytes rcvd"   3529448
+...
+</pre>
+<p>
+Every scalar generates one <tt>scalar</tt> line in the file.
+
+<p>Statistics objects (<tt><a href="../api/classomnetpp_1_1cStatistic.html">cStatistic</a></tt> subclasses such as <tt><a href="../api/classomnetpp_1_1cStdDev.html">cStdDev</a></tt>)
+generate several lines: mean, standard deviation, etc.
+
+<p>
+
+<p><h3><a name="sec:ana-sim:sqlite-result-files"/>12.3.2 SQLite Result Files<a class="headerlink" href="#sec:ana-sim:sqlite-result-files" title="Permalink to this headline">¶</a></h3>
+
+<p>Starting from version 5.1, OMNeT++ contains experimental support for
+saving simulation results into SQLite database files. The perceived advantage
+of SQLite is existing support in many existing tools and languages (no need to
+write custom parsers), and being able to use the power of the SQL language
+for queries. The latter is very useful for processing scalar results, and less
+so for vectors and histograms.
+
+<p>To let a simulation record its results in SQLite format, add the following
+configuration options to its <tt>omnetpp.ini</tt>:
+
+<pre class="inifile">
+outputvectormanager-class="omnetpp::envir::SqliteOutputVectorManager"
+outputscalarmanager-class="omnetpp::envir::SqliteOutputScalarManager"
+</pre>
+<p>
+<ul class="note"><b>NOTE</b><br>
+Alternatively, to make SQLite the default format, recompile OMNeT++ with
+<tt>PREFER_SQLITE_RESULT_FILES=yes</tt> set in <tt>configure.user</tt>.
+(Don't forget to also run  <tt>./configure</tt> before <tt>make</tt>.)
+</ul>
+
+<p>The SQLite result files will be created with the same names as textual
+result files. The two formats also store exactly the same data, only in
+a different way (there is one-to-one correspondence between them.) The
+Simulation IDE and <tt>scavetool</tt> also understand both formats.
+
+<p><ul class="hint"><b>HINT</b><br>
+If you want to get acquainted with the organization of SQLite result
+files, exploring one in a graphical tool such as SQLiteBrowser or SQLite
+Studio should be a good start.
+</ul>
+
+<p>The database schema can be found in Appendix <a href="chap28.html#cha:result-file-formats">[28]</a>.
+
+<p>
+
+<p><h3><a name="sec:ana-sim:scavetool"/>12.3.3 Scavetool<a class="headerlink" href="#sec:ana-sim:scavetool" title="Permalink to this headline">¶</a></h3>
+<!--scavetool-->
+
+<p>OMNeT++'s <tt>opp_scavetool</tt> program is a command-line tool for exploring,
+filtering and processing of result files, and exporting the result in formats
+digestible by other tools.
+
+<p><h4><a name="sec:ana-sim:scavetool:commands"/>12.3.3.1 Commands<a class="headerlink" href="#sec:ana-sim:scavetool:commands" title="Permalink to this headline">¶</a></h4>
+
+<p><tt>opp_scavetool</tt>'s functionality is grouped under four commands:
+<tt>query</tt>, <tt>export</tt>, <tt>index</tt>, and <tt>help</tt>.
+
+<p><ul>
+
+<p><li> <b>query</b>: Query the contents of result files. One can list
+    runs, run attributes, result items, unique result names, unique module
+    names, unique configuration names, etc. One can filter for result types
+    (scalar/vector/histogram), and by run, module name, result name and value,
+    using match expressions. There are various options controlling the format
+    of the output (group-by-runs; grep-friendly; suppress labels; several
+    modes for identifying the run in the output, etc.)
+
+<p><li> <b>export</b>: Export results in various formats. Results can be filtered
+    by run, module name, result name and more, using match expressions. Output
+    vectors can be cropped to a time interval. Several output formats are
+    available: CSV in two flavours (one for machine consumption, and a more
+    informal one for human consumption via loading into spreadsheet programs),
+    OMNeT++ output scalar/vector file (default), OMNeT++ SQLite result file, and
+    JSON (again two flavours: one strictly adhering to the JSON rules, and
+    another one with slightly more relaxed rules but being also more
+    expressive). All exporters have multiple options for fine-tuning the output.
+
+<p><li> <b>index</b>: Generate index files (.vci) for vector files. Note that this
+    command is usually not needed, as other scavetool commands automatically create
+    vector file indices if they are missing or out of date (unless indexing is
+    explicitly disabled.) This command can also be used to rebuild a vector file
+    so that data are clustered by vectors for more efficient access.
+
+<p><li> <b>help</b>: Prints help. The synopsys is <tt>opp_scavetool help &lt;topic&gt;</tt>,
+    where any command name can be used as topic, plus there are
+    additional ones like <tt>patterns</tt> or <tt>filters</tt>. <tt>scavetool
+    &lt;command&gt; -h</tt> also works.
+
+<p></ul>
+
+<p>The default command is <tt>query</tt>, so its name may be omitted on the
+command line.
+
+<p>
+<h4><a name="sec:ana-sim:scavetool:examples"/>12.3.3.2 Examples<a class="headerlink" href="#sec:ana-sim:scavetool:examples" title="Permalink to this headline">¶</a></h4>
+
+<p>The following example prints a one-line summary about the contents of
+result files in the current directory:
+
+<pre class="commandline">
+$ opp_scavetool *.sca *.vec
+runs: 42   scalars: 294  parameters: 7266  vectors: 22  statistics: 0  ...
+</pre>
+<p>
+Listing all results is possible with <tt>-l</tt>:
+
+<pre class="commandline">
+$ opp_scavetool -l *.sca *.vec
+PureAlohaExperiment-439-20161216-18:56:20-27607:
+
+scalar Aloha.server  duration              26.3156
+scalar Aloha.server  collisionLength:mean  0.139814
+vector Aloha.host[0] radioState:vector vectorId=2 count=3 mean=0.33 ..
+vector Aloha.host[1] radioState:vector vectorId=3 count=9 mean=0.44 ..
+vector Aloha.host[2] radioState:vector vectorId=4 count=5 mean=0.44 ..
+...
+</pre>
+<p>
+To export all scalars in CSV, use the following command:
+
+<pre class="commandline">
+$  opp_scavetool export -F CSV-R -o x.csv *.sca
+Exported 294 scalars, 7266 parameters, 84 histograms
+</pre>
+<p>
+The next example writes the queueing and transmission time vectors of
+<tt>sink</tt> modules into a CSV file.
+
+<pre class="commandline">
+$ opp_scavetool export -f 'module=~**.sink AND ("queueing time" OR "tx time")'
+  -o out.csv -F CSV-R *.vec
+Exported 15 vectors
+</pre>
+<p>
+
+<p>
+<h2><a name="sec:ana-sim:python"/>12.4 Result Analysis<a class="headerlink" href="#sec:ana-sim:python" title="Permalink to this headline">¶</a></h2>
+
+<p>The recommended way of analyzing simulation results is using the
+<i>Analysis Tool</i> in the <i>Simulation IDE</i>. The Analysis Tool
+provides a comfortable user interface for selecting result files to work with,
+browsing their contents, selecting results of interest from them, and creating
+plots. The resulting plots and their underlying data can be exported
+in several formats, both for individual charts and in batches. You can choose
+from several chart types, and new ones can also be created.
+
+<p>Charts in the Analysis Tool are powered by Python. The Python scripts underlying
+the various charts are open for the user to view and edit, so arbitrary logic
+and computations can be implemented. Visualization may use the IDE's native
+plotting widgets, but it can also be done with Matplotlib. The use of Matplotlib
+allows virtually limitless possibilities for visualization.<br><ul><font size=-1>[Note that
+Matplotlib also has extensions like Seaborn, Canopy, HoloViews, etc., which can
+also be used in chart scripts, further expanding the set of possibilities.]</font></ul> The IDE's
+own plotting widgets are more limited in functionality, but they are much more
+scalable than Matplotlib.
+
+<p><ul class="note"><b>NOTE</b><br>
+Note the terminology. Although the nouns <i>chart</i> and <i>plot</i> are
+almost interchangeable in everyday speech, we assign related but clearly
+distinct meanings to them when discussing OMNeT++ result analysis. By
+<i>chart</i> we essentially mean a Python script with its associated metadata
+and parameterization that serves as a "recipe" for producing a plot; and the
+word <i>plot</i> is used to refer to the graphics which appears as the result
+of running said script.
+</ul>
+
+<p>Chart scripts can also be used outside the IDE. Those saved as part of the IDE's
+analysis files (<tt>.anf</tt>) can be viewed or run using the <tt>opp_chartool</tt>
+command-line program. You can also take advantage of result processing
+capabilities in standalone Python scripts. When chart scripts run outside the IDE,
+native plotting widgets are "emulated" using Matplotlib.
+
+<p>The Analysis Tool is covered in detail in the User Guide. The following sections
+deal with the programming API.
+
+<p>
+<h3><a name="sec:ana-sim:python_packages"/>12.4.1 Python Packages<a class="headerlink" href="#sec:ana-sim:python_packages" title="Permalink to this headline">¶</a></h3>
+
+<p>Chart scripts heavily build on the following, fairly standard Python packages:
+
+<p><ul>
+  <li> <i>NumPy</i>: We use NumPy for its efficient representation of numeric
+    arrays and the operations on them.
+  <li> <i>Pandas</i>: Pandas <tt>DataFrame</tt>s are used for representing and
+    manipulating simulation results.
+  <li> <i>Matplotlib</i>: For creating the actual plots.
+</ul>
+
+<p>OMNeT++ adds the following packages:
+
+<p><ul>
+  <li> <i>omnetpp.scave.results</i>: Provides access to the simulation
+    results for the chart script. The results are returned as Pandas
+    <tt>DataFrame</tt>s of various formats.
+  <li> <i>omnetpp.scave.chart</i>: Provides access to the properties of the
+    current chart for the chart script.
+  <li> <i>omnetpp.scave.ideplot</i>: This module is the interface for displaying
+    plots with the IDE's native plotting widgets. The API is intentionally very
+    close to <tt>matplotlib.pyplot</tt>, which facilitates porting scripts across
+    the two APIs. When a chart script runs outside the context of a native
+    plotting widget, such as when run from <tt>opp_charttool</tt>, the functions
+    are emulated with Matplotlib.
+  <li> <i>omnetpp.scave.utils</i>: A collection of utility function for data
+    manipulation and plotting, built on top of <tt>DataFrame</tt>s and the <tt>chart</tt>
+    and <tt>plot</tt> packages from <tt>omnetpp.scave</tt>.
+  <li> <i>omnetpp.scave.vectorops</i>: Contains operations that can be
+    applied to output vectors.
+</ul>
+
+<p>An additional module:
+
+<p><ul>
+  <li> <i>omnetpp.scave.analysis</i>: Provides support for reading and writing
+   analysis (anf) files from Python, and running chart scripts in them for display,
+   image export or data export.
+</ul>
+
+<p>These packages are documented in detail in Appendix <a href="chap30.html#cha:chart-api">[30]</a>.
+
+<p>
+<h3><a name="sec:ana-sim:example_chart_script"/>12.4.2 An Example Chart Script<a class="headerlink" href="#sec:ana-sim:example_chart_script" title="Permalink to this headline">¶</a></h3>
+
+<p>Since information on NumPy, Pandas and Matplotlib can be found in abundance
+online, and a reference of the <tt>omnetpp.scave.*</tt> Python packages is in the
+Appendix, it makes little sense here to go through the functionality they
+provide. Instead, in this section we walk through an actual chart script in
+order to see how it looks in practice.
+
+<p>The chosen chart script is that of the bar chart. It is quite representative, so
+it will prepare you to understand other chart scripts, modify them for custom
+needs, or write your own; yet it is short and simple, so it is easy to follow.
+We are going to list the source, and pause for explanations after every few lines.
+
+<p><pre class="cpp">
+from omnetpp.scave import results, chart, utils
+</pre>
+
+<p>The first lines is for importing the packages we are going to use. This is
+necessary because nothing is imported by default when the chart script starts.
+
+<p>Notice how all imported modules are under the <tt>omnetpp.scave</tt> module, and not
+directly from <tt>numpy</tt> or <tt>pandas</tt> or <tt>matplotlib</tt> packages. This is
+because almost all necessary functionality is already encompassed in convenience
+methods in (mostly) the <tt>utils</tt> and <tt>plot</tt> modules.
+
+<p><pre class="cpp">
+# get chart properties
+props = chart.get_properties()
+</pre>
+
+<p>Then, we obtain the properties of the bar chart from the <tt>chart</tt> module.
+The <tt>props</tt> object we get is a Python <tt>dict</tt> whose entries can be
+influnced by the chart properties dialog, and they serve as parameters for
+the chart script and the resulting plot.
+
+<p>Try adding <tt>print(props)</tt> to the code, or <tt>for k,v in props.items():
+print(repr(k), "=", repr(v))</tt> for fancier output. After the chart script ran,
+you should see an output similar to the following:
+
+<pre class="commandline">
+'confidence_level' = '95\%'
+'filter' = 'type =~ scalar AND name =~ channelUtilization:last'
+'grid_show' = 'true'
+'legend_prefer_result_titles' = 'true'
+'title' = ''
+'legend_show' = 'true'
+'matplotlibrc' = ''
+...
+</pre>
+<p>
+Many entries should look familiar. Indeed, most of the entries have direct
+correspondence to widgets in the <i>Chart Properties</i> dialog in the IDE.
+Note that all values are strings.
+
+<p><pre class="cpp">
+utils.preconfigure_plot(props)
+</pre>
+
+<p>The <tt>preconfigure_plot()</tt> call is a mandatory part of a chart script, and
+its job is to ensure that visual properties take effect in the plot. Note that
+we will also have a <tt>postconfigure_plot()</tt> call, because some properties
+must be set before, and others after the plotting.
+
+<p><pre class="cpp">
+# collect parameters for query
+filter_expression = props["filter"]
+include_fields = props["include_fields"] == "true"
+</pre>
+
+<p>Here we obtain the result query string from the properties. The query string
+selects the subset of the results that serve as input to the chart from the set of
+all results loaded from the result files. The <tt>"filter"</tt> property is
+common to almost all chart types.
+
+<p>Since bar charts work with scalars, we provide the user an opportunity to select
+whether the fields (such as <tt>:mean</tt>, <tt>:count</tt>, <tt>:sum</tt>, etc.) of vector,
+statistics, and histogram results should also be included in the source dataset,
+as scalars.
+
+<p><pre class="cpp">
+# query scalar data into dataframe
+try:
+    df = results.get_scalars(filter_expression, include_fields=include_fields,
+             include_attrs=True, include_runattrs=True, include_itervars=True)
+except ValueError as e:
+    raise chart.ChartScriptError("Error while querying results: " + str(e))
+</pre>
+
+<p>Here, <tt>results.get_scalars()</tt> is the most important part. It uses the
+<tt>results</tt> module to get the data for the plot. The resulting Pandas
+<tt>DataFrame</tt> will have one row for each scalar result. Columns include
+<tt>runID</tt> which uniquely identifies the simulation run, <tt>module</tt>,
+<tt>name</tt> and <tt>value</tt> which refer to the scalar, and many other columns
+that represent metadata such as result attributes, iteration variables and run
+attributes: <tt>iaMean</tt>, <tt>numHosts</tt>, <tt>configname</tt>, <tt>datetime</tt>, etc.
+
+<p>Try <tt>print(df)</tt> to print the dataframe contents. You will get something like
+this (for brevity, we dropped the less important columns from the output, and
+abbreviated the name of the last colum from <tt>repetition</tt>):
+
+<pre class="commandline">
+          module                     name     value iaMean numHosts rep.
+0   Aloha.server  channelUtilization:last  0.156057      1       10    0
+1   Aloha.server  channelUtilization:last  0.156176      1       10    1
+2   Aloha.server  channelUtilization:last  0.196381      2       10    0
+3   Aloha.server  channelUtilization:last  0.193253      2       10    1
+4   Aloha.server  channelUtilization:last  0.176507      3       10    0
+5   Aloha.server  channelUtilization:last  0.176136      3       10    1
+6   Aloha.server  channelUtilization:last  0.152471      4       10    0
+7   Aloha.server  channelUtilization:last  0.154667      4       10    1
+11  Aloha.server  channelUtilization:last  0.108992      7       10    0
+...
+</pre>
+<p>
+Also note in the snippet above that <tt>try...except</tt> was used to catch
+exceptions (usually syntax errors in the query), and gracefully report them back
+to the user instead of letting a stack trace appear in the console.
+Raising a <tt>chart.ChartScriptError</tt> displays the passed message in the plot area.
+
+<p><pre class="cpp">
+if df.empty:
+    raise chart.ChartScriptError("The result filter returned no data.")
+</pre>
+
+<p>If the query matched nothing, let the user know instead of letting them figure out
+from the empty plot they get, again, by raising an exception of the appropriate type.
+
+<p><pre class="cpp">
+groups, series = utils.select_groups_series(df, props)
+</pre>
+
+<p>
+The user may fill in the <i>Groups</i> and <i>Series</i> fields of the
+<i>Chart Properties</i> dialog to control how to organize the bar chart.
+As each field may contain multiple variables (separated by comma), we split
+the values to convert them to lists.
+
+<p>If these fields (properties) are left empty, the script tries to find
+reasonable values for them. It also detects various misconfiguration cases
+(such as nonexisting column names given in, or overlap between, the "groups"
+and "series" columns), and report them back to the user. Leaving out these
+checks would, in most cases, cause those errors to manifest themselves in
+later steps as spurious Pandas exceptions, whose wording often provides
+little guidance to the user about what actually went wrong.
+
+<p><pre class="cpp">
+confidence_level = utils.get_confidence_level(props)
+</pre>
+
+<p>Extract the confidence level requested by the user from the properties.
+(<tt>"none"</tt> is the string that the user can select from the combo box in the
+dialog to turn off confidence interval computation.)
+
+<p><pre class="cpp">
+valuedf, errorsdf, metadf =
+    utils.pivot_for_barchart(df, groups, series, confidence_level)
+utils.plot_bars(valuedf, errorsdf, metadf, props)
+</pre>
+
+<p>At last, we arrive at the important part of the script, which is pivoting and
+plotting the data. The <tt>utils.pivot_for_barchart()</tt> function is used for
+pivoting, and <tt>utils.plot_bars()</tt> for plotting.
+
+<p>If you add a <tt>print(valuedf)</tt> statement, you can see the result of pivoting:
+
+<pre class="commandline">
+numHosts        10        15        20
+iaMean
+1         0.156116  0.089539  0.046586
+2         0.194817  0.178159  0.147564
+3         0.176321  0.191571  0.183976
+4         0.153569  0.182324  0.190452
+5         0.136997  0.168780  0.183742
+7         0.109281  0.141556  0.164038
+9         0.089658  0.120800  0.142568
+</pre>
+<p>
+If the user requested no confidence interval (error bars), <tt>errorsdf</tt> will be <tt>None</tt>.
+
+<p>In this case, the default 95% is used, so <tt>print(errorsdf)</tt> shows this:
+
+<pre class="commandline">
+numHosts        10        15        20
+iaMean
+1         0.000117  0.001616  0.001968
+2         0.003065  0.000619  0.002162
+3         0.000364  0.001426  0.001704
+4         0.002152  0.000918  0.002120
+5         0.002391  0.000411  0.000625
+7         0.000568  0.001729  0.002221
+9         0.001621  0.002385  0.000259
+</pre>
+<p>
+This dataframe has the exact same structure (column and row headers) as <tt>valuedf</tt>,
+only the values are different - they are the half-length of the confidence interval
+corresponding to the selected confidence level, so it can be interpreted as a "+/-" range.
+
+<p>The third dataframe, <tt>metadf</tt> contains various pieces of metadata about the results,
+
+<p>Here are just a few columns from it:
+
+<pre class="commandline">
+                        measurement        module                      title
+iaMean
+1      $numHosts=10, $iaMean=1, etc.  Aloha.server  channel utilization, last
+2      $numHosts=10, $iaMean=2, etc.  Aloha.server  channel utilization, last
+3      $numHosts=10, $iaMean=3, etc.  Aloha.server  channel utilization, last
+4      $numHosts=10, $iaMean=4, etc.  Aloha.server  channel utilization, last
+5      $numHosts=10, $iaMean=5, etc.  Aloha.server  channel utilization, last
+7      $numHosts=10, $iaMean=7, etc.  Aloha.server  channel utilization, last
+9      $numHosts=10, $iaMean=9, etc.  Aloha.server  channel utilization, last
+</pre>
+<p>
+This dataframe is used to assemble the legend labels for the series of bars on the plot.
+It has the same row headers as <tt>valuedf</tt>, but the column headers are the names of run
+and result attributes, and iteration variables. Where multiple different values would have
+had to be put into the same cell, only the first one is present, and an "etc." is appended.
+
+<p>Note that in some other types of charts (line charts, histogram charts, etc.), separating
+the results into separate dataframes like this is not necessary, as those charts do not do
+pivot operations on their results, and the corresponding plots accept data in formats
+that can hold the metadata in the same dataframe as the main values to be plotted.
+
+<p>The drawn plot is shown in Figure <a href="chap12.html#fig:ana-barplot">below</a>:
+
+<p>
+  <center>
+    <img src="ana-barplot.svg">
+    <center><div class="caption"><i>Figure: The resulting bar plot, showing confidence interval as error bars</i></div></center>
+    <a name="fig:ana-barplot"></a>
+  </center>
+
+<p>
+<pre class="cpp">
+utils.postconfigure_plot(props)
+</pre>
+
+<p>This line applies the rest of the visual properties to the plot.
+
+<p><pre class="cpp">
+utils.export_image_if_needed(props)
+utils.export_data_if_needed(df, props)
+</pre>
+
+<p>These lines perform image and data export. Exporting is done by running chart scripts with
+certain properties set in order to indicate to the chart script that exporting is requested.
+
+<p>The <tt>utils.export_image_if_needed()</tt> and <tt>utils.export_data_if_needed()</tt> functions
+take those flag properties and a lot of other properties related to exporting.
+The latter saves the dataframe given to it as argument.
+
+<p>
+<h2><a name="sec:ana-sim:result-analysis-alternatives"/>12.5 Alternatives<a class="headerlink" href="#sec:ana-sim:result-analysis-alternatives" title="Permalink to this headline">¶</a></h2>
+
+<p>Based on your personal preferences, you may opt to use to a different
+environment, language or tool than the IDE's Analysis tool for analysing
+simulation results. Here are some of the possibilities:
+
+<p><ul>
+  <li> Use your favourite Python editor to write the analysis scripts, using
+    the packages mentioned in the previous section.
+  <li> A <i>Jupyter Notebook</i> can also be used to write up the analysis
+    steps, still using Python and the above packages.
+  <li> If your simulations produce a huge amount of data, you might prefer using
+    the SQLite result file format which allows you to run queries without
+    loading all data into memory. Python also has packages to access SQLite files,
+    e.g. <tt>sqlite3</tt>.
+  <li> If you prefer <i>GNU R</i> to Python/Pandas, you might use that.
+  <li> Or you may go for <i>MATLAB</i> or <i>GNU Octave</i> if you feel at home with them.
+  <li> <i>Spreadsheet</i> programs such as Microsoft Excel might be suitable
+    if the amount of data allows it. One drawback of using spreadsheets is the
+    manual work associated with preparing and reloading data every time
+    simulations are re-run.
+  <li> A dedicated visual analytics environment such as <i>Tableau</i> might
+    be a better choice than spreadsheets.
+</ul>
+
+<p>For environments where reading OMNeT++ result files or SQLite result files is
+not a real possibility, probably the easiest way to go is to export simulation
+results into CSV with <tt>opp_scavetool</tt>. CSV is a universal format that
+nearly all tools understand.
+
+
+<hr class='pgbr'><p><hr><b><a href="chap11.html">[Prev]</A>&nbsp;<a href="chap13.html">[Next]</A>&nbsp;<a href="toc.html#toc_12.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p>
+
+</body>
+</html>

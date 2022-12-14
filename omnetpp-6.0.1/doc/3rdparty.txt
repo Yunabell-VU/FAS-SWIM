@@ -1,0 +1,238 @@
+
+THIRD PARTY SOFTWARE
+
+
+The OMNeT++/OMNEST distribution contains several open source components
+which are covered by their own licenses. These components are listed below,
+together with their web sites where you can find more information and the
+source code. We'll discuss these open-source packages in three groups:
+
+  1. Packages used by the OMNeT++/OMNEST simulation runtime
+  2. Packages needed by Eclipse-based OMNeT++/OMNEST IDE
+  3. Packages bundled with OMNEST/OMNeT++ on Windows, as part of the
+     compiler tool-chain.
+
+We'd like to thank the open source community for developing and making
+these packages available. OMNeT++/OMNEST would not have been possible
+without them.
+
+
+1. Packages used by the OMNeT++/OMNEST simulation runtime
+=========================================================
+
+Simulations built with the OMNeT++/OMNEST runtime are using the following
+*optional* open source components. It is possible to build a simulation
+without them, but with reduced functionality.
+
+MersenneTwister.h
+-----------------
+Mersenne Twister is a random number generator (RNG), written by Makoto Matsumoto,
+Takuji Nishimura, Shawn Cokus and Richard J. Wagner, and distributed under
+BSD license.
+
+OMNEST/OMNeT++ uses Mersenne Twister as its default RNG. Plugging in
+alternative RNGs and designating them as default RNG is also possible.
+
+Mersenne Twister is part of the OMNEST/OMNeT++ source code.
+
+
+YXML
+----
+YXML (https://dev.yorhel.nl/yxml) is a small non-validating XML parser distributed
+under the MIT License (https://opensource.org/licenses/MIT). 
+
+YXML is part of the OMNEST/OMNeT++ source code.
+
+
+SQLite
+------
+SQLite is a software library that implements a self-contained, serverless,
+zero-configuration, transactional SQL database engine. The SQLite code is
+in Public Domain (https://www.sqlite.org/copyright.html)
+
+OMNEST/OMNeT++ uses SQLite to record simulation results in an easily
+accessible format.
+
+SQLite is part of the OMNEST/OMNeT++ source code.
+
+
+SGR macros
+----------
+SGR macros for ANSI console color sequences, written by YOSHIOKA Takuma,
+distributed under the MIT License (https://opensource.org/licenses/MIT). 
+
+sgr_macro.h is part of the OMNEST/OMNeT++ source code.
+
+
+Fira Code font
+--------------
+The Fira Code font (https://github.com/tonsky/FiraCode) is embedded in Qtenv
+for better readability and distributed under the SIL Open Font License 
+(https://scripts.sil.org/OFL).
+
+
+Qt
+--
+The Qtenv simulation execution environment is based on Qt, a cross-platform
+widget toolkit. The open-source version of Qt is distributed under LGPLv2.1
+and LGPLv3 (http://www.gnu.org/licenses/). Non-LGPL commercial Qt licenses
+are available from The Qt Company (http://www.qt.io).
+
+Qt is needed to run models under the Qtenv GUI. Qt is not used if the
+console-based Cmdenv is used. Note that 3D visualization is only available
+under Qtenv.
+
+On Linux, the user has to install Qt from the repository; on other
+platforms it is bundled with OMNEST/OMNeT++.
+
+
+OpenSceneGraph
+--------------
+The OpenSceneGraph (openscenegraph.org) is an open source high performance
+3D graphics toolkit. OpenSceneGraph is an optional component of Qtenv.
+OpenSceneGraph is distributed under the terms of the OpenSceneGraph Public
+License (OSGPL), based on LGPL (http://www.openscenegraph.org/index.php/about/licensing).
+
+OpenSceneGraph is needed for running models with 3D visualization under the
+Qtenv GUI.
+
+On Linux, the user has to install OpenSceneGraph from the repository; on
+other platforms it is bundled with OMNEST/OMNeT++.
+
+
+osgEarth
+--------
+osgEarth (osgearth.org) is a C++ geospatial SDK and terrain engine distributed
+under the terms of LGPLv2 (http://www.gnu.org/licenses/).
+
+osgEarth is needed for running models with 3D map and terrain visualization
+under the Qtenv GUI.
+
+On Linux, the user has to install osgEarth from the repository; on other
+platforms it is bundled with OMNEST/OMNeT++.
+
+
+SystemC
+-------
+SystemC (www.accellera.org) is a C++ library which provides event-driven
+simulation capability for system design. It is licensed under the
+Apache License v2.0 (http://www.apache.org/licenses).
+
+SystemC is optional. It is only needed if one wants to run hybrid SystemC-
+OMNEST simulations.
+
+SystemC is bundled with OMNEST. It is not bundled with OMNeT++.
+
+
+LibXML2
+-------
+LibXML2 (xmlsoft.org) is an open-source XML parser, written by Daniel Veillard.
+LibXML2 and ICONV (also a needed component) are distributed under the MIT License.
+https://opensource.org/licenses/MIT
+
+When a simulation model component has parameters of type XML, OMNeT++/OMNEST
+can use this library to parse XML files that contain DTD definitions. If the model
+does not make use of XML file validation, this library is not needed and
+OMNeT++/OMNEST can use its own built-in XML parser.
+
+On Linux, the user has to install LibXML2 from the repository; on macOS, 
+OMNEST/OMNeT++ can use the LibXML2 installation bundled with the OS.
+On Windows, it is bundled with OMNEST/OMNeT++.
+
+
+2. Packages needed by the Eclipse-based OMNeT++/OMNEST IDE
+==========================================================
+
+The OMNeT++/OMNEST IDE is using the following open source components.
+If you don't use the IDE, none of the components below are needed.
+
+Eclipse
+-------
+The OMNeT++/OMNEST IDE is based on the Eclipse Platform (eclipse.org), and
+additional plug-ins, distributed under the EPL (Eclipse Public License).
+https://www.eclipse.org/org/documents/epl-v10.php
+
+Using the IDE is optional. Except for some non-crucial features, all features
+of the software are available from the command-line. Models may be developed
+using 3rd party text editors and/or C++ IDEs as well.
+
+Eclipse is bundled with OMNEST/OMNeT++ on all platforms.
+
+
+PyDev
+-----
+PyDev (pydev.org) is an Eclipse plug-in for python development distributed
+under the EPL (Eclipse Public License). https://www.eclipse.org/org/documents/epl-v10.php
+
+
+Py4J
+----
+Py4J (py4j.org) is part of the IDE and distributed under the BSD license
+(https://github.com/bartdag/py4j/blob/master/LICENSE.txt)
+
+
+Pickle
+------
+Pickle is distributed under the MIT License (https://opensource.org/licenses/MIT). 
+
+
+OpenJDK
+-------
+The IDE requires a Java runtime environment (JRE) to run which is
+distributed under GPLv2 with the Classpath Exception 
+(http://openjdk.java.net/legal/gplv2+ce.html).
+
+The JRE part of OpenJDK is bundled with the OMNEST/OMNeT++ IDE.
+
+
+Apache Java libraries
+---------------------
+The IDE internally makes use of some libraries distributed under the
+Apache License v2.0 (http://www.apache.org/licenses). These libraries
+include several from the Apache Commons project (Lang, Collections, etc),
+Apache HttpClient, and others.
+
+
+XSWT Editor
+-----------
+XSWT Editor is an Eclipse plug-in for creating XML-based forms, distributed
+under the Common Public License (https://opensource.org/licenses/cpl1.0.php)
+
+OMNEST/OMNeT++ uses XSWT Editor to support custom wizards within the IDE.
+
+
+Freemarker Template Engine
+--------------------------
+The Freemarker Template Engine is a templating engine, developed by the
+Visigoth Software Society (http://www.visigoths.org/). It is distributed
+under the 4-clause BSD License.
+
+OMNEST/OMNeT++ uses Freemarker to support custom wizards within the IDE.
+
+
+Ansi Console
+------------
+Ansi Console (https://github.com/mihnita/ansi-econsole) is an Eclipse plug-in
+for displaying ANSI color sequences in Eclipse. It is distributed under the
+Apache License v2.0 (http://www.apache.org/licenses).
+
+
+3. Packages bundled with OMNEST/OMNeT++ on Windows, as part of the compiler tool-chain
+======================================================================================
+
+On Windows (TM), the following components have been bundled with OMNeT++/OMNEST as
+part of the compiler tool-chain:
+
+MinGW-w64
+---------
+MinGW-w64 is a Windows port of gcc, and a minimal Unix-like
+environment in which typical makefiles can execute (mingw-w64.org).
+MinGW-w64 is distributed under GPLv2 (http://www.gnu.org/licenses/)
+
+OMNEST/OMNeT++ uses MinGW-w64 for compiling simulation models. It is a required
+component.
+
+___________________________________________________________________________
+Trademarks.
+Windows is a trademark of Microsoft Corporation.
+macOS is a trademark of Apple Inc.

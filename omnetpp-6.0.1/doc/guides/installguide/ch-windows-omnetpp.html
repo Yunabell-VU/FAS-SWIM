@@ -1,0 +1,743 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Windows - Using the MinGW64 Compiler Toolchain &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="macOS" href="ch-macos.html" />
+    <link rel="prev" title="General Information" href="ch-intro.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#installguide/ch-windows-omnetpp" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Windows - Using the MinGW64 Compiler Toolchain </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">Installation Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../userguide/index.html" class="md-nav__link">User Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">Installation Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-intro.html" class="md-nav__link">General Information</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Windows - Using the MinGW64 Compiler Toolchain </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Windows - Using the MinGW64 Compiler Toolchain</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#installguide-ch-windows-omnetpp--page-root" class="md-nav__link">Windows - Using the MinGW64 Compiler Toolchain</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#supported-windows-versions" class="md-nav__link">Supported Windows Versions</a>
+        </li>
+        <li class="md-nav__item"><a href="#installing-omnet" class="md-nav__link">Installing OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-and-building-omnet" class="md-nav__link">Configuring and Building OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#verifying-the-installation" class="md-nav__link">Verifying the Installation</a>
+        </li>
+        <li class="md-nav__item"><a href="#starting-the-ide" class="md-nav__link">Starting the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#reconfiguring-the-libraries" class="md-nav__link">Reconfiguring the Libraries</a>
+        </li>
+        <li class="md-nav__item"><a href="#portability-issues" class="md-nav__link">Portability Issues</a>
+        </li>
+        <li class="md-nav__item"><a href="#additional-packages" class="md-nav__link">Additional Packages</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#mpi" class="md-nav__link">MPI</a>
+        </li>
+        <li class="md-nav__item"><a href="#akaroa" class="md-nav__link">Akaroa</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#windows-using-windows-subsystem-for-linux-wsl-version-2" class="md-nav__link">Windows - Using Windows Subsystem for Linux (WSL) version 2</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#wsl-2-requirements" class="md-nav__link">WSL 2 Requirements</a>
+        </li>
+        <li class="md-nav__item"><a href="#enabling-wsl-2-on-windows" class="md-nav__link">Enabling WSL 2 on Windows</a>
+        </li>
+        <li class="md-nav__item"><a href="#installing-an-ubuntu-distribution" class="md-nav__link">Installing an Ubuntu distribution</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-vcxserver" class="md-nav__link">Install VcXserver</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-omnet-linux" class="md-nav__link">Install OMNeT++ Linux</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/installguide/ch-windows-omnetpp.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#windows-using-windows-subsystem-for-linux-wsl-version-2" class="md-nav__link">Windows - Using Windows Subsystem for Linux (WSL) version 2</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-macos.html" class="md-nav__link">macOS</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-supported-linux.html" class="md-nav__link">Linux</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-ubuntu.html" class="md-nav__link">Ubuntu</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-fedora.html" class="md-nav__link">Fedora 33</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-redhat.html" class="md-nav__link">Red Hat</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-opensuse.html" class="md-nav__link">OpenSUSE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-generic-unix.html" class="md-nav__link">Generic Unix</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ch-build-options.html" class="md-nav__link">Build Options</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#installguide-ch-windows-omnetpp--page-root" class="md-nav__link">Windows - Using the MinGW64 Compiler Toolchain</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#supported-windows-versions" class="md-nav__link">Supported Windows Versions</a>
+        </li>
+        <li class="md-nav__item"><a href="#installing-omnet" class="md-nav__link">Installing OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-and-building-omnet" class="md-nav__link">Configuring and Building OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#verifying-the-installation" class="md-nav__link">Verifying the Installation</a>
+        </li>
+        <li class="md-nav__item"><a href="#starting-the-ide" class="md-nav__link">Starting the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#reconfiguring-the-libraries" class="md-nav__link">Reconfiguring the Libraries</a>
+        </li>
+        <li class="md-nav__item"><a href="#portability-issues" class="md-nav__link">Portability Issues</a>
+        </li>
+        <li class="md-nav__item"><a href="#additional-packages" class="md-nav__link">Additional Packages</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#mpi" class="md-nav__link">MPI</a>
+        </li>
+        <li class="md-nav__item"><a href="#akaroa" class="md-nav__link">Akaroa</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#windows-using-windows-subsystem-for-linux-wsl-version-2" class="md-nav__link">Windows - Using Windows Subsystem for Linux (WSL) version 2</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#wsl-2-requirements" class="md-nav__link">WSL 2 Requirements</a>
+        </li>
+        <li class="md-nav__item"><a href="#enabling-wsl-2-on-windows" class="md-nav__link">Enabling WSL 2 on Windows</a>
+        </li>
+        <li class="md-nav__item"><a href="#installing-an-ubuntu-distribution" class="md-nav__link">Installing an Ubuntu distribution</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-vcxserver" class="md-nav__link">Install VcXserver</a>
+        </li>
+        <li class="md-nav__item"><a href="#install-omnet-linux" class="md-nav__link">Install OMNeT++ Linux</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/installguide/ch-windows-omnetpp.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="windows-using-the-mingw64-compiler-toolchain">
+<h1 id="installguide-ch-windows-omnetpp--page-root">Windows - Using the MinGW64 Compiler Toolchain<a class="headerlink" href="#installguide-ch-windows-omnetpp--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="supported-windows-versions">
+<h2 id="supported-windows-versions">Supported Windows Versions<a class="headerlink" href="#supported-windows-versions" title="Permalink to this headline">¶</a></h2>
+<p>OMNeT++ is supported only on 64-bit versions of Windows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>32-bit Windows versions are no longer supported. If you need 32-bit builds on Windows, we recommend using OMNeT++
+5.0</p>
+</div>
+</section>
+<section id="installing-omnet">
+<h2 id="installing-omnet">Installing OMNeT++<a class="headerlink" href="#installing-omnet" title="Permalink to this headline">¶</a></h2>
+<p>Download the OMNeT++ source code from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select the Windows-specific archive, named
+<code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-windows-x86_64.zip</span></code>.</p>
+<p>The package is self-contained: in addition to OMNeT++ files it includes a C++ compiler, a command-line build
+environment, and all libraries and programs required by OMNeT++.</p>
+<p>Copy the OMNeT++ archive to the directory where you want to install it. Choose a directory whose full path <strong>does not
+contain any space</strong>; for example, do not put OMNeT++ under <em>Program Files</em>.</p>
+<p>Extract the zip file. To do so, right-click the zip file in Windows Explorer, and select <em>Extract All</em> from the menu.
+You can also use external programs like Winzip or 7zip.</p>
+<p>When you look into the new <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> directory, should see directories named <code class="docutils literal notranslate"><span class="pre">doc</span></code>, <code class="docutils literal notranslate"><span class="pre">images</span></code>,
+<code class="docutils literal notranslate"><span class="pre">include</span></code>, <code class="docutils literal notranslate"><span class="pre">tools</span></code>, etc., and files named <code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code>, <code class="docutils literal notranslate"><span class="pre">configure</span></code>, <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>, and others.</p>
+</section>
+<section id="configuring-and-building-omnet">
+<h2 id="configuring-and-building-omnet">Configuring and Building OMNeT++<a class="headerlink" href="#configuring-and-building-omnet" title="Permalink to this headline">¶</a></h2>
+<p>Start <code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code> in the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> directory by double-clicking it in Windows Explorer. It will bring
+up a console with the MSYS <em>bash</em> shell, where the path is already set to include the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/bin</span></code>
+directory. On the first start of the shell, you may need to wait for the extraction of the <code class="docutils literal notranslate"><span class="pre">tools</span></code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to start simulations from outside the shell as well (for example from Explorer), you need to add
+OMNeT++’s <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory and also the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directories in the tools folder to the path; instructions are
+provided later.</p>
+</div>
+<p>First, check the contents of the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file to make sure it contains the settings you need. In most cases
+you don’t need to change anything.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">notepad</span> <span class="n">configure</span><span class="o">.</span><span class="n">user</span>
+</pre></div>
+</div>
+<p>Then enter the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make
+</pre></div>
+</div>
+<p>The build process will create both debug and release binaries.</p>
+</section>
+<section id="verifying-the-installation">
+<h2 id="verifying-the-installation">Verifying the Installation<a class="headerlink" href="#verifying-the-installation" title="Permalink to this headline">¶</a></h2>
+<p>You should now test all samples and check they run correctly. As an example, the <em>aloha</em> example is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the graphical Qtenv environment. You should see GUI windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2 id="starting-the-ide">Starting the IDE<a class="headerlink" href="#starting-the-ide" title="Permalink to this headline">¶</a></h2>
+<p>OMNeT++ comes with an Eclipse-based Simulation IDE. You should be able to start the IDE by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<p>We recommend that you start the IDE from the command-line. You can also create a shortcut for starting the IDE. To do so,
+locate the <code class="docutils literal notranslate"><span class="pre">opp_ide.exe</span></code> program in the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/ide</span></code> directory in Windows Explorer, right-click it, and
+choose <em>Send To &gt; Desktop (create shortcut)</em> from the menu. You can right-click the taskbar icon while the IDE is
+running, and select <em>Pin this program to taskbar</em> from the context menu.</p>
+</section>
+<section id="environment-variables">
+<h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>In general OMNeT++ requires that certain environment variables are set. Always use the
+the provided shell window to start the IDE or your simulations.</p>
+</section>
+<section id="reconfiguring-the-libraries">
+<h2 id="reconfiguring-the-libraries">Reconfiguring the Libraries<a class="headerlink" href="#reconfiguring-the-libraries" title="Permalink to this headline">¶</a></h2>
+<p>If you need to recompile the OMNeT++ components with different flags (e.g. different optimization), then change the
+top-level OMNeT++ directory, edit <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> accordingly, then type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make clean
+$ make
+</pre></div>
+</div>
+<p>If you want to recompile just a single library, then change to the directory of the library (e.g. <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">src/sim</span></code>) and
+type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean
+$ make
+</pre></div>
+</div>
+<p>By default, libraries are compiled in both debug and release mode. If you want to make release or debug builds only,
+use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=release
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=debug
+</pre></div>
+</div>
+<p>By default, shared libraries will be created. If you want to build static libraries, set <code class="docutils literal notranslate"><span class="pre">SHARED_LIBS=no</span></code> in
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code> and re-configure your project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The built libraries and programs are immediately copied to the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> and <code class="docutils literal notranslate"><span class="pre">bin/</span></code> subdirs.</p>
+</div>
+</section>
+<section id="portability-issues">
+<h2 id="portability-issues">Portability Issues<a class="headerlink" href="#portability-issues" title="Permalink to this headline">¶</a></h2>
+<p>OMNeT++ has been tested with both the gcc and the clang compiler from the MinGW-w64 package.</p>
+<p>Microsoft Visual C++ is not supported in the Academic Edition.</p>
+</section>
+<section id="additional-packages">
+<h2 id="additional-packages">Additional Packages<a class="headerlink" href="#additional-packages" title="Permalink to this headline">¶</a></h2>
+<section id="mpi">
+<h3 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permalink to this headline">¶</a></h3>
+<p>MPI is only needed if you would like to run parallel simulations.</p>
+<p>There are several MPI implementations for Windows, and OMNeT++ does not mandate any specific one. We recommend
+DeinoMPI, which can be downloaded from <a class="reference external" href="http://mpi.deino.net">http://mpi.deino.net</a>.</p>
+<p>After installing DeinoMPI, adjust the <code class="docutils literal notranslate"><span class="pre">MPI_DIR</span></code> setting in OMNeT++’s <code class="docutils literal notranslate"><span class="pre">configure.user</span></code>, and reconfigure and
+recompile OMNeT++:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make cleanall
+$ make
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In general, if you would like to run parallel simulations, we recommend that you use Linux, macOS, or another
+unix-like platform.</p>
+</div>
+</section>
+<section id="akaroa">
+<h3 id="akaroa">Akaroa<a class="headerlink" href="#akaroa" title="Permalink to this headline">¶</a></h3>
+<p>Akaroa 2.7.9, which is the latest version at the time of writing, does not support Windows. You may try to port it using
+the porting guide from the Akaroa distribution.</p>
+</section>
+</section>
+</section>
+<section id="windows-using-windows-subsystem-for-linux-wsl-version-2">
+<h1 id="windows-using-windows-subsystem-for-linux-wsl-version-2">Windows - Using Windows Subsystem for Linux (WSL) version 2<a class="headerlink" href="#windows-using-windows-subsystem-for-linux-wsl-version-2" title="Permalink to this headline">¶</a></h1>
+<p>WSL 2 supports running a full Linux distribution on a Windows machine. Running OMNeT++ in WSL 2 has certain advantages
+and disadvantages compared to running OMNeT++ natively on Windows:</p>
+<p>Advantages:</p>
+<ul class="simple">
+<li><p>You will probably see significant speedup on certain tasks (like compilation) compared to the native Windows
+(MinGW64) toolchain, because the compiler toolchain and the filesystem (ext4) is much faster in WSL 2 than their
+Windows equivalents.</p></li>
+<li><p>The native MinGW64 toolchain on Windows is basically a mini (Unix-like) system, emulated on top of Windows. Because
+of the emulation, it may have incompatibilities and limitations compared to the Linux tools. You will have fewer
+issues and surprises when running OMNeT++ on Linux.</p></li>
+</ul>
+<p>Disadvantages:</p>
+<ul class="simple">
+<li><p>WSL 2 does not (yet) support running Linux GUI applications. This means that you must install and run an X Server
+process on Windows to be able to use any GUI tools (i.e. IDE, Qtenv, etc.) from OMNeT++.</p></li>
+<li><p>Because of a limitation of the available X Server software, 3D acceleration is not working. You will not be able to
+use the OMNeT++ OpenSceneGraph and osgEarth integration in this setup and it is recommended to explicitly disable
+these features when you build OMNeT++.</p></li>
+</ul>
+<section id="wsl-2-requirements">
+<h2 id="wsl-2-requirements">WSL 2 Requirements<a class="headerlink" href="#wsl-2-requirements" title="Permalink to this headline">¶</a></h2>
+<p>Installing OMNeT++ on WSL 2 is supported on Windows 10 version 1903 (build 18362.1049) or later. Note especially the
+minor build number. Your Windows version must have at least 1049 as a minor build number.</p>
+</section>
+<section id="enabling-wsl-2-on-windows">
+<h2 id="enabling-wsl-2-on-windows">Enabling WSL 2 on Windows<a class="headerlink" href="#enabling-wsl-2-on-windows" title="Permalink to this headline">¶</a></h2>
+<p>Open a PowerShell with Administrator privileges. On newer versions of Windows, you can install the WSL subsystem by
+typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="o">--</span><span class="n">install</span>
+</pre></div>
+</div>
+<p>Alternatively, if your system does not have a <code class="docutils literal notranslate"><span class="pre">wsl</span></code> command, use the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dism</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">online</span> <span class="o">/</span><span class="n">enable</span><span class="o">-</span><span class="n">feature</span> <span class="o">/</span><span class="n">featurename</span><span class="p">:</span><span class="n">Microsoft</span><span class="o">-</span><span class="n">Windows</span><span class="o">-</span><span class="n">Subsystem</span><span class="o">-</span><span class="n">Linux</span> <span class="o">/</span><span class="nb">all</span> <span class="o">/</span><span class="n">norestart</span>
+<span class="n">dism</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">online</span> <span class="o">/</span><span class="n">enable</span><span class="o">-</span><span class="n">feature</span> <span class="o">/</span><span class="n">featurename</span><span class="p">:</span><span class="n">VirtualMachinePlatform</span> <span class="o">/</span><span class="nb">all</span> <span class="o">/</span><span class="n">norestart</span>
+</pre></div>
+</div>
+<p>After a successful installation, reboot your computer and open an Administrator PowerShell again to set the default WSL
+version to 2.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span><span class="o">.</span><span class="n">exe</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">version</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We recommend installing and using the Windows Terminal application, which is available at
+<a class="reference external" href="https://www.microsoft.com/store/productId/9N0DX20HK701">https://www.microsoft.com/store/productId/9N0DX20HK701</a></p>
+</div>
+</section>
+<section id="installing-an-ubuntu-distribution">
+<h2 id="installing-an-ubuntu-distribution">Installing an Ubuntu distribution<a class="headerlink" href="#installing-an-ubuntu-distribution" title="Permalink to this headline">¶</a></h2>
+<p>As a next step, you must install a Linux distribution from the Microsoft Store. We recommend using Ubuntu 20.04 from
+<a class="reference external" href="https://www.microsoft.com/store/productId/9n6svws3rx71">https://www.microsoft.com/store/productId/9n6svws3rx71</a>.</p>
+<p>Once the installation is done, run the distro and finish the setup process by setting up a user name and password. At
+this point, you could install OMNeT++, but GUI programs would not work.</p>
+</section>
+<section id="install-vcxserver">
+<h2 id="install-vcxserver">Install VcXserver<a class="headerlink" href="#install-vcxserver" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is ongoing work (called WSLg <a class="reference external" href="https://github.com/microsoft/wslg">https://github.com/microsoft/wslg</a>) to make Linux GUI applications work on
+Windows by default. On later versions of Windows (21H2+) you may be able to skip the whole X Server installation step.</p>
+</div>
+<p>To use GUI programs from Linux, you must install an X Server application from: <a class="reference external" href="https://sourceforge.net/projects/vcxsrv/">https://sourceforge.net/projects/vcxsrv/</a></p>
+<p>Start the installation and make sure that you:</p>
+<ul class="simple">
+<li><p>select “Disable access control”</p></li>
+<li><p>set display number to 0</p></li>
+<li><p>check “Private networks, such as my home or work network” and click “Allow access” when the Windows Defender Firewall
+asks for permission.</p></li>
+</ul>
+<p>Open the Windows Terminal and launch the Ubuntu distribution from the dropdown menu. Add the following line to the
+<code class="docutils literal notranslate"><span class="pre">/etc/bash.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
+</pre></div>
+</div>
+<p>This will ensure that Linux programs will always find the X Server process running on Windows. Exit from the Ubuntu
+shell, and restart it to make sure that the change was applied correctly. Check if</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $DISPLAY
+</pre></div>
+</div>
+<p>displays the correct IP address of the Windows machine.</p>
+<p>In the future, make sure that the X Server is always running when you want to run Linux GUI programs by either making
+the X Server automatically start or launching it manually.</p>
+</section>
+<section id="install-omnet-linux">
+<h2 id="install-omnet-linux">Install OMNeT++ Linux<a class="headerlink" href="#install-omnet-linux" title="Permalink to this headline">¶</a></h2>
+<p>At this point, you have a fully functional Linux environment that can run GUI apps. You can go on and follow the Ubuntu
+specific installation steps to finally install OMNeT++ on your system.</p>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="ch-intro.html" title="General Information"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> General Information </span>
+              </div>
+            </a>
+          
+          
+            <a href="ch-macos.html" title="macOS"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> macOS </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

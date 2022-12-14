@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Introduction &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Editing NED Files" href="ned-editor.html" />
+    <link rel="prev" title="User Guide" href="index.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#userguide/intro" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Introduction </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">User Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">User Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Introduction </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Introduction</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-intro--page-root" class="md-nav__link">Introduction</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-workbench" class="md-nav__link">The Workbench</a>
+        </li>
+        <li class="md-nav__item"><a href="#workspaces" class="md-nav__link">Workspaces</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-simulation-perspective" class="md-nav__link">The Simulation Perspective</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-omnet-preferences" class="md-nav__link">Configuring OMNeT++ Preferences</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-omnet-projects" class="md-nav__link">Creating OMNeT++ Projects</a>
+        </li>
+        <li class="md-nav__item"><a href="#project-references" class="md-nav__link">Project References</a>
+        </li>
+        <li class="md-nav__item"><a href="#getting-help" class="md-nav__link">Getting Help</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/intro.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ned-editor.html" class="md-nav__link">Editing NED Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ini-editor.html" class="md-nav__link">Editing INI Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="msg-editor.html" class="md-nav__link">Editing Message Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="cpp-development.html" class="md-nav__link">C++ Development</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="launcher.html" class="md-nav__link">Launching and Debugging</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="qtenv.html" class="md-nav__link">The Qtenv Graphical Runtime Environment</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="sequence-chart.html" class="md-nav__link">Sequence Charts</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="result-analysis.html" class="md-nav__link">Analyzing the Results</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="neddoc.html" class="md-nav__link">NED Documentation Generator</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ide-extensions.html" class="md-nav__link">Extending the IDE</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-intro--page-root" class="md-nav__link">Introduction</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-workbench" class="md-nav__link">The Workbench</a>
+        </li>
+        <li class="md-nav__item"><a href="#workspaces" class="md-nav__link">Workspaces</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-simulation-perspective" class="md-nav__link">The Simulation Perspective</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-omnet-preferences" class="md-nav__link">Configuring OMNeT++ Preferences</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-omnet-projects" class="md-nav__link">Creating OMNeT++ Projects</a>
+        </li>
+        <li class="md-nav__item"><a href="#project-references" class="md-nav__link">Project References</a>
+        </li>
+        <li class="md-nav__item"><a href="#getting-help" class="md-nav__link">Getting Help</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/intro.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="introduction">
+<h1 id="userguide-intro--page-root">Introduction<a class="headerlink" href="#userguide-intro--page-root" title="Permalink to this headline">¶</a></h1>
+<p>The OMNeT++ simulation IDE is based on the Eclipse platform and extends it with new editors, views, wizards, and other
+functionality. OMNeT++ adds functionality for creating and configuring models (NED and INI files), performing batch
+executions and analyzing the simulation results, while Eclipse provides C++ editing, SVN/GIT integration and other
+optional features (UML modeling, bug-tracker integration, database access, etc.) via various open-source and commercial
+plug-ins. The environment will be instantly recognizable to those at home with the Eclipse platform.</p>
+<section id="the-workbench">
+<h2 id="the-workbench">The Workbench<a class="headerlink" href="#the-workbench" title="Permalink to this headline">¶</a></h2>
+<p>The Eclipse main window consists of various Views and Editors. These are collected into Perspectives that define which
+Views and Editors are visible and how they are sized and positioned.</p>
+<p>Eclipse is a very flexible system. You can move, resize, hide and show various panels, editors and navigators. This
+allows you to customize the IDE to your liking, but it also makes it more difficult to describe. First, we need to make
+sure that we are looking at the same thing.</p>
+<p>The OMNeT++ IDE provides a “Simulation perspective” to work with simulation-related NED, INI and MSG files. To switch to
+the simulation perspective, select <span class="menuselection">Window ‣ Open Perspective ‣ Simulation</span>.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/Intro-SelectPerspective.png"><img alt="../_images/Intro-SelectPerspective.png" src="../_images/Intro-SelectPerspective.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Selecting the “Simulation Perspective” in Eclipse</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Most interface elements within Eclipse are can be moved or docked freely so you can construct your own workbench to fit
+your needs.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/Intro-DefaultLayout.png"><img alt="../_images/Intro-DefaultLayout.png" src="../_images/Intro-DefaultLayout.png" style="width: 100%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Default layout of the OMNeT++ IDE</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Project Explorer</span> on the top left part of the screen shows the projects and their content in your
+workspace. In the example above, the <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code> demo project is open. You can see the various <code class="file docutils literal notranslate"><span class="pre">.ned</span></code>,
+<code class="file docutils literal notranslate"><span class="pre">.ini</span></code> and other files inside. A number of views are docked at the bottom of the window.</p>
+<p>The screenshot shows the open README.txt file in the editor area. When a user double-clicks on a file, Eclipse
+automatically launches the editor associated with that particular file type.</p>
+<p>The <span class="guilabel">Properties View</span> contains information on the particular object that is selected in the editor area, or
+one of the other views that serve as a selection provider. The <span class="guilabel">Problems View</span> references code lines where
+Eclipse encountered problems.</p>
+<p>Several OMNeT++-specific views exist that can be used during development. We will discuss how you can use them
+effectively in a later chapter. You can open any View by selecting <span class="menuselection">Window ‣ Show View</span> from the menu.</p>
+</section>
+<section id="workspaces">
+<h2 id="workspaces">Workspaces<a class="headerlink" href="#workspaces" title="Permalink to this headline">¶</a></h2>
+<p>A workspace is basically a directory where all your projects are located. You may create and use several workspaces and
+switch between them as needed. During the first run, the OMNeT++ IDE offers to open the samples directory as the
+workspace, so you will be able to experiment with the available examples immediately. Once you start working on your own
+projects, we recommend that you create your own workspace by selecting <span class="menuselection">File ‣ Switch Workspace ‣ Other</span> .
+You can switch between workspaces, as necessary. Please be aware that the OMNeT++ IDE restarts with each switch in
+workspaces. This is normal. You can browse workspace content in the <span class="guilabel">Project Explorer</span>, <span class="guilabel">Navigator</span>,
+<span class="guilabel">C/C++ Projects</span> and similar views. We recommend using <span class="guilabel">Project Explorer</span>.</p>
+</section>
+<section id="the-simulation-perspective">
+<h2 id="the-simulation-perspective">The Simulation Perspective<a class="headerlink" href="#the-simulation-perspective" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE defines the <span class="guilabel">Simulation Perspective</span> so that it is specifically geared towards the design of
+simulations. The <span class="guilabel">Simulation Perspective</span> is simply a set of conveniently selected views, arranged to make the
+creation of NED, INI and MSG files easier. If you are working with INI and NED files a lot, we recommend selecting this
+perspective. Other perspectives are optimized for different tasks like C++ development or debugging.</p>
+</section>
+<section id="configuring-omnet-preferences">
+<h2 id="configuring-omnet-preferences">Configuring OMNeT++ Preferences<a class="headerlink" href="#configuring-omnet-preferences" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE preferences dialog is available through the standard preferences menu, which is under the main Window
+menu item. These settings are global and shared between all projects. The OMNeT++ install locations are automatically
+filled in for you after installation. The default settings for the NED documentation generation assume that the PATH
+environment variable is already set, so that third party tools can be found. The license configuration settings specify
+the preferred license type or a custom license text. The IDE will copy the license into new files and projects. The
+license will also be shown in the generated NED documentation.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/Intro-Preferences.png"><img alt="../_images/Intro-Preferences.png" src="../_images/Intro-Preferences.png" style="width: 75%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Configuring OMNeT++ preferences</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Use the Browse buttons to find files or folders easily. Specify full path for executables if you do not want to extend
+the PATH environment variable.</p>
+</section>
+<section id="creating-omnet-projects">
+<h2 id="creating-omnet-projects">Creating OMNeT++ Projects<a class="headerlink" href="#creating-omnet-projects" title="Permalink to this headline">¶</a></h2>
+<p>In Eclipse, all files are within projects, so you will need a suitable project first. The project needs to be one
+designated as an OMNeT++ Project (in Eclipse lingo, it should have the OMNeT++ Nature). The easiest way to create such a
+project is to use a wizard. Choose <span class="menuselection">File ‣ New ‣ OMNeT++ Project</span> from the menu, specify a project name, and
+click the <span class="guilabel">Finish</span> button. If you do not plan to write simple modules, you may unselect the <span class="guilabel">C++
+Support</span> checkbox which will disable all C++ related features for the project.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/Intro-NewProjectWizard.png"><img alt="../_images/Intro-NewProjectWizard.png" src="../_images/Intro-NewProjectWizard.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Creating a new OMNeT++ project</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="project-references">
+<h2 id="project-references">Project References<a class="headerlink" href="#project-references" title="Permalink to this headline">¶</a></h2>
+<p>Most aspects of a project can be configured in the <span class="guilabel">Project Properties</span> dialog. The dialog is accessible via
+the <span class="menuselection">Project ‣ Properties</span> menu item, or by right-clicking the project in <span class="guilabel">Project Explorer</span> and
+choosing <span class="guilabel">Properties</span> from the context menu.</p>
+<p>An important Eclipse concept is that a project may reference other projects in the workspace; project references can be
+configured in the <span class="guilabel">Project References</span> page of the properties dialog. To update the list of referenced
+projects, simply check those projects in the list that your project depends on, then click <span class="guilabel">Apply</span>. Note that
+circular references are not allowed (i.e. the dependency graph must be a tree).</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/Intro-ProjectReferences.png"><img alt="../_images/Intro-ProjectReferences.png" src="../_images/Intro-ProjectReferences.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Setting project dependencies</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In the OMNeT++ IDE, all NED types, C++ code and build artifacts (executables, libraries) in a project are available to
+other projects that reference the given project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To see an example of project references, check the <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> and <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code> example projects. In this
+example, <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> references <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code>. <code class="docutils literal notranslate"><span class="pre">Queuinglib</span></code> provides simple modules (NED files, and a prebuilt
+shared library that contains the code of the simple modules), and makes those modules available to <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> that
+contains simulations (networks and ini files) built from them.</p>
+</div>
+</section>
+<section id="getting-help">
+<h2 id="getting-help">Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
+<p>You may access the online help system from the <span class="menuselection">Help ‣ Help Contents</span> menu item. The OMNeT++ IDE is built on
+top of Eclipse, so if you are not familiar with Eclipse, we recommend reading the <span class="guilabel">Workbench User Guide</span> and
+the <span class="guilabel">C/C++ Development User Guide</span> before starting to use OMNeT++-specific features.</p>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="index.html" title="User Guide"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> User Guide </span>
+              </div>
+            </a>
+          
+          
+            <a href="ned-editor.html" title="Editing NED Files"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Editing NED Files </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

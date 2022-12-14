@@ -1,0 +1,1 @@
+-Wno-unused-function -O3 -DNDEBUG=1 -ffp-contract=off   -MMD -MP -MF .d    -isystem /Users/thhugh/Desktop/SAS/SWIM_SRC/omnetpp-6.0.1/tools/macos.x86_64/include -Wno-deprecated-register -Wno-unused-function -fno-omit-frame-pointer  -DWITH_NETBUILDER -DWITH_OSG -I"/Users/thhugh/Desktop/SAS/SWIM_SRC/omnetpp-6.0.1/include" -I"/Users/thhugh/Desktop/SAS/SWIM_SRC/omnetpp-6.0.1/src"

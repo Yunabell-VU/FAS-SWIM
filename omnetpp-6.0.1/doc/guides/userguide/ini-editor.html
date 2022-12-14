@@ -1,0 +1,801 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Editing INI Files &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Editing Message Files" href="msg-editor.html" />
+    <link rel="prev" title="Editing NED Files" href="ned-editor.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#userguide/ini-editor" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Editing INI Files </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">User Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">User Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="intro.html" class="md-nav__link">Introduction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ned-editor.html" class="md-nav__link">Editing NED Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Editing INI Files </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Editing INI Files</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-ini-editor--page-root" class="md-nav__link">Editing INI Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#overview" class="md-nav__link">Overview</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-ini-files" class="md-nav__link">Creating INI Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-the-ini-file-editor" class="md-nav__link">Using the INI File Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#editing-in-form-mode" class="md-nav__link">Editing in Form Mode</a>
+        </li>
+        <li class="md-nav__item"><a href="#editing-in-text-mode" class="md-nav__link">Editing in Text Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#opening-old-ini-files" class="md-nav__link">Opening Old INI Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#tooltip" class="md-nav__link">Tooltip</a>
+        </li>
+        <li class="md-nav__item"><a href="#add-unassigned-parameters" class="md-nav__link">Add Unassigned Parameters</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#error-markers" class="md-nav__link">Error Markers</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#associated-views" class="md-nav__link">Associated Views</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li>
+        <li class="md-nav__item"><a href="#parameters-view" class="md-nav__link">Parameters View</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-hierarchy-view" class="md-nav__link">Module Hierarchy View</a>
+        </li>
+        <li class="md-nav__item"><a href="#ned-inheritance-view" class="md-nav__link">NED Inheritance View</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/ini-editor.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="msg-editor.html" class="md-nav__link">Editing Message Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="cpp-development.html" class="md-nav__link">C++ Development</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="launcher.html" class="md-nav__link">Launching and Debugging</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="qtenv.html" class="md-nav__link">The Qtenv Graphical Runtime Environment</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="sequence-chart.html" class="md-nav__link">Sequence Charts</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="result-analysis.html" class="md-nav__link">Analyzing the Results</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="neddoc.html" class="md-nav__link">NED Documentation Generator</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ide-extensions.html" class="md-nav__link">Extending the IDE</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-ini-editor--page-root" class="md-nav__link">Editing INI Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#overview" class="md-nav__link">Overview</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-ini-files" class="md-nav__link">Creating INI Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-the-ini-file-editor" class="md-nav__link">Using the INI File Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#editing-in-form-mode" class="md-nav__link">Editing in Form Mode</a>
+        </li>
+        <li class="md-nav__item"><a href="#editing-in-text-mode" class="md-nav__link">Editing in Text Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#opening-old-ini-files" class="md-nav__link">Opening Old INI Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#tooltip" class="md-nav__link">Tooltip</a>
+        </li>
+        <li class="md-nav__item"><a href="#add-unassigned-parameters" class="md-nav__link">Add Unassigned Parameters</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#error-markers" class="md-nav__link">Error Markers</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#associated-views" class="md-nav__link">Associated Views</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li>
+        <li class="md-nav__item"><a href="#parameters-view" class="md-nav__link">Parameters View</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-hierarchy-view" class="md-nav__link">Module Hierarchy View</a>
+        </li>
+        <li class="md-nav__item"><a href="#ned-inheritance-view" class="md-nav__link">NED Inheritance View</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/ini-editor.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="editing-ini-files">
+<h1 id="userguide-ini-editor--page-root">Editing INI Files<a class="headerlink" href="#userguide-ini-editor--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="overview">
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>In OMNeT++, simulation models are parameterized and configured for execution using configuration files with the <code class="file docutils literal notranslate"><span class="pre">.ini</span></code>
+extension, called INI files. Ini files are text files, which can be edited using any text editor. However, OMNeT++ 4.x
+introduces a tool expressly designed for editing INI files. The INI File Editor is part of the OMNeT++ IDE and is very
+effective in assisting the user to author INI files. It is a very useful feature because it has detailed knowledge of
+the simulation model, the INI file syntax, and the available configuration options.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The syntax and features of INI files have changed since OMNeT++ 3.x. These changes are summarized in the “Configuring
+Simulations” chapter of the “OMNeT++ 4.x. User Manual”.</p>
+</div>
+<p>The INI File Editor is a dual-mode editor. The configuration can be edited using forms and dialogs, or as plain text.
+Forms are organized around topics like general setup, Cmdenv, Qtenv, output files, extensions and so on. The text editor
+provides syntax highlighting and auto completion. Several views can display information, which is useful when editing
+INI files. For example you can see the errors in the current INI file or all the available module parameters in one
+view. You can easily navigate from the module parameters to their declaration in the NED file.</p>
+</section>
+<section id="creating-ini-files">
+<h2 id="creating-ini-files">Creating INI Files<a class="headerlink" href="#creating-ini-files" title="Permalink to this headline">¶</a></h2>
+<p>To create a new INI file, choose <span class="menuselection">File ‣ New ‣ Initialization File</span> from the menu. It opens a wizard where
+you can enter the name of the new file and select the name of the network to be configured.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/INI-NewWizard.png"><img alt="../_images/INI-NewWizard.png" src="../_images/INI-NewWizard.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">New Initialization File dialog</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="using-the-ini-file-editor">
+<h2 id="using-the-ini-file-editor">Using the INI File Editor<a class="headerlink" href="#using-the-ini-file-editor" title="Permalink to this headline">¶</a></h2>
+<p>The INI File Editor has two modes. The <em>Source</em> mode provides a text editor with syntax highlighting and auto completion
+of names. In the <em>Form</em> mode, you can edit the configuration by entering the values in a form. You can switch between
+the modes by selecting the tabs at the bottom of the editor.</p>
+<section id="editing-in-form-mode">
+<h3 id="editing-in-form-mode">Editing in Form Mode<a class="headerlink" href="#editing-in-form-mode" title="Permalink to this headline">¶</a></h3>
+<p>The INI file contains the configuration of simulation runs. The content of the INI file is divided into sections. In the
+simplest case, all parameters are set in the General section. If you want to create several configurations in the same
+INI file, you can create named Configuration (Config) sections and refer to them with the <code class="docutils literal notranslate"><span class="pre">-c</span></code> option when starting
+the simulation. The Config sections inherit the settings from the General section or from other Config sections. This
+way you can factor out the common settings into a “base” configuration.</p>
+<p>On the first page of the form editor, you can edit the sections. The sections are displayed as a tree; the nodes inherit
+settings from their parents. The icon before the section name shows how many runs are configured in that section.
+You can use drag and drop to reorganize the sections. You can delete, edit, or add a new child to the selected section.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/INI-FormEditor.png"><img alt="../_images/INI-FormEditor.png" src="../_images/INI-FormEditor.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Editing INI file sections</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<table id="id3">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">Legend of Icons Before Sections</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 6%"/>
+<col style="width: 94%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="../_images/section_single.png" src="../_images/section_single.png"/>
+</td>
+<td><p>contains a single run</p></td>
+</tr>
+<tr class="row-even"><td><img alt="../_images/section_repeat.png" src="../_images/section_repeat.png"/>
+</td>
+<td><p>contains multiple replications (specified by ‘repeat=…’)</p></td>
+</tr>
+<tr class="row-odd"><td><img alt="../_images/section_iter.png" src="../_images/section_iter.png"/>
+</td>
+<td><p>contains iteration variables</p></td>
+</tr>
+<tr class="row-even"><td><img alt="../_images/section_iterrep.png" src="../_images/section_iterrep.png"/>
+</td>
+<td><p>contains multiple replications for each iteration</p></td>
+</tr>
+</tbody>
+</table>
+<p>The Config sections have a name and an optional description. You can specify a fallback section other than General. If
+the network name is not inherited, it can be specified, as well.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/INI-NewSection.png"><img alt="../_images/INI-NewSection.png" src="../_images/INI-NewSection.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Creating a new INI file section</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>On the <span class="guilabel">Parameters</span> page of the form editor, you can set module parameters. First, you have to select the
+section where the parameters are stored. After selecting the section from the list, the form shows the name of the
+edited network and the fallback section. The table below the list box shows current settings of the section and all
+other sections from which it has inherited settings. You can move parameters by dragging them. If you click a table
+cell, you can edit the parameter name (or pattern), its value and the comment attached to it. <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>
+brings up a content assist. If you hover over a table row, the parameter is described in the tooltip that appears.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/INI-FormEditor3.png"><img alt="../_images/INI-FormEditor3.png" src="../_images/INI-FormEditor3.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Editing module parameters</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>New parameters can be added one by one by pressing the <span class="guilabel">New</span> button and filling the new table row. The
+selected parameters can be removed with the <span class="guilabel">Remove</span> button. If you press the <span class="guilabel">Add</span> button, you
+can add any missing parameters.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/INI-AddParams.png"><img alt="../_images/INI-AddParams.png" src="../_images/INI-AddParams.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Add missing module parameters dialog</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The rest of the settings do not belong to modules (e.g. configuration of random number generators, output vectors,
+simulation time limit). These settings can be edited from the forms listed under the Configuration node. If the field
+has a default value and it is not set, the default value is displayed in gray. If its value is set, you can reset the
+default value by pressing the <span class="guilabel">Reset</span> button. These fields are usually set in the General section. If you want
+to specify them in a Config section, press the <img alt="expand_image" class="toolbutton" src="../_images/expand.png"/> button and add a section-specific value to
+the opening table. If the table contains the Generic section only, then it can be collapsed again by pressing the
+<img alt="collapse_image" class="toolbutton" src="../_images/collapse.png"/> button. Some fields can be specified in the General section only, so they do not have a
+<img alt="expand_image" class="toolbutton" src="../_images/expand.png"/> button next to them.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/INI-FormEditor2.png"><img alt="../_images/INI-FormEditor2.png" src="../_images/INI-FormEditor2.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 24 </span><span class="caption-text">Editing general configuration</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="editing-in-text-mode">
+<h3 id="editing-in-text-mode">Editing in Text Mode<a class="headerlink" href="#editing-in-text-mode" title="Permalink to this headline">¶</a></h3>
+<p>If you want to edit the INI file as plain text, switch to the Source mode. The editor provides several features in
+addition to the usual text editor functions like copy/paste, undo/redo and text search.</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/INI-TextEditor.png"><img alt="../_images/INI-TextEditor.png" src="../_images/INI-TextEditor.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 25 </span><span class="caption-text">Editing the INI file in text mode</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="opening-old-ini-files">
+<h4 id="opening-old-ini-files">Opening Old INI Files<a class="headerlink" href="#opening-old-ini-files" title="Permalink to this headline">¶</a></h4>
+<p>When you open an INI file with the old format, the editor offers to convert it to the new format. It creates Config
+sections from Run sections and renames old parameters.</p>
+</section>
+<section id="content-assist">
+<h4 id="content-assist">Content Assist<a class="headerlink" href="#content-assist" title="Permalink to this headline">¶</a></h4>
+<p>If you press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>, you will get a list of proposals valid at the insertion point. The list may contain section
+names, general options, and parameter names and values of the modules of the configured network.</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/INI-TextEditor2.png"><img alt="../_images/INI-TextEditor2.png" src="../_images/INI-TextEditor2.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 26 </span><span class="caption-text">Content assist in source mode</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="tooltip">
+<h4 id="tooltip">Tooltip<a class="headerlink" href="#tooltip" title="Permalink to this headline">¶</a></h4>
+<p>If you hover over a section or parameter, a tooltip appears showing the properties of the section or parameter. The
+tooltip for sections displays the inheritance chain, the network name, number of errors and warnings and the yet
+unassigned parameters. For parameters, the definition, description and the module name are displayed.</p>
+</section>
+<section id="add-unassigned-parameters">
+<h4 id="add-unassigned-parameters">Add Unassigned Parameters<a class="headerlink" href="#add-unassigned-parameters" title="Permalink to this headline">¶</a></h4>
+<p>You can add the names of unassigned module parameters to a Config section by choosing <span class="guilabel">Add Missing keys</span>
+from the context menu or pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">O</kbd></kbd>.</p>
+</section>
+<section id="commenting">
+<h4 id="commenting">Commenting<a class="headerlink" href="#commenting" title="Permalink to this headline">¶</a></h4>
+<p>To comment out the selected lines, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd>. To remove the comment, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd> again.</p>
+</section>
+<section id="navigation">
+<h4 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<p>If you press the <kbd class="kbd docutils literal notranslate">Ctrl</kbd> key and click on a module parameter name, then the declaration of the parameter will be shown in
+the NED editor. You can navigate from a network name to its definition, too.</p>
+</section>
+<section id="error-markers">
+<h4 id="error-markers">Error Markers<a class="headerlink" href="#error-markers" title="Permalink to this headline">¶</a></h4>
+<p>Errors are marked on the left/right side of the editor. You can move to the next/previous error by pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">.</kbd></kbd>
+and <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">,</kbd></kbd> respectively. You can get the error message in a tooltip if you hover over the <img alt="error_image" class="toolbutton" src="../_images/Error.png"/> marker.</p>
+</section>
+</section>
+</section>
+<section id="associated-views">
+<h2 id="associated-views">Associated Views<a class="headerlink" href="#associated-views" title="Permalink to this headline">¶</a></h2>
+<p>There are several views related to the INI editor. These views can be displayed (if not already open) by choosing the
+view from the <span class="menuselection">Window ‣ Show View</span> submenu.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are working with very large NED or INI files, you may improve the performance of the editor by closing all
+views related to INI files (Parameters, Module Hierarchy and NED Inheritance View).</p>
+</div>
+<section id="outline-view">
+<h3 id="outline-view">Outline View<a class="headerlink" href="#outline-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Outline View</span> allows an overview of the sections in the current INI file. Clicking on a section will
+highlight the corresponding element in the text or form view.</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/INI-OutlineView.png"><img alt="../_images/INI-OutlineView.png" src="../_images/INI-OutlineView.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 27 </span><span class="caption-text">Outline View showing the content of an INI file</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="problems-view">
+<h3 id="problems-view">Problems View<a class="headerlink" href="#problems-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Problems View</span> contains error and warning messages generated by the parser. Double-clicking on a row will
+open the problematic file and move to the location of the problem.</p>
+</section>
+<section id="parameters-view">
+<h3 id="parameters-view">Parameters View<a class="headerlink" href="#parameters-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Parameters View</span> shows parameters of the selected section including inherited parameters. It also
+displays the parameters that are unassigned in the configuration. When the <img alt="filter_image" class="toolbutton" src="../_images/filter.png"/> toggle button on
+the toolbar is on, then all parameters are displayed; otherwise, only the unassigned ones are visible.</p>
+<p>If you want to fix the content of the view, press the <img alt="unpin_image" class="toolbutton" src="../_images/unpin.png"/> button. After pinning, the content of
+this view will not follow the selection made by the user in other editors or views.</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/INI-ParametersView.png"><img alt="../_images/INI-ParametersView.png" src="../_images/INI-ParametersView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 28 </span><span class="caption-text">Parameters View</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<table id="id12">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Legend of icons before module parameters</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 6%"/>
+<col style="width: 94%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><img alt="../_images/par_ned.png" src="../_images/par_ned.png"/>
+</td>
+<td><p>value is set in the NED file</p></td>
+</tr>
+<tr class="row-even"><td><img alt="../_images/par_neddefault.png" src="../_images/par_neddefault.png"/>
+</td>
+<td><p>default from the NED file is explicitly set in the INI file (<code class="docutils literal notranslate"><span class="pre">**.paramname=default</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><img alt="../_images/par_implicitdefault.png" src="../_images/par_implicitdefault.png"/>
+</td>
+<td><p>default from the NED file is automatically applied, because no value is specified in the INI file</p></td>
+</tr>
+<tr class="row-even"><td><img alt="../_images/par_ini.png" src="../_images/par_ini.png"/>
+</td>
+<td><p>value is set in the INI file (may override the value from the NED file)</p></td>
+</tr>
+<tr class="row-odd"><td><img alt="../_images/par_inineddefault.png" src="../_images/par_inineddefault.png"/>
+</td>
+<td><p>value is set in the INI file to the same value as the NED default</p></td>
+</tr>
+<tr class="row-even"><td><img alt="../_images/par_iniask.png" src="../_images/par_iniask.png"/>
+</td>
+<td><p>will ask the user at runtime (<code class="docutils literal notranslate"><span class="pre">**.paramname=ask</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><img alt="../_images/par_unassigned.png" src="../_images/par_unassigned.png"/>
+</td>
+<td><p>unassigned – has no values specified in the NED or INI files</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Right-clicking on any line will show a context menu that allows you to navigate to the definition of that parameter
+or module.</p>
+</div>
+</section>
+<section id="module-hierarchy-view">
+<h3 id="module-hierarchy-view">Module Hierarchy View<a class="headerlink" href="#module-hierarchy-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Module Hierarchy View</span> shows the contained submodules, several levels deep. It also display the module
+parameters, and where its value comes from (INI file, NED file or unassigned).</p>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/INI-ModuleHierarchyView.png"><img alt="../_images/INI-ModuleHierarchyView.png" src="../_images/INI-ModuleHierarchyView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 29 </span><span class="caption-text">Module Hierarchy View</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Before you use the context menu to navigate to the <code class="docutils literal notranslate"><span class="pre">NED</span></code> definition, pin down the hierarchy view. This way you will
+not lose the current context and content if the view will not follow the selection.</p>
+</div>
+</section>
+<section id="ned-inheritance-view">
+<h3 id="ned-inheritance-view">NED Inheritance View<a class="headerlink" href="#ned-inheritance-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">NED Inheritance View</span> shows the inheritance tree of the network configured in the selected section.</p>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="ned-editor.html" title="Editing NED Files"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Editing NED Files </span>
+              </div>
+            </a>
+          
+          
+            <a href="msg-editor.html" title="Editing Message Files"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Editing Message Files </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+%description:
+Test @class property with C++ namespace.
+
+%file: package.ned
+
+// don't use @namespace
+
+%file: test.ned
+
+simple Simple
+{
+    parameters:
+        @class("@TESTNAME@::Simple");
+    gates:
+        inout g;
+}
+
+channel ChannelWithNamespace extends ned.IdealChannel
+{
+    parameters:
+        @class("@TESTNAME@::ChannelWithNamespace");
+}
+
+network Test
+{
+    submodules:
+        a: Simple;
+        b: Simple;
+    connections:
+        a.g <--> ChannelWithNamespace <--> b.g;
+}
+
+%file: test.cc
+
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace @TESTNAME@ {
+
+class ChannelWithNamespace: public cIdealChannel
+{
+  public:
+    ChannelWithNamespace() { }
+    virtual Result processMessage(cMessage *msg, const SendOptions& options, simtime_t t) override;
+};
+
+Define_Channel(ChannelWithNamespace);
+
+cChannel::Result ChannelWithNamespace::processMessage(cMessage *msg, const SendOptions& options, simtime_t t)
+{
+    EV << "ChannelWithNamespace\n";
+    return cIdealChannel::processMessage(msg, options, t);
+}
+
+class Simple : public cSimpleModule
+{
+  public:
+    Simple() : cSimpleModule(16384) { }
+    virtual void activity() override;
+};
+
+Define_Module(Simple);
+
+void Simple::activity()
+{
+    send(new cMessage(), gate("g$o"));
+    delete receive();
+}
+
+}; // namespace
+
+%contains: stdout
+ChannelWithNamespace

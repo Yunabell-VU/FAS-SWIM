@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>IDE Developers Guide</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IDE Customization Guide" href="../ide-customization-guide/ide-customization-guide.html" />
+    <link rel="prev" title="Overview of the OMNeT++ IDE" href="../ide-overview/ide-overview.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ide-developers-guide">
+<span id="id1"></span><h1>IDE Developers Guide</h1>
+<section id="introduction">
+<h2>Introduction</h2>
+<p>The OMNeT++ IDE is based on the Eclipse platform which is an extensible, Java based framework. While it started as an
+IDE framework only, its main goal is to be a generic integration platform. Extensions (called plug-ins) can be written
+in Java language. Plug-ins can be simply added to an existing Eclipse installation, extending it with new functionality
+by contributing various user interface elements into the platform user interface.</p>
+<p>The OMNeT++ IDE is in fact an Eclipse installation with some additional - simulation related - tools pre-installed:</p>
+<ul class="simple">
+<li><p>The OMNeT++ feature which contains all OMNeT++ specific tools you use: the NED, MSG and INI file editor, simulation
+launcher, result analysis tools, sequence char view, documentation generator etc.</p></li>
+<li><p>CDT (C/C++ Development Tooling - eclipse.org/cdt) - for C++ development and debugging. This feature integrates with
+the standard <code class="docutils literal notranslate"><span class="pre">gcc</span></code> toolchain and the <code class="docutils literal notranslate"><span class="pre">gdb</span></code> debugger.</p></li>
+<li><p>Version control integration plug-ins for Git and Subversion.</p></li>
+</ul>
+<p>To keep the size of OMNeT++ distribution <em>small</em>, the OMNeT++ IDE does not contain the tools required for Java
+development. If you would like to develop your own plug-ins for the IDE, you will need to install some additional
+components manually:</p>
+<ul class="simple">
+<li><p>JDT (Java Development Tools) - for generic Java development. JDT contains a Java compiler and all the editors
+debuggers and tools used during Java development.</p></li>
+<li><p>PDE (Plug-in Development Environment) - this component contains additional tools, API definitions and documentation
+for developing plug-ins. PDE requires the presence of JDT.</p></li>
+</ul>
+<p>We recommend first learning the basics of Eclipse plug-in development. The best place to start is the <em>Platform Plug-in
+Developer Guide</em> which can be accessed from the <em>Help</em> menu after you have installed the PDE. Of course, you will need
+some Java programming experience as well.</p>
+</section>
+<section id="installing-the-plug-in-development-environment">
+<h2>Installing the Plug-in Development Environment</h2>
+<p>To develop plug-ins for the IDE, you need to install the Eclipse Plug-in Development Environment (PDE) into the IDE.
+This section describes how to install PDE.</p>
+<p>Start the IDE, and select <em>Help -&gt; Install New Software…</em> from the menu. This will bring up the <em>Install</em> dialog.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/installer.png"><img alt="../_images/installer.png" src="../_images/installer.png" style="width: 60%;" /></a>
+</figure>
+<p>At the top of the dialog you can choose an Eclipse software repository to install software from. Select <em>Indigo</em> from
+the list.</p>
+<p>If <em>Indigo</em> is not present, add it: Click the <em>Add…</em> button, then fill in the dialog that comes up:</p>
+<ul class="simple">
+<li><p>Name: <code class="docutils literal notranslate"><span class="pre">Indigo</span></code></p></li>
+<li><p>Location: <code class="docutils literal notranslate"><span class="pre">http://download.eclipse.org/releases/indigo</span></code></p></li>
+</ul>
+<p>Then click OK.</p>
+<p>After a while, the <em>Install</em> dialog should show the list of available Eclipse packages. Select <em>Eclipse Plug-in
+Development Environment</em> from the <em>General Purpose Tools</em> group, then go thought the rest of the wizard to get PDE
+installed. This will install PDE’s prerequisites, most notably JDT (Java Development Tooling) as well.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/installer-pde.png"><img alt="../_images/installer-pde.png" src="../_images/installer-pde.png" style="width: 60%;" /></a>
+</figure>
+<p>When the download and the installation finished, restart the IDE.</p>
+<p>Now the IDE is ready for plug-in development.</p>
+</section>
+<section id="creating-the-first-plug-in">
+<h2>Creating The First Plug-in</h2>
+<section id="creating-the-plug-in">
+<h3>Creating the Plug-in</h3>
+<p>Once PDE is installed, we can create a small example <em>Hello World</em> plug-in. This plug-in will place a menu item on the
+main menubar. Invoking the menu item will launch a simple dialog.</p>
+<p>Choose <em>File –&gt; New –&gt; Project…</em> from the menu. The <em>New Project</em> wizard dialog comes up, with project type selection on
+the first page. Choose <em>Plug-in Project</em> from the <em>Plug-in Development</em> group and click <em>Next</em>.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/new-plugin-project.png"><img alt="../_images/new-plugin-project.png" src="../_images/new-plugin-project.png" style="width: 60%;" /></a>
+</figure>
+<p>On the next page, enter <code class="docutils literal notranslate"><span class="pre">org.example.hello</span></code> for project name, then click <em>Next</em>. On the following page (<em>Content</em>),
+you can just click <em>Next</em> as well. The following page allows you to choose the initial content for your project from
+among several code examples. Choose <em>Hello, World</em>, then click <em>Finish</em>.</p>
+<p>A new project named <code class="docutils literal notranslate"><span class="pre">org.example.hello</span></code> will be created.</p>
+<p>The IDE will also ask you if you want to switch to the <em>Plug-in Development</em> perspective; answer <em>Yes</em>.</p>
+</section>
+<section id="the-project">
+<h3>The project</h3>
+<p>Open the project and explore the generated files. There are two important files that are often used during plug-in
+development: plugin.xml and MANIFEST.MF. They both contain metadata that describe how your plug-in should be used by the
+platform.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MANIFEST.MF</span></code> contains basic information about your plug-in. External dependencies, name, version number etc. The
+<code class="docutils literal notranslate"><span class="pre">plugin.xml</span></code> file describes what your plug-in contributes to the platform. You should always specify your
+contributions otherwise they will not appear on the user interface.</p>
+<p>Double-click on one of the above files. This will start a form editor with several pages. Explore the possibilities.
+Later you can add other plug-ins here you are depending on, or you can specify what Java packages you plan to provide to
+other plug-ins. On he first page, there are useful shortcuts to export your plug-in in a deployable format (JAR file).</p>
+<p>Of course you can have other files inside the plug-ins. You will need <code class="docutils literal notranslate"><span class="pre">.class</span></code> files (containing your code of course)
+or image resources for icons.</p>
+</section>
+<section id="testing-the-plug-in">
+<h3>Testing the Plug-in</h3>
+<p>On the <em>Overview</em> tab click the <em>Launch an Eclipse application</em> link</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/plugin-overview-page.png"><img alt="../_images/plugin-overview-page.png" src="../_images/plugin-overview-page.png" style="width: 60%;" /></a>
+</figure>
+<p>A new instance of Eclipse will be started containing the generated plug-in. If everything is OK you should see a <em>Sample
+Menu</em> containing a <em>Sample Action</em>. When clicked, it will bring up a message dialog.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/plugin-running.png"><img alt="../_images/plugin-running.png" src="../_images/plugin-running.png" style="width: 60%;" /></a>
+</figure>
+</section>
+<section id="exporting-the-plug-in">
+<h3>Exporting the plug-in</h3>
+<p>Use the <em>Export plug-in</em> link on the <em>Overview</em> page of the manifest editor.</p>
+<p>Choose <em>Directory</em> radio button for <em>Destination</em>, specify directory name, and click [Finish]</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/plugin-export.png"><img alt="../_images/plugin-export.png" src="../_images/plugin-export.png" style="width: 60%;" /></a>
+</figure>
+<p>The plug-in will be generated as &lt;dirname&gt;/plugins/aaaa_1.0.0.201001061910.jar</p>
+</section>
+<section id="deploying-the-plug-in-in-a-project">
+<h3>Deploying the plug-in in a project</h3>
+<p>Once you have a final, exported plug-in in a deployable format you have to copy it into your Eclipse installation
+(&lt;omnetpp&gt;/ide/dropins). You should restart the IDE so it can recognize it.</p>
+<p>The OMNeT++ IDE can load plug-ins from the workspace (projects) as well. This can be useful if you have implemented an
+extension that is useful only for certain type of project. (e.g. a plug-in helping to assign IP addresses to hosts
+should be active only if the INET project is open).</p>
+<p>Open an existing OMNeT++ project (e.g. aloha). Create a folder named <code class="docutils literal notranslate"><span class="pre">plugins</span></code>.</p>
+<p>Copy the exported plug-in file (jar) into the <code class="docutils literal notranslate"><span class="pre">plugins</span></code> folder.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/plugin-deployed.png"><img alt="../_images/plugin-deployed.png" src="../_images/plugin-deployed.png" style="width: 60%;" /></a>
+</figure>
+<p>It should be activated automatically. If you delete it, or close the project it should disappear. If you replace it with
+a new version, it will be updated.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/plugin-deployed-closed.png"><img alt="../_images/plugin-deployed-closed.png" src="../_images/plugin-deployed-closed.png" style="width: 60%;" /></a>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all plug-ins behave nicely; (they have to support correctly the activation and deactivation themselves). If you
+experience problems, it might be a good idea to restart the IDE.</p>
+</div>
+</section>
+</section>
+<section id="eclipse-plug-in-development">
+<h2>Eclipse Plug-in Development</h2>
+<p>It is out of scope of this manual to teach the reader on how to write Eclipse plug-ins. There are excellent books and
+on-line resources on this topic; we’ll list some of them below.</p>
+<p>The most straightforward resources are the Eclipse manuals themselves. Open the Eclipse help system (<em>Help -&gt; Help
+Contents</em>). If PDE is installed, you will find the following manuals in it:</p>
+<ul class="simple">
+<li><p><em>Platform Plug-in Developer Guide</em></p></li>
+<li><p><em>Plug-in Development Environment Guide</em></p></li>
+</ul>
+<p>Searching for <em>developing Eclipse plug-ins</em> on the web will reveal many good tutorials, overviews and other articles.</p>
+<p>A more in-depth coverage of the topic is the book <em>Eclipse Plug-ins</em>, by Eric Clayberg and Dan Rubel. Former editions
+were titled <em>Eclipse: Building Commercial-Quality Plug-ins</em>, which might be familiar to more people. The book has an
+associated web site: <a class="reference external" href="http://www.qualityeclipse.com">http://www.qualityeclipse.com</a>.</p>
+<p>Another book that we found useful is <em>The Official Eclipse 3.0 FAQs</em> by John Arthorne and Chris Laffra. The book is now
+available online: <a class="reference external" href="http://wiki.eclipse.org/index.php/The_Official_Eclipse_FAQs">http://wiki.eclipse.org/index.php/The_Official_Eclipse_FAQs</a>.</p>
+<p>One can find several more good books on amazon.com about Eclipse’s architecture, services, developing plug-ins.</p>
+<p>The rest of this Manual assumes that you are familiar with Eclipse concepts and Eclipse plug-in development in general.</p>
+</section>
+<section id="omnet-ide-developers-guide">
+<h2>OMNeT++ IDE Developers Guide</h2>
+<section id="overview">
+<h3>Overview</h3>
+<p>Developing a plug-in for the OMNeT++ IDE is exactly the same how you would develop a normal Eclipse plug-in. In addition
+to Eclipse API, you can access the API provided by the OMNeT++ specific plug-ins. These plug-ins allow you to browse,
+access and even modify the data structures representing the NED and MSG files. To access OMNeT++ specific APIs, you
+first have to add the appropriate OMNeT++ plug-in as a dependency to your plug-in.</p>
+<p>Double click on the <code class="docutils literal notranslate"><span class="pre">plugin.xml</span></code> file in your plug-in project and open the dependencies page. Add the
+<code class="docutils literal notranslate"><span class="pre">org.omnetpp.ned.model</span></code> and the <code class="docutils literal notranslate"><span class="pre">org.omnetpp.ned.core</span></code> plug-in as a dependency. (Also add
+<code class="docutils literal notranslate"><span class="pre">org.eclipse.core.resources</span></code>. We will need it for our example later.)</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/ned-core-dependency.png"><img alt="../_images/ned-core-dependency.png" src="../_images/ned-core-dependency.png" style="width: 60%;" /></a>
+</figure>
+</section>
+<section id="accessing-ned-and-message-types">
+<h3>Accessing NED and Message Types</h3>
+<p>We will modify our earlier <em>Hello world</em> example to print out the number of NED types in all open projects. Note that
+this is not the same as the number of NED files. Some NED files may contain more than one type while others contain none
+at all (e.g. package.ned). We can access the internal NED model via the <code class="docutils literal notranslate"><span class="pre">NEDResources</span></code> class.</p>
+<p>Open the <code class="docutils literal notranslate"><span class="pre">SampleAction.java</span></code> file and modify its content:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="n">IAction</span> <span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">MessageDialog</span><span class="o">.</span><span class="na">openInformation</span><span class="o">(</span>
+    <span class="n">window</span><span class="o">.</span><span class="na">getShell</span><span class="o">(),</span> <span class="s">&quot;NED Info&quot;</span><span class="o">,</span>
+    <span class="s">&quot;Number of NED types: &quot;</span><span class="o">+</span><span class="n">NEDResources</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span>
+        <span class="n">getNedTypesFromAllProjects</span><span class="o">().</span><span class="na">size</span><span class="o">());</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>The parsed model of all NED files can be accessed via the <code class="docutils literal notranslate"><span class="pre">NEDResources.getInstance()</span></code> singleton object. The
+<code class="docutils literal notranslate"><span class="pre">NEDResources</span></code> class is the main entry point to access and manipulate the content of NED files. If you know the fully
+qualified name of a type, you can obtain its type descriptor (<code class="docutils literal notranslate"><span class="pre">INedTypeInfo</span></code>) using the <code class="docutils literal notranslate"><span class="pre">getToplevelNedType()</span></code>
+method. There are numerous other ways to access and query the NED types. Check the documentation of the <code class="docutils literal notranslate"><span class="pre">NEDResources</span></code>
+and <code class="docutils literal notranslate"><span class="pre">INedTypeInfo</span></code> class.</p>
+<p>Similarly, you can access information about message files using the <code class="docutils literal notranslate"><span class="pre">MsgResources.getInstance()</span></code> method. Check the
+documentation of the <code class="docutils literal notranslate"><span class="pre">IMsgTypeResolver</span></code> and <code class="docutils literal notranslate"><span class="pre">IMsgTypeInfo</span></code> interfaces for further information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You have to add the <code class="docutils literal notranslate"><span class="pre">org.omnetpp.ned.core</span></code> and <code class="docutils literal notranslate"><span class="pre">org.omnetpp.ned.model</span></code> plug-ins to the project dependencies to
+access their classes.</p>
+</div>
+</section>
+<section id="accessing-projects">
+<h3>Accessing Projects</h3>
+<p>If you want to work with projects or files in your plug-in, there are several useful classes that can help you. The
+<code class="docutils literal notranslate"><span class="pre">ProjectUtils</span></code> class from the <code class="docutils literal notranslate"><span class="pre">org.omnetpp.common</span></code> plug-in can be used to enumerate open or referenced projects, or
+NED folders. You can add OMNeT++ support to existing projects.</p>
+<p>If you add <code class="docutils literal notranslate"><span class="pre">org.omnetpp.common</span></code> to your project dependencies, you can use <code class="docutils literal notranslate"><span class="pre">CDTUtils</span></code> to enumerate C++ source or
+excluded folders. <code class="docutils literal notranslate"><span class="pre">MakefileToools</span></code> and <code class="docutils literal notranslate"><span class="pre">MetaMakemake</span></code> from <code class="docutils literal notranslate"><span class="pre">org.omnetpp.cdt</span></code> are used to control the Makefile
+generation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The source of the OMNeT++ plug-ins are bundled with the IDE. You can easily access their documentation.</p>
+</div>
+</section>
+<section id="extension-points">
+<h3>Extension Points</h3>
+<p>The OMNeT++ plug-ins define some extension points that can be used to change or extend the current functionality of the
+IDE.</p>
+<p>From <code class="docutils literal notranslate"><span class="pre">org.omnetpp.common</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">org.omnetpp.common.wizard.contenttemplates</span></code> : You can add additional content templates to the <code class="docutils literal notranslate"><span class="pre">New</span> <span class="pre">File</span></code>
+wizards. You must specify the location of the template files in your project (by default it is <code class="docutils literal notranslate"><span class="pre">templates</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">org.omnetpp.common.wizard.templatecontributors</span></code> : You can add template variables to all of your templates. The
+plug-in must implement the <code class="docutils literal notranslate"><span class="pre">org.omnetpp.common.wizard.IContentTemplateContributor</span></code> interface to contribute to the
+template variables.</p></li>
+</ul>
+<section id="wizards">
+<h4>Wizards</h4>
+<p>New wizards can be added to IDE by implementing them directly in Java. For complicated wizards, this is the recommended
+strategy. If your wizard just gathers some data from the user and then generates some file as the result, we recommend
+creating template-based wizards instead, as they do not require Java language knowledge. For further info about how to
+write custom wizards please read the <em>IDE Customization Guide</em>.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/ide-developersguide/ide-developersguide.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

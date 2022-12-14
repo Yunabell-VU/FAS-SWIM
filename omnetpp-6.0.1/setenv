@@ -1,0 +1,115 @@
+#!/usr/bin/env -S sh -c "echo >&2 \"Error: You are running this script instead of sourcing it. Make sure to use it as 'source setenv' or '. setenv', otherwise its settings won't take effect.\"; exit 1"
+
+# first argument can be (e.g. 'source setenv -q'):
+# -q : do not show banner text on configuration success
+# -r : remove an already configured environment
+
+# Get the directory where this script reside using a trick (works differently on bash and zsh)
+# On bash, the current script's name is in 'BASH_SOURCE[0]'
+if [ "$BASH_VERSION" != "" ]; then # for BASH
+  dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+elif [ "$ZSH_VERSION" != "" ]; then # on zsh the script name is in '$0'
+  dir=$(cd $(dirname $0) && pwd)
+else # on any other SH compatible shell we assume that the current working directory is the OMNeT++ root directory
+  dir=$(pwd)
+fi
+
+# check if dir is really pointing to an omnet++ installation dir
+if [ ! -f $dir/configure.user -o ! -f $dir/include/omnetpp.h -o ! -f $dir/Version ]; then
+    echo "Error: '$dir' does not look like an OMNeT++ root directory"
+    return 1
+fi
+
+# remove previous environment to prevent the accumulation of path elements
+if [ -n "$__omnetpp_root_dir" ]; then
+  if [ "$1" = "-r" ]; then
+    echo "Removed previous environment for '$__omnetpp_root_dir'."
+    dir=
+  else
+    echo "Warning: overwriting previous environment for '$__omnetpp_root_dir'."
+  fi
+  export PATH=${PATH#$__omnetpp_root_dir/bin:}
+  export PYTHONPATH=${PYTHONPATH#$__omnetpp_root_dir/python}
+  export __omnetpp_root_dir=
+  export OMNETPP_RELEASE=
+  export QT_SELECT=
+  export QT_LOGGING_RULES=
+fi
+
+# do not continue if removal was requested
+if [ "$1" = "-r" ]; then
+    return 0
+fi
+
+# macOS specific settings
+if [ $(uname) = "Darwin" ]; then
+  if [ $(arch) = "arm64" ]; then
+    if [ -d $dir/tools/macos.x86_64 ]; then
+      echo "NOTE: We are running on Apple Silicon, but you have downloaded the x86_64 version of the installation package!"
+      echo "Turning on x86_64 emulation by starting a new shell with 'arch -x86_64 /bin/zsh -i' ..."
+      export dir; arch -x86_64 /bin/zsh -c 'source $dir/setenv; zsh -i'
+      return 1
+    elif [ -d $dir/tools/macos.aarch64 ]; then
+      TOOLS_DIR=$dir/tools/macos.aarch64
+    else
+      echo "Error: We are running on macOS aarch64, but you seem to have downloaded the Linux or Windows version of the installation package!"
+      return 1
+    fi
+  else
+    if [ -d $dir/tools/macos.aarch64 ]; then
+      echo "Error: We are running on macOS x86_64, but you have downloaded the AARCH64 version of the installation package!"
+      echo "Please download and install the x86_64 compatible package."
+      return 1
+    elif [ -d $dir/tools/macos.x86_64 ]; then
+      TOOLS_DIR=$dir/tools/macos.x86_64
+    else
+      echo "Error: We are running on macOS x86_64, but you seem to have downloaded the Linux or Windows version of the installation package!"
+      return 1
+    fi
+  fi
+
+  # setup macOS specific variables
+  export PATH=$TOOLS_DIR/bin:$PATH
+  export PIP_PREFIX=$TOOLS_DIR/lib/Python.framework/Versions/Current
+  export PYTHONNOUSERSITE=1
+  export BISON_PKGDATADIR=$TOOLS_DIR/share/bison
+  export QT_PLUGIN_PATH=$TOOLS_DIR/plugins
+  TOOLS_DIR=
+fi
+
+# Windows/MinGW specifiy settings
+if [ "$MSYSTEM" = "MINGW64" ] ; then
+  if [ "$VCToolsInstallDir" = "" ] ; then
+    export PATH="/opt/mingw64/bin:$PATH"
+  else
+    export PATH="/opt/visualc/bin:$(cygpath "$VCToolsInstallDir/bin/HostX64/x64"):$PATH"
+  fi
+fi
+
+export PATH=$dir/bin:$PATH
+export PYTHONPATH=$dir/python:$PYTHONPATH && PYTHONPATH=${PYTHONPATH%:}  # required because colon at the end causes issues on Windows
+export HOSTNAME
+export HOST
+export QT_SELECT=5 # on systems with qtchooser, switch to Qt5
+export QT_LOGGING_RULES='*.debug=false;qt.qpa.*=false' # disable some qt logging
+
+export OMNETPP_RELEASE=$(cat $dir/Version)
+export __omnetpp_root_dir=$dir
+dir=
+
+if [ "$1" != "-q" ]; then
+  echo "Environment for '$OMNETPP_RELEASE' in directory '$__omnetpp_root_dir' is ready."
+
+  if [ ! -f $__omnetpp_root_dir/Makefile.inc ]; then
+  cat <<__END__
+
+Type "./configure" and "make" to build the simulation libraries.
+When done, type "omnetpp" to start the IDE.
+__END__
+  fi
+fi
+
+# source user specific script if present
+if [ -f "$__omnetpp_root_dir/setenv_local" ] ; then
+  source $__omnetpp_root_dir/setenv_local
+fi

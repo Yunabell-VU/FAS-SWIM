@@ -1,0 +1,28 @@
+%description:
+Tests constant statistics source.
+
+%file: test.ned
+
+import testlib.Dump;
+
+module Node
+{
+    @statistic[src0](source=3.14; record=vector);
+}
+
+network Test
+{
+    submodules:
+        node: Node;
+}
+
+%inifile: test.ini
+[General]
+network = Test
+debug-statistics-recording = true
+
+%exitcode: 1
+
+%contains: stderr
+Cannot add statistic 'src0' to module Test.node (NED type: Node): Error in source=3.14: Expression has no signal input
+

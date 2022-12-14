@@ -1,0 +1,28 @@
+%description:
+If document has DTD, parser must use it for validation and attribute completion.
+Missing DTD -- should produce an error.
+
+%file: test.xml
+<?xml version="1.0" ?>
+<!DOCTYPE foo SYSTEM "./no-such-file.dtd">
+<foo>
+    <bar one="X"/>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%exitcode: 1
+
+%contains: stderr
+DTD validation failed, see stderr for detailed report
+
+%contains: stderr
+Could not load the external subset "./no-such-file.dtd"
+

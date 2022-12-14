@@ -1,0 +1,22 @@
+%description:
+Test JSON-style object parameters.
+
+%file: test.ned
+
+import testlib.Dump;
+
+network Test {
+  parameters:
+    object foo = { a: 1, b: intuniform(0,100) };
+    object bar = foo; // points to the same object as foo! ownership issues
+
+  submodules:
+    dump: Dump;
+}
+
+%exitcode: 1
+%contains: stderr
+<!> Error: Cannot assign parameter 'bar': Object parameters may only hold objects they fully own, but object (omnetpp::cValueMap)map1 is already owned by a parameter named 'foo'
+
+%not-contains: stdout
+undisposed object

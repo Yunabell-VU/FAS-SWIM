@@ -1,0 +1,104 @@
+%description:
+Tests parsing of source= key in @statistic() properties, without warmup-period.
+
+%file: test.ned
+
+import testlib.Dump;
+
+module Node
+{
+    @statistic[src0](record=vector,histogram);  // no "source=": should use statistic name as signal
+    @statistic[src1](source=foo;record=vector,histogram);
+    @statistic[src2](source=foo+1;record=vector,histogram);
+    @statistic[src3](source=2*fabs(foo+1);record=vector,histogram);
+    @statistic[src4](source=mean(foo);record=vector,histogram);
+    @statistic[src5](source=fabs(mean(foo));record=vector,histogram);
+    @statistic[src6](source=mean(foo+1);record=vector,histogram);
+    @statistic[src7](source=3+fabs(mean(foo+1));record=vector,histogram);
+    @statistic[src8](source=max(mean(timeavg(foo)));record=vector,histogram);
+    @statistic[src9](source=max(1+mean(2+timeavg(3+foo)));record=vector,histogram);
+    @statistic[src10](source=foo+bar;record=vector);
+    @statistic[src11](source=max(foo+3*bar);record=vector);
+    @statistic[src12](source=max(foo)+sin(bar);record=vector);
+    @statistic[src13](source=max(foo)+min(bar);record=vector);
+}
+
+network Test
+{
+    submodules:
+        node: Node;
+}
+
+%inifile: test.ini
+[General]
+network = Test
+debug-statistics-recording = true
+
+%subst: /omnetpp:://
+%subst: /signalID=\d+/signalID=_/
+
+%contains: stdout
+Test.node (Node):
+    "bar" (signalID=_):
+        $0 + $1 (ExpressionFilter)
+            VectorRecorder ==> src10:vector
+        $0 + 3 * $1 (ExpressionFilter)
+            MaxFilter
+                VectorRecorder ==> src11:vector
+        $0 + sin($1) (ExpressionFilter)
+            VectorRecorder ==> src12:vector
+        MinFilter
+            $0 + $1 (ExpressionFilter)
+                VectorRecorder ==> src13:vector
+    "foo" (signalID=_):
+        VectorRecorder ==> src1:vector
+        HistogramRecorder ==> src1:histogram
+        $0 + 1 (ExpressionFilter)
+            VectorRecorder ==> src2:vector
+            HistogramRecorder ==> src2:histogram
+        2 * fabs($0 + 1) (ExpressionFilter)
+            VectorRecorder ==> src3:vector
+            HistogramRecorder ==> src3:histogram
+        MeanFilter
+            VectorRecorder ==> src4:vector
+            HistogramRecorder ==> src4:histogram
+        MeanFilter
+            fabs($0) (ExpressionFilter)
+                VectorRecorder ==> src5:vector
+                HistogramRecorder ==> src5:histogram
+        $0 + 1 (ExpressionFilter)
+            MeanFilter
+                VectorRecorder ==> src6:vector
+                HistogramRecorder ==> src6:histogram
+        $0 + 1 (ExpressionFilter)
+            MeanFilter
+                3 + fabs($0) (ExpressionFilter)
+                    VectorRecorder ==> src7:vector
+                    HistogramRecorder ==> src7:histogram
+        TimeAverageFilter
+            MeanFilter
+                MaxFilter
+                    VectorRecorder ==> src8:vector
+                    HistogramRecorder ==> src8:histogram
+        3 + $0 (ExpressionFilter)
+            TimeAverageFilter
+                2 + $0 (ExpressionFilter)
+                    MeanFilter
+                        1 + $0 (ExpressionFilter)
+                            MaxFilter
+                                VectorRecorder ==> src9:vector
+                                HistogramRecorder ==> src9:histogram
+        $0 + $1 (ExpressionFilter)
+            VectorRecorder ==> src10:vector
+        $0 + 3 * $1 (ExpressionFilter)
+            MaxFilter
+                VectorRecorder ==> src11:vector
+        MaxFilter
+            $0 + sin($1) (ExpressionFilter)
+                VectorRecorder ==> src12:vector
+        MaxFilter
+            $0 + $1 (ExpressionFilter)
+                VectorRecorder ==> src13:vector
+    "src0" (signalID=_):
+        VectorRecorder ==> src0:vector
+        HistogramRecorder ==> src0:histogram

@@ -1,0 +1,3672 @@
+2022-08-24  Levente Mészáros
+
+	* Fixed issue #938, filtering the eventlog in the sequence chart makes it empty.
+	Several parts were commented out during the porting of the old implementation
+	from C++ to Java. The missing parts were revived and tested manually.
+
+2022-08-17  Andras Varga
+
+	* NED Editor: Fix #896 "NED Visual editor cannot show warning symbol.
+	Showing image not found placeholder instead".
+
+2022-06-11  Andras Varga
+
+	* MSG: MsgResources: fix handling of changed msg files.
+	  1. take namespace of C++ classes into account
+	  2. types deleted from a msg file were not forgotten when file was reloaded
+
+2022-06-16  Andras Varga
+
+    Neddoc fixes and enhancements:
+
+	* Refined support for msg types with namespace. Accepts various forms:
+	unqualified, (fully or partially) qualified, explicitly fully qualified
+	(starting with "::"). Links now have a tooltip which shows the fully
+	qualified name of the type unless the link label is exactly the same string.
+
+	* Added support for the `@debug links` page directive. When a page or comment
+	contains `@debug links`, NED/MSG types will be hyperlinked in a way that
+	also shows the original code. E.g. "~inet::Foo" in the page will not simply
+	be rendered as a link with the text "Foo", but like this: "[~inet::Foo ->
+	Foo]" (where the last "Foo" is the link). This is useful for the test in
+	test/misc/neddoc.
+
+	* Make namespaces appear in the navigation tree. Added a "Namespaces" node
+	to the navigation tree with namespaces as children, and a namespaces.html
+	page that lists classes grouped by namespace.
+
+	* Added rudimentary namespace support to msg documentation
+	  1. Include namespace in names of doc pages generated from msg types
+	  2. Display namespace on doc pages generated from msg pages
+
+2022-05-24  Attila Torok
+
+	* Analysis Tool: Added the `python/` folders of the [referenced] project[s]
+	to the `PYTHONPATH` of chart scripts.
+
+2022-03-18  Andras Varga
+
+	* NED editor: fix #634. Eliminated NED file launcher class (which opened
+	either a NED editor or a plain text editor, depending on whether the NED
+	file is part of a NED folder or not), and instead make the normal NED editor
+	capable of handling files outside NED folders. This makes clicking in the
+	Search Results view work as advertised.
+
+2022-08-11  Rudolf Hornig
+
+	* New builder image with updated MINGW toolchain 220810
+
+	* Upgrade to CDT 10.6.2
+
+2022-07-29  Rudolf Hornig
+
+	* Fix #932: Use our own BigDecimal in Sequence Chart. It caused an exception
+	when the Filter button was clicked in the Sequence Chart editor.
+
+2022-06-09  Levente Meszaros
+
+	* SequenceChart: Added guard condition for the case when there is no next
+	component method entry.
+
+2022-04-11  ------ omnetpp-6.0 released ------
+
+2022-04-07  Attila Torok
+
+	* Analysis Tool: Add Ctrl+Alt+W as shortcut to close a chart page
+
+2022-04-06  Attila Torok
+
+	* Analysis Tool: Wait for Python to connect for 5 seconds instead of 2.5.
+	This should reduce timeouts ("Could not get entry point ..." errors) on
+	slower machines.
+
+2022-03-29  Attila Torok
+
+	* Analysis Tool: Native vector plots: Make sure that constant vector data
+	is not stuck to the chart edge.
+
+2022-03-29  Attila Torok
+
+	* Analysis Tool: Make LinearTicks iterator inclusive on both ends.
+	The most important effect is that on purely negative values, the 0 tick
+	is now shown on the top/right.
+
+2022-03-29  Rudolf Hornig
+
+	* IDE: a temporary fix for https://bugs.eclipse.org/bugs/show_bug.cgi?id=578221
+
+	This bug happens because the embedded Eclipse Java compiler in the
+	org.apache.jasper.glassfish package is way too old (from 2015) and cannot
+	handle the java.lang.System class file coming from the class path of the
+	JDK17 JRE. Adding the org.eclipse.jdt.core package brings an up to date
+	Java compiler (for JSP files) that is picked up automatically by the
+	org.apache.jasper.glassfish package.
+
+	Once the internal jasper compile is updated, we can remove this dependency.
+
+2022-03-24  Attila Torok
+
+	* Analysis Tool: LegacyAnalysisLoader: Handle Add/Discard ops without
+	filter as "all". This is how it worked in 5.7, and this prevents a NPE in
+	samples/tictoc/Tictoc18.anf
+
+2022-03-23  Levente Meszaros
+
+	* Sequence Chart: Use an improved version of java.math.BigDecimal instead
+	of a Java-wrapped home-grown C++ BigDecimal. We subclass Java's BigDecimal
+	in order to override its default brain-damaged equals() method, to return
+	true for all representations of the same number.
+
+2022-03-18  Rudolf Hornig
+
+	* Updated the WHATSNEW file in the IDE
+
+2022-03-11  Andras Varga
+
+	* Analysis Tool: fix "Widget already disposed" ex when closing an editor
+	with temp charts open.
+
+2022-01-19  Attila Torok
+
+	* Analysis Tool: Fix: Restore error marker functionality in the chart
+	script editor.
+
+2022-01-17  Attila Torok
+
+	* Analysis Tool: Ask whether to keep temporary charts upon editor close,
+	and only then.
+
+2022-01-14  Attila Torok
+
+	* Analysis Tool: Fix the "All" option (minor lines) for grid in ideplot.
+
+2022-01-11  Rudolf Hornig
+
+	* Documentation Generator: changed the XML format in which extra content
+	for the generated NED documentation can be provided.
+
+2022-01-10  Attila Torok
+
+	* Analysis Tool: Use an authentication token for the Py4J connections,
+	and explicit loopback addresses everywhere.
+
+2022-01-05  Rudolf Hornig
+
+	* CDT Integration: Added support for URL where the IDE (CDT) can be
+	instructed to attach to a process and start debugging. The URL:
+
+	omnetpp://cdt/debuger/attach?pid=<pid>
+
+	The URL can be submitted by running the following command:
+
+	omnetpp omnetpp://cdt/debugger/attach?pid=<pid>
+
+	Qtenv now uses the above command on all platforms to invoke the debugger.
+
+2021-12-21  Attila Torok
+
+	* Remove the Histograms page from boxwhiskers chart template dialog pages.
+
+2021-12-15  Attila Torok
+
+	* Analysis Tool: Overhaul the barchart, scatterchart, and boxwhiskers
+	template scripts.
+
+	- Instead of taking `variable_name` as parameter, integrate and delete
+	  `get_names_for_title` to make it internally.
+	- Don't try to plot all-NaN error bars, return 0 as error for multiple
+	  identical values.
+	- barchart: Fix the warning about dropping invalid columns in .agg()
+	- Factor scatterchart_itervars chart template script apart into a few
+	  functions, in utils.py
+	- Extract plot_boxwhiskers() to utils.py
+
+2021-12-08  Attila Torok
+
+	* Analysis Tool: Improve the barchart template considerably:
+	  - Legend labels made are customizable
+	  - Axis and plot titles are more reasonable
+	  - Baseline property fixed
+
+2021-12-08  Attila Torok
+
+	* Analysis Tool: Fix title generation in the 3dchart_itervars template
+
+2021-12-11  Andras Varga
+
+	* Analysis Tool: chart templates: added missing "include_fields" checkboxes
+
+2021-12-11  Andras Varga
+
+	* Analysis Tool: Changed how IDs are generated for charts, in order to fix
+	occasional ID collisions.
+
+2021-12-10  Attila Torok
+
+	* Analysis Tool: Fix chart.is_native_chart() operation from within the IDE.
+
+2021-12-07  Andras Varga
+
+	* Analysis Tool: fix Export Image NPE for temporary charts
+
+2021-12-07  Attila Torok
+
+	* Analysis Tool: Improvements in utils.extract_label_columns(),
+	make_legend_label() and make_chart_title().
+
+2021-12-06  Attila Torok
+
+	* Analysis Tool: Improve the "scatterchart_itervars" chart template script:
+	ignore "datetimef", "iterationvarsd", etc run attributes, to avoid
+	nonsensical "points are averaged from ... unique ... values" notes.
+
+2021-12-06  Attila Torok
+
+	* Analysis Tool: Fix warnings from Matplotlib when computing confidence
+	intervals (for bar- and scatterplots)
+
+2021-11-26  Attila Torok
+
+	* Analysis Tool: Add initial linechart_separate_mpl template
+
+2021-12-06  Andras Varga
+
+	* Inifile Editor: Demote "Unused entry (does not match any parameters)" message
+	from WARNING to INFO, and added "maybe" to the wording.
+
+	Reason: There were a lot of false positives, because the analyzer only understands
+	"*" as module index in module path patterns, and gets confused if numbers
+	or ranges were there, e.g. "**.app[2].pklen". With this change, those false
+	warnings are a lot milder.
+
+2021-11-30  Andras Varga
+
+	* Inifile Editor: Allow config option values to contain expressions (i.e. do
+	not falsely flag them as errors).
+
+2021-12-04  Andras Varga
+
+	* Analysis Tool: Reset Chart to Template: Allow multi-selection.
+
+2021-12-03  Andras Varga
+
+	* Analysis Tool: linechart fix: with samples/fifo, only "name" was displayed
+	in legend, despite configname being necessary to distinguish them
+
+2021-12-03  Andras Varga
+
+	* Analysis Tool: automatic legend: added "prefer module display path to module
+	path" option; dialog and code refactoring
+
+2021-11-29  Andras Varga
+
+	* Analysis Tool: legend.xswt: fix wording
+
+2021-11-30  Attila Torok
+
+	* Analysis Tool: Introduce ChartScriptError, raise it from chart scripts
+	where needed instead of manually setting the plot warning text and calling
+	(an alias to) sys.exit(1).
+
+2021-12-02  Attila Torok
+
+	* Analysis Tool: Add debug assertion to ResultSelectionFilterGenerator
+
+2021-12-01  Attila Torok
+
+	* Analysis Tool: Make sure a DataPanel view filter with an OR operator doesn't
+	break selection filter generation
+
+2021-11-30  Attila Torok
+
+	* Analysis Tool: Fix mismatch between "show fields" toolbar button and table
+	contents.
+
+2021-11-29  Attila Torok
+
+	* Analysis Tool: Add include_fields chart property to templates.
+
+2021-11-25  Rudolf Hornig
+
+	* IDE: update environment resolvers to provide correct tool directory names
+	on Windows
+
+2021-11-18  Rudolf Hornig
+
+	* IDE: Dependencies updated: Eclipse 4.22, JRE 17.0.1, PyDev 9.2;
+	Added macos/aarch64 environment for Eclipse.
+
+2021-11-26  Attila Torok
+
+	* Analysis Tool: Patch the included Py4J JAR to make it work with Java 17
+
+2021-11-12  Attila Torok
+
+	* Documentation Generator: Avoid a deadlock when generating NED documentation
+
+2021-11-28  Andras Varga
+
+	* Analysis Tool: Added content assist for column names in the legend format
+	string.
+
+	How it works: when the chart script runs, the legend function looks at
+	the DataFrame and lets the IDE know the column names by calling
+	chart.set_observed_column_names(). When the user opens the chart config
+	dialog, content assistance uses this info to provide suggestions.
+
+2021-11-27  Andras Varga
+
+	* Analysis Tool: Added Legend pages to chart templates that support it.
+	Others e.g. bar chart bypass the make_legend_label() functions.
+
+2021-11-28  Andras Varga
+
+	* Analysis Tool: Add support for x:id.enablerButton attribute in XSWT files
+
+	If control is something (e.g. a Text) that should be enabled
+	conditionally (e.g. when a radiobutton or checkbox is selected),
+	specify the ID of the controlling button in the x:id.enablerButton
+	attribute of the control.
+
+	Also fix: for x:id.isEnabler=true, if the button is a radio button, it
+	should not disable its sibling radio buttons.
+
+2021-11-19  Andras Varga
+
+	* Analysis Tool: Fix Outline selection behavior. When selecting a
+	chart in a folder in the Outline view, Charts page could not show
+	the chart because it did not switch to the chart's folder.
+
+2021-11-18  Andras Varga
+
+	* Analysis Tool: ExportChartsDialog: improve initial selection.
+	Distinguish "nothing is selected" from "selected folder(s) contain no
+	chart"
+
+2021-11-18  Andras Varga
+
+	* Analysis Tool: BrowseDataPage: added saveState()/restoreState()
+
+2021-11-18  Andras Varga
+
+	* Analysis Tool: Improved state saving.
+
+2021-11-17  Andras Varga
+
+	* Analysis Tool: assert item IDs are unique
+
+2021-11-13  Andras Varga
+
+	* Analysis Tool: Added the possibility to organize charts into folders
+	in Analyses. Note: anf files with folders are not understood by previous
+	versions.
+
+2021-11-15  Rudolf Hornig
+
+	* IDE: Updated Eclipse update URLs for Eclipse 4.21 and CDT 10.4.
+
+2021-11-10  Attila Torok
+
+	* Analysis Tool: Remove more label backgrounds
+
+2021-11-11  Andras Varga
+
+	* Analysis Tool: NativeChartViewer: avoid "widget already disposed" error
+
+2021-11-11  Andras Varga
+
+	* Analysis Tool: AnalysisLoader: simplify code; avoid NPE when "value" attr
+	doesn't exist
+
+2021-11-10  Andras Varga
+
+	* Analysis Tool: minor fix in chart template loading
+
+2021-11-10  Attila Torok
+
+	* Analysis Tool: Don't paint FormEditorPage label background
+
+2021-11-09  Attila Torok
+
+	* Analysis Tool: Don't run stale scripts when exporting opened charts
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Call System.gc() after ShmSendBufferManager::garbageCollect()
+	if it did something
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Add optional ShmSendBuffer instance number tracking and debug
+	output
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Always use ShmSendBuffer through std::shared_ptr instead of
+	raw pointers.
+
+	This fixes #900 by guaranteeing that there are no double-deletes even if
+	an exception is thrown. This makes `owner` and `deleted()` unnecessary.
+
+2021-11-11  Attila Torok
+
+	* Native Libraries: Introduce ShmSendBufferPtr and ShmSendBufferPtrVector
+	type definitions for brevity.
+
+2021-11-10  Attila Torok
+
+	* Analysis Tool: Don't set label backgrounds explicitly, they looked bad
+	with certain themes.
+
+2021-11-09  Attila Torok
+
+	* Analysis Tool: Don't use stale scripts when exporting opened charts.
+
+2021-11-09  Attila Torok
+
+	* Analysis Tool: Extract ScaveEditor.getScriptsOfOpenCharts() from doSave().
+
+2021-11-08  Attila Torok
+
+	* Analysis Tool: Tiny consistency fix in ShmSendBuffer doc comment.
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Call System.gc() after ShmSendBufferManager::garbageCollect()
+	if it did something, to make sure the unneeded ShmSendBuffers are freed.
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Add optional ShmSendBuffer instance number tracking
+	and additional debug output.
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Rename ShmPickler::get() to getBuffer() to avoid confusion
+	with std::shared_ptr<*>::get().
+
+2021-11-05  Attila Torok
+
+	* Analysis Tool: Fix #900 - Always use ShmSendBuffer through std::shared_ptr
+	instead of raw pointers, drop the ShmCleaner helper class.
+
+	This guarantees that there are no double-deletes even if an exception is
+	thrown. Also makes `owner` and the `deleted()` callback unnecessary.
+
+2021-10-29  Attila Torok
+
+	* Analysis Tool: Fix #902 (Invalid thread access when using Implement Method
+	refactoring).
+
+2021-06-23  Attila Torok
+
+	* Analysis Tool: fix: "Zoom to Fit" action did not ignore disabled
+	series after the chart was refreshed.
+
+2021-10-27  Attila Torok
+
+	* Analysis Tool: fix: Compute native plot data margins symmetrically
+
+2021-10-27  Attila Torok
+
+	* Analysis Tool: fix: Reset properties to their defaults after they are
+	cleared from the config dialog.
+
+2021-10-27  Attila Torok
+
+	* Analysis Tool: fix: Don't always reset the view area of native charts
+	after legend item enablement change
+
+2021-10-28  Andras Varga
+
+	* NED/ini editor: NED's "object" parameter type can now store all other
+	types too, so do not flag such assignments as errors.
+
+2021-10-15  Attila Torok
+
+	* Analysis Tool: On the Browse Data page, mask values that don't fit into
+	their columns using '####'. This is akin to what MS Excel does.
+
+2021-10-13  Attila Torok
+
+	* Analysis Tool: fix: Pasting into the combo boxes on the Browse Data page
+	didn't work.
+
+2021-10-12  Attila Torok
+
+	* Analysis Tool: Improve focus handling on tab switching in the Chart
+	Properties dialog.
+
+2021-10-11  Attila Torok
+
+	* Analysis Tool: Fix the bug where middle-click closing a chart tab would
+	discard changes silently.
+
+2021-10-11  Attila Torok
+
+	* Analysis Tool: When setting the name of a chart, also set its title, if it
+	was empty before.
+
+2021-10-11  Attila Torok
+
+	* Analysis Toolscave/charttemplates: Tweak chart template scores so that the
+	editor prefers native plotting to Matplotlib. Native plots are both more
+	scalable and also arguably more convenient to use.
+
+2021-10-11  Attila Torok
+
+	* Analysis Tool: When running chart scripts, override exit() to be
+	sys.exit(). Being able to use exit() is a matter of convenience and brevity,
+	but we want the behavior of sys.exit() -- raising a SystemExit, and nothing
+	more.
+
+2021-10-05 Attila Torok
+
+	* Analysis Tool: Follow recent changes in the Python API (plot -> ideplot, etc.)
+
+2021-09-27  Rudolf Hornig
+
+	* Productizing: Updated dependencies to Eclipse 4.21, Pydev 9.0.1
+
+2021-09-21  Attila Torok
+
+	*  Analysis Tool: Avoid using the phrase "iso lines" in scatter plots
+	[per suggestion of Edwards Longman]
+
+2021-09-21  Attila Torok
+
+	* Analysis Tool: Don't ignore the title set by the user on 3D and box-whiskers
+	charts
+
+2021-07-12  Rudolf Hornig
+
+	* Productizing: Added linux.aarch64 IDE native library support for
+	ARM-based Linux distros
+
+2021-07-12  Rudolf Hornig
+
+	* Productizing: justj: Use stripped version of JDK 15 instead of JDK 11
+
+2021-07-07  Rudolf Hornig
+
+	* Documentation Generator: Fix: A missing or closed referenced project caused
+	documentation generation to fail.
+
+2021-07-02  Rudolf Hornig
+
+	* Documentation Generator: Made the navigation drawer resizeable and its
+	scrollbar bigger in the generated NED documentation.
+
+2021-06-25  Rudolf Hornig
+
+	* Updated to use CDT 10.3 and the latest final version of Eclipse 4.20
+
+2021-06-23  Attila Torok
+
+	* Analysis Tool: Fix result tables not refreshing on file changes (keeping
+	stale IDs), by passing a NullProgressMonitor instead of null to Runnable.run().
+	This fixes a NPE in BrowseDataPage.doRefreshPage, which caused the tables in
+	it to keep stale result IDs in their IDLists, causing further errors
+	while plotting, and sometimes blank table rows.
+
+2021-06-10  Attila Torok
+
+	* Analysis Tool: Preserve legend item enablement state on refresh (to some
+	degree)
+
+2021-06-21  Attila Torok
+
+	* Analysis Tool: Disable sorting chart templates in context menu by last usage
+	timestamp
+
+2021-06-21  Attila Torok
+
+	* Analysis Tool: Relayout native plots on view and zoom property changes,
+	so axis tick labels don't get cut off when their number of digits changes
+
+2021-06-10  Attila Torok
+
+	* Analysis Tool: Add digit grouping to tick labels of native chart axes
+
+2021-06-14  Levente Meszaros
+
+	* SequenceChart: Added an optional module parameter to the defaultStatistic
+	property.
+
+2021-05-27  Rudolf Hornig
+
+	* Eclipse and private JRE update
+
+	- update to Eclipse 4.20 and pydev 8.3
+	- added justj repo and justj feature to the product definition
+	- JRE is no longer added manually to the distro. It's coming from justj.
+	- special VM options are no longer needed on macOS
+
+2021-05-27  Rudolf Hornig
+
+	* Prod: update to Tycho 2.3
+
+2021-06-01  Rudolf Hornig
+
+	* C++ Build: no longer use the OMNETPP_ROOT *environment* variable in the
+	generated Makefiles.
+
+2021-05-31  Rudolf Hornig
+
+	* NED Documentation Generator: fixed wrong file name (double extension)
+	and page title when using @page directive
+
+2021-05-12  Attila Torok
+
+	* Inifile Editor: Added support for cmdenv-fake-gui-seed config option
+
+2021-04-29  Andras Varga
+
+	* Inifile Editor: detect duplicate sections in file
+
+2021-04-29  Andras Varga
+
+	* Inifile Editor: Change "Missing section heading" from error to warning.
+
+	Reason: Simulation kernel (envir/inifilereader) has always accepted it,
+	and also, many test/core tests exploit it.
+
+2021-04-26  Andras Varga
+
+	* Inifile Editor: FieldEditor: fix background color
+
+2021-04-23  Andras Varga
+
+	* NED Source Editor: fix syntax highlight of string constants containing "//"
+
+	After "//", the rest of the string (and till the end of the line) was
+	colored as comment.
+
+2021-04-22  Andras Varga
+
+	* Inifile Editor: fix syntax highlight bug: '#' inside string constants also
+	triggered the comment rule
+
+2021-04-22  Andras Varga
+
+	* Inifile Editor: fix syntax highlight of string constants broken onto
+	multiple lines using backslash continuation. The coloring of the 2nd line
+	was flaky, i.e. colors were lost after editing that line.
+
+	Example:
+
+	 "hello\
+	world"  <---- coloring lost after editing this line
+
+2021-04-22  Andras Varga
+
+	* Inifile Editor: fix syntax highlight of backslash-continued comment lines
+
+	The continuation line was not colored as part of the comment.
+
+	Example:
+
+	 # some comment \
+	    continued on this line <---- text in this line was not grayed out
+
+2021-04-22  Andras Varga
+
+	* Inifile Editor: Added syntax highlight for section headings
+
+2021-04-20  Andras Varga
+
+	* Inifile Editor: Line parsing adapted for multi-line entries.
+
+	Main issue is how to handle value+comment separation with multi-line
+	values. There doesn't seem to be meaningful to edit the "pure" value and
+	the comments separately, because the comments may contain commented-out
+	lines, comments specific to some part of the value etc, which may become
+	misaligned when editing separately.
+
+	The only feasible solution for multi-line values is to leave the comments
+	as part of the value, and let the user them as one string. (For
+	consistency, the 'comment' part of the entry is then set to "".)
+
+	For validation etc, the net value is needed (ie stripped of comments).
+
+2021-04-19  Andras Varga
+
+	* Inifile Editor: Added support for indented continuation lines.
+
+	In the inifile, if a line is indented, it is taken as a continuation of
+	the previous line. You may not break a line inside a string constant that
+	way.
+
+	The trailing-backslash way still works (and can also be used to break
+	string constants).
+
+2021-04-19  Andras Varga
+
+	* Inifile Editor: The "Config " prefix in section headers is now optional.
+
+	That is, [Config PureAlohaExperiment] may now be also written as
+	[PureAlohaExperiment], the two are equivalent.
+
+2021-04-28  Attila Torok
+
+	* Analysis Tool: Handle errors in @vector_operation better
+
+2021-03-25  Attila Torok
+
+	* Analysis Tool: Wire in the vector operation list into content assist
+
+2021-04-20  Attila Torok
+
+	* Analysis Tool: Wire in the vector operation list into the context menu
+
+2021-04-20  Attila Torok
+
+	* Analysis Tool: Register vector operations in Python using a decorator
+
+2021-04-20  Attila Torok
+
+	* Analysis Tool: Fix evaluate() in PythonEntryPoint.py
+
+2021-03-22  Attila Torok
+
+	* Analysis Tool: Add chart templates to plot histograms computed from vector
+	results
+
+2021-03-22  Attila Torok
+
+	* Analysis Tool: Copy-paste fix in histogram chart template script.
+
+2021-04-23  Rudolf Hornig
+
+	* IDE: Fix null reference crashes on Windows because of non-existent
+	default display during class initialization.
+
+2021-04-23  Rudolf Hornig
+
+	* IDE: Do not force the classic theme in IDE. Let Eclipse decide the theme
+	automatically.
+
+2021-04-19  Andras Varga
+
+	* Inifile Editor: fix "widget already disposed" exception
+
+2021-04-19  Andras Varga
+
+	* Inifile Editor: Form editor: more concise display of section names in tables
+
+	Show just "PureAloha" instead of "[Config PureAloha]", there's no chance
+	of misunderstanding.
+
+2021-04-18  Andras Varga
+
+	* Inifile Editor: Auto-hide Reset and Expand buttons when mouse is outside the
+	field editor
+
+2021-04-17  Andras Varga
+
+	* Inifile Editor: Display notes in smaller font
+
+2021-04-16  Andras Varga
+
+	* Inifile Editor: Form-based editor: align controls by converting to
+	2-column grid layout.
+
+2021-04-18  Andras Varga
+
+	* Analysis Tool: fix ClassCastException in editor contributor.
+	Got "InifileEditor cannot be cast to ScaveEditor" after an InifileEditor
+	was closed and next editor was a ScaveEditor.
+
+2021-04-16  Rudolf Hornig
+
+	* IDE: Dark theme fixes for event log and sequence chart.
+
+2021-04-15  Rudolf Hornig
+
+	* IDE: Added support for dark themes in MSG, NED and INI file editors.
+
+2021-04-15  Rudolf Hornig
+
+	* IDE: Updated syntax-highlight rules for NED, MSG and INI editors
+
+	- added missing NED functions
+	- removed obsolete keywords (xmldoc, readonly, noncobject)
+	- added new keywords: import
+	- added simtime_t as a highlighted type in MSG files as it is very common
+	- highlighting of bool constants and NED expression keywords in INI files
+	 are now consistent with NED and MSG files
+
+2021-04-13  Rudolf Hornig
+
+	* IDE: Updated welcome screen theme (circle -> solstice) due to problem
+	with dark theme with the old 'circle' theme
+
+2021-04-13  Rudolf Hornig
+
+	* IDE: Fix the download issues in the Simulation Model dialog.
+
+2021-04-11  Andras Varga
+
+	* NED Source Editor: Add support for the "g" tag in display string. (The
+	graphical doesn't know about it yet.)
+
+2021-04-10  Andras Varga
+
+	* Inifile Editor: Form-based editor: added display-name and display-string
+	options
+
+2021-04-10  Andras Varga
+
+	* Inifile Editor: Tweak layout on "Filterprints" page
+
+2021-04-09  Andras Varga
+
+	* Inifile Editor: Refreshed the list of supported config options.
+
+2021-03-29  Attila Torok
+
+	* Analysis Tool: Fix bug in transferring data between the IDE and the chart
+	Python process on Windows.
+
+2021-04-08  Attila Torok
+
+	* Analysis Tool: Minor visual fix in the Browse Data page. In LargeTable,
+	draw the focus rectangle as wide as the table, not as the scrolling viewport.
+
+2021-04-08  Rudolf Hornig
+
+	* Downgrade to Eclipse 4.18 because of bug:
+	https://bugs.eclipse.org/bugs/show_bug.cgi?id=571990
+
+2021-04-08  Levente Meszaros
+
+	* Sequence Chart: Adapted to the new eventlog format and the Java eventlog API.
+
+2021-04-07  Levente Meszaros
+
+	* Sequence Chart: Adapted the common eventlog view and editor support, dialogs,
+	selections, etc. to the new eventlog format and Java based API.
+
+2021-03-24  Levente Meszaros
+
+	* Sequence Chart: Added a completely new eventlog implementation for
+	representing the eventlog using pure Java objects without native calls.
+
+2021-03-29  Attila Torok
+
+	* NED Editor: Fix: Use a custom cursor for the creation tool of the Palette.
+
+	Because of a whole stack of bugs and workarounds in SWT and GEF about a
+	pair of swapped parameters in some places:
+	https://bugs.eclipse.org/bugs/show_bug.cgi?id=467983
+
+2021-03-19  Rudolf Hornig
+
+	* Updated to use Eclipse 4.19 and CDT 10.2
+
+2021-03-19  Rudolf Hornig
+
+	* Fixed build process when copying Eclipse help.
+
+2021-03-19  Andras Varga
+
+	* Analysis Tool: Legend: fix null ptr exception in listener lambda
+
+2021-03-18  Attila Torok
+
+	* Analysis Tool: ScaveEditor: Make sure the 3 built-in tabs are hidden last
+	(except for the currently selected one)
+
+	So the Inputs, Browse Data, and Charts pages remain visible for as long
+	as possible when resizing the editor to a smaller width.
+
+2021-03-16  Attila Torok
+
+	* Analysis Tool: Charts page: Different icon sizes and margin/spacing in
+	different view modes
+
+2021-03-18  Attila Torok
+
+	* Analysis Tool: ScaveEditor: Don't allow closing the 3 built-in tabs with
+	middle click
+
+2021-03-18  Attila Torok
+
+	* Analysis Tool: Allow opening multiple charts at once (with Enter)
+
+2021-03-18  Attila Torok
+
+	* Analysis Tool: IconGridViewer: Accept enter key press from the numpad
+	(keypad) too.
+
+2021-03-16  Attila Torok
+
+	* Analysis Tool: Don't move the cursor upon error when the source editor is
+	focused.
+
+2021-03-16  Attila Torok
+
+	* Analysis Tool: Matplotlibwidget: Check for disposed widget when setting
+	cursor type.
+
+2021-03-16  Attila Torok
+
+	* Analysis Tool: ChartExport: Also dup() Charts when doing a batch export.
+
+2021-03-14  Andras Varga
+
+	* Analysis Tool: Properties view to show chart properties when chart is
+	selected.
+
+2021-03-08  Attila Torok
+
+	* Analysis Tool: Complete the list of wildcards on the Inputs page
+
+2021-03-01  Andras Varga
+
+	* Analysis Tool: PlotProperty: annotate which property is per-item, and use it
+	in content assist
+
+2021-02-27  Andras Varga
+
+	* Analysis Tool: barchart, scatter chart: commenting, minor refactor
+
+	- replace lambda with named function to get proper column name in the
+	  dataframe
+	- apparently utils.confidence_interval() works for empty and 1-element
+	 arrays too (and returns nan), no need check for that case here
+
+2021-02-24  Attila Torok
+
+	Analysis Tool: charttemplates: Do not check for chart.is_native_chart() in
+	scatterchart_itervars.
+
+	Instead, either don't check at all, or check for plot.is_native_plot()
+
+2021-02-24  Attila Torok
+
+	* Analysis Tool: charttemplates: Proper error message when columns selected
+	for pivoting overlap.
+
+2021-02-23  Attila Torok
+
+	* Analysis Tool: Don't try to include param_assignments if config_entries are
+	also included
+
+2021-02-18  Attila Torok
+
+	* Analysis Tool: Add results.get_param_assignments() to the Python API
+
+2021-02-18  Attila Torok
+
+	* Analysis Tool: Remove as_numeric and include_statistics_fields parameters
+
+2021-02-16  Attila Torok
+
+	* Analysis Tool: Cast start_time and end_time to float in results.get_vectors()
+
+2021-02-16  Attila Torok
+
+	* Analysis Tool: Include the column header in the pickle of CSV-style results
+
+2021-02-16  Attila Torok
+
+	* Analysis Tool: Add include_fields_as_scalars parameter to	results.get_results()
+
+2021-02-16  Attila Torok
+
+	* Analysis Tool: Add include_fields parameter to results.get_scalars()
+
+2020-04-30  Attila Torok
+
+	* InifileEditor: properly register "${iterationvarsd}" where needed
+
+2021-02-15  Andras Varga
+
+	* Analysis Tool: Vector Operations: on selecting op from menu, ask parameters
+	before adding it
+
+2021-02-15  Andras Varga
+
+	* Analysis Tool: content assist for the Vector Ops fields.
+
+2021-02-12  Andras Varga
+
+	* Analysis Tool: vectorops.py: Revised and improved the expression() filter.
+
+2021-02-06  Andras Varga
+
+	* Analysis Tool: added PythonNature to org.omnetpp.scave.templates
+
+2021-02-11  Andras Varga
+
+	* Analysis Tool: plot.py: remove non Pyplot-like APIs
+
+	Reasons:
+	- they are not implemented in impl_charttool/plot.py, so charts using
+	  them cannot be exported
+	- they are currently unused from both utils and the chart scripts
+	- MAIN REASON: We want to take plot.py towards being a subset of the
+	  PyPlot API. Easier for users, less docu writing, less lamenting about
+	  API semantics, etc.
+
+2021-02-11  Andras Varga
+
+	* Analysis Tool: remove *italic* from type annotations in docstrings, as they
+	are now inserted by the script
+
+2021-02-09  Attila Torok
+
+	* Analysis Tool: Also query run attributes for histograms in the template
+
+2021-02-09  Andras Varga
+
+	* Analysis Tool: utils.py: customized_box_plot(): swapped two args.
+	'labels' arg is practically more important than 'axes', bring it forward.
+
+2021-02-06  Andras Varga
+
+	* Analysis Tool: utils.py: added documentation
+
+2021-02-06  Andras Varga
+
+	* Analysis Tool: swtplot.py: added docs (copypasta from plot.py)
+
+2021-02-09  Attila Torok
+
+	* Analysis Tool: Be consistent with native plot key and label stringification
+
+	This fixes the issue where all bars were the same color on native
+	barcharts, while not feeding the unknown "key" parameter to matplotlib.
+
+2021-02-08  Attila Torok
+
+	* Analysis Tool: Fix bar chart template tests
+
+2021-02-08  Attila Torok
+
+	* Analysis Tool: Fix indexing in barchart test
+
+2021-02-08  Attila Torok
+
+	* Analysis Tool: Use utils.split in barchart template
+
+2021-02-08  Attila Torok
+
+	* Analysis Tool: utils.plot_bars now takes a string variable_name instead of a
+	names list
+
+2021-02-05  Attila Torok
+
+	* Analysis Tool: Avoid generating invalid filter expression ("type =~ ?") from
+	the All panel
+
+2021-02-04  Attila Torok
+
+	* Analysis Tool: Make our custom boxplots pretty
+
+2021-02-04  Attila Torok
+
+	* Analysis Tool: Make native plot legend background and border semi-transparent
+
+2021-02-04  Attila Torok
+
+	* Analysis Tool: Fix bar plotting w.r.t key parameter, plus add DataFrame
+	columns check
+
+2021-02-05  Andras Varga
+
+	* Analysis Tool: impl_ide/plot.py: factored out the API of the native plotting
+	widgets into swtplot.py
+
+2021-02-02  Attila Torok
+
+	* Analysis Tool: Don't ignore the title set by the user on scattercharts
+
+2021-02-02  Attila Torok
+
+	* Analysis Tool: fix: Convert key and title to str in plot.plot_bars
+
+2021-02-03  Attila Torok
+
+	* Analysis Tool: fix: Legend always displayed a line even if series in
+	the plot didn't have one.
+
+	Solution: Don't always draw a line under the marker symbols in the
+	legend.
+
+2021-02-03  Attila Torok
+
+	* Analysis Tool: fix: Triangle/Tri symbols on the legend didn't reflect
+	symbols' orientation on the plot
+
+	Solution: Marker symbols with different orientations are made subclasses.
+	This ensures that the class name alone, which is used as a key to the
+	image cache, describes the shape.
+
+	This makes sure they will have a different image cache key when they are
+	drawn into the legend tooltip, so the first orientation doesn't get
+	"stuck" in there.
+
+2021-02-03  Attila Torok
+
+	* Analysis Tool: fix: after calling setSizeHint() on a symbol, its original
+	orientation was lost
+
+	Make sure that line marker symbols are oriented correctly, even after
+	resizing Which happens when they are about to be drawn on the legend for
+	example.
+
+2021-02-03  Andras Varga
+
+	* Analysis Tool: Offer hint to the novice user when vector operation is added.
+
+2021-02-02  Andras Varga
+
+	* Analysis Tool: vectorops renamed: aggregator->aggregate, merger->merge
+
+2021-02-02  Attila Torok
+
+	* Analysis Tool: Allow non-rectangular data in GroupsSeriesDataset, pad with
+	NAN.
+
+2021-02-02  Andras Varga
+
+	* Analysis Tool: Edit Chart Pages dialog refinements.
+
+2021-02-02  Andras Varga
+
+	* Analysis Tool: input_vectors.xswt layout: make "Vector operations" pane
+	expand more, for easier editing
+
+2021-02-02  Andras Varga
+
+	* Analysis Tool: Updated to changed vectorops syntax.
+
+2021-02-02  Andras Varga
+
+	* Analysis Tool: vectorops processing code moved to utils.
+
+2021-01-29  Attila Torok
+
+	* Analysis Tool: Better error message in plt.hist() about `bins`, also check
+	`weights`
+
+2021-01-29  Attila Torok
+
+	* Analysis Tool: Catch exceptions when setting plot properties in a deferred
+	way, set them as warnings
+
+2021-01-29  Attila Torok
+
+	* Analysis Tool: Remove the default parameters in all Python API _impl methods
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: support descriptionFile key in chart template definition
+	files.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: Refresh chart when set of loaded result files change.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: "Auto Update" -> "Automatic Refresh"
+
+	To be consistent with the "Refresh Chart" action.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: Zoom in/out horiz/vert icons redesigned; added related
+	separator to toolbar.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: "Hand Tool" -> "Pan Tool" (plot toolbar)
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: "Edit Chart" -> "Configure Chart"
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: ChartTemplateGalleryDialog: resize images to fit into browser
+	view
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: ChartTemplateGalleryDialog: Visual improvements: Add
+	left/right margin; hide caret, improve template info presentation.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: ChartTemplateGalleryDialog: modernize sash state saving.
+
+2021-01-26  Andras Varga
+
+	* Analysis Tool: ChartTemplateGalleryDialog: remove flicker in StyledText when
+	switching page. Solution: use separate StyledText for each page.
+
+2021-01-25  Andras Varga
+
+	* Analysis Tool: Added Refresh Result Files to the chart toolbar.
+
+2021-01-25  Andras Varga
+
+	* Analysis Tool: Icon changes.
+
+2021-01-17  Andras Varga
+
+	* Inifile Editor: Added support for ignorable options. User can mark
+	custom config options as ones to be ignored by the editor.
+
+2021-01-19  Andras Varga
+
+	* Common: added MetafileGraphics in case it's needed somewhere.
+
+2021-01-20  Rudolf Hornig
+
+	* IDE: Fix for simulation model installer when extracting GitHub-generated
+	archives
+
+2021-01-20  Rudolf Hornig
+
+	* IDE: Better layout for the simulation installer dialog.
+
+2021-01-19  Rudolf Hornig
+
+	* IDE: Support added for changing the project name and location in the
+	simulation model download dialog.
+
+2021-01-19  Rudolf Hornig
+
+	* IDE: Install Simulation Models: Project name is now coming from the
+	descriptor file even if INET is installed on the Welcome screen.
+
+2021-01-19  Rudolf Hornig
+
+	* IDE: Turn on showing the line number ruler in editors by default.
+
+2021-01-19  Rudolf Hornig
+
+	* Productizing: added XML editor, language server, terminal, marketplace
+	client and Tips of the Day plugins into the default build.
+
+2021-01-19  Rudolf Hornig
+
+	* Productizing: use implicit eclipse version for repo URLs for more
+	reproducible builds.
+
+2021-01-22  Attila Torok
+
+	* Analysis Tool: Throw a nicer exception from results.get_* upon syntax error,
+	handle in all chart templates.
+
+2021-01-22  Attila Torok
+
+	* Analysis Tool: More helpful error messages in exceptions raised from chart
+	scripts.
+
+2020-12-11  Attila Torok
+
+	* Analysis Tool: Improve scatterchart template script.
+
+2021-01-14  Andras Varga
+
+	* Analysis Tool: Edit Chart Pages dialog: use one StyledText widget per page.
+	Reason: eliminate editing anomalies and confusion due to having a shared undo
+	stack for all pages.
+
+2021-01-13  Andras Varga
+
+	* Analysis Tool: Reset Chart To Template: added dialog to choose which
+	elements to reset.
+
+2021-01-12  Andras Varga
+
+	* XSWT: store source line/column on the widget. This may be useful later.
+
+2021-01-11  Andras Varga
+
+	* Analysis Tool: Create temp chart from gallery.
+
+2021-01-06  Attila Torok
+
+	* Analysis Tool: Add chart template descriptions and images.
+
+2021-01-06  Attila Torok
+
+	* Analysis Tool: Chart template gallery improvements.
+
+2021-01-06  Attila Torok
+
+	* Analysis Tool: Split the charttemplates folder into its own plugin project.
+
+2021-01-11  Andras Varga
+
+	* Analysis Tool: ChartEditForm: validatePropertyNames: use actual
+	properties not the template's property list. Because if chart pages
+	are edited, the property list in the template may quickly become irrelevant.
+
+2021-01-10  Andras Varga
+
+	* Analysis Tool: added "Edit Chart Dialog Pages" dialog
+
+2021-01-07  Andras Varga
+
+	* Analysis Tool: new icons for the Edit Chart Dialog Pages dialog
+
+2021-01-04  Andras Varga
+
+	* Inifile Editor: ParametersPage: restore delayed refresh of table when
+	cell editor is open.
+
+2020-12-22  Andras Varga
+
+	* Inifile Editor: Fix watching for changes in included inifiles.
+
+2020-12-20  Andras Varga
+
+	* Inifile Editor: get rid of asynchronous/delayed form page reread in
+	FormPage.
+
+	Problem: if user continued typing after committing a field editor,
+	delayed re-read tended to overwrite the new changes.
+
+	Solution: As INI re-parsing is fast/cheap (it's the analysis that's
+	costly), do it synchronously. Get rid of the async job.
+
+	Inifile analysis still completes asynchronously, we now handle that
+	separately, in the analysisCompleted() method.
+
+2020-12-18  Andras Varga
+
+	* Inifile Editor: Revert "ide: ini editor fix: edits lost when typing too
+	quickly after hitting Enter"
+
+	Reason: it made the "Reset" buttons in field editors broken. (Mostly
+	nothing happened when pressing them.)
+
+2020-12-17  Andras Varga
+
+	* Inifile Editor: Update form editor with new fields.
+
+2020-12-17  Andras Varga
+
+	* Inifile Editor: collect fingerprint and fakegui-related fields on a new
+	form page.
+
+2020-12-17  Andras Varga
+
+	* Inifile Editor: ConfigRegistry updated (using opp_run -h jconfig)
+
+2020-12-17  Attila Torok
+
+	* Analysis Tool: Use non-interactive Matplotlib backend when exporting charts.
+	Fixes #858.
+
+2020-12-17  Rudolf Hornig
+
+	* Updated to Eclipse 4.18 and CDT 10.1
+
+2020-12-16  Andras Varga
+
+	* Launcher: fix: properly handle option values containing spaces.
+
+2020-12-16  Andras Varga
+
+	* Launcher: Refine tooltips.
+
+2020-12-16  Andras Varga
+
+	* Launcher: Fix extremely sluggish typing in the "Working dir" field
+	of the launcher dialog.
+
+2020-12-15  Andras Varga
+
+	* Launcher: Pass NED exclusions to the simulation program as -x options.
+	NED exclusions are now explicitly editable in the Launch Configuration
+	dialog. Default setting is provided by the new ${opp_ned_package_exclusions}
+	platform variable.
+
+2020-12-15  Attila Torok
+
+	* Launcher: Print working directory and command line to the Console view
+	when simulation is launched in Run or Debug mode.
+
+2020-12-12  Attila Torok
+
+	* Analysis Tool: Center zero-width XY datasets on the chart instead of pushing
+	them to the left.
+
+2020-12-11  Attila Torok
+
+	* Analysis Tool: Fix (vectordata) array size on macOS after being passed
+	through SHM.
+
+2020-11-27  Attila Torok
+
+	* Analysis Tool: Fix global actions (Cut, Copy, Paste, Delete) in the script
+	editor being redirected to the wrong place.
+
+2020-11-27  Attila Torok
+
+	* Analysis Tool: NPE fix in Legend
+
+2020-11-27  Attila Torok
+
+	* Analysis Tool: LargeTable: Accept the Enter key on the NumPad as well.
+
+2020-11-13  Attila Torok
+
+	* Analysis Tool: Do not require iso itervar in the scatter chart template script.
+
+2020-11-13  Attila Torok
+
+	* Analysis Tool: Make our backend compatible with Matplotlib >= 3.3.
+
+2020-10-09  Andras Varga
+
+	* Analysis Tool redesign, 3rd phase. This is a summary of several hundred
+	commits by Attila Torok and Andras Varga, over the period of 2020-01-03
+	through 2020-07-23.
+
+	In OMNeT++ 6.0pre9 (2020-05-07 through 2020-07-03):
+
+	- Chart improvements, such as adding error bars to the Matplotlib-based
+	  bar chart, and adding confidence interval drawing to the Matplotlib-based
+	  scatter chart.
+
+	- UI refinements, such as rearranging the menu items on the Browse Data page.
+
+	- Improved how selection works in the table widget (Browse Data page).
+
+	- Content assist improvements, mainly for the "Input" pages of chart dialogs.
+
+	- Performance improvements, such as enabling vector data caching when
+	  pickling results, and memoizing the results of query methods.
+
+	- Countless small improvements and bug fixes.
+
+	In OMNeT++ 6.0pre8 (2020-02-xx through 2020-05-07):
+
+	- The main focus of improvements was to improve the scalability of the new
+	  Analysis Tool. Indeed, the UI is now easily capable of dealing with at least
+	  several tens of thousands of result files, and a million result items
+	  (this was the input routinely used during the development).
+
+	OMNeT++ 6.0pre7 (2020-01-16 through 2020-02-xx):
+
+	- Fix shared memory name issue on macOS. Miscellaneous improvements overall.
+
+2020-09-24  Rudolf Hornig
+
+	* Update Eclipse to 4.17 and CDT to 10.0
+
+2020-08-05  Rudolf Hornig
+
+	* Update to Eclipse 4.16
+
+2020-05-18  Zoltan Bojthe
+
+	* SimpleModule creation wizard: added "override" for functions
+
+2020-04-23 Attila Torok
+
+	* Common: Allow excluding debug channels by prepending "-" to them in
+	the OMNETPP_DEBUG environment variable.
+
+2020-04-10  Rudolf Hornig
+
+	* NED Documentation Generator: use project relative path to specify doc-fragment file.
+
+	- if the filename is relative, it is considered relative to the given project
+	- if the filename is absolute, it is considered as an absolute workspace path
+
+2020-04-08  Andras Varga
+
+	* NED Documentation Generator: UI refinements; excludedDirs semantic change.
+
+	- excludedDirs: now accepts both space and comma as separator; full
+	  workspace paths are expected (if you want to exclude a "foo" dir in all
+	  projects, now you need to write "/*/foo")
+
+	- Layout: move excluded dirs and extension fragment file to the top,
+	  under project list
+
+	- Mnemonic for menu item
+
+	- Labels shortened
+
+	- Use SWTFactory
+
+2020-04-07  Rudolf Hornig
+
+	* IDE: neddoc generator dialog two column layout to reduce height.
+
+2020-03-31  Rudolf Hornig
+
+	* IDE: add possibility to insert documentation fragments into the generated
+	ned documentation
+
+2020-04-15  Andras Varga
+
+	* Cosmetics:
+	  - Eliminate tons of warnings
+	  - Tab-to-space in all projects
+	  - Run "organize imports" on all projects
+
+2020-04-15 Attila Torok
+
+	* Add Debug.inDevelopment()
+
+2020-04-15  Rudolf Hornig
+
+	* Removed unused nativelibs.linux.x86 32-bit fragment project.
+
+2020-04-15  Rudolf Hornig
+
+	* Tycho updated to latest version (1.6)
+
+2020-04-06  Rudolf Hornig
+
+	* Use Java 11 as source and target version.
+
+2020-04-14  Rudolf Hornig
+
+	* IDE updated to Eclipse 4.15 and CDT 9.11.
+
+2020-03-24  Rudolf Hornig
+
+	* Increased heap size for IDE.
+
+2020-03-20  Levente Meszaros
+
+	* SequenceChart: Fixed resultFileManager.loadFile call after rebase.
+
+2020-03-20  Levente Meszaros
+
+	* SequenceChart: Reworked the whole implementation including several major
+	changes.
+
+	The new chart supports selecting events and axes independently. Axis can
+	be expanded and collapsed. Internal data structures are more explicit and
+	flexible. Added new selectable objects: axes, method calls, message
+	sends. Added the ability to measure time between selected objects.
+	Several other unlisted changes.
+
+2020-03-20  Levente Meszaros
+
+	* SequenceChart: Added new filter parameters.
+
+2020-03-20  Levente Meszaros
+
+	* CachingCanvas: Fixed incorrect clipping handling.
+
+2020-03-20  Levente Meszaros
+
+	* SequenceChart: Added a lot of icons for the new actions.
+
+2020-01-06  Levente Meszaros
+
+	* SequenceChart: Started adding support for horizontally finite sized events.
+	This allows separating message sends and method calls from each other
+	horizontally.
+
+2020-03-20  Levente Meszaros
+
+	* SequenceChart: Factored out a separate style provider.
+
+2020-01-10  Levente Meszaros
+
+	* Fixed translation in CachingCanvas by moving it from GC to
+	SWTGraphics. The SWTGraphics will set the transform on GC when
+	rotate is called without knowing that there's a transform already set.
+
+2020-02-06  Andras Varga
+
+	* ColorFactory: added asRGBStrict(); asRGB() now validates
+	better. Rejects #rgb/@hsb strings of invalid (non-6) length, instead
+	of silently returning an incorrect answer.
+
+2020-01-20  Rudolf Hornig
+
+	* Added missing CR at the end of the Makefile template which caused
+	unnecessary rebuild of the projects	in IDE, as it did not match the
+	opp_makemake template.
+
+2020-01-02  Attila Torok
+
+	* Analysis Tool redesign, 2nd phase. This is a summary of several hundred
+	commits Attila Torok, over the period of 2018-08-01 through 2020-01-02.
+
+	The following is a high-level overview of what was achieved.
+
+	Charts are now produced by running user-editable Python scripts that
+	rely on NumPy and Pandas. For charting, there are two options: Matplotlib,
+	and the Analysis Tool's own chart widgets. The former is more flexible
+	and has more features, but the latter scales better.
+
+	Matplotlib integrates smoothly into the IDE. Charts are live, and even
+	animated charts work.
+
+	Scripts are run in separate Python processes that communicate with the IDE
+	using Py4J. Result data are loaded by the IDE, and the script can query them
+	using an API provide by the Analysis Tool. Data are transferred between the
+	IDE and the script using serialization (with the Pickle library), and for
+	large amounts of data (vectors), using shared memory for better performance.
+
+	Charts can be configured/parameterized using dialogs. Settings entered into
+	the dialog are made accessible to the script, and it can freely use them for
+	whatever purpose.
+
+	Charts are created using chart templates. Chart templates include the script
+	itself, and the description of the associated dialog. The dialog has
+	multiple tabs. The contents of dialog tabs (widgets, layout) are defined in
+	XML files (we use the XSWT Eclipse plugin). Many chart templates are
+	provided, and the user can also create new ones.
+
+	For editing Python code, the Analysis Tool utilizes the editor provided by
+	the PyDev Eclipse plugin. Charts are updated live as the user edits the
+	code. (The script is run every time the user stops editing for some time.
+	This auto-update can be turned off.)
+
+	Charts and their associated scripts and settings are saved into ANF files,
+	whose format has completely changed from version 5.x. An effort is made to
+	convert old ANF files to the new format when they are opened, but the result
+	usually needs manual editing.
+
+	Charts in an ANF file can be exported from the command-line using a tool
+	named opp_charttool. opp_charttool does not rely on the IDE (it is written
+	in pure Python), but instead emulates the Analysis Tool's Python API.
+	Native charts are emulated using Matplotlib. opp_charttool is useful
+	for e.g. exporting chart graphics from automated scripts.
+
+2019-12-19  Rudolf Hornig
+
+	* Update to Eclipse 4.14 and CDT 9.10
+
+2019-11-08  Andras Varga
+
+	* Rudimentary IDE support for new parameter type "object" (syntax highlight).
+
+2019-10-28  Attila Torok
+
+	* Sequence Chart: Add a (potential) axis for any module with a custom
+	@class, instead of only those that do not have any submodules. These used to
+	be the same, but not anymore in INET, with the new "tricky" compound modules
+	that handle some messages themselves. This works around issues #759 and
+	#778.
+
+2019-11-14  Attila Torok
+
+	* Install INET 4 (the inet4 project) from FirstStepsDialog.
+
+2019-11-20  Rudolf Hornig
+
+	* Model catalog URL updated
+
+2019-09-30  Rudolf Hornig
+
+	* Updated for Eclipse 4.13.
+
+2019-09-13  Andras Varga
+
+	* Added the new example simulations to the IDE.
+
+2019-09-01  Andras Varga
+
+	* NEDDoc: Automatic hyperlinking of URLs embedded in the text.
+
+2019-08-22  Rudolf Hornig
+
+	* Updated splash / about images for OMNeT++ 6.
+
+2019-08-22  Rudolf Hornig
+
+	* Fix an NPE on closing the Welcome view
+
+2019-08-21  Rudolf Hornig
+
+	* Fix incorrect product ID.
+
+2019-07-31  Andras Varga
+
+	* NEDDoc: Generate "Implementors" table for interfaces. Implementors table
+	includes indirect implementors as well.
+
+2019-07-31  Andras Varga
+
+	* NEDDoc: fix: Inheritance diagrams were missing in module interface pages,
+	even if they had implementors. This bug made INET documentation much less
+	useful.
+
+	Cause: hasBaseType was too restrictive, and its value didn't align with
+	what generateInheritanceDiagram() was doing.
+
+	Solution: always generate the dot graph, and check afterwards if it has
+	content.
+
+2019-07-24  Rudolf Hornig
+
+	* Use bundled private JRE on all platforms.
+
+2019-07-24  Rudolf Hornig
+
+	* Debug launch config to use lldbmi2 by default on macOS.
+
+2019-07-05  Rudolf Hornig
+
+	* Updated to use Eclipse 4.12, CDT 9.8
+
+2019-06-04  Attila Torok
+
+	* CDT: Remove ancient CProjectChecker class. It often caused a
+	DeadlockException on startup, and is no longer relevant.
+
+2019-05-08  Attila Torok
+
+	* Remove dependency on the now defunct AERI (error reporting service).
+
+2019-05-27  Rudolf Hornig
+
+	* Fixed bug report and model descriptor download URLs
+
+2019-04-11  Rudolf Hornig
+
+	* Makefile improvements.
+
+2019-03-28  Rudolf Hornig
+
+	* Use fully offline build with network turned off in the docker
+	container
+
+2019-03-27  Rudolf Hornig
+
+	* Eclipse 4.11 update, Tycho 1.3.0 update for building
+
+2019-03-04  Rudolf Hornig
+
+	* Renamed the launcher executable to opp_ide. The same launcher name will be
+	used in both OMNeT++ and OMNEST
+
+2019-02-28  Rudolf Hornig
+
+	* NEDDoc: NED documentation now can be generated from commandline
+
+2019-02-13  Rudolf Hornig
+
+	* NEDoc: fix: excluded directories were not working when it was empty
+
+2019-02-18  Rudolf Hornig
+
+	* Fix an NPE when MakefileBuilder was running without a workbench window.
+
+2019-02-14  Rudolf Hornig
+
+	* Fix a crash when shared images was accessed in headless mode
+
+2019-02-22  Rudolf Hornig
+
+	* Updated to Eclipse 4.11, tycho 1.3.
+
+2019-02-11  Andras Varga
+
+	* Sequence Chart: follow rename of ModuleMethodBegin/End to ComponentMethodBegin/End.
+
+	Note: the Sequence Chart tool cannot visualize methods calls from/to
+	channel objects, as they have no axes in the chart.
+
+2019-02-11  Rudolf Hornig
+
+	* Added a bookmark file specifying all used update sites.
+
+	The site bookmark file can be imported in the Eclipse / Preferences /
+	Install/Update / Available Software Sites dialog. It contains update
+	sites for Eclipse Platform, CDT, GEF, PyDev, Linux Tools.
+
+2019-01-24  Rudolf Hornig
+
+	* Fixed dependency file generation
+
+	The dependency file generated by a .msg and the related object file's
+	dependency file were overwriting each other.
+
+2019-01-18  Rudolf Hornig
+
+	* Build process refactoring
+
+2018-12-05  Rudolf Hornig
+
+	* Releng: moved to the root directory
+
+2018-10-24  Rudolf Hornig
+
+	* NED documentation generator updated. [This is a summary of several commits.]
+
+	  - Generate material design inspired output.
+
+	  - Navigation tree revised.
+
+	  - It is now possible to specify excluded directories during documentation
+	    generation, in order to be able to exclude samples, showcases etc. that
+	    are not integral part of the documentation.
+
+	  - Now generates nedtags.xml/msgtags.xml file which is compatible with
+	    the doxytags.xml file generated by doxygen. This allows crosslinking to
+	    the ned documentation from a sphinx based documentation (using the
+	    doxy-link plugin)
+
+	  - Generate usage and inheritance diagrams ONLY if they are meaningful.
+
+	  - Use SVG files as the usage/inheritance diagram image. Removed map
+	    files as SVG already contains proper links.
+
+2018-11-26  Andras Varga
+
+	* NED Editor, Sequence Chart: allow SVG export.
+
+	* Makemake dialog: allow setting DLL export symbol from OMNeT++.
+
+2018-08-01  Attila Torok
+
+	* CachingCanvas: Remove a workaround for Eclipse bug #245523 (fixed).
+	Affects both the Analysis Tool and Sequence Chart Tool.
+
+2017-06-07  Andras Varga
+
+	* Analysis Tool redesign, 1st phase. This is a summary of several commits by Andras
+	Varga, 	over the period of 2017-04-07 through 2017-06-07.
+
+	A partial list of changes:
+
+	- Data model change: added Dataset, Chartsheet and Folder
+
+	- Datasets page replaced by an IconGridViewer that displays chart icons.
+	  Charts will be created from scripts instead of tree-edited steps like
+	  "add", "apply" and "chart".
+
+	- Remove dependency on Eclipse EMF -- ecore data model was replaced by
+	  hand-coded classed, to reduce bloat and for greater control.
+
+	- Editor pages: added a toolbar to the top-right inner corner, use that
+	  instead of the main Eclipse toolbar.
+
+	- Inputs page redesigned and rewritten (basically from scratch)
+
+	- Browse Data page: filter strip: remove "Apply" button; "Swap" button moved
+	  to left
+
+	- Browse Data page: Tree Levels and Choose Table Columns actions added to
+	  toolbar
+
+	- Browse Data page: right-align numeric colums
+
+	- Browse Data page: copy to clipboard action: added icon
+
+	- Browse Data page: added Increase/Decrease Precision actions
+
+	- Browse Data page: data tree was missing icons (used a folder icon)
+	  for some item types
+
+	- Browse Data page: adjust preset tree levels: "File" -> "File / Run"
+
+	- Browse Data page: table filter: replace RunId filter with
+	  Experiment/Measurement/Replication
+
+	- Exporter improvements: validate dialog on start; enable/disable Export
+	  action based on the contents of the selection
+
+	- Charts: default legend positioning changed from "off" to "inside,
+	  anchor north"
+
+	- During development, existing Analysis Tool code was preserved for reference,
+	  as plugins org.omnetpp.scave_orig and org.omnetpp.scave.model_orig, and
+	  later removed.
+
+2018-11-22  Andras Varga
+
+	* Removed unused IDE build scripts. Replaced by releng.
+
+2018-11-22  Andras Varga
+
+	* Remove abandoned Standalone Sequence Chart, due to lack of interest.
+
+2018-11-22  Andras Varga
+
+	* Remove abandoned IDE-based animation plugins.
+
+	This was offline animation, i.e. play-back from the eventlog file
+	recorded from the simulation.
+
+	This effort pre-dated the Canvas API, OSG/osgEarth support, smooth
+	animation using refreshDisplay(), and Qtenv.
+
+	Originally abandoned due to scalability concerns (eventlog file can be
+	huge), but now a huge drawback would be lack of support for recent
+	animation APIs used with Qtenv (Canvas, OSG/osgEarth, refreshDisplay()).
+
+2018-11-22  Andras Varga
+
+	* Remove the IDE-based simulation front-end plugin, a shelved project.
+
+	This plugin requires a custom Cmdenv, as it communicates with the
+	simulation process that runs in the background via HTTP JSON requests.
+
+	This attempt has pre-dated the Canvas API, OSG/osgEarth and Qtenv.
+	Abandoned mainly due to scalability concerns (too much socket
+	communication between simulation process and GUI front-end), and more
+	recently, due to OSG which would be difficult to integrate into Eclipse.
+
+2018-11-22  Andras Varga
+
+	* Removed the abandoned Standalone Analysis Tool, due to lack of interest.
+
+2018-11-22  Andras Varga
+
+	* Removed abandoned GUI tester and usage tracker plugins, unused for ~10
+	years.
+
+2018-07-04  Rudolf Hornig
+
+	* Updated to Eclipse 4.8
+
+2018-06-26  Andras Varga
+
+	* Follow change: Remove references to Tkenv.
+
+2020-01-06  ------ omnetpp-5.6 released ------
+
+2020-01-06  Rudolf Hornig
+
+	* Updated to use Eclipse 4.14 and CDT 9.10.
+
+2019-12-13  Andras Varga
+
+	* IDE: Made the "Project Features" menu item more creative in finding
+	the project. (It said "Select a project first" much too often.)
+
+2019-10-07  Attila Torok
+
+	* Analysis Tool: Fix weighted histogram PDF/CDF computation (use sum of
+	weights instead of observation count).
+
+2019-10-25  Attila Torok
+
+	* NED editor: added manual connection routing using the "m" tag.
+
+2019-10-30  Attila Torok
+
+	* SequenceChart: Avoid out of bounds error when selecting manual axis
+	ordering, or switching between "Manual" and "Minimize crossings" modes.
+
+2019-10-28  Attila Torok
+
+	* EventlogTable, SequenceChart: Strip ANSI escape sequences from log
+	message lines.
+
+2019-08-24  Andras Varga
+
+	* NED editor: Fix "Failed to create the part's controls" error due to
+	"assertion failed: file is not a NED file, or not parsed yet".
+
+2019-08-06  Andras Varga
+
+	* IDE: Let the user permanently turn off the "OMNeT++ libraries not yet
+	compiled" dialog.
+
+2019-05-14  Attila Torok
+
+	* IDE: Remove AERI (now defunct logging service) reference.
+
+2018-11-20  Attila Torok
+
+	* IDE: Avoid NPE when web browser could not be created.
+
+2019-02-11  Andras Varga
+
+	* NED editor: fix recently introduced runtime error during connecting
+	nodes.
+
+2018-07-20  Rudolf Hornig
+
+	* IDE: Fix: NedType and Msgtape tags had different value in C++ and Java.
+
+2019-12-06  Rudolf Hornig
+
+	* Updated to use Eclipse 4.13, CDT 9.9.
+
+2019-05-15  ------ omnetpp-5.5 released ------
+
+2019-04-26  Rudolf Hornig
+
+	* fix NPE in workspace import when the initial welcome screen closed
+	on the latest eclipse
+
+2019-03-25  Rudolf Hornig
+
+	* Updated tycho/antrunner/pomless plugin versions + fixed version
+	number replacements
+
+2019-03-21  Rudolf Hornig
+
+	* Use Eclipse 4.11, CDT 9.7
+
+2019-02-09  Andras Varga
+
+	* ide: removing "bgl" display string tag
+
+	Store seed in the figure instead of the display string tag. Change
+	Relayout action accordingly.
+
+	The "bgl" could be used to specify the layout seed for the compound
+	module. It has not been supported by Qtenv, as it was unclear how it was
+	supposed to coexist with Qtenv's "Relayout" button. We are now removing
+	it altogether.
+
+2018-07-06  Rudolf Hornig
+
+	* Fixed the trashy cursors during connection drag and new module
+	creation with GTK3. The IDE now runs with GTK3. Both the cursor issue
+	and the missing 3-state checkbox issue in the launcher dialog has been fixed.
+
+2018-06-25  ------ omnetpp-5.4.1 released ------
+
+2018-06-13  Andras Varga
+
+	* NED: fix: in a "compound-extends-simple" situation, base was not
+	added to the inheritance chain
+
+	simple A {
+	   gates:
+	       inout g;
+	}
+
+	module B extends A {  // <---- despite this, internally B did NOT extend
+	A
+	}
+
+	module C {
+	   submodules:
+	       b1: B;
+	       b2: B;
+	   connections:
+	       b1.g <--> b2.g; // ERROR (bogus): gate 'g' not found in 'B'
+	}
+
+2018-06-13  Levente Meszaros
+
+	* NED editor: Solved unused deep parameter assignment in NED file
+	analysis.
+
+	moduleinterface IMac
+	{
+	}
+
+	module Mac like IMac
+	{
+	   parameters:
+	       int x;
+	}
+
+	module Test
+	{
+	   parameters: WARN-->     mac.x = 2;
+	   submodules:
+	       mac: <default("Mac")> like IMac;
+	}
+
+2018-06-13  Andras Varga
+
+	* NED: fix: when a compound module extends a simple module, references to
+	the base module's gates and parameters were reported as errors ("unknown
+	gate", etc.)
+
+2018-06-13  Levente Meszaros
+
+	* NED editor: Solved unused deep parameter assignment in NED file analysis
+
+2018-06-11  ------ omnetpp-5.4 released ------
+
+2018-06-05  Attila Torok
+
+	* Launcher: fix: The IDE sometimes started build in the UI thread,
+	locking up the UI for the time of the build, potentially for several
+	minutes.
+
+2018-06-05  Attila Torok
+
+	* Fix "unknown" image as module background in the graphical NED	editor.
+
+2018-06-04  Andras Varga
+
+	* Fix: do not report "undefined parameter" for typename assignments in NED
+
+2018-06-01  Andras Varga
+
+	* Fix: inifile analysis: typename deep assignments in NED were ignored
+
+2018-04-11  ------ omnetpp-5.3 released ------
+
+2018-03-08  Rudolf Hornig
+
+	* Fix: added --add-modules vm argument to eclipse.ini to be compatible
+	with JDK 9
+
+2017-11-22  Rudolf Hornig
+
+	* Makefile generator: follow opp_makemake change: generate dependency
+	files for .msg files too (if they use imports)
+
+2017-11-30  Andras Varga
+
+	* Updated for nedxml library changes
+
+2017-12-08  ------ omnetpp-5.2.1 released ------
+
+2017-12-08  Rudolf Hornig
+
+	* Launcher: fix for program name validation.
+
+2017-09-18  ------ omnetpp-5.2 released ------
+
+2017-09-18  Andras Varga
+
+	* Removed "Add OMNeT++ Support" from the "File" menu
+
+	Reason: it did not add C++ support.
+
+	Replacement: delete the project from the workspace (but leave its
+	files!), and create a project over it using the "New OMNeT++ Project"
+	wizard. You existing files will appear under the new project.
+
+2017-09-18  Andras Varga
+
+	* Makemake Options dialog: layout fixes
+
+2017-08-25  Andras Varga
+
+	* Launching: no not offer ".qtenv.ini" when creating launch
+	configuration
+
+2017-07-16  Andras Varga
+
+	* Analysis Tool: Updated for 'statistic' items and for weighted statistics.
+
+	Background: Specifying "record=stats" in a @statistic NED property, or
+	or calling the record() method on a cStddDev object saves a "statistic"
+	object in the output scalar file (.sca). A "statistic" object includes
+	fields like the count of observations, mean, standard deviation, minimum
+	and maximum value. "statistic" objects so far have been blown up to
+	several unrelated scalars upon loading into the Analysis Tool, and were
+	not available as objects. Now they are loaded as objects, and appear in
+	the Histograms and All tabs of the Browse Data page. Statistics fields
+	continue to be available as scalars as well, so they can be used as
+	chart input.
+
+	Also, weighted statistics (like those saved from cWeightedStddev) were
+	not properly displayed in the Analysis Tool. This has been rectified
+	as well.
+
+	Details:
+	- The Histograms tab on the Browse Data page now includes "statistics"-
+	  type results as well.
+
+	- The Histograms tab now has new table columns: "Kind", "SumWeights",
+	  "#Bins", "Hist.Range", all displayed by default. "Kind" indicates
+	  whether a result item is a "statistic" or a "histogram", and whether
+	  it is weighted or unweighted.
+
+	- Individual fields of "statistic" and "histogram" result items are
+	  no longer displayed on the Scalars page.
+
+	- Properties for "statistic" and "histogram" result items now includes
+	  "Kind" ("weighted"/"unweighted") and "Sum of weights".
+
+	- The "Variance" line has been removed from Properties view because
+	  it's not too useful and can be easily computed as the square of the
+	  standard deviation.
+
+	- Missing or unavailable data in table cells is now displayed with a
+	  hyphen instead of "n.a."
+
+	- On the All tab of Browse Data page, result item fields are now in
+	  natural order (i.e. no longer in alphabetically sorted).
+
+	- New icon for scalar items on the All tab of Browse Data page
+
+2017-06-27  Andras Varga
+
+	* Analysis Tool: better display of histogram bins in the Properties view.
+	The display format of bins was changed from "a..b" to "[a,b)", in order
+	to clearly indicate that "a" is	inclusive and "b" is exclusive.
+
+2017-06-21  Andras Varga
+
+	* Analysis Tool: Export dialog refined
+
+	- Dialog now comes up with correct size (XSWT form fully visible)
+	- Better filename generation/validation
+	- Disable Finish button when filename field is empty
+	- Added 'Open exported file afterwards' checkbox
+	- Other refinements
+
+2017-04-06  Andras Varga
+
+	* Analysis Tool: final removal of export code (it was no longer
+	accessible from	the GUI since version 5.1.)
+
+2017-04-04  Andras Varga
+
+	* Analysis Tools: changed the syntax for accessing iteration variables
+	in filter expressions. Before, they could be accessed like run attributes,
+	with the "attr:" prefix. Now, one needs to use the "itervar:" prefix,
+	which is more explicit.
+
+2017-03-31  Andras Varga
+
+	* Analysis Tool: Properties view: properly display attributes, iteration
+	variables and parameter assignments for runs
+
+2017-03-20  Andras Varga
+
+	* Analysis Tool: Properties view: removed "Number of lines" and
+	"Unrecognized lines" entries from the properties of result files
+
+2017-06-23  Rudolf Hornig
+
+	* IDE: updated Eclipse for the final Oxygen release
+
+2017-06-08  Rudolf Hornig
+
+	* Run/Debug Launchers: changes related to "build before launch" and
+	recent changes in debug/release builds.
+
+	- The Run, Profile and Debug launch types now automatically trigger build.
+
+	- The launcher now switches the project (and optionally all projects it
+	  depends on) to the appropriate build configuration if necessary: Run
+	  and Profile will perform RELEASE build, Debug will perform DEBUG build.
+
+	- For Debug launch, the "_dbg" suffix is added implicitly to the target
+	  name (both exe and shared lib), and it is expected that the simulation
+	  will also load the "_dbg" versions of libraries.
+
+	- A new "Build before launch" section was added to the Launch config
+	  dialog, which allows you to control whether to switch build configuration
+	  automatically, or ask before the build. The scope of build can also
+	  configured; options are: "None", "This project", or "Project + dependencies".
+
+	- If the launch is configured as "Ask before build" (default), a
+	  confirmation dialog is shown on launch (and before the build), asking
+	  whether to switch the active build configuration to appropriate one.
+	  The dialog allows you to set the decision as permanent and reconfigures
+	  the launch config accordingly.
+
+2017-05-26  Rudolf Hornig
+
+	* Makefile generator: follow changes in the command-line opp_makemake tool
+
+	- Models are built in RELEASE mode by default. Until now, DEBUG was the
+	  default, which resulted in casual users always running their simulations
+	  in DEBUG mode, i.e. much slower than possible.
+
+	- RELEASE and DEBUG mode binaries can now co-exist, so users do not have
+	  to recompile when they switch modes (e.g. when they want to debug a
+	  simulation -- remember, they are built in RELEASE mode by default.)
+	  This is a significant gain especially for large models like INET.
+	  The goal was achieved by adding the "_dbg" suffix to the names of
+	  DEBUG-mode binaries.
+
+	- Binaries are now hard-linked from the build directory (out/) to the
+	  target directory instead of being soft-linked. This leaves the copy
+	  in the build directory intact when the one in the target directory
+	  is deleted.
+
+2017-05-29  Rudolf Hornig
+
+	* IDE: Use statically linked stdc++ library for the IDE native lib for
+	better compatibility.
+
+2017-05-12  Rudolf Hornig
+
+	* Simulation Launcher: better progress reporting and cancellation
+	for batch runs. Internally, this is the result of switching to the
+	new JobGroups API of Eclipse.
+
+2017-05-11  Rudolf Hornig
+
+	* IDE: use Eclipse Oxygen milestone builds (platform version 4.6.2)
+
+2017-05-29  Rudolf Hornig
+
+	* The IDE's native library is now using statically linked c++ standard
+	library to avoid binary dependency on libstdc++. This reduces the possibility
+	of compatibility issues on older systems.
+
+2017-05-08  ------ omnetpp-5.1.1 released ------
+
+2017-04-29  Rudolf Hornig
+
+	* IDE: Fixed a problem where the IDE was not able to load its native
+	library	if it was not started from the MinGW shell.
+
+	* The IDE now properly detects whether it is using MinGW or Clang/C2.
+
+2017-03-31  ------ omnetpp-5.1 released ------
+
+2017-03-10  Andras Varga
+
+	* Analysis Tool: switch to using the new exporters in the scave library
+	and new Export dialog.
+
+2017-02-21  Andras Varga
+
+	* Analysis Tool: Old export wizard renamed
+
+2017-03-04  Andras Varga
+
+	* nativelibs: tweak SWIG wrapping to accommodate changes in the scave library
+
+2017-03-16  Andras Varga
+
+	* nativelibs: tweak SWIG wrapping to accommodate changes in the scave library
+
+2017-02-17  Andras Varga
+
+	* Analysis Tool: remove octave and matlab export from the IDE
+
+	Reasons:
+
+	1. poor data representation chosen in the output file, esp. for vector
+	   (one time vector, and one value vector per OMNeT++ output vector,
+	   where most values were NaN due to the common T vector!
+	   2-column matrices for each vector would have been a better choice.)
+
+	2. We don't want to promote Matlab/Octave use for result analysis.
+	   Matlab/Octave users should use CSV export.
+
+	Note: octaveexport.cc/h were unused (not in build).
+
+2017-03-10  Andras Varga
+
+	* nativelibs: allow C++11 (compiler flag comes from CXXFLAGS)
+
+2017-02-16  Andras Varga
+
+	* nativelibs: added missing %ignore
+
+2017-03-16  Andras Varga
+
+	* Fix NPE when deleting folder in a non-C++ project
+
+2017-03-13  Rudolf Hornig
+
+	* build: use Eclipse 4.6.3 milestone builds
+
+2017-03-17  Rudolf Hornig
+
+	* NPE and logging fixes
+
+2017-03-09  Rudolf Hornig
+
+	* Makefile generation: follow opp_makemake change: improved the "clean"
+	target in the generated makefiles (recursive wildcard; delete only the
+	actual target)
+
+2017-03-03  Levente Meszaros
+
+	* Sequence Chart: Eventlog view: selection handling fixes
+	   - Temporarily disabled reusing selection (due to NPE) after filtering
+	     the eventlog
+	   - Fixed dangling focusElement on input change.
+	   - Changed selection marks to be more apparent.
+	   - Fixed revealing selected element in VirtualTable.
+
+2017-03-03  Levente Meszaros
+
+	* Sequence Chart: Eventlog view: Fixed foreground color when the table
+	widget is not focused.
+
+2017-03-02  Andras Varga
+
+	* Inifile Editor: fix #941: Recursively including ini file makes
+	OMNeT++ workspace unusable
+
+2017-03-03  Andras Varga
+
+	* Inifile Editor: parser: ParseException is never used, eliminated.
+	Also: wrap IOException into CoreException
+
+2017-03-03  Andras Varga
+
+	* Launch dialog fix: debug-on-errors did not take effect for DEBUG
+	launch on a fresh launch config. Just opening and closing the Debug
+	dialog fixed it (it wrote the setting into the launch config).
+
+2017-03-02  Andras Varga
+
+	* Launch dialog page: fix: config name "Gen" could not be restored.
+
+	"General" was chosen instead, because code used simple startsWith() call
+	to test, and "General" came before "Gen" in the list (??).
+
+2017-03-02  Andras Varga
+
+	* Inifile Editor: fix: form edits were lost when typing too quickly
+	after hitting Enter. Cause: reread() overwrote user's edits.
+
+2017-03-02  Andras Varga
+
+	* Inifile Editor: Fix #1001: form editor: "Reset to default" button
+	pops up "No such entry" error dialog
+
+2017-03-03  Rudolf Hornig
+
+	* Added default Eclipse repositories as update sites
+
+2017-03-02  Rudolf Hornig
+
+	* Added automatic Eclipse reporting support to OMNeT++ (not to OMNEST)
+
+2017-03-02  Rudolf Hornig
+
+	* Removed dummy MSVC toolchain definition
+
+2017-03-03  Levente Meszaros
+
+	* SequenceChart: Changed selection marks to be more apparent.
+
+	* SequenceChart: Fixed revealing selected element in VirtualTable.
+
+	* SequenceChart: Fixed foreground color for EventLogTable when the widget is not
+	focused.
+
+2017-03-02  Andras Varga
+
+	* Fix #941: Recursively including ini file makes OMNeT workspace
+	unusable
+
+	* Launcher fix: debug-on-errors did not take effect on a fresh launch
+	config
+
+	* Launch dialog page: fix: config name "Gen" could not be restored.
+	"General" was chosen instead, because code used simple startsWith() call
+	to test, and "General" came before "Gen" in the list...
+
+	* Ini editor fix: edits lost when typing too quickly after hitting
+	Enter
+
+	* Fix #1001: Ini form editor: "Reset to default" button pops up "No
+	such entry" error dialog
+
+2017-03-03  Rudolf Hornig
+
+	* Added default eclipse repositories as update sites
+
+	* Added automatic Eclipse reporting support to OMNeT++ (not to OMNEST)
+
+	* Removed dummy MSVC toolchain definition
+
+2017-02-06  ------ omnetpp-5.1pre3 released ------
+
+2017-02-01  Rudolf Hornig
+
+	* Added CDT repo so plugins can be installed from there directly (It
+	was required to add LLDB debugger support as it is not part of the main
+	repo.
+
+2017-01-27  Andras Varga
+
+	* "New empty project" wizard: do NOT generate package.ned. Change fixes
+	the TicToc tutorial.
+
+2017-01-27  Rudolf Hornig
+
+	* Added lldb support plugins
+
+2017-01-27  Rudolf Hornig
+
+	* Upgraded to Eclipse 4.6.2
+
+2017-01-26  Rudolf Hornig
+
+	* The IDE now generates exactly the same makefile as the opp_makemake
+	tool. This allows easier switching between IDE and command line without
+	rebuilding the model.
+
+2017-01-16  Andras Varga
+
+	* Fix tri-state checkboxes. Affects launch dialog and Analysis tool chart
+	properties dialog.
+
+2017-01-11  Rudolf Hornig
+
+	* neddoc: made the doxy file path relative to the project. This fixes the
+	issue in windows.
+
+2016-11-21  Levente Meszaros
+
+	* Debug launch: GDB init file changed from python2 to python3 syntax
+
+2016-12-23  ------ omnetpp-5.1pre2 released ------
+
+2016-12-19  Andras Varga
+
+	* IDE: Inifile editor updated with new/changed options
+
+2016-12-16  Rudolf Hornig
+
+	* IDE: updated logo images
+
+2016-11-25  Andras Varga
+
+	* Analysis tool: initial support for SQLite-based result files [Zoltan
+	Bojthe, Rudolf Hornig, Andras Varga]
+
+2016-12-05  Rudolf Hornig
+
+	* Build: renamed default config names from gcc-debug -> debug.
+
+2016-12-01  Rudolf Hornig
+
+	* Build: removed Visual C++ specific code, as now we support the
+	Visual C++ compiler with the normal makefiles and build mechanism.
+
+2016-11-18  Andras Varga
+
+	* Inifile editor, Launcher: support for cmdenv-stop-batch-on-error
+
+2016-11-11  Andras Varga
+
+	* Launch page: "Silent" checkbox replaced by "Verbose"
+
+2016-11-14  Andras Varga
+
+	* Launch page: more/better tooltips
+
+2016-11-18  Andras Varga
+
+	* Launcher: don't force --debug-on-errors=false in RUN mode. Reason:
+	user may want to launch simulation using RUN, and use an external
+	debugger to debug it.
+
+2016-11-14  Andras Varga
+
+	* Launch page: "Debug on errors" made tri-state checkbox
+
+2016-11-14  Andras Varga
+
+	* Launcher: added hint for the run filter
+
+2016-11-14  Andras Varga
+
+	* IDE: omnetpp-ide.launch updated
+
+2016-11-16  Andras Varga
+
+	* Project Features: detecting external changes in the generated header file
+	made more robust: made comparison insensitive to comment, whitespace and
+	order differences.
+
+2016-11-16  Andras Varga
+
+	* Project Features property page: fix: could not properly fix NED
+	exclusions list
+
+	The old NED exclusions list always came back after "fixing" the project
+	configuration from the Project Features property page. (.nedexclusions
+	with updated content was saved to disk, then on "Apply" it was
+	overwritten with old content.)
+
+2016-10-27  Andras Varga
+
+	* Launcher improvements
+
+	- tolerate lack of console (no NPE in stream monitor)
+	- on simulation error, display concrete message in the error dialog,
+	  not just "Finished with error"
+	- code structuring for readability
+
+2016-10-27  Andras Varga
+
+	* Launch page: UI revamp
+
+	- use tristate checkboxes instead of Yes/No/Default radio buttons or combos
+	- UI: use editable combo instead
+	- working dir merged into Simulation group
+	- Qtenv to precede Tkenv
+	- Batch settings into separate group
+	- introduced explicit "useBatching" checkbox
+	- debug-on-errors: replace combo with checkbox that appears only in DEBUG
+	  mode (and fixed "false" in RUN mode)
+	- use our own SWTFactory
+	- added simulation time limit / CPU time limit
+	- added content assist for Additional Arguments
+	- hook modificatoin listeners automatically
+	- etc.
+
+2016-10-07  Andras Varga
+
+	* Launcher: allow simulations execute in batches
+
+	OmnetppMainTab: added "Batch size" spinner, etc.
+
+	Added JobGroup-based alternative implementation code as comment (it
+	currently does not work, because progress reporting from job groups is
+	broken, see Eclipse bugtracker)
+
+2016-10-20  Rudolf Hornig
+
+	* IDE: set all plugin's minimum runtime requirement to JRE 1.8
+
+2016-10-20  Rudolf Hornig
+
+	* IDE: Updated to eclipse 4.6.1
+
+2016-10-19  Andras Varga
+
+	* Fix NPE on startup when open ANF file was deleted since last session
+
+2016-10-19  Andras Varga
+
+	* Analysis tool: display Experiment/Measurement/Replication columns in
+	Browse Data tables instead of Folder/Filename/RunId/Config/RunNumber.
+
+	Note that this is only the default values for a preference, so change
+	will only take effect in new installations (or delete delete scave
+	preferences from .metadata/org.eclipse.core.runtime/...)
+
+	Also: increase default columns widths
+
+2016-10-19  Andras Varga
+
+	* Analysis tool: updated generation of default anf file names from
+	vec/sca file names
+
+2016-10-12  Andras Varga
+
+	* Launcher: make simulation batch cancellable; getting run list was
+	broken by a recent commit
+
+2016-10-12  Levente Meszaros
+
+	* Fixed incorrect tooltip background/foreground colors.
+
+	Added colorLock flag to prevent the eclipse styling mechanism from
+	overriding colors already set on the widget. Added kludge to workaround
+	the fact that the HTML parser returns black colors for
+	foreground/background even when they were not specified. Removed colors
+	from HTML prolog to fallback to system defaults.
+
+2016-10-10  Andras Varga
+
+	* Analysis tool: dark scheme fix
+
+2016-10-10  Andras Varga
+
+	* NED editor: improvement for dark color schemes (removed grey strip
+	from "package" heading)
+
+2016-10-10  Andras Varga
+
+	* Inifile edtor: icons: better transparency (for dark color schemes)
+
+2016-10-10  Andras Varga
+
+	* Inifile form editor: improvements for the dark color scheme
+
+2016-10-10  Andras Varga
+
+	* Inifile editor: fix "widget already disposed" error
+
+2016-10-05  Levente Meszaros
+
+	* Fixed incorrect swig mapping for ptr_t/uintptr_t.
+
+2016-11-30  Rudolf Hornig
+
+	* Removed 'nmake' support from the IDE. The Microsoft Clang/C2 compiler
+	now works with the same configuration as the MinGW compiler.
+
+	* Added support for 64-bit builds with both the MinGW-W64 and the Clang/C2
+	compilers.
+
+2016-08-04  Rudolf Hornig
+
+	* While detecting the omnetpp_root directory, check all parent
+	directories for Makefile.inc
+
+2016-08-03  Rudolf Hornig
+
+	* build: removed 32-bit linux support for the IDE
+
+2016-07-20  Rudolf Hornig
+
+	* build: The native IDE build script now creates Windows 64, Linux 64 and
+	macOS shared libraries.
+
+2016-05-23  Rudolf Hornig
+
+	* The IDE build system is now using Eclipse 4.6 and Maven/Tycho
+
+2016-05-27  Rudolf Hornig
+
+	* Removed deprecated construct + handled IllegalArgumentException when
+	invalid path is entered in the IMAGE_PATH
+
+2016-07-08  Andras Varga
+
+	* Project Features: features.h banner change, and more fixes
+
+	- fix NPE when opening Project Features dialog for a project with no
+	  features defined
+	- String getDefinesFileName() -> IFile getDefinesFile()
+
+2016-07-05  Andras Varga
+
+	* test/* added IDE test projects for testing the linker/compiler
+	options, include path etc. [Rudi]
+
+	Exercises the following IDE build features:
+	- multiple projects
+	- multiple makemake folders per project
+	- target types: static lib, shared lib, executable
+	- linked project (i.e. not directly under the workspace dir)
+	- project references, >2 deep
+	- project features (.oppfeatures)
+	- include folders: defined in CDT (Paths&Symbols page), by project
+	  features, and in makemake -I options
+	- defines: defined ibn CDT (Paths&Symbols page), by project features, and
+	  in makemame -D options
+	- message files, used in referenced projects
+
+	Pass criteria:
+	- project must compile, resulting executable must start
+	- content of generated makefiles is checked against a saved copy
+
+2016-07-05  Andras Varga
+
+	* ProjectFeaturesManager: warn for missing definesFile attribute
+
+2016-07-01  Andras Varga
+
+	* ProjectFeaturesManager: offer removing "WITH_TCP" etc macros from
+	CDT configuration. Now they come from header file, and only cause
+	confusion.
+
+2016-07-01  Andras Varga
+
+	* Added BuildSpecFolderRenameDetector, MsgFileRemoveDetector
+
+	They:
+	- remove _m.cc/h files when their msg is deleted
+	- make .oppbuildspec files follow folder renames
+
+2016-07-04  Andras Varga
+
+	* MetaMakemake: convert paths to relative for makemake
+
+2016-07-04  Andras Varga
+
+	* MetaMakemake: collect include path recursively; linker settings:
+	only use directly referenced projects
+
+2016-07-01  Andras Varga
+
+	* MetaMakemake: renames; add -L for referenced projects even if we
+	dont automatically link with their libs
+
+2016-07-01  Andras Varga
+
+	* MetaMakemake: better values for the FOO_PROJ=... variables
+
+2016-07-05  Andras Varga
+
+	* MetaMakemake: fix include path exported from referenced projects
+
+2016-06-29  Andras Varga
+
+	* MetaMakemake: refactor: split up addFeatureCFlagsTo() /
+	addFeatureLDFlagsTo()
+
+2016-07-01  Andras Varga
+
+	* MakemakeOptionsPanel: remember manually added -L options
+
+2016-07-05  Andras Varga
+
+	* MakemakeOptionsPanel: Compile tab: put some options under a More>>>
+	link
+
+2016-07-05  Andras Varga
+
+	* MakemakeOptionsPanel: disable useFeatureLDFlagsCheckbox if not
+	applicable
+
+2016-07-01  Andras Varga
+
+	* MakemakeOptionsPanel: don't lose manually entered options in the
+	Preview pane
+
+2016-06-30  Andras Varga
+
+	* MakemakeOptionsPanel: added note, wrap label
+
+2016-07-05  Andras Varga
+
+	* MakemakeOptionsPanel: added checkboxes for metaFeatureCFlags and
+	metaFeatureLDFlags
+
+2016-06-30  Andras Varga
+
+	* MakemakeOptionsPanel: make MakemakeOptionsDialog resizable
+
+2016-06-29  Andras Varga
+
+	* MakemakeOptionsPanel: added Include directories listbox to the
+	Compile page
+
+2016-06-30  Andras Varga
+
+	* MakemakeOptions: added "." as default include dir
+
+2016-06-29  Andras Varga
+
+	* MakemakeOptions: change order of generated options
+
+2016-06-29  Rudolf Hornig
+
+	* Build: for gmake builds removed the CONFIGNAME from the invokation
+	command line.
+
+	Make will use the automatically detected toolchain name (detected by
+	./configure). In practice this means that once a project is built from
+	the IDE, issuing a make command from the command line will not rebuild it
+	from scratch.
+
+2016-06-29  Andras Varga
+
+	* Project Features property page: validate the saved project state,
+	not the edited one
+
+2016-07-05  Andras Varga
+
+	* Project Features property page: removed "Export build tester
+	makefile" feature. We now have an opp_featuretool-based shell script
+	for the same purpose.
+
+2016-06-28  Andras Varga
+
+	* Project Features: handle defines with generated header file instead
+	of macros in the CDT project configuration. Needs definesFile="..."
+	in the root element of .oppfeatures
+
+	* ProjectFeaturesPropertyPage: display name of generated header file
+
+2016-06-28  Andras Varga
+
+	* Metamakemake: use absolute paths for -L, it will be converted
+	to relative inside the Makemake class later (in a better way than
+	makeRelativePath() can)
+
+2016-06-28  Andras Varga
+
+	* Added metaExportIncludePath, metaUseExportedIncludePaths
+
+2016-07-05  Andras Varga
+
+	* Removed deep-includes option from the IDE and opp_makemake
+
+	As it turned out, it was not all that useful (too error-prone
+	for large projects like INET where it was originally targeted)
+
+2016-06-24  Andras Varga
+
+	* IncludeFoldersCache: cache deep-include folders ONLY (based on
+	makemake options)
+
+	Don't add non-deepinclude makemake folders to the include path -- if
+	that's needed, it should be done explicitly in the Paths&Symbols page.
+
+2016-06-24  Andras Varga
+
+	* Makemake: removed Autoinclude option -- always use include folders
+	from the Path&Symbols page
+
+	It was convenient but a messy, for example the -I options in the generate
+	Makefiles did not match with the contents of the Paths&Symbols page.
+
+	Better make everything explicit -- and more predictable.
+
+2016-06-24  Andras Varga
+
+	* IncludeFoldersCache changes:
+	1. fix: skip non-omnetpp projects
+	2. rewrite to discover and maintain list of include folders, base on makemake options
+
+2016-06-28  Andras Varga
+
+	* Removed dependency cache from the IDE.
+
+	Remaining issue: MetaMakemake used to take automatic include folders from
+	DependencyCache, this no longer works
+
+2016-06-24  Andras Varga
+
+	* Fix: don't save makemake options for non-makemake folders
+
+2016-06-28  Andras Varga
+
+	* Fix long-standing MetaMakemake bug
+
+2016-06-23  Rudolf Hornig
+
+	* Makefile now uses compiler-generated dependency files.
+
+2016-04-13  ------ omnetpp-5.0 released ------
+
+2016-03-10  ------ omnetpp-5.0rc released ------
+
+2015-12-07  ------ omnetpp-5.0b3 released ------
+
+2015-07-20  ------ omnetpp-5.0b2 released ------
+
+2015-03-04  ------ omnetpp-5.0b1 released ------
+
+2014-11-27  ------ omnetpp-4.6 released ------
+
+2014-06-30  ------ omnetpp-4.5 released ------
+
+2014-02-13  ------ omnetpp-4.4.1 released ------
+
+2013-12-20  ------ omnetpp-4.4 released ------
+
+2013-10-15  Rudolf Hornig
+
+	Fixed the launcher not to throw error if the toolchain is clang.
+
+2013-10-14  Rudolf Hornig
+
+	Now using Eclipse 4.3.1 as base for the IDE
+
+2013-09-13  Tamas Borbely
+
+	Implemented project specific image searches. The "image" folder of the
+	project and its dependency projects are added to the image path. New image
+	path is automatically used by the NED editor and other places where module
+	are displayed. (Folder name is hardcoded now; this will be configurable
+	in future releases).
+
+	Additional changes:
+	- Launch dialog contains a field to specify the --tkenv-image-path option;
+	  by default its value is populated with the image path of the project
+	  containing the working directory.
+	- Added ${opp_image_path:dir} variable substitution.
+	- Caches are invalidated if OMNETPP_IMAGE_PATH, the project dependencies, or
+	  the image directories or files have changed.
+
+	Also: NED palette scales images to 16x16 and 24x24. Previously the aspect
+	ratio was kept.
+
+2013-10-01  Andras Varga
+
+	* Analysis Tool: name of 'substract' filter changed to 'subtract' (typo)
+
+2013-09-30  Levente Meszaros
+
+	Sequence Chart: Fixed error handling when the error occurs in paint during
+	startup.
+
+2013-09-12  ------ omnetpp-4.3.1 released ------
+
+2013-09-12  Levente Meszaros, Andras Varga
+
+	When the IDE is started with an empty workspace (e.g. on first-time
+	launch), a dialog comes up automatically that offers the user the
+	following options for getting something into the workspace:
+
+	- Import the OMNeT++ sample simulations into the workspace
+	- Download and install INET Framework
+
+	The latter function is also available now via the Help > Install
+	Simulation Models... menu item. The menu item brings up a dialog
+	with the list of simulation models available for automated installation,
+	and lets the user choose. Currently only the INET Framework is
+	listed there, but it is planned to add further models.
+
+2013-09-12  Levente Meszaros, Andras Varga
+
+	When the IDE was started for the first time, the user formerly saw an
+	empty workbench window (apart from the imported samples). Now some
+	helpful introductory pages are displayed in the editor area:
+
+	- "Getting Started" - practical advice for getting past the first
+	  10 minutes spent in the IDE
+
+	- "At a Glance" - explains the common file types (NED, msg, ini) and
+	  their purposes
+
+	- "The Simulation Examples" - explains each example simulation in two
+	  sentences, then provides links for opening the project, viewing the
+	  README, launching the simulation, etc.
+
+	These pages are also available in the Help system (except the last one,
+	which has a dedicated menu item under the Help menu.)
+
+2013-09-06  Andras Varga
+
+	Run dialog > OMNeT++ Simulation > Launch tab: bug fixes:
+	- pasting "a}" into the Working dir field caused weird behavior
+	- pasting ${ into workingDir caused error dialog
+
+2013-08-28  Andras Varga
+
+	* IDE: import sample projects even if workspace is different from omnetpp/samples
+
+2013-06-06  Levente Meszaros
+
+	Changed default appearance of the main welcome page to be more user friendly.
+
+2013-09-03  Andras Varga
+
+	* IDE: trying to launch a closed project will now offer opening it
+
+2013-08-26  Levente Meszaros
+
+	Neddoc: fixed bug 672: Added escaping for replacement string.
+
+2013-08-07  Tamas Borbély
+
+	Output Vector View: show 'Goto ...' actions in the context menu
+	(instead of the view's pulldown menu)
+
+2013-08-07  Tamas Borbély
+
+	Analysis Tool: fix #389 (Useless items in the Statistic Name filter)
+
+	The filter hints of combos is now computed from the result items filtered
+	by the other 2 combos.
+
+2013-08-06  Tamas Borbély
+
+	Analysis Tool: fix #388 (add '*.host[*].*' variant to module filter hints)
+
+2013-08-09  Rudolf Hornig
+
+	command line: fix for #670 -vmargs conflict between omnetpp.ini and
+	the launcher script.
+
+2013-04-02  ------ omnetpp-4.3 released ------
+
+2013-03-17  Rudolf Hornig
+
+	The debugger no longer stops at the main() symbol by default.
+
+	Updated the IDE to Eclipse 3.8.2
+
+2013-02-08  ------ omnetpp-4.3rc1 released ------
+
+2012-12-17  Rudolf Hornig
+
+	Debugging: the default gdbinit file is now ${opp_root}/misc/gdb/gdbinit.py
+	when a new launch configuration is created.
+
+	Also added support for project-specific gdbinit files: the .gdbinit.py
+	script in the project root is now automatically sourced by the default
+	init script. Project-specific gdbinit files can be used to initialize
+	pretty printers specific to the project.
+
+2011-11-15  Rudolf Hornig
+
+	Launcher: for the running program, the configuration name is now
+	correctly displayed in the Console view.
+
+2012-12-11  Rudolf Hornig
+
+	Debugging: switched over to the newer DSF debugger framework of CDT.
+
+2012-11-30  Rudolf Hornig, Andras Varga
+
+	* IDE: Added support for opening files from the command line, i.e. the command
+
+	  $ omnetpp Aloha.ned Aloha.cc
+
+	will work as expected (opens these files on startup). If necessary,
+	the IDE will open the containing projects if they are closed, and will
+	even offer creating/importing a project if the files are outside all
+	workspace projects.
+
+2012-11-21  Levente Meszaros
+
+	EventLog, Sequence Chart: better error reporting
+
+2012-11-13  Rudolf Hornig
+
+	CDT: disabled Code Analysis by default. It displayed tons of bogus
+	"Semantic Errors" that totally confused novice users.
+
+2012-11-06  Rudolf Hornig
+
+	Command line: the build output is now less verbose (for gcc/mingw).
+	Only the file names are printed when building, not whole command lines.
+
+2012-10-24  Rudolf Hornig
+
+	Productizing: updated to Eclipse 3.8.1, removed our own linuxtools
+	feature, changed to Cocoa framework from Carbon on OS X, moved to Java
+	1.6 as a minimum requirement.
+
+2012-10-16  Levente Meszaros
+
+	Common: avoid showing a hover while any mouse button is pressed
+
+2012-10-15  Tamas Borbely
+
+	* Analysis Tool: BaseLineChartEditForm: no loss of settings when clicking on lines
+	without pressing Apply first
+
+	The content of the controls are saved temporarily as properties of the
+	selected lines.
+
+2012-10-15  Tamas Borbely
+
+	* Analysis Tool: fix #604: display names were reset after setting another line
+	property in the Properties dialog
+
+2012-10-10  Tamas Borbely
+
+	* Analysis Tool: use set display names on legend of scatter charts
+
+2012-10-07  Andras Varga
+
+	* IDE: registered "Small font" (appears in the Preferences dialog)
+
+2012-10-11  Andras Varga
+
+	* Analysis Tool: remember last open tab of Chart Properties dialog
+
+2012-10-13  Andras Varga
+
+	Launcher: fix NPE
+
+2012-08-29  Andras Varga
+
+	Launcher: dialog: fix NPE when processing an omnetpp.ini without section header
+	Launcher: dialog main page: cosmetics on labels
+
+2012-10-09  Levente Meszaros, Andras Varga
+
+	* IDE: use StyledText instead of Browser for HTML hover information
+
+	Motivation: The Browser widget is not always available on all platforms
+	(constant xulrunner problems on Linux, etc).
+
+2012-10-09  Levente Meszaros
+
+	* IDE: added Full Screen menu item, bound to Ctrl+Shift+F11
+
+2012-07-17  Tamas Borbely
+
+	* Analysis Tool: major feature: implementation of computed scalars
+
+2012-07-09  Tamas Borbely
+
+	* Analysis Tool: fix #754: user defined chart area (minX/maxX/minY/maxY) can now
+	be larger than the plot area computed from the data
+
+2012-07-09  Tamas Borbely
+
+	* Analysis Tool: fix #573/2: added hot keys for switching between the Vectors,
+	Scalars, Histograms, All pages in the Browse Data page
+
+	For switching between Inputs/Browse Data/Dataset pages, Alt+PgUp/PgDown
+	can be used.
+
+2012-07-09  Tamas Borbely
+
+	* Analysis Tool: fix #573: do not switch to VectorBrowser/Dataset view on page
+	changes in the Browse Data page
+
+2012-06-27  Tamas Borbely
+
+	* Analysis Tool: add 'logarithmic X axis' option to scatter chart (bug #573)
+
+2012-10-03  Rudolf Hornig
+
+	SeqChart: better error messages for the Goto Simulation Time dialog
+
+2012-03-28  Andras Varga
+
+	* Launcher: fix ".cc file cannot be launched" bug. Now we interpret
+	it that as if the file's parent folder was selected.
+
+2012-01-15  Andras Varga
+
+	* IDE: added named connections support to:
+	- Property View
+	- Properties Dialog in graphical mode
+	- content assist in NED editor
+
+	TODO: inifile editor
+
+2012-03-26  Andras Varga
+
+	* IDE: fix: change remaining KB/MB to KiB/MiB
+
+2012-03-13  Rudolf Hornig
+
+	* Analysis Tool: removed export support for Matlab script output.
+	The generated script was syntactically incorrect, plus Matlab uses only
+	the first 63 chars as identifiers, and this causes collisions between names.
+
+	CSV should be used as data export for Matlab.
+
+2012-03-12  Rudolf Hornig
+
+	CDT: fix #532: Makemake and Project Features pages are now displayed
+	only if the project is both OMNeT++ and CDT project
+
+2012-03-13  ------ omnetpp-4.2.2 released ------
+
+2012-01-17  ------ omnetpp-4.2.1 released ------
+
+2011-10-28  ------ omnetpp-4.2 released ------
+
+2011-09-11  ------ omnetpp-4.2rc1 released ------
+
+2011-05-27 Rudolf Hornig
+
+	* Before running a simulation, the IDE will show the command line in
+	 the console view to help you execute the same simulation from the
+	 command line.
+
+	* CTRL-TAB now works on freshly opened NED files even if you do not explicitly
+	 select a simple module. In this case the IDE opens the .h and .cc files
+	 associated with the first simple module in the NED file.
+
+2011-05-05  ------ omnetpp-4.2b2 released ------
+
+2011-05-03 Levente Meszaros
+
+	* Animator preview: Updated animator plugin. Heavy changes since last version.
+
+2011-05-03 Andras Varga
+
+	* Fixes #289: Problem with syntax highlight of xml tags in NED comments
+
+2011-04-30 Andras Varga
+
+	* Added "Export BuildTester makefile" to the project properties dialog
+	to help testing projects that define several "Project Features" (i.e.
+	INET-Framework)
+
+2011-04-21 Andras Varga
+
+	* Ini editor: rearranged tree and default page on the form editor.
+
+	* Fixed #282, #283. Source/sink example generated by the new project
+	wizard was incorrect.
+
+2011-04-20 Tamas Borbely
+
+	* Ini file editor performance enhancements.
+
+	* Ini editor: a new INI edior opens with the same page (text/form) that
+	was used last time
+
+2011-04-14 Andras Varga
+
+	* Makefile Wizard Template fixes
+	* Added support for the new xml() NED function
+
+2011-04-08 Andras Varga
+
+	* Implemented conditional submodule support (including content assist)
+
+2011-04-02 Andras Varga
+
+	* NED Editor: Supporting default values for parametric module and channel types.
+	* Added support for excluding NED packages
+	* Implemented "Project Features" feature.
+
+2011-04-01 Levente Meszaros
+
+	* EventLog and Tkenv: several fixes to support the new animation component.
+	* EventLogView: changed some wording, addes additional fields to be displayed in the table
+
+2011-03-31 Andras Varga
+
+	* Fixes on Project Property Makamake page. Apply button now works correctly.
+
+2011-03-29 Tamas Borbely
+
+	* Analysis tool: when double-clicking on an item on the InputsPage, filter will be set to 'All'
+
+2011-03-28 Levente Meszaros
+
+	* NED Editor: Double-click now opens the NED type instead of the Properties dialog.
+
+2011-03-24 Levente Meszaros
+
+	* SequenceChart filter dialog enhancements
+
+2011-03-17 Levente Meszaros
+
+	* Layouter in IDE and in Tkenv now produces the same result.
+
+2011-03-04 Tamas Borbely
+
+	* Ini file lines now contain links also to modules, not just to the parameters
+	* Copy action added to the Module Parameters View
+
+2011-03-04 Rudolf Hornig
+
+	* IDE Updated to Eclipse 3.6.2
+
+2011-03-04 Levente Meszaros
+
+	* EventLog format changes for animation support.
+
+2011-02-23  ------ omnetpp-4.2b1 released ------
+
+2011-02-05 Andras Varga
+
+	* Several performance optimizations for the NED Editor. It must be able to
+	open networks containing around 10.000 submodules.
+
+	* Performance: NED validation is done now in a background thread
+
+2011-02-03 Rudolf Hornig
+
+	* Graphical editor: Figure borders and outlines now correctly follow the zoom level.
+
+	* Graphical editor: The resize/move feedback figures have been changed to
+	transparent blue from a simple outline.
+
+2011-02-03 Levente Meszaros
+
+	* Added Technology Preview version of the network animator. It works only
+	on .elog files smaller than 10Mb. You can open it by right clicking on an
+	.elog file and selection "Open with...". This implementation is NOT optimized
+	for larger files.
+
+2011-02-01 Rudolf Hornig
+
+	* NED Files are refreshed now before opening. No more "file is out of sync"
+	message if the opened NED file was modified outside of the IDE.
+
+2011-02-01 Andras Varga
+
+	* Simulation launcher: Size of the popup information tooltip is limited
+	when displaying all the runs (i.e. whan the parameter space is too big)
+
+2011-01-31 Levente Meszaros
+
+	* Added the possibility to go to a specific simulation time in event log
+	view by specifying relative values (+-) in the dialog (units are supported)
+
+	* In sequence chart added 'Goto simulation time' and 'Goto event number'
+	in the context menu
+
+	* Sequence chart: the current position is shown in the gutter
+
+	* Completion proposals in inner types after @ are working properly in NED text editor
+
+2011-01-28 Andras Varga
+
+	* NED type selection dialog now optionally shows the defining projects for the types.
+
+2011-01-24 Rudolf Hornig
+
+	* Context menu in graphical editor is reorganized for better and easier access of the
+	 most used functions.
+
+	* Linux tools now included in the build. It allows to profile the simulation
+	using Valgrind on Linux systems. (Windows and Mac builds does not have
+	this capability). Use the "Profile as" menu item in the context menu of
+	the project directory.
+
+2011-01-21 Rudolf Hornig
+
+	* Go to C++ definiton (CTRL-TAB) now correctly finds the appropriate C++ class even if the
+	NED type is extending another type or it is using the @class property. (bug #238)
+
+2011-01-20 Rudolf Hornig
+
+	* In graphical editor the previous action used with double click (go to
+	type or supertype) has ben moved to the F3 key. It is also available
+	from the context menu.
+
+2011-01-20 Andras Varga
+
+	* Added a brand new Property dialog that can be accessed by double clicking
+	on the module or type. Type, name, vector size and graphical properties
+	are supported. A preview is shown at the bottom	of the dialog.
+
+	* Enhanced Ned Type Selection dialog (CTRL-SHIFT-N)
+
+2011-01-18 Rudolf Hornig
+
+	* The package name for the ned file is shown at the top in the graphical editor
+
+	* Support for displaying self-connections in the graphical editor as
+	an arch in the upper right corner
+
+2011-01-13 Rudolf Hornig
+
+	* Connections in graphical editor now have an error marker to show possible problems.
+
+	* Validator used for entering type names (in the Property View) now correctly
+	supports inner types and packages
+
+2011-01-07 Rudolf Hornig
+
+	* NED Editor now supports drag-and-drop operations of inner types (moving
+	an inner type to top level, or the other way around). Types dropped inside
+	the submodule area create a submodule with that type. Types dropped on the
+	title area of the compound module create an inner type.
+
+2011-01-06 Andras Varga
+
+	* Unit name now can be set in property editor for compound modules
+
+2011-01-04 Andras Varga
+
+	* Compound module border now can be set to 0 width
+
+2011-01-04 Rudolf Hornig
+
+	* In the graphical editor, inner types can now be created by dropping
+	a NED type on the title of the compound module
+
+2011-01-03 Rudolf Hornig
+
+	* The simulation process is now started by using relative paths. The
+	command line displayed in the console when the process start has
+	failed is much more readable now.
+
+2010-12-22 Rudolf Hornig
+
+	* Property cell editors for type, liketype, extends properties on simple
+	modules, compound modules, channels, submodules and connections are now
+	displaying all the possible types correctly. Cells contents are validated
+	so nonexistent types cannot be used.
+
+2010-12-17 Rudolf Hornig
+
+	* Fixed #230. The values for Type, Like and Extends property on a
+	submodule/connections/or NED type (top-level or inner) are initialized
+	correctly. They contain correct values according to the current lookup context.
+
+	* Cloning or creating new inner types using the graphical editor now
+	generates unique names correctly
+
+2010-12-16 Rudolf Hornig
+
+	* Changed the palette entry ordering in NED editor to include inner types
+	in the current file on the top.
+
+2010-12-15 Rudolf Hornig
+
+	* Fixed #229. In NED Editor: Inherited display property values can be
+	leared now using "-" as a value. It is possible now to remove an icon
+	even if the ancestor specified one.
+
+2010-12-14 Rudolf Hornig
+
+	* Fixed the tooltip of the "Display property" in the properties view. No longer displays null[0]
+
+2010-12-13 Rudolf Hornig
+
+	* Fixed bug#224. NPEs when cloning submodules with connections which are defined in an ancestor module.
+	* Fixed bug#227. NPE on upinning a submodule
+
+2010-12-11 Rudolf Hornig
+
+	* Added plugin customization to force workspace refresh on IDE startup.
+
+2010-12-11 Rudolf Hornig
+
+	* Fixed bug#213. NPE occurred in NedEditorLauncher if the filesystem and the
+	workspace got out of sync.
+
+2010-12-11 Andras Varga
+
+	* IDE: fix of bug #145: Open NED Type dialog comes up empty on first invocation
+	NedTypeSelectionDialog now contains a INedChangeListener, and any NED
+	change triggers a delayed update of the displayed list.
+
+	* IDE: fix for bug #223: bogus "X seems to be a hand-written makefile" message
+	when the makefile was deleted from the disk behind the IDE's back
+
+2010-12-10 Rudolf Hornig
+
+	* Changed the default OMNeT++ source code formatter profile to match the
+	current INET coding convention. Profile is using only spaces instead of
+	tabs for indentation.
+
+2010-12-10 Andras Varga
+
+	* IDE: fix for bug #222: Chinese comments become gibberish in NED files.
+	Solution: wherever possible, save files in the file's own encoding
+	(i.e. charset), using content.getBytes(ifile.getCharset()).
+
+2010-12-06 Rudolf Hornig
+
+	* IDE: Added a "Clean Selected Projects" menuitem to the project explorer context menu.
+	This item DOES NOT clean referred projects.
+
+2010-11-10 Rudolf Hornig
+
+	* Support for Profiling (in addition to Debug and Run modes). (enable to use linuxtools with valgrind)
+
+2010-10-19 Rudolf Hornig
+
+	* MachO64 parser support added for new CDT projects. Updated error parsers provided by CDT 7.x.
+
+2010-09-30 Rudolf Hornig
+
+	* Updated the base system to Eclipse 3.6.1
+
+2010-09-22 Andras Varga
+
+	* IDE: fixed resolution of parametric submodule types in NedTreeTraversal
+
+	* IDE: refined the resolution of parametric submodule types
+	The actual type needs to be resolved in the project of the inifile,
+	not in the project of the compound module that contains the submodule
+	(for example, udpApp's type need not be in StandardHost's project INET,
+	it may also come from a project that has INET as dependency)
+
+2010-07-13 Tamas Borbely
+
+	* Scave: Line type on vector chart did get reflected in the Chart Properties
+	dialog (issue 182). When the line property has the same value for each
+	selected line in the Properties dialog, then that value is displayed in
+	the control, instead of 'No change'.
+
+	* Scave: Empty chart if refreshing a temp chart after re-running simulation
+	(issue 186). When creating a temp chart, runs was identified by runname,
+	now they are identified by file/configname/runnumber.  'Add Selected Data
+	to Dataset' and 'Convert to Dataset' actions also use the file/configname/
+	runnumber fields for consistency.
+
+2010-07-19 Levente Meszaros
+
+	* SeqChart: Fixed a NPE.
+
+	* SeqChart: fix handling show/hide [self] message reuses toggle buttons
+	There was some confusion between those buttons, now they toggle showing/hidign
+	only for those arrows that they represent.
+
+	* SeqChart: fix message reuse arrows when affected by a module method call
+	The end point for a message reuse was wrong. It used the event's module of
+	the begin send entry instead of the context module to determine the Y coordinate.
+
+2010-07-13 Tamas Borbely
+
+	* fix issue 180: fixed assert when double coordinate is +-Infinite
+
+	* fix issue 196: use file/configname/runnumber to identify runs of temp chart data
+
+2010-07-13 Tamas Borbely
+
+	* BaseLineChartEditForm: fix issue 182
+	When the line property has the same value for each selected line,
+	then that value is displayed in the control instead of 'No change'.
+
+2010-07-12 Tamas Borbely
+
+	* small layout fix in BaseLineChartEditForm
+
+2010-07-08 Andras Varga
+
+	* Scave: fix focus problems (bug #188) by using the new FocusManager class
+
+2010-07-07 Andras Varga
+
+	* Scave: drawing timeouts come now from preferences
+
+	* Scave: time limit facility for line chart plotting
+
+	* Scave: removed smartMode in LinePlot as it was responsible for bug #181
+	Turning off symbols for DOTS line type resulted in empty chart.
+	http://dev.omnetpp.org/bugs/view.php?id=181
+
+	* SeqChart: axis ordering dialog layout improved: buttons move to the right
+
+	* SeqChart: fix: "Show self-messages" button (blue arched arrow) also toggled
+	self-reuse (green) arrows on the chart
+
+2010-06-23 Levente Meszaros
+
+	* Sequence Chart: Fix for find text bug. Find text did not work in filtered eventlogs.
+
+	* Cleanup the show/hide flags related to message send/reuse arrows.
+	A couple of renames and minor tweaks, namely arrows are categorized along
+	two axes: reuse/send, self/other.
+
+2010-06-22 Andras Varga
+
+	* Scave: fix unreadable (black-on-black) filter combo dropdown on ubuntu 10.04
+	in Ubuntu 10.04: in the default theme, combo editfield is black-on-white
+	and dropdown list is white-on-black, so calling setForeground() on the combo
+	will inevitably make one of them unreadable. Workaround: do NOT call
+	getForeground().
+
+2010-06-11  ------ omnetpp-4.1 released ------
+
+2010-05-31  ------ omnetpp-4.1rc2 released ------
+
+2010-04-20  ------ omnetpp-4.1b4 released ------
+
+2010-03-14  ------ omnetpp-4.1b3 released ------
+
+2009-08-03  Levente Meszaros
+
+	* Connection chooser brings up channel chooser when using the default
+	connection tool and there are matching labels between the connected
+	gates and an available channel type.
+
+	* Palette shows NED types in two distinct groups: the first contains
+	those which are related to the current editor ordered by score, the
+	second contains all available types ordered by name
+
+2009-07-17  Levente Meszaros
+
+	* Text editor provides new context menu items to infer/distribute gate labels.
+
+2009-07-15  Levente Meszaros
+
+	* Palette provides regexp based substring filtering for qualified NED
+	type names and @label properties.
+
+	* Palette sorts submodules based on what is actually already used, what
+	could be connected and @contains properties.
+
+2009-07-14  Levente Meszaros
+
+	* Added support for matching @labels properties of gates in the connection
+	chooser popup menu.
+
+2009-07-13  Levente Meszaros
+
+	* Added validation to parameters dialog, reserved NED words cannot be
+	parameter names, and parameter values must be valid expressions.
+
+2009-06-09  Levente Meszaros
+
+	* SEQCHART: Added sequence chart support to display module method calls
+	as vertical orange arrows. The arrow's label is the method's name,
+	tooltips are also available.
+
+	* Some message send arrows were drawn incorrectly from the caller module
+	due to not taking into consideration module method calls. From now on
+	these kind of arrows might start from any point on a module's axis,
+	even if there was no event at that simulation time in the callee module.
+
+	* Store various show/hide flags in sequence chart eventlog configuration files.
+
+2009-03-12  ------ omnetpp-4.0 released ------

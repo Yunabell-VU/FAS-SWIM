@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Generic Unix</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Build Options" href="ch-build-options.html" />
+    <link rel="prev" title="OpenSUSE" href="ch-opensuse.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="generic-unix">
+<h1>Generic Unix</h1>
+<section id="introduction">
+<h2>Introduction</h2>
+<p>This chapter provides additional information for installing OMNeT++ on Unix-like operating systems not specifically
+covered by this Installation Guide. The list includes FreeBSD, Solaris, and Linux distributions not covered in other
+chapters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In addition to Windows and macOS, the Simulation IDE will only work on Linux x86/arm 64-bit platforms. Other operating
+systems (FreeBSD, Solaris, etc.) and architectures may still be used as simulation platforms, without the IDE.</p>
+</div>
+</section>
+<section id="dependencies">
+<h2>Dependencies</h2>
+<p>The following packages are required for OMNeT++ to work:</p>
+<dl class="simple">
+<dt>build-essential, GNU make, gcc, g++, bison (3.0+), flex, perl, python3, xdg-utils</dt><dd><p>These packages are needed for compiling OMNeT++ and simulation models, and also for certain OMNeT++ tools to
+work.</p>
+</dd>
+</dl>
+<p>It is also recommended to install the <em>clang</em> and <em>lld</em> package as they provide faster compilation and linking.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may opt to use gcc instead of the clang compiler and/or use the system default linker instead of <em>lld</em> by setting
+the <code class="docutils literal notranslate"><span class="pre">PREFER_CLANG</span></code> and <code class="docutils literal notranslate"><span class="pre">PREFER_LLD</span></code> variables in the <em>configure.user</em> file. If you do not need the 3D
+visualization capabilities, you can disable them in the <em>configure.user</em> file, too.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The IDE requires GLIBC 2.28 version or later, so you will need at least Debian 10, RedHat 8 or Ubuntu 18.10 to run the IDE.</p>
+</div>
+<p>The following packages are strongly recommended, because their absence results in severe feature loss:</p>
+<dl class="simple">
+<dt>Qt 5.9 or later</dt><dd><p>Required by the Qtenv simulation runtime environment. You need the <em>devel</em> packages that include header files as
+well.</p>
+</dd>
+<dt>OpenSceneGraph (3.4+) and osgEarth (2.9+)</dt><dd><p>These packages will enable 3D visualization in Qtenv. You need the <em>devel</em> packages that include header files as
+well.</p>
+</dd>
+</dl>
+<p>The following packages are required if you want to take advantage of some advanced OMNeT++ features:</p>
+<dl class="simple">
+<dt>LibXML2</dt><dd><p>LibXML2 is needed for OMNeT++ to be able to DTD validate an XML file. The <em>devel</em> packages (that include the header
+files) are needed.</p>
+</dd>
+<dt>GraphViz, Doxygen</dt><dd><p>These packages are used by the NED documentation generation feature of the IDE. When they are missing, documentation
+will have less content.</p>
+</dd>
+<dt>MPI</dt><dd><p>openmpi or some other MPI implementation is required to support parallel simulation execution.</p>
+</dd>
+<dt>Akaroa</dt><dd><p>Implements Multiple Replications In Parallel (MRIP). Akaroa can be downloaded from the project’s website.</p>
+</dd>
+</dl>
+<p>The exact names of these packages may differ across distributions.</p>
+</section>
+<section id="determining-package-names">
+<h2>Determining Package Names</h2>
+<p>If you have a distro unrelated to the ones covered in this Installation Guide, you need to figure out what is the
+established way of installing packages on your system, and what are the names of the packages you need.</p>
+<section id="qt">
+<h3>Qt</h3>
+<p>If your platform does not have suitable Qt packages, you may still use OMNeT++ to run simulations from the command
+line. To disable the Qtenv runtime environment, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure WITH_QTENV=no
+</pre></div>
+</div>
+<p>This will prevent the build system to link with Qt libraries. It is also recommended if you are installing OMNeT++
+from a remote terminal session.</p>
+</section>
+<section id="mpi">
+<h3>MPI</h3>
+<p>OMNeT++ is not sensitive to the particular MPI implementation. You may use OpenMPI, or any other standards-compliant
+MPI package.</p>
+</section>
+</section>
+<section id="downloading-and-unpacking">
+<h2>Downloading and Unpacking</h2>
+<p>Download OMNeT++ from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select to download
+the generic archive, <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-core.tgz</span></code>.</p>
+<p>Copy the archive to the directory where you want to install it. This is usually your home directory, <code class="docutils literal notranslate"><span class="pre">/home/&lt;you&gt;</span></code>.
+Open a terminal, and extract the archive using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvfz omnetpp-6.0.1-core.tgz
+</pre></div>
+</div>
+<p>This will create an <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> subdirectory with the OMNeT++ files in it.</p>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables</h2>
+<p>In general OMNeT++ requires that certain environment variables are set and the
+<code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/bin</span></code> directory is in the PATH. Source the <code class="docutils literal notranslate"><span class="pre">setenv</span></code>
+script to set up all these variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd omnetpp-6.0.1
+$ source setenv
+</pre></div>
+</div>
+<p>To set the environment variables permanently, edit <code class="docutils literal notranslate"><span class="pre">.profile</span></code> or <code class="docutils literal notranslate"><span class="pre">.zprofile</span></code> in your home directory and
+add a line something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span> <span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">source</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use a shell other than bash, consult the man page of that shell to find out which startup file to edit, and
+how to set and export variables.</p>
+</div>
+</section>
+<section id="configuring-and-building-omnet">
+<h2>Configuring and Building OMNeT++</h2>
+<p>In the top-level OMNeT++ directory, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script detects installed software and configuration of your system. It writes the results into the
+<code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> file, which will be read by the makefiles during the build process.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/terminal-configuration.png"><img alt="../_images/terminal-configuration.png" src="../_images/terminal-configuration.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 151 </span><span class="caption-text">Configuring OMNeT++</span></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there is an error during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, the output may give hints about what went wrong. Scroll up to see the
+messages. (Use Shift+PgUp; you may need to increase the scrollback buffer size of the terminal and re-run
+<code class="docutils literal notranslate"><span class="pre">./configure</span></code>.) The script also writes a very detailed log of its operation into <code class="docutils literal notranslate"><span class="pre">config.log</span></code> to help track down
+errors. Since <code class="docutils literal notranslate"><span class="pre">config.log</span></code> is very long, it is recommended that you open it in an editor and search for phrases
+like <em>error</em> or the name of the package associated with the problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script tries to build and run small test programs that are using specific libraries or features of
+the system. You can check the <code class="docutils literal notranslate"><span class="pre">config.log</span></code> file to see which test program has failed and why. In most cases the
+problem is that the script cannot figure out the location of a specific library. Specifying the include file or
+library location in the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file and then re-running the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script usually solves the
+problem.</p>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">./configure</span></code> has finished, you can compile OMNeT++. Type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/terminal-make.png"><img alt="../_images/terminal-make.png" src="../_images/terminal-make.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 152 </span><span class="caption-text">Building OMNeT++</span></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To take advantage of multiple processor cores, add the <code class="docutils literal notranslate"><span class="pre">-j8</span></code> option (for 8 cores) to the <code class="docutils literal notranslate"><span class="pre">make</span></code> command line.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The build process will not write anything outside its directory, so no special privileges are needed.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The make command will seemingly compile everything twice. This is because both debug and optimized versions of the
+libraries are built. If you only want to build one set of the libraries, specify <code class="docutils literal notranslate"><span class="pre">MODE=debug</span></code> or <code class="docutils literal notranslate"><span class="pre">MODE=release</span></code>:</p>
+</div>
+</section>
+<section id="verifying-the-installation">
+<h2>Verifying the Installation</h2>
+<p>You can now verify that the sample simulations run correctly. For example, the aloha simulation is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the Qtenv environment. You should see nice gui windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2>Starting the IDE</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The IDE is supported only on 64-bit versions of Windows, macOS and Linux.</p>
+</div>
+<p>You can run the IDE by typing the following command in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/ide-initial.png"><img alt="../_images/ide-initial.png" src="../_images/ide-initial.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 153 </span><span class="caption-text">The Simulation IDE</span></p>
+</figcaption>
+</figure>
+<p>If you would like to be able to access the IDE from the application launcher or via a desktop shortcut, run one or both
+of the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install-menu-item
+$ make install-desktop-icon
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above commands assume that your system has the <code class="docutils literal notranslate"><span class="pre">xdg</span></code> commands, which most modern distributions do.</p>
+</div>
+</section>
+<section id="optional-packages">
+<h2>Optional Packages</h2>
+<section id="akaroa">
+<h3>Akaroa</h3>
+<p>If you wish to use Akaroa, it must be downloaded, compiled, and installed manually before installing OMNeT++.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of version 2.7.9, Akaroa only supports Linux and Solaris.</p>
+</div>
+<p>Download Akaroa 2.7.9 from: <a class="reference external" href="http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml">http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml</a></p>
+<p>Extract it into a temporary directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xfz akaroa-2.7.9.tar.gz
+</pre></div>
+</div>
+<p>Configure, build and install the Akaroa library. By default, it will be installed into the <code class="docutils literal notranslate"><span class="pre">/usr/local/akaroa</span></code>
+directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make
+$ sudo make install
+</pre></div>
+</div>
+<p>Go to the OMNeT++ directory, and (re-)run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script. Akaroa will be automatically detected if you
+installed it to the default location.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-generic-unix.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

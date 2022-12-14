@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Linux</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ubuntu" href="ch-ubuntu.html" />
+    <link rel="prev" title="macOS" href="ch-macos.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="linux">
+<h1>Linux</h1>
+<section id="supported-linux-distributions">
+<h2>Supported Linux Distributions</h2>
+<p>This chapter provides instructions for installing OMNeT++ on selected Linux distributions:</p>
+<ul class="simple">
+<li><p>Ubuntu 20.04 and 22.4 LTS</p></li>
+<li><p>Fedora Workstation 31</p></li>
+<li><p>Red Hat Enterprise Linux Desktop Workstation 8.x</p></li>
+<li><p>OpenSUSE Leap 15.3</p></li>
+</ul>
+<p>This chapter describes the overall process. Distro-specific information, such as how to install the prerequisite
+packages, are covered by distro-specific chapters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your Linux distribution is not listed above, you still may be able to use some distro-specific instructions in
+this Guide.</p>
+<p>Ubuntu derivatives (Ubuntu instructions may apply):</p>
+<ul class="simple">
+<li><p>Kubuntu, Xubuntu, Edubuntu, …</p></li>
+<li><p>Linux Mint</p></li>
+</ul>
+<p>Some Debian-based distros (Ubuntu instructions may apply, as Ubuntu itself is based on Debian):</p>
+<ul class="simple">
+<li><p>Knoppix and derivatives</p></li>
+<li><p>Mepis</p></li>
+</ul>
+<p>Some Fedora-based distros (Fedora instructions may apply):</p>
+<ul class="simple">
+<li><p>Simplis</p></li>
+<li><p>Eeedora</p></li>
+</ul>
+</div>
+</section>
+<section id="installing-the-prerequisite-packages">
+<h2>Installing the Prerequisite Packages</h2>
+<p>OMNeT++ requires several packages to be installed on the computer. These packages include the C++ compiler (gcc or
+clang) and several other libraries and programs. These packages can be installed from the software
+repositories of your Linux distribution.</p>
+<p><strong>See the chapter specific to your Linux distribution for instructions on installing the packages needed by OMNeT++.</strong></p>
+<p>Generally, you will need superuser permissions to install packages.</p>
+<p>Not all packages are available from software repositories; some (optional) ones need to be downloaded separately from
+their web sites, and installed manually. See the section <em>Additional Packages</em> later in this chapter.</p>
+</section>
+<section id="downloading-and-unpacking">
+<h2>Downloading and Unpacking</h2>
+<p>Download OMNeT++ from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select to download
+the Linux specific archive, <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-linux-x86_64.tgz</span></code>.</p>
+<p>Copy the archive to the directory where you want to install it. This is usually your home directory, <code class="docutils literal notranslate"><span class="pre">/home/&lt;you&gt;</span></code>.
+Open a terminal, and extract the archive using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvfz omnetpp-6.0.1-linux-x86_64.tgz
+</pre></div>
+</div>
+<p>This will create an <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> subdirectory with the OMNeT++ files in it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On how to open a terminal on your Linux installation, see the chapter specific to your Linux distribution.</p>
+</div>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables</h2>
+<p>In general OMNeT++ requires that certain environment variables are set and the
+<cite>omnetpp-6.0.1/bin</cite> directory is in the PATH. Source the <cite>setenv</cite>
+script to set up all these variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd omnetpp-6.0.1
+$ source setenv
+</pre></div>
+</div>
+<p>To set the environment variables permanently, edit <code class="docutils literal notranslate"><span class="pre">.profile</span></code> or <code class="docutils literal notranslate"><span class="pre">.zprofile</span></code> in your home directory and
+add a line something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span> <span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">source</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use a shell other than bash, consult the man page of that shell to find out which startup file to edit, and
+how to set and export variables.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use a shell other than <em>bash</em>, consult the man page of that shell to find out which startup file to edit, and
+how to set and export variables.</p>
+<p>Note that all Linux distributions covered in this Installation Guide use <em>bash</em> unless the user has explicitly
+selected another shell.</p>
+</div>
+</section>
+<section id="configuring-and-building-omnet">
+<h2>Configuring and Building OMNeT++</h2>
+<p>In the top-level OMNeT++ directory, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script detects installed software and configuration of your system. It writes the results into the
+<code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> file, which will be read by the makefiles during the build process.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/terminal-configuration.png"><img alt="../_images/terminal-configuration.png" src="../_images/terminal-configuration.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 145 </span><span class="caption-text">Configuring OMNeT++</span></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there is an error during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, the output may give hints about what went wrong. Scroll up to see the
+messages. (Use Shift+PgUp; you may need to increase the scrollback buffer size of the terminal and re-run
+<code class="docutils literal notranslate"><span class="pre">./configure</span></code>.) The script also writes a very detailed log of its operation into <code class="docutils literal notranslate"><span class="pre">config.log</span></code> to help track down
+errors. Since <code class="docutils literal notranslate"><span class="pre">config.log</span></code> is very long, it is recommended that you open it in an editor and search for phrases
+like <em>error</em> or the name of the package associated with the problem.</p>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">./configure</span></code> has finished, you can compile OMNeT++. Type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/terminal-make.png"><img alt="../_images/terminal-make.png" src="../_images/terminal-make.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 146 </span><span class="caption-text">Building OMNeT++</span></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To take advantage of multiple processor cores, add the <code class="docutils literal notranslate"><span class="pre">-j8</span></code> option to the <code class="docutils literal notranslate"><span class="pre">make</span></code> command line.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The build process will not write anything outside its directory, so no special privileges are needed.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The make command will seemingly compile everything twice. This is because both debug and optimized versions of the
+libraries are built. If you only want to build one set of the libraries, specify <code class="docutils literal notranslate"><span class="pre">MODE=debug</span></code> or <code class="docutils literal notranslate"><span class="pre">MODE=release</span></code>:</p>
+</div>
+</section>
+<section id="verifying-the-installation">
+<h2>Verifying the Installation</h2>
+<p>You can now verify that the sample simulations run correctly. For example, the aloha simulation is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the Qtenv environment. You should see nice gui windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2>Starting the IDE</h2>
+<p>You can launch the OMNeT++ Simulation IDE by typing the following command in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/ide-initial.png"><img alt="../_images/ide-initial.png" src="../_images/ide-initial.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 147 </span><span class="caption-text">The Simulation IDE</span></p>
+</figcaption>
+</figure>
+<p>If you would like to be able to access the IDE from the application launcher or via a desktop shortcut, run one or both
+of the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install-menu-item
+$ make install-desktop-icon
+</pre></div>
+</div>
+<p>Or add a shortcut that points to the <code class="docutils literal notranslate"><span class="pre">omnetpp</span></code> program in the <code class="docutils literal notranslate"><span class="pre">ide</span></code> subdirectory by other means, for example using
+the Linux desktop’s context menu.</p>
+</section>
+<section id="using-the-ide">
+<h2>Using the IDE</h2>
+<p>When you try to build a project in the IDE, you may get the following warning message:</p>
+<blockquote>
+<div><p>Toolchain “…” is not supported on this platform or installation. Please go to the Project menu, and activate a
+different build configuration. (You may need to switch to the C/C++ perspective first, so that the required menu
+items appear in the Project menu.)</p>
+</div></blockquote>
+<p>If you encounter this message, choose <em>Project &gt; Properties &gt; C/C++ Build &gt; Tool Chain Editor &gt; Current toolchain &gt;
+GCC for OMNeT++</em>.</p>
+<p>The IDE is documented in detail in the <em>User Guide</em>.</p>
+</section>
+<section id="reconfiguring-the-libraries">
+<h2>Reconfiguring the Libraries</h2>
+<p>If you need to recompile the OMNeT++ components with different flags (e.g. different optimization), then change the
+top-level OMNeT++ directory, edit <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> accordingly, then type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make cleanall
+$ make
+</pre></div>
+</div>
+<p>If you want to recompile just a single library, then change to the directory of the library (e.g. <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">src/sim</span></code>) and
+type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean
+$ make
+</pre></div>
+</div>
+<p>By default, libraries are compiled in both debug and release mode. If you want to make release or debug builds only,
+use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=release
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=debug
+</pre></div>
+</div>
+<p>By default, shared libraries will be created. If you want to build static libraries, set <code class="docutils literal notranslate"><span class="pre">SHARED_LIBS=no</span></code> in
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code> and re-configure your project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For detailed description of all options please read the <em>Build Options</em> chapter.</p>
+</div>
+</section>
+<section id="additional-packages">
+<h2>Additional Packages</h2>
+<p>Note that at this point, MPI, Doxygen and GraphViz have been installed as part of the prerequisites.</p>
+<section id="qtenv">
+<h3>Qtenv</h3>
+<p>OMNeT++ comes with a Qt based runtime environment that supports also 3D visualization. The new environment can be
+disabled by the WITH_QTENV=no variable in the configure.user file and then running <code class="docutils literal notranslate"><span class="pre">./configure</span></code>.</p>
+</section>
+<section id="akaroa">
+<h3>Akaroa</h3>
+<p>Linux distributions do not contain the Akaroa package. It must be downloaded, compiled and installed manually before
+installing OMNeT++.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of version 2.7.9, Akaroa only supports Linux and Solaris.</p>
+</div>
+<p>Download Akaroa 2.7.9 from: <a class="reference external" href="http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml">http://www.cosc.canterbury.ac.nz/research/RG/net_sim/simulation_group/akaroa/download.chtml</a></p>
+<p>Extract it into a temporary directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xfz akaroa-2.7.9.tar.gz
+</pre></div>
+</div>
+<p>Configure, build and install the Akaroa library. By default, it will be installed into the <code class="docutils literal notranslate"><span class="pre">/usr/local/akaroa</span></code>
+directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make
+$ sudo make install
+</pre></div>
+</div>
+<p>Go to the OMNeT++ directory, and (re-)run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script. Akaroa will be automatically detected if you
+installed it to the default location.</p>
+</section>
+<section id="nemiver">
+<h3>Nemiver</h3>
+<p>Nemiver is the default debugger for the OMNeT++ just-in-time debugging facility (see the
+<code class="docutils literal notranslate"><span class="pre">debugger-attach-on-startup</span></code> and <code class="docutils literal notranslate"><span class="pre">debugger-attach-on-error</span></code> configuration options). Nemiver can be installed via the
+package manager in most Linux distros. For example, on Ubuntu and other Debian-based distros you can install it by the
+following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install nemiver
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-supported-linux.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Build Options</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Overview of the OMNeT++ IDE" href="../ide-overview/ide-overview.html" />
+    <link rel="prev" title="Generic Unix" href="ch-generic-unix.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="build-options">
+<h1>Build Options</h1>
+<section id="configure-user-options">
+<h2>Configure.user Options</h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file contains several options that can be used to fine-tune the simulation libraries.</p>
+<p>You always need to re-run the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script in the installation root after changing the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>After this step, you have to remove all previous libraries and recompile OMNeT++:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make cleanall
+$ make
+</pre></div>
+</div>
+<p>Options:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">PREFER_CLANG=no</span></code></dt><dd><p>If both <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">clang</span></code> are installed on your system, setting this variable to <code class="docutils literal notranslate"><span class="pre">no</span></code> will force the configure
+script to use <code class="docutils literal notranslate"><span class="pre">gcc</span></code> as C++ compiler.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;COMPONENTNAME&gt;_CFLAGS</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;COMPONENTNAME&gt;_LIBS</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file contains variables for defining the compile and link options needed by various external
+libraries. By default, the <code class="docutils literal notranslate"><span class="pre">configure</span></code> command detects these automatically, but you may override the auto detection
+by specifying the values by hand. (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;COMP&gt;_CFLAGS=-I/path/to/comp/includedir</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;COMP&gt;_LIBS=-L/path/to/comp/libdir</span> <span class="pre">-lnameoflib</span></code>.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WITH_PARSIM=no</span></code></dt><dd><p>Use this variable to explicitly disable parallel simulation support in OMNeT++.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WITH_NETBUILDER=no</span></code></dt><dd><p>This option allows you to leave out the NED language parser and the network builder. (This is needed only if you are
+building your network with C++ API calls and you do not use the built-in NED language parser at all.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WITH_QTENV=no</span></code></dt><dd><p>This will prevent the build system to link with the Qt libraries. Use this option if your platform does not have a
+suitable Qt package or you will run the simulation only in command line mode. (i.e. You want to run OMNeT++ in a
+remote terminal session.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WITH_OSG=no</span></code></dt><dd><p>This will prevent the build system to use OpenScreenGraph which is used for 3D visualization in Qtenv.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WITH_OSGEARTH=no</span></code></dt><dd><p>This will prevent the build system to use osgEarth which is used for 2D/3D mapping and visualization in Qtenv.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CFLAGS_[RELEASE/DEBUG]</span></code></dt><dd><p>To change the compiler command line options the build process is using, you should specify them in the
+<code class="docutils literal notranslate"><span class="pre">CFLAGS_RELEASE</span></code> and <code class="docutils literal notranslate"><span class="pre">CFLAGS_DEBUG</span></code> variables. By default, the flags required for debugging or optimization are
+detected automatically by the <code class="docutils literal notranslate"><span class="pre">configure</span></code> script. If you set them manually, you should specify all options you
+need. It is recommended to check what options are detected automatically (check the <code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> after running
+<code class="docutils literal notranslate"><span class="pre">configure</span></code> and look for the <code class="docutils literal notranslate"><span class="pre">CFLAGS_[RELEASE/DEBUG]</span></code> variables.) and add/modify those options manually in the
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code></dt><dd><p>Linker command line options can be explicitly set using this variable. It is recommended to check what options are
+detected automatically (check the <code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> after running <code class="docutils literal notranslate"><span class="pre">configure</span></code> and look for the <code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code>
+variable.) and add/modify those options manually in the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHARED_LIBS</span></code></dt><dd><p>This variable controls whether the OMNeT++ build process will create static or dynamic libraries. By default, the
+OMNeT++ runtime is built as a set of shared libraries. If you want to build a single executable from your
+simulation, specify <code class="docutils literal notranslate"><span class="pre">SHARED_LIBS=no</span></code> in <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> to create static OMNeT++ libraries and then
+reconfigure (<code class="docutils literal notranslate"><span class="pre">./configure</span></code>) and recompile OMNeT++ (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanall;</span> <span class="pre">make</span></code>). Once the OMNeT++ static libraries
+are correctly built, your own project have to be rebuilt, too. You will get a single, statically linked executable,
+which requires only the NED and INI files to run.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is important to completely delete the OMNeT++ libraries (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">cleanall</span></code>) and then rebuild them, otherwise it
+cannot be guaranteed that the created simulations are linked against the correct libraries.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">USE_DOUBLE_SIMTIME</span></code> and <code class="docutils literal notranslate"><span class="pre">WITHOUT_CPACKET</span></code> options are no longer supported. They were introduced in OMNeT++
+4.0 to help porting model code from OMNeT++ 3.x, and having fulfilled their role, they were removed in OMNeT++
+5.0. If you still have old model code to port, use OMNeT++ 4.x.</p>
+</div>
+</section>
+<section id="moving-the-installation">
+<h2>Moving the Installation</h2>
+<p>When you build OMNeT++ on your machine, several directory names are compiled into the binaries. This makes it easier
+to set up OMNeT++ in the first place, but if you rename the installation directory or move it to another location in
+the file system, the built-in paths become invalid and the correct paths have to be supplied via environment variables.</p>
+<p>The following environment variables are affected (in addition to <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, which also needs to be adjusted):</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">OMNETPP_IMAGE_PATH</span></code></dt><dd><p>This variable contains the list of directories where Qtenv looks for icons. Set it to point to the <code class="docutils literal notranslate"><span class="pre">images/</span></code>
+subdirectory of your OMNeT++ installation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code></dt><dd><p>This variable contains the list of additional directories where shared libraries are looked for. Initially,
+<code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> is not needed because shared libraries are located via the <em>rpath</em> mechanism. When you move the
+installation, you need to add the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> subdirectory of your OMNeT++ installation to <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On macOS, <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH</span></code> is used instead of <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>. On Windows, the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable must
+contain the directory where shared libraries (DLLs) are present.</p>
+</div>
+</section>
+<section id="using-different-compilers">
+<h2>Using Different Compilers</h2>
+<p>By default, the configure script detects the following compilers automatically in the path:</p>
+<ul class="simple">
+<li><p>Intel compiler (icc, icpc)</p></li>
+<li><p>GNU C/C++ (gcc, g++)</p></li>
+<li><p>Clang (clang, clang++)</p></li>
+<li><p>Clang/C2 (from Microsoft Visual Studio)</p></li>
+<li><p>Sun Studio (cc, cxx)</p></li>
+<li><p>IBM compiler (xlc, xlC)</p></li>
+</ul>
+<p>If you want to use compilers other than the above ones, you should specify the compiler name in the <code class="docutils literal notranslate"><span class="pre">CC</span></code> and <code class="docutils literal notranslate"><span class="pre">CXX</span></code>
+variables, and re-run the configuration script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Different compilers may have different command line options. If you use a compiler other than the default <code class="docutils literal notranslate"><span class="pre">gcc</span></code>,
+you may have to revise the <code class="docutils literal notranslate"><span class="pre">CFLAGS_[RELEASE/DEBUG]</span></code> and <code class="docutils literal notranslate"><span class="pre">LDFLAGS</span></code> variables.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-build-options.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

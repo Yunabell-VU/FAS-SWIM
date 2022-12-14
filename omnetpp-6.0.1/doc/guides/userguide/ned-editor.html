@@ -1,0 +1,1092 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Editing NED Files &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Editing INI Files" href="ini-editor.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#userguide/ned-editor" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Editing NED Files </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">User Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">User Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="intro.html" class="md-nav__link">Introduction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Editing NED Files </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Editing NED Files</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-ned-editor--page-root" class="md-nav__link">Editing NED Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#overview" class="md-nav__link">Overview</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-older-ned-files" class="md-nav__link">Opening Older NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-new-ned-files" class="md-nav__link">Creating New NED Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#ned-source-folders" class="md-nav__link">NED Source Folders</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#using-the-ned-editor" class="md-nav__link">Using the NED Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#editing-in-graphical-mode" class="md-nav__link">Editing in Graphical Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#creating-modules" class="md-nav__link">Creating Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-types-and-inner-types" class="md-nav__link">Creating Types and Inner Types</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-and-changing-connections" class="md-nav__link">Creating and Changing Connections</a>
+        </li>
+        <li class="md-nav__item"><a href="#reconnecting-modules" class="md-nav__link">Reconnecting Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#selecting-elements" class="md-nav__link">Selecting Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#undo-redo-deleting-elements" class="md-nav__link">Undo, Redo, Deleting Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#moving-and-resizing-elements" class="md-nav__link">Moving and Resizing Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#copying-elements" class="md-nav__link">Copying Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#zooming" class="md-nav__link">Zooming</a>
+        </li>
+        <li class="md-nav__item"><a href="#pinning-unpinning-re-layouting" class="md-nav__link">Pinning, Unpinning, Re-Layouting</a>
+        </li>
+        <li class="md-nav__item"><a href="#changing-a-module-property" class="md-nav__link">Changing a Module Property</a>
+        </li>
+        <li class="md-nav__item"><a href="#changing-a-module-parameter" class="md-nav__link">Changing a Module Parameter</a>
+        </li>
+        <li class="md-nav__item"><a href="#renaming-modules" class="md-nav__link">Renaming Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#exporting-a-module-as-an-image" class="md-nav__link">Exporting a Module as an Image</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-a-ned-type" class="md-nav__link">Opening a NED Type</a>
+        </li>
+        <li class="md-nav__item"><a href="#setting-properties" class="md-nav__link">Setting Properties</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#editing-in-source-mode" class="md-nav__link">Editing in Source Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basic-functions" class="md-nav__link">Basic Functions</a>
+        </li>
+        <li class="md-nav__item"><a href="#converting-to-the-new-ned-syntax" class="md-nav__link">Converting to the New NED Syntax</a>
+        </li>
+        <li class="md-nav__item"><a href="#view-documentation" class="md-nav__link">View Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#searching-in-ned-files" class="md-nav__link">Searching in NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#organizing-imports" class="md-nav__link">Organizing Imports</a>
+        </li>
+        <li class="md-nav__item"><a href="#cleaning-up-ned-files" class="md-nav__link">Cleaning Up NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#formatting-the-source-code" class="md-nav__link">Formatting the Source Code</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Navigation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#other-features" class="md-nav__link">Other Features</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#exporting-images" class="md-nav__link">Exporting Images</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#associated-views" class="md-nav__link">Associated Views</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#property-view" class="md-nav__link">Property View</a>
+        </li>
+        <li class="md-nav__item"><a href="#palette-view" class="md-nav__link">Palette View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li>
+        <li class="md-nav__item"><a href="#ned-inheritance-view" class="md-nav__link">NED Inheritance View</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-hierarchy-view" class="md-nav__link">Module Hierarchy View</a>
+        </li>
+        <li class="md-nav__item"><a href="#parameters-view" class="md-nav__link">Parameters View</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/ned-editor.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ini-editor.html" class="md-nav__link">Editing INI Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="msg-editor.html" class="md-nav__link">Editing Message Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="cpp-development.html" class="md-nav__link">C++ Development</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="launcher.html" class="md-nav__link">Launching and Debugging</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="qtenv.html" class="md-nav__link">The Qtenv Graphical Runtime Environment</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="sequence-chart.html" class="md-nav__link">Sequence Charts</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="result-analysis.html" class="md-nav__link">Analyzing the Results</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="neddoc.html" class="md-nav__link">NED Documentation Generator</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ide-extensions.html" class="md-nav__link">Extending the IDE</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-ned-editor--page-root" class="md-nav__link">Editing NED Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#overview" class="md-nav__link">Overview</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-older-ned-files" class="md-nav__link">Opening Older NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-new-ned-files" class="md-nav__link">Creating New NED Files</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#ned-source-folders" class="md-nav__link">NED Source Folders</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#using-the-ned-editor" class="md-nav__link">Using the NED Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#editing-in-graphical-mode" class="md-nav__link">Editing in Graphical Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#creating-modules" class="md-nav__link">Creating Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-types-and-inner-types" class="md-nav__link">Creating Types and Inner Types</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-and-changing-connections" class="md-nav__link">Creating and Changing Connections</a>
+        </li>
+        <li class="md-nav__item"><a href="#reconnecting-modules" class="md-nav__link">Reconnecting Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#selecting-elements" class="md-nav__link">Selecting Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#undo-redo-deleting-elements" class="md-nav__link">Undo, Redo, Deleting Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#moving-and-resizing-elements" class="md-nav__link">Moving and Resizing Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#copying-elements" class="md-nav__link">Copying Elements</a>
+        </li>
+        <li class="md-nav__item"><a href="#zooming" class="md-nav__link">Zooming</a>
+        </li>
+        <li class="md-nav__item"><a href="#pinning-unpinning-re-layouting" class="md-nav__link">Pinning, Unpinning, Re-Layouting</a>
+        </li>
+        <li class="md-nav__item"><a href="#changing-a-module-property" class="md-nav__link">Changing a Module Property</a>
+        </li>
+        <li class="md-nav__item"><a href="#changing-a-module-parameter" class="md-nav__link">Changing a Module Parameter</a>
+        </li>
+        <li class="md-nav__item"><a href="#renaming-modules" class="md-nav__link">Renaming Modules</a>
+        </li>
+        <li class="md-nav__item"><a href="#exporting-a-module-as-an-image" class="md-nav__link">Exporting a Module as an Image</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-a-ned-type" class="md-nav__link">Opening a NED Type</a>
+        </li>
+        <li class="md-nav__item"><a href="#setting-properties" class="md-nav__link">Setting Properties</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#editing-in-source-mode" class="md-nav__link">Editing in Source Mode</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basic-functions" class="md-nav__link">Basic Functions</a>
+        </li>
+        <li class="md-nav__item"><a href="#converting-to-the-new-ned-syntax" class="md-nav__link">Converting to the New NED Syntax</a>
+        </li>
+        <li class="md-nav__item"><a href="#view-documentation" class="md-nav__link">View Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#searching-in-ned-files" class="md-nav__link">Searching in NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#organizing-imports" class="md-nav__link">Organizing Imports</a>
+        </li>
+        <li class="md-nav__item"><a href="#cleaning-up-ned-files" class="md-nav__link">Cleaning Up NED Files</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#formatting-the-source-code" class="md-nav__link">Formatting the Source Code</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Navigation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#other-features" class="md-nav__link">Other Features</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#exporting-images" class="md-nav__link">Exporting Images</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#associated-views" class="md-nav__link">Associated Views</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#property-view" class="md-nav__link">Property View</a>
+        </li>
+        <li class="md-nav__item"><a href="#palette-view" class="md-nav__link">Palette View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li>
+        <li class="md-nav__item"><a href="#ned-inheritance-view" class="md-nav__link">NED Inheritance View</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-hierarchy-view" class="md-nav__link">Module Hierarchy View</a>
+        </li>
+        <li class="md-nav__item"><a href="#parameters-view" class="md-nav__link">Parameters View</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/ned-editor.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="editing-ned-files">
+<h1 id="userguide-ned-editor--page-root">Editing NED Files<a class="headerlink" href="#userguide-ned-editor--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="overview">
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>When you double-click a <code class="file docutils literal notranslate"><span class="pre">.ned</span></code> file in the IDE, it will open in the NED editor. The new NED editor is a dual-mode
+editor. In the editor’s graphical mode, you can edit the network using the mouse. The textual mode allows you to work
+directly on the NED source.</p>
+<p>When the IDE detects errors in a NED file, the problem will be flagged with an error marker in the <span class="guilabel">Project
+Explorer</span> and the <span class="guilabel">Problems View</span> will be updated to show the description and location of the problem. In
+addition, error markers will appear in the text window or on the graphical representation of the problematic component.
+Opening a NED file which contains an error will open the file in text mode. Switching to graphical mode is possible only
+if the NED file is syntactically correct.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As a side effect, if there are two modules with the same name and package in related projects, they will collide and
+both will be marked with an error. Furthermore, the name will be treated as undefined and any other modules depending
+on it will also generate an error (thus, a “no such module type” error may mean that there are actually multiple
+definitions which nullify each other).</p>
+</div>
+</section>
+<section id="opening-older-ned-files">
+<h2 id="opening-older-ned-files">Opening Older NED Files<a class="headerlink" href="#opening-older-ned-files" title="Permalink to this headline">¶</a></h2>
+<p>The syntax of NED files has changed significantly from the 3.x version. The NED editor primarily supports the new
+syntax. However, it is still possible to read and display NED files with the old syntax. It is important to note that
+many of the advanced features (syntax highlighting, content assistance, etc.) will not work with the old syntax. There
+is automatic conversion from the old syntax to the new, available both from the NED editor and as an external utility
+program (<strong class="command">opp_nedtool</strong>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gned</span></code> program from OMNeT++ 3.x viewed NED files in isolation. In contrast, the OMNeT++ IDE gathers information
+from all <code class="docutils literal notranslate"><span class="pre">.ned</span></code> files in all open OMNeT++ projects and makes this information available to the NED editor. This is
+necessary because OMNeT++ 4.x modules may inherit parameters, visual appearance or even submodules and connections from
+other modules, so it is only possible to display a compound module correctly if all related NED definitions are
+available.</p>
+</section>
+<section id="creating-new-ned-files">
+<h2 id="creating-new-ned-files">Creating New NED Files<a class="headerlink" href="#creating-new-ned-files" title="Permalink to this headline">¶</a></h2>
+<p>Once you have an empty OMNeT++ project, you can create new NED files. Choosing <span class="menuselection">File ‣ New ‣ Network Description
+File</span> from the menu will bring up a wizard where you can specify the target directory and the file/module name. You may
+choose to create an empty NED file, a simple/compound module, or a network. Once you press the <span class="guilabel">Finish</span>
+button, a new NED file will be created with the requested content.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/NED-NewWizard.png"><img alt="../_images/NED-NewWizard.png" src="../_images/NED-NewWizard.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Creating a new NED file</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure that the NED file and the contained module have the same name. For example, a compound module named
+<code class="docutils literal notranslate"><span class="pre">Wireless42</span></code> should be defined within its own <code class="docutils literal notranslate"><span class="pre">Wireless42.ned</span></code> file.</p>
+</div>
+<section id="ned-source-folders">
+<h3 id="ned-source-folders">NED Source Folders<a class="headerlink" href="#ned-source-folders" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to specify which folders the IDE should scan for NED files and that the IDE will use as the base
+directory for your NED package hierarchy. The IDE will not use any NED files outside the specified NED Source Folders
+and those files will be opened in a standard text editor. To specify the directory where the NED files will be stored,
+right-click on the project in the <span class="guilabel">Project Explorer</span> and choose <span class="guilabel">Properties</span>. Select the
+<span class="menuselection">OMNeT++ ‣ NED Source Folders</span> page and click on the folders where you store your NED files. The default
+value is the project root.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/NED-SourceFolders.png"><img alt="../_images/NED-SourceFolders.png" src="../_images/NED-SourceFolders.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Specifying which folder will hold your NED files</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="using-the-ned-editor">
+<h2 id="using-the-ned-editor">Using the NED Editor<a class="headerlink" href="#using-the-ned-editor" title="Permalink to this headline">¶</a></h2>
+<p>If you want to open an NED file, just double-click its icon in the <span class="guilabel">Project Explorer</span>. If the NED file can be
+parsed without an error, the graphical representation of the file will be opened; otherwise, the text view will be
+opened and the text will be annotated with error markers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Only files located in NED Source Folders will be opened with the graphical editor. If a NED file is not in the NED
+Source Folders, it will be opened in a standard text editor.</p>
+</div>
+<p>You can switch between graphical and source editing mode by clicking the tabs at the bottom of the editor, or by using
+the <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">PGUP</kbd></kbd> / <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">PGDN</kbd></kbd> key combinations. The editor will try to keep the selection during the switch.
+Selecting an element in a graphical view and then switching to text view will move the cursor to the related element
+in the NED file. When switching back to graphical view, the graphical editor will try to select the element that
+corresponds to the cursor location in the NED source. This allows you to keep the context, even when switching
+back and forth.</p>
+<section id="editing-in-graphical-mode">
+<h3 id="editing-in-graphical-mode">Editing in Graphical Mode<a class="headerlink" href="#editing-in-graphical-mode" title="Permalink to this headline">¶</a></h3>
+<p>The graphical editor displays the visible elements of the loaded NED file. Simple modules, compound modules and networks
+are represented by figures or icons. Each NED file can contain more than one module or network. If it does, the
+corresponding figures will appear in the same order as they are found in the NED file.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Place only a single module or network into an NED file, and name the file according to the module name.</p>
+</div>
+<p>Simple modules and submodules are represented as icons while compound modules and networks are displayed as rectangles
+where other submodules can be dropped. Connections between submodules are represented either by lines or arrows
+depending on whether the connection was uni- or bi-directional. Submodules can be dragged or resized using the mouse and
+connected by using the Connection Tool in the palette.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/NED-GraphEditor.png"><img alt="../_images/NED-GraphEditor.png" src="../_images/NED-GraphEditor.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Graphical NED Editor</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The palette is normally to the right of the editor area. The upper part of the palette contains the basic tools:
+selector, connection selector, and the connection creator tool. To use a palette item, simply click on it. Then, click
+in the module where you want to place/activate it. The mouse pointer will give you feedback as to whether the requested
+operation is allowed. The middle part of the toolbox contains the basic elements that can be placed at the top level in
+a NED file (simple module, compound module, interface, channel, etc.) and a “generic” submodule. Click on any of these
+and then click into the editor area to create an instance. The bottom part of the palette contains all module types that
+can be instantiated as a submodule. They are shortcuts for creating a generic submodule and then modifying its type.
+They will display the default icon (if any) and a short description if you hover the mouse over them. You may configure
+the palette by right-clicking on a button and selecting <span class="guilabel">Settings</span> or filter its content by selecting
+<span class="guilabel">Select Packages</span></p>
+<p>Right-clicking any element in the edited NED file will bring up a context menu that allows several actions like changing
+the icon, pinning/unpinning a submodule, re-layouting a compound module, or deleting/renaming the element. There are
+also items to activate various views. For example, the <span class="guilabel">Properties View</span> allows you to edit properties of the
+element.</p>
+<p>Hovering over an element will display its documentation (the comment in the NED source above the definition) as a
+tooltip. Pressing <kbd class="kbd docutils literal notranslate">F2</kbd> will make the tooltip window persistent, so it can be resized and scrolled for more convenient
+reading.</p>
+<section id="creating-modules">
+<h4 id="creating-modules">Creating Modules<a class="headerlink" href="#creating-modules" title="Permalink to this headline">¶</a></h4>
+<p>To create a module or a submodule, click on the appropriate palette item and then click where you want to place the new
+element. Submodules can be placed only inside compound modules or networks.</p>
+</section>
+<section id="creating-types-and-inner-types">
+<h4 id="creating-types-and-inner-types">Creating Types and Inner Types<a class="headerlink" href="#creating-types-and-inner-types" title="Permalink to this headline">¶</a></h4>
+<p>To create a type, or an inner type inside a compound module, click on the appropriate palette item in the “Types”
+drawer, and then click where you want to place the new element. If you click on the background, a new top-level type
+will be created. Clicking on an existing compound module or network creates an inner type inside that module.</p>
+</section>
+<section id="creating-and-changing-connections">
+<h4 id="creating-and-changing-connections">Creating and Changing Connections<a class="headerlink" href="#creating-and-changing-connections" title="Permalink to this headline">¶</a></h4>
+<p>Select the <span class="guilabel">connection tool</span> (if there are channels defined in the project, you can use the dropdown to select
+the connection channel type). First, click the source module and then, the destination. A popup menu will appear, asking
+which gates should be connected on the two selected modules. The tool will offer only valid connections (e.g. it will
+not offer to connect two output gates).</p>
+</section>
+<section id="reconnecting-modules">
+<h4 id="reconnecting-modules">Reconnecting Modules<a class="headerlink" href="#reconnecting-modules" title="Permalink to this headline">¶</a></h4>
+<p>Clicking and dragging a connection end point to another module will reconnect it (optionally, asking which gate should
+be connected). If you want to change only the gate, drag the connection end point and drop it over the original module.
+A popup will appear asking for the source or destination gate.</p>
+</section>
+<section id="selecting-elements">
+<h4 id="selecting-elements">Selecting Elements<a class="headerlink" href="#selecting-elements" title="Permalink to this headline">¶</a></h4>
+<p>Selecting an element is done by clicking on it or by dragging a rectangle over the target modules. A compound module can
+be selected by clicking on its border or title. If you want to select only connections within a selection rectangle, use
+the <span class="guilabel">connection selector</span> tool in the dropdown menu of the <span class="guilabel">connection tool</span> . The <kbd class="kbd docutils literal notranslate">Ctrl</kbd> and <kbd class="kbd docutils literal notranslate">Shift</kbd>
+keys can be used to add/remove to/from the current selection. Note that the keyboard (arrow keys) can also be used to
+navigate between submodules. You can also select using a selection rectangle by dragging the mouse around the modules.</p>
+</section>
+<section id="undo-redo-deleting-elements">
+<h4 id="undo-redo-deleting-elements">Undo, Redo, Deleting Elements<a class="headerlink" href="#undo-redo-deleting-elements" title="Permalink to this headline">¶</a></h4>
+<p>Use <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd> and <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Y</kbd></kbd> for undo and redo, respectively, and the <kbd class="kbd docutils literal notranslate">DEL</kbd> key for deletion. These
+functions are also available in the <span class="guilabel">Edit</span> menu and in the context menu of the selected element.</p>
+</section>
+<section id="moving-and-resizing-elements">
+<h4 id="moving-and-resizing-elements">Moving and Resizing Elements<a class="headerlink" href="#moving-and-resizing-elements" title="Permalink to this headline">¶</a></h4>
+<p>You can move/resize the selected elements with the mouse. Holding down <kbd class="kbd docutils literal notranslate">Shift</kbd> during move will perform a constrained
+(horizontal, diagonal or vertical) move operation. <kbd class="kbd docutils literal notranslate">Shift</kbd> + resize will keep the aspect ratio of the element.</p>
+<p>If you turn on <span class="guilabel">Snap to Geometry</span> in the <span class="guilabel">View</span> menu, helper lines will appear to help you align
+with other modules. Selecting more than one submodule activates the <span class="guilabel">Alignment</span> menu (found both in the
+<span class="guilabel">View</span> menu and in the context menu).</p>
+</section>
+<section id="copying-elements">
+<h4 id="copying-elements">Copying Elements<a class="headerlink" href="#copying-elements" title="Permalink to this headline">¶</a></h4>
+<p>Holding down <kbd class="kbd docutils literal notranslate">Ctrl</kbd> while dragging will clone the module(s). Copy/Paste can also be used both on single modules and with
+group selection.</p>
+</section>
+<section id="zooming">
+<h4 id="zooming">Zooming<a class="headerlink" href="#zooming" title="Permalink to this headline">¶</a></h4>
+<p>Zooming in and out is possible from the <span class="guilabel">View</span> menu, or using <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">-</kbd></kbd>, <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">=</kbd></kbd>, or holding down <kbd class="kbd docutils literal notranslate">Ctrl</kbd> and using
+the mouse wheel.</p>
+</section>
+<section id="pinning-unpinning-re-layouting">
+<h4 id="pinning-unpinning-re-layouting">Pinning, Unpinning, Re-Layouting<a class="headerlink" href="#pinning-unpinning-re-layouting" title="Permalink to this headline">¶</a></h4>
+<p>A submodule display string may or may not contain explicit coordinates for the submodule; if it does not, then the
+location of the submodule will be determined by the layouting algorithm. A submodule with explicit coordinates is
+pinned; one without is unpinned. The Pin action inserts the current coordinates into the display string and the Unpin
+action removes them. Moving a submodule also automatically pins it. The position of an unpinned module is undetermined
+and may change every time the layouting algorithm runs. For convenience, the layouter does not run when a submodule gets
+unpinned (so that the submodule does not jump away on unpinning), but this also means that unpinned submodules may
+appear at different locations next time the same NED file is opened.</p>
+</section>
+<section id="changing-a-module-property">
+<h4 id="changing-a-module-property">Changing a Module Property<a class="headerlink" href="#changing-a-module-property" title="Permalink to this headline">¶</a></h4>
+<p>To change a module property, right-click on it and select the <span class="guilabel">Properties</span> menu item from the context menu
+or select the module and modify that property in the <span class="guilabel">Properties View</span>. Alternatively, you can press
+<kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Enter</kbd></kbd> when the module is selected. NED properties like name, type and vector size are available on
+<span class="guilabel">General</span> tab. Visual properties like icon, size, color, border etc. can be set on the <span class="guilabel">Appearance</span>
+tab. You may check how your module will look like in the preview panel at the bottom of the dialog.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/NED-Properties.png"><img alt="../_images/NED-Properties.png" src="../_images/NED-Properties.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Editing Visual Properties</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can select several modules at the same time and open the <span class="guilabel">Properties</span> dialog to set their common
+properties at the same time.</p>
+</div>
+</section>
+<section id="changing-a-module-parameter">
+<h4 id="changing-a-module-parameter">Changing a Module Parameter<a class="headerlink" href="#changing-a-module-parameter" title="Permalink to this headline">¶</a></h4>
+<p>To change a module parameter, right-click on it and select the <span class="guilabel">Parameters</span> menu item from the context
+menu. The dialog allows you to add or remove module parameters or assign value to them.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/NED-Parameters.png"><img alt="../_images/NED-Parameters.png" src="../_images/NED-Parameters.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Editing Module Parameters</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="renaming-modules">
+<h4 id="renaming-modules">Renaming Modules<a class="headerlink" href="#renaming-modules" title="Permalink to this headline">¶</a></h4>
+<p>To rename an existing module select its context menu and choose <span class="guilabel">Rename</span> or click on an already selected
+module a second time. You can specify a new name for the module or even turn a submodule into a vector by adding
+<code class="docutils literal notranslate"><span class="pre">[vectorsize]</span></code> after its name. Alternatively the name of a module can be set in the <span class="guilabel">Properties</span> dialog or can
+be edited by pressing <kbd class="kbd docutils literal notranslate">F6</kbd> when the module is selected.</p>
+</section>
+<section id="exporting-a-module-as-an-image">
+<h4 id="exporting-a-module-as-an-image">Exporting a Module as an Image<a class="headerlink" href="#exporting-a-module-as-an-image" title="Permalink to this headline">¶</a></h4>
+<p>A module can be exported using several image formats by selecting <span class="guilabel">Export Image</span> from the module’s context
+menu.</p>
+</section>
+<section id="navigation">
+<h4 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<p>Double-clicking a submodule will open the corresponding module type in a NED editor. Selecting an element in the
+graphical editor and then switching to text mode will place the cursor near the previously selected element in the text
+editor.</p>
+<p>Navigating inside a longer NED file is easier if you open the <span class="guilabel">Outline View</span> to see the structure of the file.
+Selecting an element in the outline will select the same element in the graphical editor.</p>
+<p>If you want to see the selected element in a different view, select the element and right-click on it. Choose
+<span class="guilabel">Show In</span> from the context menu, and select the desired view.</p>
+</section>
+<section id="opening-a-ned-type">
+<h4 id="opening-a-ned-type">Opening a NED Type<a class="headerlink" href="#opening-a-ned-type" title="Permalink to this headline">¶</a></h4>
+<p>If you know only the name of a module type or other NED element, you can use the <span class="guilabel">Open NED Type</span> dialog by
+pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">N</kbd></kbd>. Type the name, or search with wildcards. The requested type will be opened in an editor. This
+feature is not tied to the graphical editor: the <span class="guilabel">Open NED Type</span> dialog is available from anywhere in the IDE.</p>
+</section>
+<section id="setting-properties">
+<h4 id="setting-properties">Setting Properties<a class="headerlink" href="#setting-properties" title="Permalink to this headline">¶</a></h4>
+<p>Elements of the display string and other properties associated with the selected elements can be edited in the
+<span class="guilabel">Properties View</span>. The Property View is grouped and hierarchically organized; however, you can switch off this
+behavior on the view toolbar. Most properties can be edited directly in the <span class="guilabel">Properties View</span>, but some also
+have specific editors that can be activated by pressing the ellipsis button at the end of the field. Fields marked with
+a small light bulb support content assist. Use the <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd> key combination to get a list of possible values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following functions are available only in source editing mode:</p>
+<ul class="simple">
+<li><p>Creating or modifying gates</p></li>
+<li><p>Creating grouped and conditional connections</p></li>
+<li><p>Adding or editing properties</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="editing-in-source-mode">
+<h3 id="editing-in-source-mode">Editing in Source Mode<a class="headerlink" href="#editing-in-source-mode" title="Permalink to this headline">¶</a></h3>
+<p>The NED source editor supports all functionality that one can expect from an Eclipse-based text editor, such as syntax
+highlighting, clipboard cut/copy/paste, unlimited undo/redo, folding, find/replace and incremental search.</p>
+<p>The NED source is continually parsed as you type, and errors and warnings are displayed as markers on the editor rulers.
+At times when the NED text is syntactically correct, the editor has full knowledge of “what is what” in the text buffer.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/NED-TextEditor.png"><img alt="../_images/NED-TextEditor.png" src="../_images/NED-TextEditor.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">NED Source Editor</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="basic-functions">
+<h4 id="basic-functions">Basic Functions<a class="headerlink" href="#basic-functions" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Undo <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd>, Redo <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Y</kbd></kbd></p></li>
+<li><p>Indent/unindent code blocks <kbd class="kbd docutils literal notranslate">TAB</kbd> / <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">TAB</kbd></kbd></p></li>
+<li><p>Correct indentation (NED syntax aware) <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">I</kbd></kbd></p></li>
+<li><p>Find <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">F</kbd></kbd>, incremental search <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">J</kbd></kbd></p></li>
+<li><p>Move lines <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">UP</kbd></kbd> <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">DOWN</kbd></kbd></p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The following functions can help you explore the IDE:</p>
+<ul class="simple">
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">L</kbd></kbd> pops up a window that lists all keyboard bindings, and</p></li>
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">3</kbd></kbd> brings up a filtered list of all available commands.</p></li>
+</ul>
+</div>
+</section>
+<section id="converting-to-the-new-ned-syntax">
+<h4 id="converting-to-the-new-ned-syntax">Converting to the New NED Syntax<a class="headerlink" href="#converting-to-the-new-ned-syntax" title="Permalink to this headline">¶</a></h4>
+<p>If you have an NED file with older syntax, you can still open it. A context menu item allows you to convert it to the
+new syntax. If the NED file is already using the new syntax, the <span class="guilabel">Convert to 4.x Format</span> menu item is
+disabled.</p>
+</section>
+<section id="view-documentation">
+<h4 id="view-documentation">View Documentation<a class="headerlink" href="#view-documentation" title="Permalink to this headline">¶</a></h4>
+<p>Hovering the mouse over a NED type name will display the documentation in a “tooltip” window, which can be made
+persistent by hitting <kbd class="kbd docutils literal notranslate">F2</kbd>.</p>
+</section>
+<section id="content-assist">
+<h4 id="content-assist">Content Assist<a class="headerlink" href="#content-assist" title="Permalink to this headline">¶</a></h4>
+<p>If you need help, just press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>. The editor will offer possible words or templates. This is context sensitive,
+so it will offer only valid suggestions. Content assist is also a good way of exploring the new NED syntax and features.</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/NED-TextEditorCA.png"><img alt="../_images/NED-TextEditorCA.png" src="../_images/NED-TextEditorCA.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">NED Source Editor with content assist activated</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="searching-in-ned-files">
+<h4 id="searching-in-ned-files">Searching in NED Files<a class="headerlink" href="#searching-in-ned-files" title="Permalink to this headline">¶</a></h4>
+<p>Selecting a text or moving the cursor over a word and pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">G</kbd></kbd> searches for the selection in all NED files
+in the open projects. This function lets you quickly find references to the word or type currently under the cursor. The
+results are shown in the standard <span class="guilabel">Search View</span>.</p>
+</section>
+<section id="organizing-imports">
+<h4 id="organizing-imports">Organizing Imports<a class="headerlink" href="#organizing-imports" title="Permalink to this headline">¶</a></h4>
+<p>Sometimes, it is very inconvenient to add the necessary import statements to the beginning of the NED file by hand. The
+IDE can do it for you (almost) automatically. Pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">O</kbd></kbd> will cause the IDE to try to insert all necessary
+import statements. You will be prompted to specify the used packages in case of ambiguity.</p>
+</section>
+<section id="cleaning-up-ned-files">
+<h4 id="cleaning-up-ned-files">Cleaning Up NED Files<a class="headerlink" href="#cleaning-up-ned-files" title="Permalink to this headline">¶</a></h4>
+<p>This function does a general repair on all selected NED files by throwing out or adding import statements as needed,
+checking (and fixing) the file’s package declaration, and reformatting the source code. It can be activated by clicking
+on the <span class="menuselection">Project ‣ Clean Up NED Files</span> menu item from the main menu.</p>
+</section>
+<section id="commenting">
+<h4 id="commenting">Commenting<a class="headerlink" href="#commenting" title="Permalink to this headline">¶</a></h4>
+<p>To comment out the selected lines, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd>. To remove the comment, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd> again.</p>
+</section>
+<section id="formatting-the-source-code">
+<h4 id="formatting-the-source-code">Formatting the Source Code<a class="headerlink" href="#formatting-the-source-code" title="Permalink to this headline">¶</a></h4>
+<p>It is possible to reformat the whole NED file according to the recommended coding guidelines by activating the
+<span class="guilabel">Format Source</span> context menu item or by pressing the <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">F</kbd></kbd> key combination.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using the graphical editor and switching to source mode automatically re-formats the NED source code, as well.</p>
+</div>
+</section>
+<section id="id1">
+<h4 id="id1">Navigation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Holding the <kbd class="kbd docutils literal notranslate">Ctrl</kbd> key and clicking any identifier type will jump to the definition. Alternatively, move the cursor into
+the identifier and hit <kbd class="kbd docutils literal notranslate">F3</kbd> to achieve the same effect.</p>
+<p>If you switch to graphical mode from text mode, the editor will try to locate the NED element under the cursor and
+select it in the graphical editor.</p>
+<p>The Eclipse platform’s bookmarking and navigation history facilities also work in the NED editor.</p>
+</section>
+</section>
+<section id="other-features">
+<h3 id="other-features">Other Features<a class="headerlink" href="#other-features" title="Permalink to this headline">¶</a></h3>
+<section id="exporting-images">
+<h4 id="exporting-images">Exporting Images<a class="headerlink" href="#exporting-images" title="Permalink to this headline">¶</a></h4>
+<p>To export a compound module as a picture, select the compound module and bring up its context menu, select
+<span class="guilabel">Export Image</span> and choose file name and type. The module will be exported to the file system. BMP, PNG,
+JPEG, SVG and PDF formats are supported.</p>
+<p>It is also possible to export images from all (or selected) NED files; the corresponding wizard can be found under
+<span class="menuselection">File ‣ Export</span> in the menu.</p>
+</section>
+</section>
+</section>
+<section id="associated-views">
+<h2 id="associated-views">Associated Views<a class="headerlink" href="#associated-views" title="Permalink to this headline">¶</a></h2>
+<p>There are several views related to the NED editor. These views can be displayed (if not already open) by choosing
+<span class="menuselection">Window ‣ Show View</span> in the menu or by selecting a NED element in the graphical editor and selecting
+<span class="guilabel">Show In</span> from the context menu.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are working with very large NED files, you may improve the performance of the editor by closing all NED file
+related views you do not need.</p>
+</div>
+<section id="outline-view">
+<h3 id="outline-view">Outline View<a class="headerlink" href="#outline-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Outline View</span> allows an overview of the current NED file. Clicking on an element will select the
+corresponding element in the text or graphical view. It has limited editing functionality; you can copy/cut/paste and
+delete an object.</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/NED-OutlineView.png"><img alt="../_images/NED-OutlineView.png" src="../_images/NED-OutlineView.png" style="width: 30%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Outline View</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="property-view">
+<h3 id="property-view">Property View<a class="headerlink" href="#property-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Property View</span> contains all properties of the selected graphical element. Visual appearance, name, type
+and other properties can be changed in this view. Some fields have specialized editors that can be activated by clicking
+on the ellipsis button in the field editor. Fields marked with a small light bulb icon have content assist support.
+Pressing <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd> will display the possible values the field can hold.</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/NED-PropertiesView.png"><img alt="../_images/NED-PropertiesView.png" src="../_images/NED-PropertiesView.png" style="width: 30%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Properties View</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="palette-view">
+<h3 id="palette-view">Palette View<a class="headerlink" href="#palette-view" title="Permalink to this headline">¶</a></h3>
+<p>The Palette is normally displayed on the left or right side of the editor area and contains tools to create various NED
+elements. It is possible to hide the Palette by clicking on the little arrow in the corner. You can also detach it from
+the editor and display it as a normal Eclipse View (<span class="menuselection">Window ‣ Show View ‣ Other ‣ General ‣ Palette</span>).</p>
+</section>
+<section id="problems-view">
+<h3 id="problems-view">Problems View<a class="headerlink" href="#problems-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Problems View</span> contains error and warning messages generated by the parser. Double-clicking a line will
+open the problematic file and move to the appropriate marker.</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/NED-ProblemsView.png"><img alt="../_images/NED-ProblemsView.png" src="../_images/NED-ProblemsView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Problems View</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="ned-inheritance-view">
+<h3 id="ned-inheritance-view">NED Inheritance View<a class="headerlink" href="#ned-inheritance-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Inheritance View</span> displays the relationship between different NED types. Select a NED element in the
+graphical editor or move the cursor into a NED definition and the <span class="guilabel">Inheritance View</span> will display the
+ancestors of this type. If you do not want the view to follow the selection in the editor, click the Pin icon on the
+view toolbar. This will fix the displayed type to the currently selected one.</p>
+<figure class="align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/NED-InheritanceView.png"><img alt="../_images/NED-InheritanceView.png" src="../_images/NED-InheritanceView.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">NED Inheritance View</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="module-hierarchy-view">
+<h3 id="module-hierarchy-view">Module Hierarchy View<a class="headerlink" href="#module-hierarchy-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Module Hierarchy View</span> shows the contained submodules and their parameters, several levels deep. It also
+displays the parameters and other contained features.</p>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/NED-ModuleHierarchyView.png"><img alt="../_images/NED-ModuleHierarchyView.png" src="../_images/NED-ModuleHierarchyView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Module Hierarchy View</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="parameters-view">
+<h3 id="parameters-view">Parameters View<a class="headerlink" href="#parameters-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Parameters View</span> shows the parameters of the selected module including inherited parameters.</p>
+<figure class="align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/NED-ParametersView.png"><img alt="../_images/NED-ParametersView.png" src="../_images/NED-ParametersView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Outline View</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The latter two views are used mainly with the INI File Editor.</p>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="intro.html" title="Introduction"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Introduction </span>
+              </div>
+            </a>
+          
+          
+            <a href="ini-editor.html" title="Editing INI Files"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Editing INI Files </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

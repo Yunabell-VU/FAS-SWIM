@@ -1,0 +1,1556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta name="copyright" content="OpenSim Ltd.">
+  <meta NAME="Author" CONTENT="Andras Varga">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="STYLESHEET" href="../book.css"  type="text/css">
+  <title>OMNeT++ - Simulation Manual</title>
+</head>
+<style type="text/css">
+  hr.pgbr { color: #f5f5f5; margin-top: 40px; margin-bottom: 10px; }
+  ul.dl { padding-left: 30px; text-indent: -30px; list-style: none; }
+  pre { margin: 4px 8px 4px 2px; padding: 8px 10px; background:#fffff4; border: 1px solid #dddddd; }
+  pre.ned { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.msg { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.cpp { background:#f5f5f5; border-left: 4px solid #ccccff; }
+  pre.inifile { background:#fffff0; border-left: 4px solid #e5e533; }
+  pre.filelisting { background:#f0f0f0; border-left: 4px solid #d9d9d9; }
+  pre.xml { background:#fff0f0; border-left: 4px solid #ffa0a0; }
+  pre.commandline { background:#fffff0; border-left: 4px solid #606060; }
+  td,th { text-align:left; vertical-align:top; border:1px solid; padding:3pt; border-color:#000000; }
+  div.caption { margin-top: 10px; }
+  a[href] { color: #202080; text-decoration: none; }
+  a:visited { text-decoration: none; }
+  # a:hover { text-decoration: underline; }
+
+  table.matrix { display:inline-block; vertical-align: middle; position: relative; border: 0px; background:#ffffff; margin-left:8pt; margin-right:8pt; }
+  table.matrix:before, table.matrix:after { content: ""; position: absolute; top: 0; border: 1px solid #000; width: 6px; height: 100%; }
+  table.matrix:before { left: -6px; border-right: 0px; }
+  table.matrix:after { right: -6px; border-left: 0px; }
+  table.matrix td { padding: 5px; text-align: center; border: 0px; }
+
+  a.headerlink { visibility: hidden; }
+</style>
+<body>
+
+<p><hr><b><a href="chap5.html">[Prev]</A>&nbsp;<a href="chap7.html">[Next]</A>&nbsp;<a href="toc.html#toc_6.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p><h1><a name="cha:msg-def"/>6 Message Definitions<a class="headerlink" href="#cha:msg-def" title="Permalink to this headline">¶</a></h1>
+
+<p>
+<h2><a name="sec:msg-defs:intro"/>6.1 Introduction<a class="headerlink" href="#sec:msg-defs:intro" title="Permalink to this headline">¶</a></h2>
+
+<p>In practice, one needs to add various fields to <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt> or
+<tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt> to make them useful. For example, when modeling
+communication networks, message/packet objects need to carry protocol
+header fields. Since the simulation library is written in C++, the natural
+way of extending <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt>/<tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt> is via subclassing
+them. However, at least three items has to be added to the new class for
+each field (a private data member, a getter and a setter method) and the
+resulting class needs to integrate with the simulation framework, which
+means that writing the necessary C++ code can be a tedious and
+time-consuming task.
+
+<p>OMNeT++ offers a more convenient way called <i>message definitions</i>.
+Message definitions offer a compact syntax to describe message contents,
+and the corresponding C++ code is automatically generated from the
+definitions. When needed, the generated class can also be customized via
+subclassing. Even when the generated class needs to be heavily customized,
+message definitions can still save the programmer a great deal of manual
+work.
+
+<p>
+<h3><a name="sec:msg-defs:first-msg-class"/>6.1.1 The First Message Class<a class="headerlink" href="#sec:msg-defs:first-msg-class" title="Permalink to this headline">¶</a></h3>
+
+<p>Let us begin with a simple example. Suppose that we need a packet type that
+carries a source and a destination address as well as a hop count. The
+corresponding C++ code can be generated from the following definition in a
+<tt>MyPacket.msg</tt> file:
+
+<pre class="msg">
+packet MyPacket
+{
+     int srcAddress;
+     int destAddress;
+     int remainingHops = 32;
+};
+</pre>
+<p>
+It is the task of the OMNeT++ <i>message compiler</i>, <tt>opp_msgc</tt> or
+<tt>opp_msgtool</tt>, to translate the definition into a C++ class that can be
+instantiated from C++ model code. The message compiler is normally invoked for
+<tt>.msg</tt> files automatically, as part of the build process.
+
+<p>When the message compiler processes <tt>MyPacket.msg</tt>, it creates two files:
+<tt>MyPacket_m.h</tt> and <tt>MyPacket_m.cc</tt>. The generated <tt>MyPacket_m.h</tt>
+will contain the following class declaration (abbreviated):
+
+<pre class="cpp">
+class MyPacket : public <a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> {
+  protected:
+    int srcAddress;
+    int destAddress;
+    int remainingHops = 32;
+  public:
+    MyPacket(const char *name=nullptr, short kind=0);
+    MyPacket(const MyPacket& other);
+    MyPacket& operator=(const MyPacket& other);
+    virtual MyPacket *dup() const override {return new MyPacket(*this);}
+    ...
+
+    // field getter/setter methods
+    virtual int getSrcAddress() const;
+    virtual void setSrcAddress(int srcAddress);
+    virtual int getDestAddress() const;
+    virtual void setDestAddress(int destAddress);
+    virtual int getRemainingHops() const;
+    virtual void setRemainingHops(int remainingHops);
+};
+</pre>
+<p>
+As you can see, for each field the generated class contains a protected data
+member, and a public getter and a setter method. The names of the methods will
+begin with <tt>get</tt> and <tt>set</tt>, followed by the field name with its first
+letter converted to uppercase.
+
+<p>The <tt>MyPacket_m.cc</tt> file contains implementation of the generated
+<tt>MyPacket</tt> class as well as &#8220;reflection&#8221; code (see
+<tt><a href="../api/classomnetpp_1_1cClassDescriptor.html">cClassDescriptor</a></tt>) that allows inspection of these data structures under
+graphical user interfaces like Qtenv. The <tt>MyPacket_m.cc</tt> file should be
+compiled and linked into the simulation; this is normally taken care of
+automatically.
+
+<p>In order to use the <tt>MyPacket</tt> class from a C++ source file, the
+generated header file needs to be included:
+
+<pre class="cpp">
+#include "MyPacket_m.h"
+
+...
+MyPacket *pkt = new MyPacket("pkt");
+pkt-&gt;setSrcAddress(localAddr);
+...
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:ingredients"/>6.1.2 Ingredients of Message Files<a class="headerlink" href="#sec:msg-defs:ingredients" title="Permalink to this headline">¶</a></h3>
+
+<p>Message files contain the following ingredients:
+
+<p><ul>
+  <li> <i>Packet, message, and class definitions</i> translate into C++ class
+    definitions. The three types are very similar, they practically only differ
+    in the choice of the default base class (<tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt>,
+    <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt>, and no base class, respectively).
+  <li> <i>Struct definitions</i> translate into C-like structs, where fields
+    are represented with public data members (there are no getters and setters).
+  <li> <i>Enum definitions</i> translate into C++ enums.
+  <li> <i>Namespace declarations</i> define the namespace for subsequent definitions.
+  <li> <i>Imports</i> allow reusing definitions from other <tt>.msg</tt> files.
+  <li> <i>Properties</i> are metadata annotations of the syntax <tt>@name</tt>
+    or <tt>@name(...)</tt> that may occur on file, class (packet, struct, etc.)
+    definition, and field level as well. There are many predefined properties,
+    and a large subset of them deal with the details of what C++ code to
+    generate for the item they occur with. For example, <tt>@getter(getFoo)</tt>
+    on a field requests that the generated getter function have the name <tt>getFoo</tt>.
+  <li> <i>C++ blocks</i> are used for injecting literal C++ code fragments
+    into the generated source files. The target (the place where to insert the
+    code) can be specified.
+</ul>
+
+<p>The following sections describe all of the above elements in detail.
+
+<p>
+<h2><a name="sec:msg-defs:classes-messages-packets-structs"/>6.2 Classes, Messages, Packets, Structs<a class="headerlink" href="#sec:msg-defs:classes-messages-packets-structs" title="Permalink to this headline">¶</a></h2>
+
+<p>As shown above, the message description language allows you to generate C++ data
+classes and structs from concise descriptions that have a syntax resembling C
+structs. The descriptions contain the choice of the base class (message
+descriptions only support single inheritance), the list of fields the class
+should have, and possibly various metadata annotations that e.g. control the
+details of the code generation.
+
+<p>A description starts with one of the <b><tt>packet</tt></b>, <b><tt>message</tt></b>,
+<b><tt>class</tt></b>, <b><tt>struct</tt></b> keywords. The first three are very
+similar: they all generate C++ classes, and only differ on the choice of the
+default base class (and related details such as the argument list of the
+constructor). The fourth one generates a plain (C-style) struct.
+
+<p>
+<h3><a name="sec:msg-defs:classes-messages-packets"/>6.2.1 Classes, Messages, Packets<a class="headerlink" href="#sec:msg-defs:classes-messages-packets" title="Permalink to this headline">¶</a></h3>
+<a name="sec:msg-defs:defining-classes"></a> % legacy
+<a name="sec:msg-defs:messages-and-packets"></a> % legacy
+<a name="sec:msg-defs:defining-messages-and-packets"></a> % legacy
+
+<p>For <b><tt>packet</tt></b>, the default base class is <tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt>; or if a base
+class is explicitly named, it must be a subclass of <tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt>. Similarly,
+for <b><tt>message</tt></b>, the default base class is <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt>, or if a
+base class is specified, it must be a subclass of <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt>.
+
+<p>For <b><tt>class</tt></b>, the default is <i>no</i> base class. However, it is often a
+good idea to choose <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt> as a base class.<br><ul><font size=-1>[Until OMNeT++
+6.0, the default base class was <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt>. Thus, when migrating code from
+version 5.x or earlier, one needs to add <tt>extends <a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt> to class
+definitions lacking an "extends" clause.]</font></ul>
+
+<p><ul class="note"><b>NOTE</b><br>
+  It is recommended to use <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt> as base class, because it adds zero
+  overhead to the generated class, and at the same time makes the class more
+  interoperable with the rest of the simulation library. <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt>
+  only defines virtual methods but no data members, so the only overhead would
+  be the <i>vptr</i>; however, the generated class already has a vptr because
+  the generated methods are also virtual.
+</ul>
+
+<p>The base class is specified with the <b><tt>extends</tt></b> keyword. For example:
+
+<pre class="msg">
+packet FooPacket extends PacketBase
+{
+    ...
+};
+</pre>
+<p>
+The generated C++ class will look like this:
+
+<pre class="cpp">
+class FooPacket : public PacketBase {
+    ...
+};
+</pre>
+<p>
+The generated class will have a constructor and also a copy constructor. An
+assignment operator (<tt>operator=()</tt>) and cloning method (<tt>dup()</tt>)
+will also be generated.
+
+<p>The argument list of the generated constructor depends on the base class. For
+classes derived from <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt>, it will accept an object name and
+message kind. For classes derived from <tt><a href="../api/classomnetpp_1_1cNamedObject.html">cNamedObject</a></tt>, it will accept an
+object name. The arguments are optional (they have default values).
+
+<pre class="cpp">
+class FooPacket : public PacketBase
+{
+  public:
+    FooPacket(const char *name=nullptr, int kind=0);
+    FooPacket(const FooPacket& other);
+    FooPacket& operator=(const FooPacket& other);
+    virtual FooPacket *dup() const;
+    ...
+</pre>
+<p>
+Additional base classes can be added by listing them in the <b><tt>@implements</tt></b>
+class property.
+
+<p>
+<h3><a name="sec:msg-defs:defining-structs"/>6.2.2 Structs<a class="headerlink" href="#sec:msg-defs:defining-structs" title="Permalink to this headline">¶</a></h3>
+
+<p>Message definitions allow one to define C-style structs, &#8220;C-style&#8221;
+meaning &#8220;containing only data and no methods&#8221;. These structs can be
+useful as fields in message classes.
+
+<p>The syntax is similar to that of defining messages:
+
+<pre class="msg">
+struct Place
+{
+    int type;
+    string description;
+    double coords[3];
+};
+</pre>
+<p>
+The generated struct has public data members, and no getter or setter
+methods. The following code is generated from the above definition:
+
+<pre class="cpp">
+// generated C++
+struct Place
+{
+    int type;
+    omnetpp::<a href="../api/classomnetpp_1_1opp__string.html">opp_string</a> description;
+    double coords[3];
+};
+</pre>
+<p>
+Note that <b><tt>string</tt></b> fields are generated with the <tt><a href="../api/classomnetpp_1_1opp__string.html">opp_string</a></tt> C++
+type, which is a minimalistic string class that wraps <tt>const char*</tt> and
+takes care of allocation/deallocation. It was chosen instead of
+<tt>std::string</tt> because of its significantly smaller memory footprint.
+(<tt>std::string</tt> is significantly larger than a <tt>const char*</tt> pointer
+because it also needs to store length and capacity information in some form.)
+
+<p>Inheritance is supported for structs:
+
+<pre class="msg">
+struct Base
+{
+    ...
+};
+
+struct Extended extends Base
+{
+    ...
+};
+</pre>
+<p>
+However, because a struct has no member functions, there are limitations:
+
+<p><ul>
+   <li> variable-size arrays are not supported;
+   <li> customization via inheritance and <b><tt>abstract</tt></b> fields
+      (see later in <a href="chap6.html#sec:msg-defs:customizing-via-inheritance">[6.10.6]</a>)
+      cannot be used;
+   <li> cannot have classes subclassed from <tt><a href="../api/classomnetpp_1_1cOwnedObject.html">cOwnedObject</a></tt> as fields,
+      because structs cannot be owners.
+</ul>
+
+<p>
+<h2><a name="sec:msg-defs:enums"/>6.3 Enums<a class="headerlink" href="#sec:msg-defs:enums" title="Permalink to this headline">¶</a></h2>
+
+<p>An enum is declared with the <b><tt>enum</tt></b> keyword, using the following
+syntax:
+
+<pre class="msg">
+enum PayloadType
+{
+   NONE = 0;
+   VOICE = 1;
+   VIDEO = 2;
+   DATA = 3;
+};
+</pre>
+<p>
+Enum values need to be unique.
+
+<p>The message compiler translates an enum into a normal C++ enum, plus also
+generates a descriptor that stores the symbolic names as strings. The latter
+makes it possible for Qtenv to display symbolic names for enum values.
+
+<p>Enums can be used in two ways. The first is simply to use the enum's name as
+field type:
+
+<pre class="msg">
+packet FooPacket
+{
+    PayloadType payloadType;
+};
+</pre>
+<p>
+The second way is to tag a field of the type <b><tt>int</tt></b> or any
+other integral type with the <b><tt>@enum</tt></b> property and the name of
+the enum, like so:
+
+<pre class="msg">
+packet FooPacket
+{
+    int16_t payloadType @enum(PayloadType);
+};
+</pre>
+<p>
+In the generated C++ code, the field will have the original type (in this case,
+<b><tt>int16_t</tt></b>). However, additional code generated by the message compiler
+will allow Qtenv to display the symbolic name of the field's value in addition
+to the numeric value.
+
+<p>
+<h2><a name="sec:msg-defs:imports"/>6.4 Imports<a class="headerlink" href="#sec:msg-defs:imports" title="Permalink to this headline">¶</a></h2>
+
+<p>Import directives are used to make definitions in one message file available to another
+one. Importing an MSG file makes the definitions in that file available to the
+file that imports it, but has no further side effect (and in particular, it will
+generate no C++ code).
+
+<p>To import a message file, use the <b><tt>import</tt></b> keyword followed by a name
+that identifies the message file within its project:
+
+<pre class="msg">
+import inet.linklayer.common.MacAddress;
+</pre>
+<p>
+The <b><tt>import</tt></b>'s parameter is interpreted as a relative file path (by
+replacing dots with slashes, and appending <tt>.msg</tt>), which is searched for in
+folders listed in the <i>message import path</i>, much like C/C++ include
+files are searched for in the compiler's include path, Python modules in the
+Python module search path, or NED files in the NED path.
+
+<p>The message import path can be be specified to the message compiler via a series
+of <tt>-I</tt> command-line options.
+
+<p>
+<h2><a name="sec:msg-defs:namespaces"/>6.5 Namespaces<a class="headerlink" href="#sec:msg-defs:namespaces" title="Permalink to this headline">¶</a></h2>
+<a name="sec:msg-defs:declaring-a-namespace"></a> % legacy
+
+<p>To place generated types into a namespace, add a <b><tt>namespace</tt></b> directive
+above the types in question:
+
+<pre class="msg">
+namespace inet;
+</pre>
+<p>
+Hierarchical (nested) namespaces are declared using double colons in the
+namespace definition, much like nested namespace definitions introduced into
+C++ in version C++17.
+
+<pre class="msg">
+namespace inet::ieee80211;
+</pre>
+<p>
+The above code will be translated into multiple nested namespaces in the C++ code:
+
+<pre class="cpp">
+namespace inet { namespace ieee80211 {
+...
+}}
+</pre>
+<p>
+There can be multiple <b><tt>namespace</tt></b> directives in a message file. The
+effect of the <b><tt>namespace</tt></b> directive extends from the place of the
+directive until the next <b><tt>namespace</tt></b> directive or the end of the
+message file. Each <b><tt>namespace</tt></b> directive opens a completely new
+namespace, i.e. <i>not</i> a namespace within the previous one. An empty
+namespace directive (<tt>namespace;</tt>) returns to the global namespace. For
+example:
+
+<pre class="msg">
+namespace foo::bar;
+class A {}  // defines foo::bar::A
+
+namespace baz;
+class B {}  // defines baz::B
+
+namespace;
+class C {}  // defines ::C
+</pre>
+<p>
+
+<p><h2><a name="sec:msg-defs:properties"/>6.6 Properties<a class="headerlink" href="#sec:msg-defs:properties" title="Permalink to this headline">¶</a></h2>
+
+<p>Properties are metadata annotations of the syntax <tt>@name</tt> or
+<tt>@name(...)</tt> that may occur on file, class (packet, struct, etc.)
+definition, and field level. There are many predefined properties, and a
+large subset of them deal with the details of what C++ code to generate for the
+item they occur with. For example, <tt>@getter(getFoo)</tt> on a field requests
+that the generated getter function have the name <tt>getFoo</tt>.
+
+<p>Here is a syntax example. Note that class properties are placed in the fields
+list (fields and properties may be mixed in arbitrary order), and field
+properties are written after the field name.
+
+<pre class="msg">
+@foo;
+class Foo {
+  @customize(true);
+  string value @getter(...) @setter(...) @hint("...");
+}
+</pre>
+<p>
+Syntactically, the mandatory part of a property is the <tt>@</tt> character
+followed by the property name. They are then optionally followed by an
+<i>index</i> and a <i>parameter list</i>. The index is a name in square
+brackets, and it is rarely used. The parameter list is enclosed in parentheses,
+and in theory it may contain a value list and key-valuelist pairs, but
+almost all properties expect to find just a single value there.
+
+<p>For boolean properties, the value may be <b><tt>true</tt></b> or <b><tt>false</tt></b>; if
+the value is missing, <b><tt>true</tt></b> is assumed. Thus, <tt>@customize</tt> is
+equivalent to <tt>@customize(true)</tt>.
+
+<p>As a guard against mistyping property names, properties need to be declared
+before they can be used. Properties are declared using the <b><tt>@property</tt></b>
+property, with the name of the new property in the index, and the type and other
+attributes of the property in the parameter list. Examples for property
+declarations, including the declaration of <b><tt>@property</tt></b> itself, can be seed
+by listing the built-in definitions of the message compiler
+(<tt>opp_msgtool -h builtindefs</tt>).
+
+<p>The full list of properties understood by the message compiler and other OMNeT++
+tools can be found in Appendix <a href="chap24.html#cha:msg-properties">[24]</a>.
+
+<p>
+<h3><a name="sec:msg-defs:field-data-types"/>6.6.1 Data Types<a class="headerlink" href="#sec:msg-defs:field-data-types" title="Permalink to this headline">¶</a></h3>
+
+<p>The following data types can be used for fields:
+
+<p><ul>
+  <li> C/C++ primitive data types: <b><tt>bool</tt></b>, <b><tt>char</tt></b>,
+    <b><tt>short</tt></b>, <b><tt>int</tt></b>, <b><tt>long</tt></b>, <b><tt>unsigned char</tt></b>,
+    <b><tt>unsigned short</tt></b>, <b><tt>unsigned int</tt></b>, <b><tt>$2</tt></b>unsigned
+    long, <b><tt>float</tt></b>, <b><tt>double</tt></b>.
+  <li> <b><tt>string</tt></b>. Getters and setters use the <b><tt>const char*</tt></b> data
+    type; <b><tt>nullptr</tt></b> is not allowed. Setters store a copy of the string, not
+    just the pointer.
+  <li> C99-style fixed-size integer types: <b><tt>int8_t</tt></b>,
+    <b><tt>int16_t</tt></b>, <b><tt>int32_t</tt></b>, <b><tt>int64_t</tt></b>,
+    <b><tt>uint8_t</tt></b>, <b><tt>uint16_t</tt></b>, <b><tt>uint32_t</tt></b>,
+    <b><tt>uint64_t</tt></b>.<br><ul><font size=-1>[These type names are accepted without the
+    <tt>_t</tt> suffix as well, but you are responsible to ensure that the
+    generated code compiles, i.e. the shortened type names must be defined in a
+    header file you include.]</font></ul>
+</ul>
+
+<p>In addition, OMNeT++ class names such as <tt>simtime_t</tt> and <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt> are
+also made available without the need to import anything. These names are
+accepted both with and without spelling out the <tt>omnetpp</tt> namespace
+name.
+
+<p>Numeric fields are initialized to zero, booleans to <b><tt>false</tt></b>, and string
+fields to the empty string.
+
+<p>
+<h2><a name="sec:msg-defs:fields"/>6.7 Fields<a class="headerlink" href="#sec:msg-defs:fields" title="Permalink to this headline">¶</a></h2>
+
+<p><h3><a name="sec:msg-defs:scalar-fields"/>6.7.1 Scalar fields<a class="headerlink" href="#sec:msg-defs:scalar-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>A scalar field is one that holds a single value. It is defined by specifying the
+data type and the field name, for example:
+
+<pre class="msg">
+int timeToLive;
+</pre>
+<p>
+For each field, the generated class will have a protected data member, and a
+public getter and setter method. The names of the methods will begin with
+<tt>get</tt> and <tt>set</tt>, followed by the field name with its first letter
+converted to uppercase. Thus, the above field will generate the following
+methods in the C++ class:
+
+<pre class="cpp">
+int getTimeToLive() const;
+void setTimeToLive(int timeToLive);
+</pre>
+<p>
+<ul class="note"><b>NOTE</b><br>
+All methods are generated to be virtual, but we omit the <b><tt>virtual</tt></b>
+keyword here and in further examples.
+</ul>
+
+<p>The method names are derived from the field name, but they can be customized
+with the <b><tt>@getter</tt></b> and <b><tt>@setter</tt></b> properties, as shown below:
+
+<pre class="msg">
+int timeToLive @getter(getTTL) @setter(setTTL);
+</pre>
+<p>
+The choice of C++ type used for the data member and the getter/setter methods
+can be overridden with the help of the <b><tt>@cppType</tt></b> property (and on a more
+fine-grained level, with <b><tt>@datamemberType</tt></b>, <b><tt>@argType</tt></b> and
+<b><tt>@returnType</tt></b>), although this it is rarely useful.
+
+<p>
+<h3><a name="sec:msg-defs:initial-values"/>6.7.2 Initial Values<a class="headerlink" href="#sec:msg-defs:initial-values" title="Permalink to this headline">¶</a></h3>
+
+<p>Initial values for fields can be specified after an equal sign, like so:
+
+<pre class="msg">
+int version = HTTP_VERSION;
+string method = "GET";
+string resource = "/";
+bool keepAlive = true;
+int timeout = 5*60;
+</pre>
+<p>
+Any phrase that is a valid C++ expression can be used as initializer value. (The
+message compiler does not check the syntax of the values, it merely copies them
+into the generated C++ file.)
+
+<p>For array fields, the initializer specifies the value for individual array
+elements. There is no syntax for initializing an array with a list of values.
+
+<p>
+<h3><a name="sec:msg-defs:assignment-of-inherited-fields"/>6.7.3 Overriding Initial Values from Subclasses<a class="headerlink" href="#sec:msg-defs:assignment-of-inherited-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>In a subclass, it is possible to override the initial value of an inherited
+field. The syntax is similar to that of a field definition with initial value,
+only the data type is missing.
+
+<p>An example:
+
+<pre class="msg">
+packet Ieee80211Frame
+{
+    int frameType;
+    ...
+};
+
+packet Ieee80211DataFrame extends Ieee80211Frame
+{
+    frameType = DATA_FRAME;  // assignment of inherited field
+    ...
+};
+</pre>
+<p>
+It may seem like the message compiler would need the definition of the base
+class to check the definition of the field being assigned. However, it is
+not the case. The message compiler trusts that such field exists; or
+rather, it leaves the check to the C++ compiler.
+
+<p>What the message compiler actually does is derives a setter method name
+from the field name, and generates a call to it into the constructor.
+Thus, the generated constructor for the above packet type would be
+something like this:
+
+<pre class="cpp">
+Ieee80211DataFrame::Ieee80211DataFrame(const char *name, int kind) :
+    Ieee80211Frame(name, kind)
+{
+    this-&gt;setFrameType(DATA_FRAME);
+    ...
+}
+</pre>
+<p>
+This implementation also lets one initialize <tt><a href="../api/classomnetpp_1_1cMessage.html">cMessage</a></tt> /
+<tt><a href="../api/classomnetpp_1_1cPacket.html">cPacket</a></tt> fields such as message kind or packet length:
+
+<pre class="msg">
+packet UDPPacket
+{
+    byteLength = 16;  // results in 'setByteLength(16);' being placed into ctor
+};
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:const-fields"/>6.7.4 Const Fields<a class="headerlink" href="#sec:msg-defs:const-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>A field can be marked as const by the using <b><tt>const</tt></b> keyword. A
+const field only has a (const) data member and a getter function, but no
+setter. The value can be provided via an initializer. An example:
+
+<pre class="msg">
+const int foo = 24;
+</pre>
+<p>
+This generates a <tt>const int</tt> data member in the class, initialized to 24,
+and a getter member function that returns its value:
+
+<pre class="cpp">
+int getFoo() const;
+</pre>
+<p>
+Array fields cannot be const.
+
+<p>Note that a pointer field may also be marked const, but <b><tt>const</tt></b> is
+interpreted differently in that case: as a mutable field that holds a pointer to
+a <b><tt>const</tt></b> object.
+
+<p>One use of <b><tt>const</tt></b> is to implement computed fields. For that, the field
+needs to be annotated with the <b><tt>@custom</tt></b> or <b><tt>@customImpl</tt></b> property
+to allow for a custom implementation to be supplied for the getter. The custom
+getter can then encapsulate the computation of the field value. Customization is
+covered in section <a href="chap6.html#sec:msg-defs:customizing-generated-class">[6.10]</a>.
+
+<p><ul class="note"><b>NOTE</b><br>
+To add actual constants (as opposed to getter-only fields) to a class, it
+is better use a targeted <b><tt>cplusplus</tt></b> block to inject their definitions
+into the C++ class declaration.
+</ul>
+
+<p>
+<h3><a name="sec:msg-defs:abstract-fields"/>6.7.5 Abstract Fields<a class="headerlink" href="#sec:msg-defs:abstract-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>Abstract fields is a way to allow a custom implementation (such as storage,
+getter/setter methods, etc.) to be provided for a field. For a field marked as
+abstract, the message compiler does not generate a data member, and generated
+getter/setter methods will be pure virtual. It is expected that the pure virtual
+methods will be implemented in a subclass (possibly via <b><tt>@customize</tt></b>, see
+section <a href="chap6.html#sec:msg-defs:customizing-generated-class">[6.10]</a>).
+
+<p>A field is declared abstract by using the <b><tt>abstract</tt></b> keyword or the
+<b><tt>@abstract</tt></b> property (the two are equivalent).
+
+<pre class="msg">
+abstract bool urgentBit; // or: bool urgentBit @abstract;
+</pre>
+<p>
+The generated pure virtual methods:
+
+<pre class="cpp">
+virtual bool getUrgentBit() const = 0;
+virtual void setUrgentBit(bool urgentBit) = 0;
+</pre>
+<p>
+Alternatives to <b><tt>abstract</tt></b>, at least for certain use cases, are
+<b><tt>@custom</tt></b> and <b><tt>@customImpl</tt></b> (see section
+<a href="chap6.html#sec:msg-defs:customizing-generated-class">[6.10]</a>).
+
+<p>
+<h3><a name="sec:msg-defs:fixed-size-arrays"/>6.7.6 Fixed-Size Arrays<a class="headerlink" href="#sec:msg-defs:fixed-size-arrays" title="Permalink to this headline">¶</a></h3>
+
+<p>Fixed-size arrays can be declared with the usual syntax of putting the
+array size in square brackets after the field name:
+
+<pre class="msg">
+int route[4];
+</pre>
+<p>
+The generated getter and setter methods will have an extra <tt>k</tt> argument (the
+array index), and a third method that returns the array size is also generated:
+
+<pre class="cpp">
+int getRoute(size_t k) const;
+void setRoute(size_t k, int route);
+size_t getRouteArraySize() const;
+</pre>
+<p>
+When the getter or setter method is called with an index that is out of bounds,
+an exception is thrown.
+
+<p>The method names can be overridden with the <b><tt>@getter</tt></b>, <b><tt>@setter</tt></b> and
+<b><tt>@sizeGetter</tt></b> properties. To use another C++ type for array size and
+indices instead of the default <b><tt>size_t</tt></b>, specify the <b><tt>@sizeType</tt></b>
+property.
+
+<p><ul class="note"><b>NOTE</b><br>
+  Use a singular noun for field name instead of plural (<tt>route[]</tt> instead of
+  <tt>routes[]</tt>), otherwise method names will look confusing (<tt>getRoutes()</tt>,
+  <tt>appendRoutes()</tt>, etc, for methods that deal with a single route).
+</ul>
+
+<p>When a default value is given, it is interpreted as a scalar for filling the
+array with. There is no syntax for initializing an array with a list of values.
+
+<pre class="msg">
+int route[4] = -1; // all elements set to -1
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:variable-size-arrays"/>6.7.7 Variable-Size Arrays<a class="headerlink" href="#sec:msg-defs:variable-size-arrays" title="Permalink to this headline">¶</a></h3>
+
+<p>If the array size is not known in advance, the field can be declared
+to have a variable size by using an empty pair in brackets:
+
+<pre class="msg">
+int route[];
+</pre>
+<p>
+In this case, the generated class will have extra methods in addition to the
+getter and setter: one for resizing the array, one for getting the array size,
+plus methods for inserting an element at a given position, appending an element,
+and erasing an element at a given position.
+
+<pre class="cpp">
+int getRoute(size_t k) const;
+void setRoute(size_t k, int route);
+void setRouteArraySize(size_t size);
+size_t getRouteArraySize() const;
+void insertRoute(size_t k, int route);
+void appendRoute(int route);
+void eraseRoute(size_t k);
+</pre>
+<p>
+The default array size is zero. Elements can be added by calling the inserter
+or the appender method, or resizing the array and setting individual elements.
+
+<p>Internally, all methods that change the array size (inserter, appender, resizer)
+always allocate a new array, and copy existing values over to the new array.
+Therefore, when adding a large number elements, it is recommended to resize the
+array first, instead of calling the appender method multiple times.
+
+<p>The method names can be overridden with the <b><tt>@getter</tt></b>, <b><tt>@setter</tt></b>,
+<b><tt>@sizeGetter</tt></b>, <b><tt>@sizeSetter</tt></b>, <b><tt>@inserter</tt></b>, <b><tt>@appender</tt></b>
+and <b><tt>@eraser</tt></b> field properties. To use another C++ type for array size and
+indices instead of the default <b><tt>size_t</tt></b>, specify the <b><tt>@sizeType</tt></b>
+property.
+
+<p>When a default value is given, it is used for initializing new elements
+when the array is expanded.
+
+<pre class="msg">
+int route[] = -1;
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:other-types-as-fields"/>6.7.8 Classes and Structs as Fields<a class="headerlink" href="#sec:msg-defs:other-types-as-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>Classes and structs may also be used as as fields, not only primitive types and
+<tt>string</tt>. For example, given a class named <tt>IPAddress</tt>, one can write
+the following field:
+
+<pre class="msg">
+IPAddress sourceAddress;
+</pre>
+<p>
+The <tt>IPAddress</tt> type must be known to the message compiler.
+
+<p>The generated class will contain an <tt>IPAddress</tt> data member, and the
+following member functions:
+
+<pre class="cpp">
+const IPAddress& getSourceAddress() const;
+void setSourceAddress(const IPAddress& sourceAddress);
+IPAddress& getSourceAddressForUpdate();
+</pre>
+<p>
+Note that in addition to the getter and setter, a mutable getter
+(<tt>get...ForUpdate</tt>) is also generated, which allows the stored value (object
+or struct) to be modified in place.
+
+<p>By default, values are passed by reference. This can be changed by specifying
+the <b><tt>@byValue</tt></b> property:
+
+<pre class="msg">
+IPAddress sourceAddress @byValue;
+</pre>
+<p>
+This generates the following member functions:
+
+<pre class="cpp">
+virtual IPAddress getSourceAddress() const;
+virtual void setSourceAddress(IPAddress sourceAddress);
+</pre>
+<p>
+Note that both member functions use pass-by-value, and that the mutable getter
+function is not generated.
+
+<p>Specifying <b><tt>const</tt></b> will cause only a getter function to be generated
+but no setter or mutable getter, as shown before in <a href="chap6.html#sec:msg-defs:const-fields">[6.7.4]</a>.
+
+<p>Array fields are treated similarly, the difference being that the getter and setter
+methods take an extra index argument:
+
+<pre class="msg">
+IPAddress route[];
+</pre>
+<p>
+The generated methods:
+
+<pre class="cpp">
+void setRouteArraySize(size_t size);
+size_t getRouteArraySize() const;
+const IPAddress& getRoute(size_t k) const;
+IPAddress& getRouteForUpdate(size_t k);
+void setRoute(size_t k, const IPAddress& route);
+void insertRoute(size_t k, const IPAddress& route);
+void appendRoute(const IPAddress& route);
+void eraseRoute(size_t k);
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:pointers-fields"/>6.7.10 6.7.9 Non-Owning Pointer Fields<a class="headerlink" href="#sec:msg-defs:pointers-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>The field type may be a pointer, both for scalar and array fields. Pointer
+fields come in two flavours: owning and non-owning. A non-owning pointer field
+just stores the pointer value regardless of the ownership of the object it
+points to, while an owning pointer holds the ownership of the object. This
+section discusses non-owning pointer fields.
+
+<p>Example:
+
+<pre class="msg">
+<a href="../api/classomnetpp_1_1cModule.html">cModule</a> *contextModule;  // missing @owner: non-owning pointer field
+</pre>
+<p>
+The generated methods:
+
+<pre class="cpp">
+const <a href="../api/classomnetpp_1_1cModule.html">cModule</a> *getContextModule() const;
+void setContextModule(<a href="../api/classomnetpp_1_1cModule.html">cModule</a> *contextModule);
+<a href="../api/classomnetpp_1_1cModule.html">cModule</a> *getContextModuleForUpdate();
+</pre>
+<p>
+If the field is marked <b><tt>const</tt></b>, then the setter will take a
+<b><tt>const</tt></b> pointer, and the <tt>getForUpdate()</tt> method is not generated:
+
+<pre class="msg">
+const <a href="../api/classomnetpp_1_1cModule.html">cModule</a> *contextModule;
+</pre>
+<p>
+The output:
+
+<pre class="cpp">
+const <a href="../api/classomnetpp_1_1cModule.html">cModule</a> *getContextModule() const;
+void setContextModule(const <a href="../api/classomnetpp_1_1cModule.html">cModule</a> *contextModule);
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:pointers-fields"/>6.7.10 6.7.9 Owning Pointer Fields<a class="headerlink" href="#sec:msg-defs:pointers-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>This section discusses pointer fields that own the objects they point to, that
+is, are responsible for deallocating the object when the object containing the
+field (let's refer to it as <i>container</i> object) is deleted.
+
+<p>For all owning pointer fields in a class, the destructor of the class deletes the
+owned objects, the <tt>dup()</tt> method and the copy constructor duplicate the
+owned objects for the newly created object, and the assignment operator
+(<tt>operator=</tt>) does both: the old objects in the destination object are
+deleted, and replaced by clones of the objects in the source object.
+
+<p>When the owned object is a subclass of <tt><a href="../api/classomnetpp_1_1cOwnedObject.html">cOwnedObject</a></tt> that keeps track of
+its owner, the code generated for the container class invokes the <tt>take()</tt>
+and <tt>drop()</tt> methods at the appropriate times to manage the ownership.
+
+<p>Example:
+
+<pre class="msg">
+<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *payload @owned;
+</pre>
+<p>
+The generated methods:
+
+<pre class="cpp">
+const <a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *getPayload() const;
+<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *getPayloadForUpdate();
+void setPayload(<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *payload);
+<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *removePayload();
+</pre>
+<p>
+The getter and mutable getter return the stored pointer (or <b><tt>nullptr</tt></b> if
+there is none).
+
+<p>The remover method releases the ownership of the stored object, sets the field
+to <b><tt>nullptr</tt></b>, and returns the object.
+
+<p>The setter method behavior depends on the presence of the <b><tt>@allowReplace</tt></b>
+property. By default (when <b><tt>@allowReplace</tt></b> is absent), the setter does not
+allow replacing the object. That is, when the setter is invoked on a field that
+already contains an object (the pointer is non-null), an error is raised:
+<i>"A value is already set, remove it first with removePayload()"</i>.
+One must call <b><tt>removePayload()</tt></b> before setting a new object.
+
+<p>When <b><tt>@allowReplace</tt></b> is specified for the field, there is no need to call
+te remover method before setting a new value, because the setter method deletes
+the old object before storing the new one.
+
+<pre class="msg">
+<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *payload @owned @allowReplace; // allow setter to delete the old object
+</pre>
+<p>
+If the field is marked <b><tt>const</tt></b>, then the <tt>getForUpdate()</tt> method
+is not generated, and the setter takes a <b><tt>const</tt></b> pointer.
+
+<pre class="msg">
+const <a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *payload @owned;
+</pre>
+<p>
+The generated methods:
+
+<pre class="cpp">
+const <a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *getPayload() const;
+void setPayload(const <a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *payload);
+<a href="../api/classomnetpp_1_1cPacket.html">cPacket</a> *removePayload();
+</pre>
+<p>
+The name of the remover method (which is the only extra method compared to
+non-pointer fields) can be customized using the <b><tt>@remover</tt></b> property.
+
+<p>
+<h2><a name="sec:msg-defs:cplusplus-blocks"/>6.8 Literal C++ Blocks<a class="headerlink" href="#sec:msg-defs:cplusplus-blocks" title="Permalink to this headline">¶</a></h2>
+
+<p>It is possible to have C++ code fragments injected directly into the generated
+code. This is done with the <b><tt>cplusplus</tt></b> keyword optionally followed by
+a <i>target</i> in parentheses, and the code fragment enclosed in double curly
+braces.
+
+<p>The target specifies where to insert the code fragment in the generated header
+or implementation file; we'll get to it in a minute.
+
+<p>As far as a the code fragment is concerned, the message compiler does not try to
+make sense of it, just simply copies it into the generated source file at the
+requested location. The code fragment should be formatted so that it does not
+contain a double close curly brace (<tt>}}</tt>) because it would be interpreted as
+end of the fragment block.<br><ul><font size=-1>[Should this ever be a problem, just insert a space
+between the two braces, or use the automatic concatenation of adjacent string literals
+feature of C/C++ if they occur within a string constant, i.e. break up <tt>"foo}}bar"</tt>
+into <tt>"foo}" "}bar"</tt>.]</font></ul>
+
+<pre class="msg">
+cplusplus {{
+#include "FooDefs.h"
+#define SOME_CONSTANT 63
+}}
+</pre>
+<p>
+The target can be <tt>h</tt> (the generated header file -- this is the default),
+<tt>cc</tt> (the generated <tt>.cc</tt> file), the name of a type generated in the
+same message file (content is inserted in the declaration of the type, just
+before the closing curly brace), or a member function name of one such type.
+
+<p><b><tt>cplusplus</tt></b> blocks with the target <tt>h</tt> are customarily used to
+insert <tt>#include</tt> directives, commonly used constants or macros (e.g.
+<tt>#define</tt>s), or, rarely, typedefs and other elements into the generated
+header. The fragments are pasted into the namespace which is open at that point.
+Note that includes should always be placed into a <b><tt>cplusplus(h)</tt></b> block
+<b>above</b> the first namespace declaration in the message file.
+
+<p><b><tt>cplusplus</tt></b> blocks with <tt>cc</tt> as target allow you to insert code
+into the <tt>.cc</tt> file, e.g. implementations of member functions. This is
+useful e.g with custom-implementation fields (<b><tt>@customImpl</tt></b>, see
+<a href="chap6.html#sec:msg-defs:customimpl-fields">[6.10.4]</a>).
+
+<p><b><tt>cplusplus</tt></b> blocks with a type name as target allow you to insert new
+data members and member functions into the class. This is useful e.g with custom
+fields (<b><tt>@custom</tt></b>, see <a href="chap6.html#sec:msg-defs:custom-fields">[6.10.5]</a>).
+
+<p>To inject code into the implementation of a member function of a generated
+class, specify <i>&lt;classname&gt;</i><tt>::</tt><i>&lt;methodname&gt;</i> as target.
+Supported methods include the constructor, copy constructor (use <tt>Foo&amp;</tt> as
+name), destructor, <tt>operator=</tt>, <tt>copy()</tt>, <tt>parsimPack()</tt>,
+<tt>parsimUnpack()</tt>, etc., and the per-field generated methods (setter, getter,
+etc.).
+
+<p>
+
+<p><h2><a name="sec:msg-defs:using-cpp-types"/>6.9 Using External C++ Types<a class="headerlink" href="#sec:msg-defs:using-cpp-types" title="Permalink to this headline">¶</a></h2>
+<a name="sec:msg-defs:announcing-types"></a> %% legacy
+
+<p>The message compiler only allows types it knows about to be used for fields or
+base classes. If you want to use to types not generated by the message compiler,
+you need to do the following:
+
+<p><ol>
+   <li> Let the message compiler know about the type; and
+   <li> Make sure its C++ declaration is available at compile time
+</ol>
+
+<p>For the first one can be achieved with the <b><tt>@existingClass</tt></b> property. When
+a type (class or struct) is annotated with <b><tt>@existingClass</tt></b>, the message
+compiler remembers the definition, but assumes that the class (or struct)
+already exist in C++ code, and does not generate it. (However, it will still
+generate a class descriptor, see section <a href="chap6.html#sec:msg-defs:descriptor-classes">[6.11]</a>.)
+
+<p><ul class="note"><b>NOTE</b><br>
+Support for C++-style type announcements is no longer part of the message
+definitions syntax, they were removed in OMNeT++ version 6.0.
+</ul>
+
+<p>The second task is achieved by adding a <b><tt>cplusplus</tt></b> block with
+an <tt>#include</tt> directive to the message file.
+
+<p>For example, suppose we have a hand-written <tt>ieee802::MACAddress</tt> class
+defined in <tt>MACAddress.h</tt> that we would like to use for fields in multiple
+message files. One way to make this possible is to add a <tt>MACAddress.msg</tt>
+file alongside the header with the following content:
+
+<pre class="msg">
+// MACAddress.msg
+
+cplusplus {{
+#include "MACAddress.h"
+}}
+
+class ieee802::MACAddress  // a separate namespace decl would also do
+{
+    @existingClass;
+    int8_t octet[6]; // assumes class has getOctet(k) and setOctet(k)
+}
+</pre>
+<p>
+As exemplified above, for existing classes it is possible to announce
+them with their namespace-qualified name, there is no need for separate
+<b><tt>namespace</tt></b> line.
+
+<p>This message file can be imported into all other message files that need
+<tt>MACAddress</tt>, for example like this:
+
+<pre class="msg">
+import MACAddress;
+
+packet EthernetFrame {
+    ieee802::MACAddress source;
+    ieee802::MACAddress destination;
+    ...
+}
+</pre>
+<p>
+
+<p><h2><a name="sec:msg-defs:customizing-generated-class"/>6.10 Customizing the Generated Class<a class="headerlink" href="#sec:msg-defs:customizing-generated-class" title="Permalink to this headline">¶</a></h2>
+
+<p>There are several possibilities for customizing a generated class:
+
+<p><ul>
+  <li> Using custom method names and custom field types
+  <li> Using custom field types
+  <li> Injecting code into existing member functions
+  <li> Custom fields
+  <li> Fields with custom-implementation methods
+  <li> The Generation Gap pattern
+  <li> Abstract fields
+  <li> Special customizations, e.g. <b><tt>@str</tt></b>, <b><tt>@nopack</tt></b>, etc.
+</ul>
+
+<p>The following sections explore the above possibilities.
+
+<p>
+<h3><a name="sec:msg-defs:customizing-method-names"/>6.10.1 Customizing Method Names<a class="headerlink" href="#sec:msg-defs:customizing-method-names" title="Permalink to this headline">¶</a></h3>
+
+<p>The names and some other properties of generated methods can be influenced
+with metadata annotations (properties).
+
+<p>The following field properties exist for overriding method names:
+<b><tt>@getter</tt></b>, <b><tt>@setter</tt></b>, <b><tt>@getterForUpdate</tt></b>, <b><tt>@remover</tt></b>,
+<b><tt>@sizeGetter</tt></b>, <b><tt>@sizeSetter</tt></b>, <b><tt>@inserter</tt></b>, <b><tt>@appender</tt></b>
+and <b><tt>@eraser</tt></b>.
+
+<p>To override data types used by the data member and its accessor methods, use
+<b><tt>@cppType</tt></b>, <b><tt>@datamemberType</tt></b>, <b><tt>@argType</tt></b>, or
+<b><tt>@returnType</tt></b>.
+
+<p>To override the default <tt>size_t</tt> type used for array size and indices, use
+<b><tt>@sizeType</tt></b>.
+
+<p>Consider the following example:
+
+<pre class="msg">
+packet IPPacket {
+    int ttl @getter(getTTL) @setter(setTTL);
+    Option options[] @sizeGetter(getNumOptions)
+                     @sizeSetter(setNumOptions)
+                     @sizetype(short);
+}
+</pre>
+<p>
+The generated class would have the following methods (note the differences
+from the default names <tt>getTtl()</tt>, <tt>setTtl()</tt>, <tt>getOptions()</tt>,
+<tt>setOptions()</tt>, <tt>getOptionsArraySize()</tt>, <tt>getOptionsArraySize()</tt>;
+also note that indices and array sizes are now <b><tt>short</tt></b>):
+
+<pre class="cpp">
+virtual int getTTL() const;
+virtual void setTTL(int ttl);
+virtual const Option& getOption(short k) const;
+virtual void setOption(short k, const Option& option);
+virtual short getNumOptions() const;
+virtual void setNumOptions(short n);
+</pre>
+<p>
+In some older simulation models you may also see the use of the
+<b><tt>@omitGetVerb</tt></b> class property. This property tells the message
+compiler to generate getter methods without the &#8220;get&#8221; prefix, e.g. for a
+<tt>sourceAddress</tt> field it would generate a <tt>sourceAddress()</tt> method
+instead of the default <tt>getSourceAddress()</tt>. It is not recommended to
+use <tt>@omitGetVerb</tt> in new models, because it is inconsistent with the
+accepted naming convention.
+
+<p>
+
+<p><h3><a name="sec:msg-defs:injecting-code-into-methods"/>6.10.2 Injecting Code into Methods<a class="headerlink" href="#sec:msg-defs:injecting-code-into-methods" title="Permalink to this headline">¶</a></h3>
+
+<p>Generally, literal C++ blocks (the <b><tt>cplusplus</tt></b> keyword) are the way to
+inject code into the body of individual methods, as described in
+<a href="chap6.html#sec:msg-defs:cplusplus-blocks">[6.8]</a>.
+
+<p>The <b><tt>@beforeChange</tt></b> class property can be used to designate a member function
+which is to be called before any mutator code (in setters, non-const getters,
+assignment operator, etc.) executes. This can be used to implement e.g. a dirty
+flag or some form of immutability (i.e. freeze the state of the object).
+
+<p>
+<h3><a name="sec:msg-defs:generating-str-method"/>6.10.3 Generating str()<a class="headerlink" href="#sec:msg-defs:generating-str-method" title="Permalink to this headline">¶</a></h3>
+
+<p>The <b><tt>@str</tt></b> class property aims at simplifying adding an <tt>str()</tt>
+method in the generated class. Having an <tt>str()</tt> method is often useful
+for debugging, and it also has a special role in class descriptors (see
+<a href="chap6.html#sec:msg-defs:descriptor-tostring">[6.11.6]</a>).
+
+<p>When <b><tt>@str</tt></b> is present, an <tt>std::string str() const</tt> method is
+generated for the class. The method's implementation will contain a single
+<tt>return</tt> keyword, with the value of the <b><tt>@str</tt></b> property copied
+after it.
+
+<p>Example:
+
+<pre class="msg">
+class Location {
+    double lat;
+    double lon;
+    @str("(" + std::to_string(getLat()) + "," + std::to_string(getLon()) + ")");
+}
+</pre>
+<p>
+It will result in the following <tt>str()</tt> method to be generated as part of
+the <tt>Location</tt> class:
+
+<pre class="cpp">
+std::string Location::str() const
+{
+    return "(" + std::to_string(getLat()) + "," + std::to_string(getLon()) + ")";
+}
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:customimpl-fields"/>6.10.4 Custom-implementation Methods<a class="headerlink" href="#sec:msg-defs:customimpl-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>When member functions generated for a field need customized implementation and
+method-targeted C++ blocks are not sufficient, the <b><tt>customImpl</tt></b> property
+can be of help. When a field is marked <b><tt>customImpl</tt></b>, the message compiler
+will skip generating the implementations of its accessor methods in the <tt>.cc</tt> file,
+allowing the user to supply their own versions.
+
+<p>Here is a simple example. The methods in it do not perform anything extra
+compared to the default generated versions, but they illustrate the principle.
+
+<pre class="msg">
+class Packet
+{
+    int hopCount @customImpl;
+}
+
+cplusplus(cc) {{
+int Packet::getHopCount() const
+{
+    return hopCount; // replace/extend with extra code
+}
+
+void Packet::setHopCount(int value)
+{
+    hopCount = value; // replace/extend with extra code
+}
+}}
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:custom-fields"/>6.10.5 Custom Fields<a class="headerlink" href="#sec:msg-defs:custom-fields" title="Permalink to this headline">¶</a></h3>
+
+<p>If a field is marked with <b><tt>@custom</tt></b>, the field will only appear in the
+class descriptor, but no code is generated for it at all. One can inject the
+code that implements the field (data member, getter, setter, etc.) via targeted
+<b><tt>cplusplus</tt></b> blocks (<a href="chap6.html#sec:msg-defs:cplusplus-blocks">[6.8]</a>).
+<b><tt>@custom</tt></b> is a good way to go when you want the field to have a different
+underlying storage or different accessor methods than normally generated by the
+message compiler. (For the latter case, however, be aware that the generated
+class descriptor assumes the presence of certain accessor methods for the
+field, although the set of expected methods can be customized to a degree. See
+<a href="chap6.html#sec:msg-defs:descriptor-classes">[6.11]</a> for details.)
+
+<p>The following example uses <b><tt>@custom</tt></b> to implement a field that acts a
+stack (has <tt>push()</tt> and <tt>pop()</tt> methods), and uses <tt>std::vector</tt> as
+the underlying data structure.
+
+<pre class="msg">
+cplusplus {{
+#include &lt;vector&gt;
+}}
+
+class MPLSHeader
+{
+    int32_t label[] @custom @sizeGetter(getNumLabels) @sizeSetter(setNumLabels);
+}
+
+cplusplus(MPLSHeader) {{
+  protected:
+    std::vector&lt;int32_t&gt; labels;
+  public:
+    // expected methods:
+    virtual void setNumLabels(size_t size) {labels.resize(size);}
+    virtual size_t getNumLabels() const {return labels.size();}
+    virtual int32_t getLabel(size_t k) const {return labels.at(k);}
+    virtual void setLabel(size_t k, int32_t label) {labels.at(k) = label;}
+    // new methods:
+    virtual void pushLabel(int32_t label) {labels.push_back(label);}
+    virtual int32_t popLabel() {auto l=labels.back();labels.pop_back();return l;}
+}}
+
+cplusplus(MPLSHeader::copy) {{
+    labels = other.labels;
+}}
+</pre>
+<p>
+The last C++ block is needed so that the copy constructor and the
+<tt>operator=</tt> method also copies the new field. (<tt>copy()</tt> is a member
+function where the common part of the above two are factored out, and the C++
+block injects code in there.)
+
+<p>
+<h3><a name="sec:msg-defs:customizing-via-inheritance"/>6.10.6 Customizing the Class via Inheritance<a class="headerlink" href="#sec:msg-defs:customizing-via-inheritance" title="Permalink to this headline">¶</a></h3>
+
+<p>Another way of customizing the generated code is by employing what is known as
+the <i>Generation Gap</i> design pattern, proposed by John Vlissides. The idea
+is that the customization can be done while <i>subclassing</i> the generated
+class, overriding whichever member functions need to be different from their
+generated versions.
+
+<p>This feature is enabled by adding the <b><tt>@customize</tt></b> property on the class.
+Doing so will cause the message compiler to generate an intermediate class
+instead of the final one, and the user will subclass the intermediate class to
+obtain the real class. The name of the intermediate class is obtained by
+appending <tt>_Base</tt> to the class name. The subclassing code can be in an
+entirely different header and <tt>.cc</tt> file from the generated one, so this
+method does not require the use of <b><tt>cplusplus</tt></b> blocks.
+
+<p>Consider the following example:
+
+<pre class="msg">
+packet FooPacket
+{
+   @customize(true);
+   ...
+};
+</pre>
+<p>
+The message compiler will generate a <tt>FooPacket_Base</tt> class instead of
+<tt>FooPacket</tt>. It is then the user's task to subclass <tt>FooPacket_Base</tt> to
+derive <tt>FooPacket</tt>, while adding extra data members and adding/overriding
+methods to achieve the goals that motivated the customization.
+
+<p>There is a minimum amount of code you have to write for <tt>FooPacket</tt>, because
+not everything can be pre-generated as part of <tt>FooPacket_Base</tt> (e.g.
+constructors cannot be inherited). This minimum code, which usually goes into a
+header file, is the following:
+
+<pre class="cpp">
+class FooPacket : public FooPacket_Base
+{
+  private:
+    void copy(const FooPacket& other) { ... }
+  public:
+    FooPacket(const char *s=nullptr, short kind=0) : FooPacket_Base(s,kind) {}
+    FooPacket(const FooPacket& other) : FooPacket_Base(other) {copy(other);}
+    FooPacket& operator=(const FooPacket& other) {if (this==&other) return *this;
+        FooPacket_Base::operator=(other); copy(other); return *this;}
+    virtual FooPacket *dup() const override {return new FooPacket(*this);}
+};
+</pre>
+<p>
+<ul class="note"><b>NOTE</b><br>
+  The above boilerplate code can be copied out of the generated C++ header, which
+  contains it as a comment.
+</ul>
+
+<p>The generated constructor, copy constructor, <tt>operator=</tt>, <tt>dup()</tt> can be
+usually be copied verbatim. The only method that needs to be custom code is
+<tt>copy()</tt>. It is shared by the copy constructor and <tt>operator=</tt>, and
+should take care of copying the new data members you added as part of
+<tt>FooPacket</tt>.
+
+<p>In addition to the above, the implementation (<tt>.cc</tt>) file should contain the
+registration of the new class:
+
+<pre class="cpp">
+Register_Class(FooPacket);
+</pre>
+<p>
+
+<p><h3><a name="sec:msg-defs:customizing-via-abstact-field"/>6.10.7 Using an Abstract Field<a class="headerlink" href="#sec:msg-defs:customizing-via-abstact-field" title="Permalink to this headline">¶</a></h3>
+
+<p>Abstract fields, introduced in <a href="chap6.html#sec:msg-defs:abstract-fields">[6.7.5]</a>, are an
+alternative to <b><tt>@custom</tt></b> (see <a href="chap6.html#sec:msg-defs:custom-fields">[6.10.5]</a>) for
+allowing a custom implementation (such as storage, getter/setter methods, etc.)
+to be provided for a field. For a field marked <b><tt>abstract</tt></b>, the message compiler does
+not generate a data member, and generated getter/setter methods will be pure
+virtual.
+
+<p>Abstract fields are most often used together with the Generation Gap pattern
+(see <a href="chap6.html#sec:msg-defs:customizing-via-inheritance">[6.10.6]</a>), so that one can
+immediately supply a custom implementation.
+
+<p>The following example demonstrates the use of abstract fields for creating
+an array field that uses <tt>std::vector</tt> as underlying implementation:
+
+<pre class="msg">
+packet FooPacket
+{
+    @customize(true);
+    abstract int foo[]; // impl will use std::vector&lt;int&gt;
+}
+</pre>
+<p>
+If you compile the above code, in the generated C++ code you will only find
+abstract methods for <tt>foo</tt>, but no underlying data member or method
+implementation. You can implement everything as you like. You can then write the
+following C++ file to implement <tt>foo</tt> with <tt>std::vector</tt> (some
+details omitted for brevity):
+
+<pre class="cpp">
+#include &lt;vector&gt;
+#include "FooPacket_m.h"
+
+class FooPacket : public FooPacket_Base
+{
+  protected:
+    std::vector&lt;int&gt; foo;
+
+  public:
+    // constructor and other methods omitted, see below
+    ...
+    virtual int getFoo(size_t k) {return foo[k];}
+    virtual void setFoo(size_t k, int x) {foo[k]=x;}
+    virtual void addFoo(int x) {foo.push_back(x);}
+    virtual void setFooArraySize(size_t size) {foo.resize(size);}
+    virtual size_t getFooArraySize() const {return foo.size();}
+};
+
+Register_Class(FooPacket);
+</pre>
+<p>
+Some additional boilerplate code is needed so that the class conforms
+to conventions, and duplication and copying works properly:
+
+<pre class="cpp">
+    FooPacket(const char *name=nullptr, int kind=0) : FooPacket_Base(name,kind) {
+    }
+    FooPacket(const FooPacket& other) : FooPacket_Base(other.getName()) {
+        operator=(other);
+    }
+    FooPacket& operator=(const FooPacket& other) {
+        if (&other==this) return *this;
+        FooPacket_Base::operator=(other);
+        foo = other.foo;
+        return *this;
+    }
+    virtual FooPacket *dup() {
+        return new FooPacket(*this);
+    }
+</pre>
+<p>
+
+<p><h2><a name="sec:msg-defs:descriptor-classes"/>6.11 Descriptor Classes<a class="headerlink" href="#sec:msg-defs:descriptor-classes" title="Permalink to this headline">¶</a></h2>
+
+<p>For each generated class and struct, the message compiler also generates an
+associated descriptor class, which class carries &#8220;reflection&#8221; information
+about the new class. The descriptor class encapsulates virtually all information
+that the original message definition contains, and exposes it via member
+functions. Reflection information allows inspecting object contents down to
+field level in Qtenv, filtering objects by a filter expression that refers to
+object fields, serializing messages-packets in a readable form for the eventlog
+file, and has several further potential uses.
+
+<p>
+<h3><a name="sec:msg-defs:cclassdescriptor"/>6.11.1 <a href="../api/classomnetpp_1_1cClassDescriptor.html">cClassDescriptor</a><a class="headerlink" href="#sec:msg-defs:cclassdescriptor" title="Permalink to this headline">¶</a></h3>
+
+<p>The descriptor class is subclassed from <tt><a href="../api/classomnetpp_1_1cClassDescriptor.html">cClassDescriptor</a></tt>. It has
+methods for enumerating fields (<tt>getFieldCount()</tt>, <tt>getFieldName()</tt>,
+<tt>getFieldTypeString()</tt>, etc.), for getting and setting a field's value in
+string form (<tt>getFieldAsString()</tt>, <tt>setFieldAsString()</tt>) and as
+<tt><a href="../api/classomnetpp_1_1cValue.html">cValue</a></tt> (<tt>getFieldValue()</tt>, <tt>setFieldValue()</tt>), for
+exploring the class hierarchy (<tt>getBaseClassDescriptor()</tt>, etc.), for
+accessing class and field properties, and for similar tasks.
+
+<p>Classes derived from <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt> have a virtual member function
+<tt>getDescriptor</tt> that returns their associated descriptor. For other
+classes, it is possible to obtain the descriptor using
+<tt><a href="../api/classomnetpp_1_1cClassDescriptor.html">cClassDescriptor</a>::getDescriptorFor()</tt> with the class name as argument.
+
+<p>Several properties control the creation and details of the class descriptor.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-property"/>6.11.2 Controlling Descriptor Generation<a class="headerlink" href="#sec:msg-defs:descriptor-property" title="Permalink to this headline">¶</a></h3>
+
+<p>The <b><tt>@descriptor</tt></b> class property can be used to control the generation
+of the descriptor class. <tt>@descriptor(readonly)</tt> instructs the message
+compiler not to generate field setters for the descriptor, and
+<tt>@descriptor(false)</tt> instructs it not to generate a description class
+for the class at all.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-existingclass-property"/>6.11.3 Generating Descriptors For Existing Classes<a class="headerlink" href="#sec:msg-defs:descriptor-existingclass-property" title="Permalink to this headline">¶</a></h3>
+
+<p>It is also possible to use (or abuse) the message compiler for generating a
+descriptor class for an existing class. To do that, write a message definition
+for your existing class (for example, if it has <tt>int getFoo()</tt> and
+<tt>setFoo(int)</tt> methods, add an <tt>int foo</tt> field to the message
+definition), and mark it with <b><tt>@existingClass</tt></b>. This will tell the
+message compiler that it should not generate an actual class (as it already
+exists), only a descriptor class.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-field-meadata"/>6.11.4 Field Metadata<a class="headerlink" href="#sec:msg-defs:descriptor-field-meadata" title="Permalink to this headline">¶</a></h3>
+
+<p>When an object is shown in Qtenv's Object Inspector pane, Qtenv obtains all
+information it displays from the object's descriptor. There are several
+properties that can be used to customize how a field appears in the Object
+Inspector:
+
+<p><ul>
+  <li> <b><tt>@icon</tt></b> associates an icon with the field;
+  <li> <b><tt>@label</tt></b> overrides the text displayed as field name;
+  <li> <b><tt>@group</tt></b> is used for grouping related fields;
+  <li> <b><tt>@hint</tt></b> can be used to provide a short description of the field,
+    which Qtenv displays in a tooltip
+</ul>
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-method-name-properties"/>6.11.5 Method Name Properties<a class="headerlink" href="#sec:msg-defs:descriptor-method-name-properties" title="Permalink to this headline">¶</a></h3>
+
+<p>Several of the properties which are for overriding field accessor method names
+(<b><tt>@getter</tt></b>, <b><tt>@setter</tt></b>, <b><tt>@sizeGetter</tt></b>, <b><tt>@sizeSetter</tt></b>,
+etc., see <a href="chap6.html#sec:msg-defs:customizing-method-names">[6.10.1]</a>) have a secondary purpose.
+When generating a descriptor for an <i>existing</i> class (see
+<b><tt>@existingClass</tt></b>), those properties specify how the descriptor can access
+the field, i.e. what code to generate in the implementation of the descriptor's
+various methods. In that use case, such properties may contain code fragments or
+a function call template instead of a method name.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-tostring"/>6.11.6 toString/fromString<a class="headerlink" href="#sec:msg-defs:descriptor-tostring" title="Permalink to this headline">¶</a></h3>
+
+<p>To be able to generate the descriptor's <tt>getFieldValueAsString()</tt> member
+function, the message compiler needs to know how to convert the return type of
+the getter to <tt>std::string</tt>. Similarly, for <tt>setFieldValueAsString()</tt> it
+needs to know how to convert (or parse) a string to obtain the setter's argument
+type. For the built-in types (<b><tt>int</tt></b>, <b><tt>double</tt></b>, etc.) this information is
+pre-configured, but for other types the user needs to supply it via two
+properties:
+
+<p><ul>
+  <li> <b><tt>@toString</tt></b> specifies the code to convert the return type of the setter to a string;
+  <li> <b><tt>@fromString</tt></b> specifies the code to convert a string to the setter's argument type.
+</ul>
+
+<p>These properties can be specified on the class (where it will be applied to
+fields of that type), or directly on fields. Multiple syntaxes are accepted:
+
+<p><ul>
+  <li> If the value starts with a dot, it is interpreted as a member function call.
+  <li> If the value contains a dollar sign, it serves as a placeholder for the
+        value to be converted.
+</ul>
+
+<p>Example:
+
+<pre class="msg">
+class IPAddress
+{
+    @existingClass;
+    @opaque;
+    @toString(.str());  // use IPAddress::str() to produce a string
+    @fromString(IPAddress($));  // use constructor; '$' will be replaced by the string
+}
+</pre>
+<p>
+If the <b><tt>@toString</tt></b> property is missing, the message compiler generates
+code which calls the <tt>str()</tt> member function on the value returned by the
+getter, provided that it knows for certain that the corresponding type has such
+method (the type is derived from <tt><a href="../api/classomnetpp_1_1cObject.html">cObject</a></tt>, or has the <b><tt>@str</tt></b> property).
+
+<p>If there is no <b><tt>@toString</tt></b> property and no (known) <tt>str()</tt> method,
+the descriptor will return the empty string.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-tovalue"/>6.11.7 toValue/fromValue<a class="headerlink" href="#sec:msg-defs:descriptor-tovalue" title="Permalink to this headline">¶</a></h3>
+
+<p>Similarly to <b><tt>@toString</tt></b>/<b><tt>@fromString</tt></b> described in the previous
+section, the <b><tt>@toValue</tt></b> and <b><tt>@fromValue</tt></b> properties are used define
+how to convert the field's value to and from <tt><a href="../api/classomnetpp_1_1cValue.html">cValue</a></tt> for the
+descriptor's <tt>getFieldValue()</tt> and <tt>setFieldValue()</tt> methods.
+
+<p>
+<h3><a name="sec:msg-defs:descriptor-fieldmodifiers"/>6.11.8 Field Modifiers<a class="headerlink" href="#sec:msg-defs:descriptor-fieldmodifiers" title="Permalink to this headline">¶</a></h3>
+
+<p>There are several boolean-valued properties which enable/disable various
+features in the descriptor:
+
+<p><ul>
+
+<p>  <li> <b><tt>@opaque</tt></b>: If true: Treat the field as atomic (non-compound) type, i.e.
+    having no descriptor class. When specified on a class, it determines the default
+    for fields of that type.
+
+<p>  <li> <b><tt>@editable</tt></b>: If set, value of the field (or value of fields that
+    are instances of this type) can be set via the class descriptor's
+    <tt>setFieldValueFromString()</tt> and <tt>setFieldValue()</tt> methods.
+
+<p>  <li> <b><tt>@replaceable</tt></b>: If set, field is a pointer whose value can be set
+    via the class descriptor's <tt>setFieldStructValuePointer()</tt> and
+    <tt>setFieldValue()</tt> methods.
+
+<p>  <li> <b><tt>@resizable</tt></b>: If set, field is a variable-size array whose size
+    can be set via the class descriptor's <tt>setFieldArraySize()</tt> method.
+
+<p>  <li> <b><tt>@readonly</tt></b>: This is simply a shorthand for <tt>@editable(false)
+    @replaceable(false) @resizable(false)</tt>.
+
+<p></ul>
+<hr class='pgbr'><p><hr><b><a href="chap5.html">[Prev]</A>&nbsp;<a href="chap7.html">[Next]</A>&nbsp;<a href="toc.html#toc_6.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p>
+
+</body>
+</html>

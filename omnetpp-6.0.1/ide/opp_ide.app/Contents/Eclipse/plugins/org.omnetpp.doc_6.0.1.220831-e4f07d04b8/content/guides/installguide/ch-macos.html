@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>macOS</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Linux" href="ch-supported-linux.html" />
+    <link rel="prev" title="Windows - Using the MinGW64 Compiler Toolchain" href="ch-windows-omnetpp.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="macos">
+<h1>macOS</h1>
+<section id="supported-releases">
+<h2>Supported Releases</h2>
+<p>This chapter provides additional information for installing OMNeT++ on macOS.</p>
+<p>The following releases are covered:</p>
+<ul class="simple">
+<li><p>macOS 11.x</p></li>
+</ul>
+</section>
+<section id="installing-the-prerequisite-packages">
+<h2>Installing the Prerequisite Packages</h2>
+<p>Install the command line developer tools for macOS (compiler, debugger, etc.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ xcode-select --install
+</pre></div>
+</div>
+<p>Installing additional packages will enable more functionality in OMNeT++; see the <em>Additional packages</em> section at the
+end of this chapter.</p>
+</section>
+<section id="enabling-development-mode-in-terminal">
+<h2>Enabling Development Mode in Terminal</h2>
+<p>MacOS has a strict default security policy preventing the execution of unsigned code. This behavior often
+interferes with the development process so you must explicitly allow running unsigned code from a Terminal.
+On the <em>System Preferences / Security and Privacy / Privacy</em> tab, select <em>Development Tools</em> on the left side,
+unlock the panel with the lock icon on the bottom left and select the Terminal app on the right side to
+override the default security policy for the Terminal app.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/macos-security.png"><img alt="../_images/macos-security.png" src="../_images/macos-security.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 144 </span><span class="caption-text">Enable Running Unsigned Code in Terminal</span></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you do not see the <em>Terminal</em> item in the <em>Development Tools</em> section, you should execute
+<cite>spctl developer-mode enable-terminal</cite> in the terminal and then restart <em>System Preferences</em>
+applet.</p>
+</div>
+</section>
+<section id="debugging-unsigned-code">
+<h2>Debugging Unsigned Code</h2>
+<p>Even if you have enabled development mode in the terminal, missing code signatures will still
+cause problems during debugging, because the debugged process is started by the IDE, not the terminal.
+To be able to debug, you must disable code signature checking globally by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo spctl --master-disable
+</pre></div>
+</div>
+<p>After issuing the above command go to <em>System Preferences / Security and Privacy / General</em> and
+select <em>Any</em> at the bottom of the dialog. After restarting your terminal application, you will be
+able to debug your unsigned simulation models.</p>
+</section>
+<section id="running-omnet-on-apple-silicon">
+<h2>Running OMNeT++ on Apple Silicon</h2>
+<p>OMNeT++ does not currently support the Apple M1 processor natively, but you can run the x86_64 version using
+the Rosetta 2 emulator. To run OMNeT++ under emulation, open a terminal window, then execute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ arch -x86_64 /bin/zsh --login
+</pre></div>
+</div>
+<p>After this, follow the normal installation instructions and be sure to execute all commands in this terminal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above command may graphically prompt you to allow the installation of the emulator component.
+You can also manually trigger the installation from the command line using the following command:
+<cite>softwareupdate –install-rosetta –agree-to-license</cite>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Typing <cite>source setenv</cite> will launch the x86_64 emulator automatically for you. Make sure to execute
+all commands from that terminal.</p>
+</div>
+</section>
+<section id="additional-steps-required-on-macos-to-use-the-debugger">
+<h2>Additional Steps Required on macOS to Use the Debugger</h2>
+<p>The Command Line Developer Tools package contains the <code class="docutils literal notranslate"><span class="pre">lldb</span></code> debugger. OMNeT++ 6.0 and later contains the necessary
+driver binary (<code class="docutils literal notranslate"><span class="pre">lldbmi2</span></code>) that allows <code class="docutils literal notranslate"><span class="pre">lldb</span></code> to be used in the OMNeT++ IDE. If you are upgrading from an earlier
+version of OMNeT++, be sure to delete and recreate all Launch Configurations in the IDE. This is required because
+older Launch Configurations were using <code class="docutils literal notranslate"><span class="pre">gdb</span></code> as the debugger, but the new IDE uses <code class="docutils literal notranslate"><span class="pre">lldbmi2</span></code> as the debugger
+executable.</p>
+<p>On the first debug session the OS may prompt you to allow debugging with the <code class="docutils literal notranslate"><span class="pre">lldb</span></code> executable.</p>
+</section>
+<section id="downloading-and-unpacking-omnet">
+<h2>Downloading and Unpacking OMNeT++</h2>
+<p>Download OMNeT++ from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select to download
+the macOS specific archive, <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-macos-x86_64.tgz</span></code>.</p>
+<p>Copy the archive to the directory where you want to install it. This is usually your home directory, <code class="docutils literal notranslate"><span class="pre">/Users/&lt;you&gt;</span></code>.
+Open a terminal, and extract the archive using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar zxvf omnetpp-6.0.1-macos-x86_64.tgz
+</pre></div>
+</div>
+<p>A subdirectory called <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> will be created, containing the simulator files.</p>
+<p>Alternatively, you can also unpack the archive using Finder.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Terminal can be found in the Applications / Utilities folder.</p>
+</div>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables</h2>
+<p>In general OMNeT++ requires that certain environment variables are set and the
+<code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/bin</span></code> directory is in the PATH. Source the <code class="docutils literal notranslate"><span class="pre">setenv</span></code>
+script to set up all these variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd omnetpp-6.0.1
+$ source setenv
+</pre></div>
+</div>
+<p>To set the environment variables permanently, edit <code class="docutils literal notranslate"><span class="pre">.profile</span></code>, <code class="docutils literal notranslate"><span class="pre">.zprofile</span></code> or <code class="docutils literal notranslate"><span class="pre">.zshenv</span></code> in your home directory and
+add a line something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span> <span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">source</span> <span class="s2">&quot;$HOME/omnetpp-6.0.1/setenv&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="configuring-and-building-omnet">
+<h2>Configuring and Building OMNeT++</h2>
+<p>Check <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> to make sure it contains the settings you need. In most cases you don’t need to change anything
+in it.</p>
+<p>In the top-level OMNeT++ directory, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">configure</span></code> script detects installed software and configuration of your system. It writes the results into the
+<code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> file, which will be read by the makefiles during the build process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there is an error during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, the output may give hints about what went wrong. Scroll up to see the
+messages. (You may need to increase the scrollback buffer size of the terminal and re-run <code class="docutils literal notranslate"><span class="pre">./configure</span></code>.) The
+script also writes a very detailed log of its operation into <code class="docutils literal notranslate"><span class="pre">config.log</span></code> to help track down errors. Since
+<code class="docutils literal notranslate"><span class="pre">config.log</span></code> is very long, it is recommended that you open it in an editor and search for phrases like <em>error</em> or
+the name of the package associated with the problem.</p>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">./configure</span></code> has finished, you can compile OMNeT++. Type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To take advantage of multiple processor cores, add the <code class="docutils literal notranslate"><span class="pre">-j4</span></code> option to the <code class="docutils literal notranslate"><span class="pre">make</span></code> command line.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The build process will not write anything outside its directory, so no special privileges are needed.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The make command will seemingly compile everything twice. This is because both debug and optimized versions of the
+libraries are built. If you only want to build one set of the libraries, specify <code class="docutils literal notranslate"><span class="pre">MODE=debug</span></code> or <code class="docutils literal notranslate"><span class="pre">MODE=release</span></code>:</p>
+</div>
+</section>
+<section id="verifying-the-installation">
+<h2>Verifying the Installation</h2>
+<p>You can now verify that the sample simulations run correctly. For example, the aloha simulation is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the Qtenv environment. You should see nice gui windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2>Starting the IDE</h2>
+<p>OMNeT++ comes with an Eclipse-based simulation IDE.</p>
+<p>Start the IDE by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<p>If you would like to be able to launch the IDE via Applications, the Dock or a desktop shortcut, do the following: open
+the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> folder in Finder, go into the <code class="docutils literal notranslate"><span class="pre">ide</span></code> subfolder, create an alias for the omnetpp program
+there (right-click, <em>Make Alias</em>), and drag the new alias into the Applications folder, onto the Dock, or onto the
+desktop.</p>
+<p>Alternatively, run one or both of the commands below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make install-menu-item
+$ make install-desktop-icon
+</pre></div>
+</div>
+<p>which will do roughly the same.</p>
+</section>
+<section id="using-the-ide">
+<h2>Using the IDE</h2>
+<p>When you try to build a project in the IDE, you may get the following warning message:</p>
+<blockquote>
+<div><p>Toolchain “…” is not supported on this platform or installation. Please go to the Project menu, and activate a
+different build configuration. (You may need to switch to the C/C++ perspective first, so that the required menu
+items appear in the Project menu.)</p>
+</div></blockquote>
+<p>If you encounter this message, choose <em>Project &gt; Properties &gt; C/C++ Build &gt; Tool Chain Editor &gt; Current toolchain &gt;
+GCC for OMNeT++</em>.</p>
+<p>The IDE is documented in detail in the <em>User Guide</em>.</p>
+</section>
+<section id="reconfiguring-the-libraries">
+<h2>Reconfiguring the Libraries</h2>
+<p>If you need to recompile the OMNeT++ components with different flags (e.g. different optimization), then change the
+top-level OMNeT++ directory, edit <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> accordingly, then type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make clean
+$ make
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To take advantage of multiple processor cores, add the <code class="docutils literal notranslate"><span class="pre">-j4</span></code> option to the <code class="docutils literal notranslate"><span class="pre">make</span></code> command line.</p>
+</div>
+<p>If you want to recompile just a single library, then change to the directory of the library (e.g. <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">src/sim</span></code>) and
+type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean
+$ make
+</pre></div>
+</div>
+<p>By default, libraries are compiled in both debug and release mode. If you want to make release or debug builds only,
+use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=release
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=debug
+</pre></div>
+</div>
+<p>By default, shared libraries will be created. If you want to build static libraries, set <code class="docutils literal notranslate"><span class="pre">SHARED_LIBS=no</span></code> in
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code> and re-configure your project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The built libraries and programs are immediately copied to the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> and <code class="docutils literal notranslate"><span class="pre">bin/</span></code> subdirectories.</p>
+</div>
+</section>
+<section id="additional-packages">
+<h2>Additional Packages</h2>
+<section id="openmpi">
+<h3>OpenMPI</h3>
+<p>MacOS does not come with OpenMPI, so you must install it manually. You can install it from the Homebrew repo
+(<a class="reference external" href="http://brew.sh">http://brew.sh</a>) by typing <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">open-mpi</span></code>. In this case, you have to manually set the MPI_CFLAGS and MPI_LIBS
+variables in <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> and re-run <code class="docutils literal notranslate"><span class="pre">./configure</span></code>.</p>
+</section>
+<section id="akaroa">
+<h3>Akaroa</h3>
+<p>Akaroa 2.7.9, which is the latest version at the time of writing, does not support macOS. You may try to port it using
+the porting guide from the Akaroa distribution.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-macos.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

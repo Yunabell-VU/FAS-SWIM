@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Overview of the OMNeT++ IDE &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IDE Developers Guide" href="../ide-developersguide/ide-developersguide.html" />
+    <link rel="prev" title="Build Options" href="../installguide/ch-build-options.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#ide-overview/ide-overview" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Overview of the OMNeT++ IDE </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../userguide/index.html" class="md-nav__link">User Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Overview of the OMNeT++ IDE </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Overview of the OMNeT++ IDE</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#ide-overview-ide-overview--page-root" class="md-nav__link">Overview of the OMNeT++ IDE</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-ned-editor" class="md-nav__link">The NED Editor</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-ini-file-editor" class="md-nav__link">The Ini File Editor</a>
+        </li>
+        <li class="md-nav__item"><a href="#simulation-launcher" class="md-nav__link">Simulation Launcher</a>
+        </li>
+        <li class="md-nav__item"><a href="#sequence-chart" class="md-nav__link">Sequence Chart</a>
+        </li>
+        <li class="md-nav__item"><a href="#scave-result-analysis" class="md-nav__link">Scave (Result Analysis)</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/ide-overview/ide-overview.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="#introduction" class="md-nav__link">Introduction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#the-ned-editor" class="md-nav__link">The NED Editor</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#the-ini-file-editor" class="md-nav__link">The Ini File Editor</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#simulation-launcher" class="md-nav__link">Simulation Launcher</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#sequence-chart" class="md-nav__link">Sequence Chart</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="#scave-result-analysis" class="md-nav__link">Scave (Result Analysis)</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#ide-overview-ide-overview--page-root" class="md-nav__link">Overview of the OMNeT++ IDE</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-ned-editor" class="md-nav__link">The NED Editor</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-ini-file-editor" class="md-nav__link">The Ini File Editor</a>
+        </li>
+        <li class="md-nav__item"><a href="#simulation-launcher" class="md-nav__link">Simulation Launcher</a>
+        </li>
+        <li class="md-nav__item"><a href="#sequence-chart" class="md-nav__link">Sequence Chart</a>
+        </li>
+        <li class="md-nav__item"><a href="#scave-result-analysis" class="md-nav__link">Scave (Result Analysis)</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/ide-overview/ide-overview.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="overview-of-the-omnet-ide">
+<h1 id="ide-overview-ide-overview--page-root">Overview of the OMNeT++ IDE<a class="headerlink" href="#ide-overview-ide-overview--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ Integrated Development Environment is based on the Eclipse platform, and extends it with new editors, views,
+wizards, and additional functionality. OMNeT++ adds functionality for creating and configuring models (NED and ini
+files), performing batch executions, and analyzing simulation results, while Eclipse provides C++ editing, SVN/GIT
+integration, and other optional features (UML modeling, bugtracker integration, database access, etc.) via various
+open-source and commercial plug-ins.</p>
+<p>The following screenshots introduce the main components of the OMNeT++ IDE.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/img1.png" src="../_images/img1.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 154 </span><span class="caption-text">The OMNeT++ IDE, editing a NED file</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="the-ned-editor">
+<h2 id="the-ned-editor">The NED Editor<a class="headerlink" href="#the-ned-editor" title="Permalink to this headline">¶</a></h2>
+<p>The NED Editor can edit NED files both graphically or in text mode, and the user can switch between the two modes at any
+time, using the tabs at the bottom of the editor window.</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/img2.png" src="../_images/img2.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 155 </span><span class="caption-text">The NED Editor in graphical editing mode</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In graphical mode, one can create compound modules, channels, and other component types. Submodules can be created using
+the palette of available module types. Visual and non-visual properties can be modified in the Properties View, or by
+dialogs invoked from the context menu. The editor offers many features such as unlimited undo/redo, object cloning,
+constrained move and resize, alignment of objects, and zooming.</p>
+<p>Submodules can be pinned (having a fixed position), or unpinned (auto-layout). Graphical features that can be edited are
+background image, background grid, default icons (via display string inheritance), icon sizing and coloring,
+transmission range, and many others.</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/img3.png" src="../_images/img3.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 156 </span><span class="caption-text">Properties view</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Properties View lets the user edit graphical and non-graphical properties of objects. Special cell editors
+facilitate selecting colors, icons, etc. Undo and redo is supported for property changes too. The Properties View is
+also used with other editors like the Result Analysis editor, where it allows the user to customize charts and other
+objects.</p>
+<figure class="align-default" id="id4">
+<img alt="../_images/img4.png" src="../_images/img4.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 157 </span><span class="caption-text">The NED Editor in source editing mode</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Text mode lets the user work with the NED source directly. When hitting <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>, the editor offers context-aware
+completion of keywords and module type, parameter, gate, and submodule names. Template proposals to insert full compound
+module skeletons, submodules, various connection structures, etc. are also available. Documentation of referenced module
+types can be viewed by hovering over the NED type name. The NED source is continually parsed and validated as the user
+is typing, and errors are displayed in real time on the left margin. Syntax highlighting, automatic indentation, and
+automatic conversion from the OMNeT++ 3.x NED syntax are also provided.</p>
+<figure class="align-default" id="id5">
+<img alt="../_images/img5.png" src="../_images/img5.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 158 </span><span class="caption-text">Outline View</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Outline View shows the structure of NED files in both graphical and text editing mode, and allows navigation, as
+well.</p>
+<p><em>Other Views.</em> The Module Hierarchy View and the NED Parameters View can also be used with the NED Editor (they will
+display the submodule hierarchy and the parameters of the selected module or submodule) – these views will be described
+with the Ini File Editor. Further related views are the Problems View (which displays errors and warnings in NED files
+and other files), and Tasks View (which shows a list of all FIXME and TODO comments found in NED files and other source
+files.)</p>
+</section>
+<section id="the-ini-file-editor">
+<h2 id="the-ini-file-editor">The Ini File Editor<a class="headerlink" href="#the-ini-file-editor" title="Permalink to this headline">¶</a></h2>
+<p>The Ini File Editor lets the user configure simulation models for execution. It features both form-based and source
+editing.</p>
+<figure class="align-default" id="id6">
+<img alt="../_images/img6.png" src="../_images/img6.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 159 </span><span class="caption-text">Form-based ini file editing</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Ini File editor considers all supported configuration options and offers them in several forms, organized by topics.
+Descriptions and default values are displayed in tooltips, which can be made persistent for easier reading. The
+structure of the ini file (sections and their inheritance tree) is also visualized and editable via drag&amp;drop and
+dialogs. Validation and content assist ( <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>) are also provided where needed. The editor supports unlimited
+undo/redo and automatic conversion from OMNeT++ 3.x ini files.</p>
+<figure class="align-default" id="id7">
+<img alt="../_images/img7.png" src="../_images/img7.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 160 </span><span class="caption-text">The ini file source editor</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The text editor lets the user work with the ini file directly, which is more efficient for advanced users than forms.
+Unlimited undo/redo, syntax coloring, and completion of configuration keys, values, and module parameter patterns (on
+<kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>) are provided. As the user types, the file is continually analyzed and errors/warnings are displayed in real
+time.</p>
+<p>The editor considers all NED declarations (simple modules, compound modules, channels, etc.) and can fully exploit this
+information to provide diagnostics and assistance to the user. Looking at the <em>network=</em> configuration key, it knows the
+top-level compound module NED type, and internally builds a static picture of the network by recursively enumerating the
+top-level module’s submodules, sub-submodules, sub-sub-submodules, etc., and continually relates this information to the
+ini file contents. Thus, the editor always knows which ini file keys match which module parameters, which are the ini
+file keys that are unused (will not match anything), and which module parameters are still open (i.e. have no value
+assigned yet). It displays this information in tooltips, as warnings, and in various views.</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/img8.png"><img alt="../_images/img8.png" src="../_images/img8.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 161 </span><span class="caption-text">The Add Missing Keys dialog</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>To speed up the process of creating ini files from scratch, the editor offers an <em>Add Missing Keys</em> dialog. After
+clicking OK, the editor will insert ini file keys for all open NED parameters. The user will only need to supply the
+values.</p>
+<figure class="align-default" id="id9">
+<img alt="../_images/img9.png" src="../_images/img9.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 162 </span><span class="caption-text">Module Hierarchy View</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Module Hierarchy View displays the submodule hierarchy of the current configuration’s network, together with the
+module’s parameters. It shows how module parameters obtain their values (from NED, by applying a NED default value, or
+from the ini file). It is able to resolve simple cases where a submodule type comes from a string parameter (NED’s
+<em>like</em> keyword). By using the context menu, the user can go to the NED declaration of a module, submodule, parameter,
+gate, or to the place where a parameter gets its value (in NED or in the ini file).</p>
+<p>The View can be pinned to a particular editor to prevent its contents from changing when the user switches across NED
+and ini file editors.</p>
+<figure class="align-default" id="id10">
+<img alt="../_images/img10.png" src="../_images/img10.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 163 </span><span class="caption-text">The NED Parameters View</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>By default, the NED Parameters View displays the table of all unassigned NED parameters in the current configuration’s
+network and it can be switched over to show all parameters, assigned or unassigned. For assigned parameters, it shows
+how they obtain their values (from NED, by applying a NED default value, or from the ini file). The user can open the
+relevant places in the NED files or the ini file. This View can also be pinned.</p>
+<figure class="align-default" id="id11">
+<img alt="../_images/img11.png" src="../_images/img11.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 164 </span><span class="caption-text">The Problems View</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Problems View presents errors, warnings, and info messages in NED files, ini files, and other source files in a
+unified manner. Double-clicking on an item opens the corresponding file and goes to the error’s location. The view’s
+contents can be filtered in various ways (current file, current project, all projects, by severity, etc).</p>
+<p><em>Other Views.</em> The Outline View displays the list of sections in the current ini file and can be used for navigation as
+well.</p>
+</section>
+<section id="simulation-launcher">
+<h2 id="simulation-launcher">Simulation Launcher<a class="headerlink" href="#simulation-launcher" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE makes it possible to run simulations directly from the integrated environment. It is possible to run a
+simulation as a normal C/C++ application and perform C++ source-level debugging on it. The user can also run it as a
+standalone application (under Qtenv or Cmdenv) or run batches of simulations where runs differ in module parameter
+settings or random number seeds (NOTE: an Eclipse-based runtime environment [“IDEEnv”] does not exist yet; it is planned
+for future releases).</p>
+<figure class="align-default" id="id12">
+<img alt="../_images/img12.png" src="../_images/img12.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 165 </span><span class="caption-text">The Run dialog showing a simulation launch configuration</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In the Eclipse IDE, the various ways of launching a program under development is described by launch configurations.
+There are various launch configuration types (C/C++ Application, Java Application, etc.). To launch a program for the
+first time, the user creates an instance of a launch configuration, fills in a form (program name, command-line
+arguments, etc.), and hits the Run button. OMNeT++ provides launch configuration types for simulations: one extends the
+normal “C/C++ Local Application” launch type with a <em>Simulation</em> tab (for convenient editing of simulation-related
+command-line options), and a standalone launch type for launching a simulation or running simulation batches. The former
+can be used for C++ debugging, as well.</p>
+<p>The dialog shows a standalone launch type for the QueueNet example simulation model. Batch simulations can be launched
+by specifying more than one run number in the dialog. Ini files allow the user to define various scenarios iterating
+over a list of values for certain NED parameters, and/or do multiple runs with different seeds. The launch dialog helps
+the user select the desired run numbers by showing which runs correspond to which parameters and seed settings.</p>
+<p>Multi-processor or multi-core computers can be exploited by specifying that more than one process may be launched (i.e.
+may be running) at a time.</p>
+<figure class="align-default" id="id13">
+<img alt="../_images/img13.png" src="../_images/img13.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 166 </span><span class="caption-text">Progress View</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Progress View reports the status of simulation execution when you have a long-running simulation, or you are
+executing several runs in a batch. It is possible to cancel the whole batch operation with a single click, if necessary.
+Simulations run in separate processes that do not block the IDE, so users can keep working while their simulations run
+in the background. In the above screenshot, the number of processes to run in parallel was set to 2; run #1 has already
+terminated (and is no longer shown), run #3 has already launched, and run #2 is still running.</p>
+<figure class="align-default" id="id14">
+<img alt="../_images/img14.png" src="../_images/img14.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 167 </span><span class="caption-text">Console View</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Each running process sends its output to a separate console buffer within the Console View, so the user can review the
+output after a simulation has finished. One can switch between console buffers using the Console View’s menu or toolbar,
+or by double-clicking on a process in the Debug View.</p>
+<figure class="align-default" id="id15">
+<img alt="../_images/img15.png" src="../_images/img15.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 168 </span><span class="caption-text">The Debug View showing three runs in a simulation batch</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Debug View is another one of Eclipse’s standard Views, but it is not only useful for debugging. While the Progress
+View only shows currently executing processes, the Debug View displays the ones already terminated, as well, together
+with their exit codes. Processes are marked with run numbers and launch times for easier identification. Double-clicking
+an item reveals the process output in the Console View.</p>
+</section>
+<section id="sequence-chart">
+<h2 id="sequence-chart">Sequence Chart<a class="headerlink" href="#sequence-chart" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ simulation kernel is capable of logging various events during simulation: scheduling and canceling
+self-messages, sending messages, display changes, module and connection creation and deletion, user log messages, etc.
+The result is an event log file which contains detailed information of the simulation, and later can be used for various
+purposes, such as visualizing message exchanges among modules on a sequence chart. The file format is line-based text to
+facilitate processing by third party tools.</p>
+<figure class="align-default" id="id16">
+<img alt="../_images/img16.png" src="../_images/img16.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 169 </span><span class="caption-text">A Sequence Chart showing ARP on a wireless network</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>An event log can be visualized with the Sequence Chart in the IDE. On the Sequence Chart, events are represented as
+nodes, and message send/schedule/reuse operations as arrows. The chart can be filtered according to modules, message
+types, and various other criteria. The chart can also be filtered according to the causes/consequences of a particular
+event (this works by following message arrows backward and forward in simulation time). The chart timeline can be
+displayed in various modes, such as linear (simulation time), compact (non-linear), and event number-based. Other
+features include sorting of module axes, displaying state vector data on axes (using output vector files), zooming, and
+special navigation options (bookmarks, zoom to message send, follow message send), and exporting the chart in SVG
+format.</p>
+<p>Both the Event Log Table and the Sequence Chart are capable of efficiently displaying event log files of several
+gigabytes without requiring large amounts of memory.</p>
+<figure class="align-default" id="id17">
+<img alt="../_images/img17.png" src="../_images/img17.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 170 </span><span class="caption-text">The Event Log View</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Event Log Table displays the content of an event log file recorded during a simulation. It supports raw and
+descriptive notations, line-based filtering for event log entry types and various parameters, search for free text,
+bookmarks, and special navigation options such as “go to simulation time” or message arrival. The Event Log Table
+supports the same filtering as the Sequence Chart.</p>
+</section>
+<section id="scave-result-analysis">
+<h2 id="scave-result-analysis">Scave (Result Analysis)<a class="headerlink" href="#scave-result-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Scave is the result analysis tool of OMNeT++ and its task is to help the user process and visualize simulation results
+saved into vector and scalar files. Scave is designed so that the user can work equally well on the output of a single
+simulation run (one or two files) and the result of simulation batches (which may be several hundred files, possibly in
+multiple directories). Ad-hoc browsing of the data is supported in addition to systematic and repeatable processing.
+With the latter, all processing and charts are stored as “recipes”. For example, if simulations need to be re-run due to
+a model bug or misconfiguration, existing charts do not need to be drawn all over again. Simply replacing the old result
+files with the new ones will result in the charts being automatically displayed with the new data.</p>
+<p>Scave is implemented as a multi-page editor. What the editor edits is the “recipe,” which includes what files to take as
+inputs, what data to select from them, what (optional) processing to apply, and what kind of charts to create from them.
+The pages (tabs) of the editor roughly correspond to these steps. You will see that Scave is much more than just a union
+of the OMNeT++ 3.x Scalars and Plove tools.</p>
+<figure class="align-default" id="id18">
+<img alt="../_images/img18.png" src="../_images/img18.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 171 </span><span class="caption-text">Specifying input files for data analysis</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The first page displays the result files that serve as input for the analysis. The upper half specifies what files to
+select, by explicit filenames or by wildcards. The lower half shows what files actually matched the input specification
+and what runs they contain. Note that OMNeT++ result files contain a unique run ID and several metadata annotations in
+addition to the actual recorded data.  The third tree organizes simulation runs according to their
+experiment—measurement—replication labels.</p>
+<p>The underlying assumption is that users will organize their simulation-based research into various “experiments”. An
+experiment will consist of several “measurements”, which are typically (but not necessarily) simulations done with the
+same model but with different parameter settings; that is, the user will explore the parameter space with several
+simulation runs. To gain statistical confidence in the results, each measurement will be possibly repeated several times
+with different random number seeds. It is easy to set up such scenarios with the improved ini files of OMNeT++. Then,
+the experiment-measurement-replication labels will be assigned more-or-less automatically – please refer to the Inifile
+document (“Configuring Simulations in OMNeT++”) for more discussion.</p>
+<figure class="align-default" id="id19">
+<img alt="../_images/img19.png" src="../_images/img19.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 172 </span><span class="caption-text">Browsing vector and scalar data generated by the simulation</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The second page displays results (vectors, scalars, and histograms) from all files in tables and lets the user browse
+them. Results can be sorted and filtered. Simple filtering is possible with combo boxes, or when that is not enough, the
+user can write arbitrarily complex filters using a generic pattern matching expression language. Selected or filtered
+data can be immediately plotted, or remembered in named datasets <em>for further processing</em>.</p>
+<figure class="align-default" id="id20">
+<img alt="../_images/img20.png" src="../_images/img20.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 173 </span><span class="caption-text">Defining datasets to be analyzed</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>It is possible to define reusable datasets that are basically recipes on how to select and process data received from
+the simulation. You can add selection and data processing nodes to a dataset. Chart drawing is possible at any point in
+the processing tree.</p>
+<figure class="align-default" id="id21">
+<img alt="../_images/img21.png" src="../_images/img21.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 174 </span><span class="caption-text">A Line Chart</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Line charts are typically drawn from time-series data stored in vector files. Pre-processing of the data is possible in
+the dataset. The line chart component can be configured freely to display the vector data according to your needs.</p>
+<figure class="align-default" id="id22">
+<img alt="../_images/img22.png" src="../_images/img22.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 175 </span><span class="caption-text">A Bar Chart</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Bar charts are created from scalar results and histograms. Relevant data can be grouped and displayed via the Bar chart
+component. Colors, chart type, and other display attributes can be set on the component.</p>
+<figure class="align-default" id="id23">
+<img alt="../_images/img23.png" src="../_images/img23.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 176 </span><span class="caption-text">Output Vector View</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Output Vector View can be used to inspect the raw numerical data when required. It can show the original data read
+from the vector file, or the result of a computation. The user can select a point on the line chart or a vector in the
+Dataset View and its content will be displayed.</p>
+<figure class="align-default" id="id24">
+<img alt="../_images/img24.png" src="../_images/img24.png"/>
+<figcaption>
+<p><span class="caption-number">Fig. 177 </span><span class="caption-text">Dataset View</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The Dataset View is used to show the result items contained in the dataset. The content of the view corresponds to the
+state of the dataset after the selected processing is performed.</p>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="../installguide/ch-build-options.html" title="Build Options"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Build Options </span>
+              </div>
+            </a>
+          
+          
+            <a href="../ide-developersguide/ide-developersguide.html" title="IDE Developers Guide"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> IDE Developers Guide </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

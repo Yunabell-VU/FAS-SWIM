@@ -1,0 +1,307 @@
+%description:
+Basic test for operators in NED.
+
+%file: test.ned
+
+simple Test
+{
+    parameters:
+        @isNetwork(true);
+
+        // unary minus or negative constant
+        int umin1 = -3;
+        int umin2 = -(4+1);
+
+        // add
+        int add1 = 12+3;
+        double add2 = 12.2+3;
+
+        // subtract
+        int sub1 = 12-3;
+        double sub2 = 12.2-3;
+
+        // multiply
+        int mul1 = 12*3;
+        double mul2 = 12.2*3;
+
+        // divide (type of result is always 'double'!)
+        double div1 = 12/5;
+
+        // modulus (expects integer args!)
+        int mod1 = 12%5;
+
+        // power-of
+        int pow1 = 12^3;
+        double pow2 = 6.25^0.5;
+
+        // bitwise complement (yields -x-1)
+        int compl1 = ~3;
+        int compl2 = ~-3;
+
+        // bitwise and, or, xor
+        int band1 = 10&3;
+        int bor1 = 10|3;
+        int bxor1 = 10#3;
+
+        // shifting
+        int lsh1 = 10<<2;
+        int rsh1 = 10>>2;
+
+        // equal
+        bool eq1 = 8==3;
+        bool eq2 = 8==8;
+        bool eq3 = 8.0==8;
+
+        // not equal
+        bool ne1 = 8!=3;
+        bool ne2 = 8!=8;
+        bool ne3 = 8.0!=8;
+
+        // greater than
+        bool gt1 = 8>3;
+        bool gt2 = 3>8;
+        bool gt3 = 8>8;
+        bool gt4 = 8.0>8;
+
+        // greater or equal
+        bool ge1 = 8>=3;
+        bool ge2 = 3>=8;
+        bool ge3 = 8>=8;
+        bool ge4 = 8.0>=8;
+
+        // less than
+        bool lt1 = 8<3;
+        bool lt2 = 3<8;
+        bool lt3 = 8<8;
+        bool lt4 = 8.0<8;
+
+        // less or equal
+        bool le1 = 8<=3;
+        bool le2 = 3<=8;
+        bool le3 = 8<=8;
+        bool le4 = 8.0<=8;
+
+        // comparison ("spaceship" operator, yields, -1, 0, 1 or nan)
+        double cmp1 = 8<=>3;
+        double cmp2 = 3<=>8;
+        double cmp3 = 8<=>8;
+        double cmp4 = 8.0<=>8;
+        double cmp5 = inf<=>inf;
+        double cmp6 = nan<=>8;
+
+        // match (case-sensitive, full-string, dotted-path)
+        bool match1 = "foobar" =~ "foo";
+        bool match2 = "foobar" =~ "foo*";
+        bool match3 = "foobar" =~ "*xxx*";
+        bool match4 = "foobar" =~ "F*O*";
+        bool match5 = "foo.bar" =~ "f*b*";
+        bool match6 = "foo.bar" =~ "f**b*";
+
+        // logical negation
+        bool not1 = !true;
+        bool not2 = !false;
+
+        // logical and
+        bool and1 = true && true;
+        bool and2 = true && false;
+        bool and3 = false && true;
+        bool and4 = false && false;
+
+        // logical or
+        bool or1 = true || true;
+        bool or2 = true || false;
+        bool or3 = false || true;
+        bool or4 = false || false;
+
+        // logical xor
+        bool xor1 = true ## true;
+        bool xor2 = true ## false;
+        bool xor3 = false ## true;
+        bool xor4 = false ## false;
+
+        // inline if
+        int iif1 = true ? 5 : 2;
+        int iif2 = false ? 5 : 2;
+
+        // string concatenation
+        string concat1 = "He" + "llo";
+        string concat2 = "He" + "";
+
+        // int cast
+        int int1 = int(3);
+        int int2 = int(3.14);
+        int int3 = int(-3.14);
+        int int4 = int("3.14");
+        int int5 = int("1.5e6");
+        int int6 = int(true);
+        int int7 = int(false);
+
+        // double cast
+        double double1 = double(3);
+        double double2 = double(3.14);
+        double double3 = double("3.14");
+        double double4 = double("1.5e6");
+        double double5 = double(true);
+        double double6 = double(false);
+
+        // string cast
+        string string1 = string(3);
+        string string2 = string(3.14);
+        string string3 = string("3.14");
+        string string4 = string("1.5e6");
+        string string5 = string(true);
+        string string6 = string(false);
+
+        // bool cast
+        bool bool1 = bool(0);
+        bool bool2 = bool(nan);
+        bool bool3 = bool(3);
+        bool bool4 = bool(3.14);
+        bool bool5 = bool("true");
+        bool bool6 = bool("false");
+        bool bool7 = bool("");
+        bool bool8 = bool("blah");
+        bool bool9 = bool(true);
+        bool bool10 = bool(false);
+}
+
+%file: test.cc
+
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace @TESTNAME@ {
+
+class Test : public cSimpleModule
+{
+  public:
+    Test() : cSimpleModule(16384) { }
+    virtual void activity() override;
+};
+
+Define_Module(Test);
+
+void Test::activity()
+{
+    for (int i=0; i<getNumParams(); i++) {
+        cPar& p = par(i);
+        EV << p.getName() << "=";
+        switch (p.getType()) {
+            case cPar::BOOL: EV << p.boolValue(); break;
+            case cPar::DOUBLE: EV << p.doubleValue(); break;
+            case cPar::INT: EV << p.intValue(); break;
+            case cPar::STRING: EV << p.stringValue(); break;
+            case cPar::XML: EV << p.xmlValue()->str(); break;
+            case cPar::OBJECT: EV << p.objectValue()->getClassName(); break;
+        }
+        EV << endl;
+    }
+    EV << ".\n";
+}
+
+}; //namespace
+
+%contains: stdout
+umin1=-3
+umin2=-5
+add1=15
+add2=15.2
+sub1=9
+sub2=9.2
+mul1=36
+mul2=36.6
+div1=2.4
+mod1=2
+pow1=1728
+pow2=2.5
+compl1=-4
+compl2=2
+band1=2
+bor1=11
+bxor1=9
+lsh1=40
+rsh1=2
+eq1=0
+eq2=1
+eq3=1
+ne1=1
+ne2=0
+ne3=0
+gt1=1
+gt2=0
+gt3=0
+gt4=0
+ge1=1
+ge2=0
+ge3=1
+ge4=1
+lt1=0
+lt2=1
+lt3=0
+lt4=0
+le1=0
+le2=1
+le3=1
+le4=1
+cmp1=1
+cmp2=-1
+cmp3=0
+cmp4=0
+cmp5=0
+cmp6=nan
+match1=0
+match2=1
+match3=0
+match4=0
+match5=0
+match6=1
+not1=0
+not2=1
+and1=1
+and2=0
+and3=0
+and4=0
+or1=1
+or2=1
+or3=1
+or4=0
+xor1=0
+xor2=1
+xor3=1
+xor4=0
+iif1=5
+iif2=2
+concat1=Hello
+concat2=He
+int1=3
+int2=3
+int3=-4
+int4=3
+int5=1500000
+int6=1
+int7=0
+double1=3
+double2=3.14
+double3=3.14
+double4=1.5e+06
+double5=1
+double6=0
+string1=3
+string2=3.14
+string3="3.14"
+string4="1.5e6"
+string5=true
+string6=false
+bool1=0
+bool2=0
+bool3=1
+bool4=1
+bool5=1
+bool6=0
+bool7=0
+bool8=0
+bool9=1
+bool10=0
+.
+

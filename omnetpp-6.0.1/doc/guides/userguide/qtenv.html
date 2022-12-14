@@ -1,0 +1,1581 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>The Qtenv Graphical Runtime Environment &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sequence Charts" href="sequence-chart.html" />
+    <link rel="prev" title="Launching and Debugging" href="launcher.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#userguide/qtenv" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> The Qtenv Graphical Runtime Environment </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">User Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">User Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="intro.html" class="md-nav__link">Introduction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ned-editor.html" class="md-nav__link">Editing NED Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ini-editor.html" class="md-nav__link">Editing INI Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="msg-editor.html" class="md-nav__link">Editing Message Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="cpp-development.html" class="md-nav__link">C++ Development</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="launcher.html" class="md-nav__link">Launching and Debugging</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> The Qtenv Graphical Runtime Environment </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">The Qtenv Graphical Runtime Environment</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-qtenv--page-root" class="md-nav__link">The Qtenv Graphical Runtime Environment</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#features" class="md-nav__link">Features</a>
+        </li>
+        <li class="md-nav__item"><a href="#overview-of-the-user-interface" class="md-nav__link">Overview of the User Interface</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-qtenv" class="md-nav__link">Using Qtenv</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#starting-qtenv" class="md-nav__link">Starting Qtenv</a>
+        </li>
+        <li class="md-nav__item"><a href="#setting-up-and-running-the-simulation" class="md-nav__link">Setting Up and Running the Simulation</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#set-up-a-configuration" class="md-nav__link">Set up a Configuration</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-primary-ini-file" class="md-nav__link">Open Primary Ini File</a>
+        </li>
+        <li class="md-nav__item"><a href="#step" class="md-nav__link">Step</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-or-normal-run" class="md-nav__link">Run (or Normal Run)</a>
+        </li>
+        <li class="md-nav__item"><a href="#fast-run" class="md-nav__link">Fast Run</a>
+        </li>
+        <li class="md-nav__item"><a href="#express-run" class="md-nav__link">Express Run</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-until" class="md-nav__link">Run Until</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-until-next-event" class="md-nav__link">Run Until Next Event</a>
+        </li>
+        <li class="md-nav__item"><a href="#debug-next-event" class="md-nav__link">Debug Next Event</a>
+        </li>
+        <li class="md-nav__item"><a href="#debug-on-errors" class="md-nav__link">Debug On Errors</a>
+        </li>
+        <li class="md-nav__item"><a href="#recording-an-event-log" class="md-nav__link">Recording an Event Log</a>
+        </li>
+        <li class="md-nav__item"><a href="#capturing-a-video" class="md-nav__link">Capturing a Video</a>
+        </li>
+        <li class="md-nav__item"><a href="#conclude-simulation" class="md-nav__link">Conclude Simulation</a>
+        </li>
+        <li class="md-nav__item"><a href="#rebuild-network" class="md-nav__link">Rebuild Network</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#inspecting-simulation-objects" class="md-nav__link">Inspecting Simulation Objects</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#inspectors" class="md-nav__link">Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-inspectors" class="md-nav__link">Opening Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#history" class="md-nav__link">History</a>
+        </li>
+        <li class="md-nav__item"><a href="#restoring-inspectors" class="md-nav__link">Restoring Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#extending-qtenv" class="md-nav__link">Extending Qtenv</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#using-qtenv-with-a-debugger" class="md-nav__link">Using Qtenv with a Debugger</a>
+        </li>
+        <li class="md-nav__item"><a href="#parts-of-the-qtenv-ui" class="md-nav__link">Parts of the Qtenv UI</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-status-bars" class="md-nav__link">The Status Bars</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-timeline" class="md-nav__link">The Timeline</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-object-navigator" class="md-nav__link">The Object Navigator</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-object-inspector" class="md-nav__link">The Object Inspector</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-network-display" class="md-nav__link">The Network Display</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#zooming-and-panning" class="md-nav__link">Zooming and Panning</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#the-log-viewer" class="md-nav__link">The Log Viewer</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#inspecting-objects" class="md-nav__link">Inspecting Objects</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#object-inspectors" class="md-nav__link">Object Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#browsing-the-registered-components" class="md-nav__link">Browsing the Registered Components</a>
+        </li>
+        <li class="md-nav__item"><a href="#querying-objects" class="md-nav__link">Querying Objects</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#the-preferences-dialog" class="md-nav__link">The Preferences Dialog</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#general" class="md-nav__link">General</a>
+        </li>
+        <li class="md-nav__item"><a href="#logs" class="md-nav__link">Logs</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-layouting-algorithm" class="md-nav__link">Configuring the Layouting Algorithm</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-animation" class="md-nav__link">Configuring Animation</a>
+        </li>
+        <li class="md-nav__item"><a href="#timeline-and-animation-filtering" class="md-nav__link">Timeline and Animation Filtering</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-fonts" class="md-nav__link">Configuring Fonts</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-qtenvrc-file" class="md-nav__link">The .qtenvrc File</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#qtenv-and-c" class="md-nav__link">Qtenv and C++</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#during-simulation" class="md-nav__link">During Simulation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#reference" class="md-nav__link">Reference</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#command-line-options" class="md-nav__link">Command-Line Options</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuration-options" class="md-nav__link">Configuration Options</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/qtenv.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="sequence-chart.html" class="md-nav__link">Sequence Charts</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="result-analysis.html" class="md-nav__link">Analyzing the Results</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="neddoc.html" class="md-nav__link">NED Documentation Generator</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ide-extensions.html" class="md-nav__link">Extending the IDE</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-qtenv--page-root" class="md-nav__link">The Qtenv Graphical Runtime Environment</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#features" class="md-nav__link">Features</a>
+        </li>
+        <li class="md-nav__item"><a href="#overview-of-the-user-interface" class="md-nav__link">Overview of the User Interface</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-qtenv" class="md-nav__link">Using Qtenv</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#starting-qtenv" class="md-nav__link">Starting Qtenv</a>
+        </li>
+        <li class="md-nav__item"><a href="#setting-up-and-running-the-simulation" class="md-nav__link">Setting Up and Running the Simulation</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#set-up-a-configuration" class="md-nav__link">Set up a Configuration</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-primary-ini-file" class="md-nav__link">Open Primary Ini File</a>
+        </li>
+        <li class="md-nav__item"><a href="#step" class="md-nav__link">Step</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-or-normal-run" class="md-nav__link">Run (or Normal Run)</a>
+        </li>
+        <li class="md-nav__item"><a href="#fast-run" class="md-nav__link">Fast Run</a>
+        </li>
+        <li class="md-nav__item"><a href="#express-run" class="md-nav__link">Express Run</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-until" class="md-nav__link">Run Until</a>
+        </li>
+        <li class="md-nav__item"><a href="#run-until-next-event" class="md-nav__link">Run Until Next Event</a>
+        </li>
+        <li class="md-nav__item"><a href="#debug-next-event" class="md-nav__link">Debug Next Event</a>
+        </li>
+        <li class="md-nav__item"><a href="#debug-on-errors" class="md-nav__link">Debug On Errors</a>
+        </li>
+        <li class="md-nav__item"><a href="#recording-an-event-log" class="md-nav__link">Recording an Event Log</a>
+        </li>
+        <li class="md-nav__item"><a href="#capturing-a-video" class="md-nav__link">Capturing a Video</a>
+        </li>
+        <li class="md-nav__item"><a href="#conclude-simulation" class="md-nav__link">Conclude Simulation</a>
+        </li>
+        <li class="md-nav__item"><a href="#rebuild-network" class="md-nav__link">Rebuild Network</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#inspecting-simulation-objects" class="md-nav__link">Inspecting Simulation Objects</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#inspectors" class="md-nav__link">Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#opening-inspectors" class="md-nav__link">Opening Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#history" class="md-nav__link">History</a>
+        </li>
+        <li class="md-nav__item"><a href="#restoring-inspectors" class="md-nav__link">Restoring Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#extending-qtenv" class="md-nav__link">Extending Qtenv</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#using-qtenv-with-a-debugger" class="md-nav__link">Using Qtenv with a Debugger</a>
+        </li>
+        <li class="md-nav__item"><a href="#parts-of-the-qtenv-ui" class="md-nav__link">Parts of the Qtenv UI</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-status-bars" class="md-nav__link">The Status Bars</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-timeline" class="md-nav__link">The Timeline</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-object-navigator" class="md-nav__link">The Object Navigator</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-object-inspector" class="md-nav__link">The Object Inspector</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-network-display" class="md-nav__link">The Network Display</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#zooming-and-panning" class="md-nav__link">Zooming and Panning</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#the-log-viewer" class="md-nav__link">The Log Viewer</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#inspecting-objects" class="md-nav__link">Inspecting Objects</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#object-inspectors" class="md-nav__link">Object Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#browsing-the-registered-components" class="md-nav__link">Browsing the Registered Components</a>
+        </li>
+        <li class="md-nav__item"><a href="#querying-objects" class="md-nav__link">Querying Objects</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#the-preferences-dialog" class="md-nav__link">The Preferences Dialog</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#general" class="md-nav__link">General</a>
+        </li>
+        <li class="md-nav__item"><a href="#logs" class="md-nav__link">Logs</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-layouting-algorithm" class="md-nav__link">Configuring the Layouting Algorithm</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-animation" class="md-nav__link">Configuring Animation</a>
+        </li>
+        <li class="md-nav__item"><a href="#timeline-and-animation-filtering" class="md-nav__link">Timeline and Animation Filtering</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-fonts" class="md-nav__link">Configuring Fonts</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-qtenvrc-file" class="md-nav__link">The .qtenvrc File</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#qtenv-and-c" class="md-nav__link">Qtenv and C++</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Inspectors</a>
+        </li>
+        <li class="md-nav__item"><a href="#during-simulation" class="md-nav__link">During Simulation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#reference" class="md-nav__link">Reference</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#command-line-options" class="md-nav__link">Command-Line Options</a>
+        </li>
+        <li class="md-nav__item"><a href="#environment-variables" class="md-nav__link">Environment Variables</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuration-options" class="md-nav__link">Configuration Options</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/qtenv.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="the-qtenv-graphical-runtime-environment">
+<h1 id="userguide-qtenv--page-root">The Qtenv Graphical Runtime Environment<a class="headerlink" href="#userguide-qtenv--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="features">
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>Qtenv is a graphical runtime interface for simulations. Qtenv supports interactive simulation execution, animation,
+inspection, tracing and debugging. In addition to model development and verification, Qtenv is also useful for
+presentation and educational purposes, since it allows the user to get a detailed picture of the state and history of
+the simulation at any point of its execution.</p>
+<p>When used together with a C++ source-level debugger, Qtenv can significantly speed up model development.</p>
+<p>Its most important features are:</p>
+<ul class="simple">
+<li><p>network visualization</p></li>
+<li><p>message flow animation</p></li>
+<li><p>various run modes: event-by-event, normal, fast, express</p></li>
+<li><p>run until (a scheduled event, any event in a module, or given simulation time)</p></li>
+<li><p>simulation can be restarted</p></li>
+<li><p>a different configuration/run or network can be set up</p></li>
+<li><p>log of message flow</p></li>
+<li><p>display of textual module logs</p></li>
+<li><p>inspectors for viewing contents of objects and variables in the model</p></li>
+<li><p>eventlog recording for later analysis</p></li>
+<li><p>capturing a video of the main window</p></li>
+<li><p>snapshots (detailed report about the model: objects, variables, etc.)</p></li>
+</ul>
+</section>
+<section id="overview-of-the-user-interface">
+<h2 id="overview-of-the-user-interface">Overview of the User Interface<a class="headerlink" href="#overview-of-the-user-interface" title="Permalink to this headline">¶</a></h2>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/Qtenv-main.png"><img alt="../_images/Qtenv-main.png" src="../_images/Qtenv-main.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 58 </span><span class="caption-text">The main window of Qtenv</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are experiencing graphics glitches, unreadable text, or the desktop color scheme you have set up is not
+suitable for Qtenv, you can disable the platform integration style plugins of Qt by setting the <code class="docutils literal notranslate"><span class="pre">QT_STYLE_OVERRIDE</span></code>
+environment variable to <code class="docutils literal notranslate"><span class="pre">fusion</span></code>. This will make the widgets appear in a platform-independent manner, as shown
+above.</p>
+</div>
+<p>The top of the window contains the following elements below the menu bar:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Toolbar</span>: The toolbar lets you access the most frequently used functions, such as stepping, running and
+stopping the simulation.</p></li>
+<li><p><span class="guilabel">Animation speed</span>: The slider on the end of the toolbar lets you scale the speed of the built-in
+animations, as well as the playback speed of the custom animations added by the model.</p></li>
+<li><p><span class="guilabel">Event Number and Simulation Time</span>: These two labels on the right end of the toolbar display the event
+number of the last executed or the next future event, and the current simulation time. The display format can be
+changed from context menu.</p></li>
+<li><p><span class="guilabel">Top status bar</span>: Three labels in a row that display either information about the next simulation event (in
+<span class="guilabel">Step</span> and <span class="guilabel">Normal</span> mode), or performance data like the number of events processed per second (in
+<span class="guilabel">Fast</span> and <span class="guilabel">Express</span> mode). This can be hidden to free up vertical space.</p></li>
+<li><p><span class="guilabel">Timeline</span>: Displays the contents of the Future Events Set (FES) on a logarithmic time scale. The timeline
+can be turned off to free up vertical space.</p></li>
+<li><p><span class="guilabel">Bottom status bar</span>: Displays the current configuration, the run number, and the name of the root module
+(network) on the left, and a few statistics about the message objects in the model on the right.</p></li>
+</ul>
+<p>The central area of the main window is divided into the following regions:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Object Navigator</span>: Displays the hierarchy of objects in the current simulation and in the FES.</p></li>
+<li><p><span class="guilabel">Object Inspector</span>: Displays the contents and properties of the selected object.</p></li>
+<li><p><span class="guilabel">Network Display</span>: Displays the network or any module graphically. This is also where animation takes
+place.</p></li>
+<li><p><span class="guilabel">Log Viewer</span>: Displays the log of packets or messages sent between modules, or log messages output by
+modules during simulation.</p></li>
+</ul>
+<p>Additionally, you can open inspector windows that float on top of the main window.</p>
+</section>
+<section id="using-qtenv">
+<h2 id="using-qtenv">Using Qtenv<a class="headerlink" href="#using-qtenv" title="Permalink to this headline">¶</a></h2>
+<section id="starting-qtenv">
+<h3 id="starting-qtenv">Starting Qtenv<a class="headerlink" href="#starting-qtenv" title="Permalink to this headline">¶</a></h3>
+<p>When you launch a simulation from the IDE, by default it will be started with Qtenv. When it does not, you can
+explicitly select Qtenv in the <span class="guilabel">Run</span> or <span class="guilabel">Debug</span> dialog.</p>
+<p>Qtenv is also the default when you start the simulation from the command line. When necessary, you can force Qtenv by
+adding the <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">Qtenv</span></code> switch to the command line.</p>
+<p>The complete list of command-line options, related environment variables and configuration options can be found at the
+end of this chapter.</p>
+</section>
+<section id="setting-up-and-running-the-simulation">
+<h3 id="setting-up-and-running-the-simulation">Setting Up and Running the Simulation<a class="headerlink" href="#setting-up-and-running-the-simulation" title="Permalink to this headline">¶</a></h3>
+<p>On startup, Qtenv reads the ini file(s) specified on the command line (or <code class="docutils literal notranslate"><span class="pre">omnetpp.ini</span></code> if none is specified), and
+automatically sets up the simulation described in them. If they contain several simulation configurations, Qtenv will
+ask you which one you want to set up.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/Qtenv-setup-dialog.png"><img alt="../_images/Qtenv-setup-dialog.png" src="../_images/Qtenv-setup-dialog.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 59 </span><span class="caption-text">Setting Up a New Simulation</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Once a simulation has been set up (modules have been created and initialized), you can run it in various modes and
+examine its state. At any time you can restart the simulation, or set up another simulation. If you choose to quit Qtenv
+before the simulation finishes (or try to restart the simulation), Qtenv will ask you whether to finalize the
+simulation, which usually translates to saving summary statistics.</p>
+<p>Functions related to setting up a simulation are in the <span class="guilabel">File</span> and <span class="guilabel">Simulate</span> menus,
+and the most important ones are accessible via toolbar icons and keyboard shortcuts as well.</p>
+<p>Some of these functions are:</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/Qtenv-file-menu.png"><img alt="../_images/Qtenv-file-menu.png" src="../_images/Qtenv-file-menu.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 60 </span><span class="caption-text">The File menu</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="set-up-a-configuration">
+<h4 id="set-up-a-configuration">Set up a Configuration<a class="headerlink" href="#set-up-a-configuration" title="Permalink to this headline">¶</a></h4>
+<p>This function lets you choose a configuration and run number from the ini file.</p>
+</section>
+<section id="open-primary-ini-file">
+<h4 id="open-primary-ini-file">Open Primary Ini File<a class="headerlink" href="#open-primary-ini-file" title="Permalink to this headline">¶</a></h4>
+<p>Opens the first ini file in an text window for viewing.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/Qtenv-simulate-menu.png"><img alt="../_images/Qtenv-simulate-menu.png" src="../_images/Qtenv-simulate-menu.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 61 </span><span class="caption-text">The Simulate menu</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="step">
+<h4 id="step">Step<a class="headerlink" href="#step" title="Permalink to this headline">¶</a></h4>
+<p><span class="guilabel">Step</span> lets you execute one simulation event, that at the front of the FES. The next event is always shown on
+the status bar. The module where the next event will be delivered is highlighted with a red rectangle on the graphical
+display.</p>
+</section>
+<section id="run-or-normal-run">
+<h4 id="run-or-normal-run">Run (or Normal Run)<a class="headerlink" href="#run-or-normal-run" title="Permalink to this headline">¶</a></h4>
+<p>In <span class="guilabel">Run</span> mode, the simulation runs with all tracing aids on. Message animation is active, simulation time is
+interpolated if the model requested a non-zero animation speed, and inspector windows are constantly updated. Output
+messages are displayed in the main window and module output windows. You can stop the simulation with the
+<span class="guilabel">Stop</span> button on the toolbar. You can fully interact with the user interface while the simulation is running
+(e.g. you can open inspectors, etc.).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you find this mode too slow or distracting, you may switch off animation features in the <span class="guilabel">Preferences</span>
+dialog.</p>
+</div>
+</section>
+<section id="fast-run">
+<h4 id="fast-run">Fast Run<a class="headerlink" href="#fast-run" title="Permalink to this headline">¶</a></h4>
+<p>In <span class="guilabel">Fast</span> mode, message animation is turned off. The inspectors are updated much less often. Fast mode is
+several times faster than the Run mode; the speed can increase by up to 10 times (or up to the configured event count).</p>
+</section>
+<section id="express-run">
+<h4 id="express-run">Express Run<a class="headerlink" href="#express-run" title="Permalink to this headline">¶</a></h4>
+<p>In <span class="guilabel">Express</span> mode, the simulation runs at about the same speed as with Cmdenv, all tracing disabled. Module
+log is not recorded. The simulation can only be interacted with once in a while, thus the run-time overhead of the user
+interface is minimal. UI updates can even be disabled completely, in which case you have to explicitly click the
+<span class="guilabel">Update now</span> button to refresh the inspectors.</p>
+</section>
+<section id="run-until">
+<h4 id="run-until">Run Until<a class="headerlink" href="#run-until" title="Permalink to this headline">¶</a></h4>
+<p>You can run the simulation until a specified simulation time, event number or until a specific message has been
+delivered or canceled. This is a valuable tool during debugging sessions.
+It is also possible to right-click on an event in the simulation timeline and choose the <span class="guilabel">Run until this
+event</span> menu item.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/Qtenv-rununtil.png"><img alt="../_images/Qtenv-rununtil.png" src="../_images/Qtenv-rununtil.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 62 </span><span class="caption-text">The Run Until dialog</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="run-until-next-event">
+<h4 id="run-until-next-event">Run Until Next Event<a class="headerlink" href="#run-until-next-event" title="Permalink to this headline">¶</a></h4>
+<p>It is also possible to run until an event occurs in a specified module. Browse for the module and choose <span class="guilabel">Run
+until next event in this module.</span> Simulation will stop once an event occurs in the selected module.</p>
+</section>
+<section id="debug-next-event">
+<h4 id="debug-next-event">Debug Next Event<a class="headerlink" href="#debug-next-event" title="Permalink to this headline">¶</a></h4>
+<p>This function is useful when you are running the simulation under a C++ source-level debugger. <span class="guilabel">Debug Next
+Event</span> will perform one simulation event just like <span class="guilabel">Step</span>, but executes a software debugger breakpoint
+(<code class="docutils literal notranslate"><span class="pre">int3</span></code> or <code class="docutils literal notranslate"><span class="pre">SIGTRAP</span></code>) just before entering the module’s event handling code (<code class="docutils literal notranslate"><span class="pre">handleMessage()</span></code> or <code class="docutils literal notranslate"><span class="pre">activity()</span></code>).
+This will cause the debugger to stop the program there, letting you examine state variables, single-step, etc. When you
+resume execution, Qtenv will get back control and become responsive again.</p>
+</section>
+<section id="debug-on-errors">
+<h4 id="debug-on-errors">Debug On Errors<a class="headerlink" href="#debug-on-errors" title="Permalink to this headline">¶</a></h4>
+<p>This menu item allows you to change the value of the <code class="docutils literal notranslate"><span class="pre">debug-on-errors</span></code> configuration variable on the fly. This is
+useful if you forgot to set this option before starting the simulation, but would like to debug a runtime error. The
+state of this menu item is reset to the value of <code class="docutils literal notranslate"><span class="pre">debug-on-errors</span></code> every time Qtenv is started.</p>
+</section>
+<section id="recording-an-event-log">
+<h4 id="recording-an-event-log">Recording an Event Log<a class="headerlink" href="#recording-an-event-log" title="Permalink to this headline">¶</a></h4>
+<p>The OMNeT++ simulation kernel allows you to record event related information into a file which later can be used to
+analyze the simulation run using the <span class="guilabel">Sequence Chart</span> tool in the IDE. Eventlog recording can be turned on
+with the <code class="docutils literal notranslate"><span class="pre">record-eventlog=true</span></code> ini file option, but also interactively, via the respective item in the
+<span class="guilabel">Simulate</span> menu, or using a toobar button.</p>
+<p>Note that the starting Qtenv with <code class="docutils literal notranslate"><span class="pre">record-eventlog=true</span></code> and turning on recording later does not result in exactly the
+same eventlog file. In the former case, all steps of setting up the network, such as module creations, are recorded as
+they happen; while for the latter, Qtenv has to “fake” a chain of steps that would result in the current state of the
+simulation.</p>
+</section>
+<section id="capturing-a-video">
+<h4 id="capturing-a-video">Capturing a Video<a class="headerlink" href="#capturing-a-video" title="Permalink to this headline">¶</a></h4>
+<p>When active, this feature will save the contents of the main window into a subfolder named <code class="docutils literal notranslate"><span class="pre">frames</span></code> in the working
+directory with a regular frequency (in animation time). Each frame is a PNG image, with a sequence number in its file
+name. Currently the user has to convert (encode) these images into a video file after the fact by using an external tool
+(for example <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">avconv</span></code>, or <code class="docutils literal notranslate"><span class="pre">vlc</span></code>). When the recording is started, an info dialog pops up, showing further
+details on the output, and an example command for encoding in high quality using <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code>. The resulting video is also
+affected by the speed slider on the toolbar.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This built-in recording feature is able to produce a smooth video, in contrast to external screen-capture utilities.
+This is possible because it has access to more information, and has more control over the process than external
+tools.</p>
+</div>
+</section>
+<section id="conclude-simulation">
+<h4 id="conclude-simulation">Conclude Simulation<a class="headerlink" href="#conclude-simulation" title="Permalink to this headline">¶</a></h4>
+<p>This function finalizes the simulation by invoking the user-supplied <code class="docutils literal notranslate"><span class="pre">finish()</span></code> member functions on all module and
+channel objects in the simulation. The customary implementation of <code class="docutils literal notranslate"><span class="pre">finish()</span></code> is to record summary statistics. The
+simulation cannot be continued afterwards.</p>
+</section>
+<section id="rebuild-network">
+<h4 id="rebuild-network">Rebuild Network<a class="headerlink" href="#rebuild-network" title="Permalink to this headline">¶</a></h4>
+<p>Rebuilds the simulation by deleting the current network and setting it up again. Improperly written simulations often
+crash when <span class="guilabel">Rebuild Network</span> is invoked; this is usually due to incorrectly written destructors in module
+classes.</p>
+</section>
+</section>
+<section id="inspecting-simulation-objects">
+<h3 id="inspecting-simulation-objects">Inspecting Simulation Objects<a class="headerlink" href="#inspecting-simulation-objects" title="Permalink to this headline">¶</a></h3>
+<section id="inspectors">
+<h4 id="inspectors">Inspectors<a class="headerlink" href="#inspectors" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="guilabel">Network Display</span>, the <span class="guilabel">Log Viewer</span> and the <span class="guilabel">Object Inspector</span> in the main window
+share some common properties: they display various aspects (graphical view / log messages / fields or contents) of a
+given object. Such UI parts are called <span class="guilabel">inspectors</span> in Qtenv.</p>
+<p>The three inspectors mentioned above are built into the main window, but you can open add additional ones at any time.
+The new inspectors will open in floating windows above the main window, and you can have any number of them open.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/Qtenv-floating-inspector.png"><img alt="../_images/Qtenv-floating-inspector.png" src="../_images/Qtenv-floating-inspector.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 63 </span><span class="caption-text">A floating inspector window</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Inspectors come in many flavours. They can be graphical like the network view, textual like the log viewer, tree-based
+like the object inspector, or something entirely different.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some window managers might disable/hide the close button of floating inspectors. If this happens, you can still close
+them with a keyboard shortcut (most commonly
+Alt
++
+F4
+), or by right-clicking on the title bar, and choosing the Close option in the appearing menu.</p>
+</div>
+</section>
+<section id="opening-inspectors">
+<h4 id="opening-inspectors">Opening Inspectors<a class="headerlink" href="#opening-inspectors" title="Permalink to this headline">¶</a></h4>
+<p>Inspectors can be opened in various ways: by double-clicking an item in the <span class="guilabel">Object Navigator</span> or in other
+inspectors; by choosing one of the <span class="guilabel">Open</span> menu items from the context menu of an object displayed on the
+UI; via the <span class="guilabel">Find/Inspect Objects</span> dialog (see later); or even by directly entering the C++ pointer of an
+object as a hex value. Inspector-related menu items are in the <span class="guilabel">Inspect</span> menu.</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspect-menu.png"><img alt="../_images/Qtenv-inspect-menu.png" src="../_images/Qtenv-inspect-menu.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 64 </span><span class="caption-text">The Inspect menu</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="history">
+<h4 id="history">History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h4>
+<p>Inspectors always show some aspect of one simulation object, but they can change objects. For example, in the
+<span class="guilabel">Network View</span>, when you double-click a submodule which is itself a compound module, the view will switch to
+showing the internals of that module; or, the <span class="guilabel">Object Inspector</span> will always show information about the object
+last clicked in the UI. Inspectors maintain a navigable history: the <span class="guilabel">Back</span>/<span class="guilabel">Forward</span> functions go
+to the object inspected before/after the currently displayed object. Objects that are deleted during simulation also
+disappear from the history.</p>
+</section>
+<section id="restoring-inspectors">
+<h4 id="restoring-inspectors">Restoring Inspectors<a class="headerlink" href="#restoring-inspectors" title="Permalink to this headline">¶</a></h4>
+<p>When you exit and then restart a simulation program, Qtenv tries to restore the open inspector windows. However, as
+object identity is not preserved across different runs of the same program, Qtenv uses the object full path, class name
+and object ID (where exists) to find and identify the object to be inspected.</p>
+<p>Preferences such as zoom level or open/closed state of a tree node are usually maintained per object type (i.e. tied to
+the C++ class of the inspected object).</p>
+</section>
+<section id="extending-qtenv">
+<h4 id="extending-qtenv">Extending Qtenv<a class="headerlink" href="#extending-qtenv" title="Permalink to this headline">¶</a></h4>
+<p>It is possible for the user to contribute new inspector types without modifying Qtenv code. For this, the inspector C++
+code needs to include Qtenv header files and link with the Qtenv library. One caveat is that the Qtenv headers are not
+public API and thus subject to change in a new version of OMNeT++.</p>
+</section>
+</section>
+</section>
+<section id="using-qtenv-with-a-debugger">
+<h2 id="using-qtenv-with-a-debugger">Using Qtenv with a Debugger<a class="headerlink" href="#using-qtenv-with-a-debugger" title="Permalink to this headline">¶</a></h2>
+<p>You can use Qtenv together with a C++ debugger, which is mainly useful when developing new models. When you do that,
+there are a few things you need to know.</p>
+<p>Qtenv is a library that runs as part of the simulation program. This has a lot of implications, the most apparent being
+that when the simulation crashes (due to a bug in the model’s C++ code), it will bring down the whole OS process,
+including the Qtenv GUI.</p>
+<p>The second consequence is that suspending the simulation program in a debugger will also freeze the GUI until it is
+resumed. Also, Qtenv is single-theaded and runs in the same thread as the simulation program, so even if you only
+suspend the simulation’s thread in the debugger, the UI will freeze.</p>
+<p>The Qtenv UI deals with <code class="docutils literal notranslate"><span class="pre">cObject</span></code>s (the C++ methods that the GUI relies on are defined on <code class="docutils literal notranslate"><span class="pre">cObject</span></code>). All other data
+such as primitive variables, non-<code class="docutils literal notranslate"><span class="pre">cObject</span></code> classes and structs, STL containers etc, are hidden from Qtenv. You may wrap
+objects into <code class="docutils literal notranslate"><span class="pre">cObject</span></code>s to make them visible for Qtenv, that’s what e.g. the <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> macros do as well.</p>
+<p>The following sections go into detail about various parts and functions of the Qtenv UI.</p>
+</section>
+<section id="parts-of-the-qtenv-ui">
+<h2 id="parts-of-the-qtenv-ui">Parts of the Qtenv UI<a class="headerlink" href="#parts-of-the-qtenv-ui" title="Permalink to this headline">¶</a></h2>
+<section id="the-status-bars">
+<h3 id="the-status-bars">The Status Bars<a class="headerlink" href="#the-status-bars" title="Permalink to this headline">¶</a></h3>
+<p>The status bars show the simulation’s progress. There is one row at the top of the main window, and one at the bottom.
+The top one can be hidden using the <span class="menuselection">View ‣ Status Details</span> menu item.</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/Qtenv-statusbar.png"><img alt="../_images/Qtenv-statusbar.png" src="../_images/Qtenv-statusbar.png" style="width: 90%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 65 </span><span class="caption-text">The top status bar</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>When the simulation is paused or runs with animation, the top row displays the next expected simulation event. Note the
+word <span class="guilabel">expected</span>: certain schedulers may insert new events before the displayed event in the last moment. Some
+schedulers that tend to do that are those that accept input from outside sources: real-time scheduler, hybrid or
+hardware-in-the-loop schedulers, parallel simulation schedulers, etc. Contents of the top row:</p>
+<ol class="arabic simple">
+<li><p>Name, C++ class and ID of the next message (event) object</p></li>
+<li><p>The module where the next event will occur (i.e. the module where the message will be delivered)</p></li>
+<li><p>The simulation time of the next (expected) simulation event</p></li>
+<li><p>Time of the next event, and delta from the current simulation time</p></li>
+</ol>
+<p>When the simulation is running in <span class="guilabel">Fast</span> or <span class="guilabel">Express</span> mode, displaying the next event becomes
+useless, so the contents of the top row are replaced by the following performance gauges:</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/Qtenv-statusbar-running.png"><img alt="../_images/Qtenv-statusbar-running.png" src="../_images/Qtenv-statusbar-running.png" style="width: 90%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 66 </span><span class="caption-text">The top status bar during Fast or Express run</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<ol class="arabic simple">
+<li><p>Simulation speed: number of events processed per real second</p></li>
+<li><p>Relative speed of the simulation (compared to real-time)</p></li>
+<li><p>Event density: the number of events per simulated seconds</p></li>
+</ol>
+<p>The bottom row contains the following items:</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/Qtenv-statusbar-bottom.png"><img alt="../_images/Qtenv-statusbar-bottom.png" src="../_images/Qtenv-statusbar-bottom.png" style="width: 90%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 67 </span><span class="caption-text">The bottom status bar</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<ol class="arabic simple">
+<li><p>Ini config name, run number, and the name of the network</p></li>
+<li><p>Message statistics: the number of messages currently scheduled (i.e. in the FES); the number of message objects that
+currently exists in the simulation; and the number of message objects that have been created this far, including the
+already deleted ones. Out of the three, probably the middle one is the most useful: if it is steadily growing without
+apparent reason, the simulation model is probably missing some <code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">msg</span></code> statements, and needs to be debugged.</p></li>
+</ol>
+</section>
+<section id="the-timeline">
+<h3 id="the-timeline">The Timeline<a class="headerlink" href="#the-timeline" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/Qtenv-timeline.png"><img alt="../_images/Qtenv-timeline.png" src="../_images/Qtenv-timeline.png" style="width: 90%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 68 </span><span class="caption-text">The timeline</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The timeline displays the contents of the Future Events Set on a logarithmic time scale. Each dot represents a message
+(event). Messages to be delivered in the current simulation time are grouped into a separate section on the left between
+brackets.</p>
+<p>Clicking an event will focus it in the <span class="guilabel">Object Inspector</span>, and double-clicking will open a floating inspector
+window. Right-clicking will bring up a context menu with further actions.</p>
+<p>The timeline is often crowded, limiting its usefulness. To overcome this, you can hide uninteresting events from the
+timeline: right-click the event, and choose <span class="guilabel">Exclude Messages Like ‘x’ From Animation</span> from the context menu.
+This will hide events with similar name and the same C++ class name from the timeline, and also skip the animation when
+such messages are sent from one module to another. You can view and edit the list of excluded messages on the
+<span class="guilabel">Filtering</span> page of the <span class="guilabel">Preferences</span> dialog. (Tip: the timeline context menu provides a shortcut to
+that dialog).</p>
+<p>The whole timeline can be hidden (and revealed again) using the <span class="menuselection">View ‣ Timeline</span> menu item, by pressing a
+button on the toolbar, or simply by dragging the handle of the separator under it all the way up.</p>
+</section>
+<section id="the-object-navigator">
+<h3 id="the-object-navigator">The Object Navigator<a class="headerlink" href="#the-object-navigator" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/Qtenv-objtree.png"><img alt="../_images/Qtenv-objtree.png" src="../_images/Qtenv-objtree.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 69 </span><span class="caption-text">The object tree</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Object Navigator</span> displays inspectable objects reachable from two root objects (the network module and
+the FES) in a tree form.</p>
+<p>Clicking an object will focus it in the <span class="guilabel">Object Inspector</span>, and double-clicking will open a floating inspector
+window. Right-clicking will bring up a context menu with further actions.</p>
+</section>
+<section id="the-object-inspector">
+<h3 id="the-object-inspector">The Object Inspector<a class="headerlink" href="#the-object-inspector" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Object Inspector</span> is located below the <span class="guilabel">Object Navigator</span>, and lets you examine the contents of
+objects in detail. The <span class="guilabel">Object Inspector</span> always focuses on the object last clicked (or otherwise selected) on
+the Qtenv UI. It can be directly navigated as well, via the <span class="guilabel">Back</span>, <span class="guilabel">Forward</span>, and <span class="guilabel">Go to
+Parent</span> buttons, and also by double-clicking objects shown inside the inspector’s area.</p>
+<table>
+<colgroup>
+<col style="width: 50%"/>
+<col style="width: 50%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><figure class="align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspector-grouped.png"><img alt="../_images/Qtenv-inspector-grouped.png" src="../_images/Qtenv-inspector-grouped.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 70 </span><span class="caption-text">The object inspector in Grouped mode</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+<td><figure class="align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspector-flat.png"><img alt="../_images/Qtenv-inspector-flat.png" src="../_images/Qtenv-inspector-flat.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 71 </span><span class="caption-text">The object inspector in Flat mode</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The inspector has four display modes: <span class="guilabel">Grouped</span>, <span class="guilabel">Flat</span>, <span class="guilabel">Children</span> and
+<span class="guilabel">Inheritance</span>. You can switch between these modes using the buttons on the inspector’s toolbar.</p>
+<p>In <span class="guilabel">Grouped</span>, <span class="guilabel">Flat</span> and <span class="guilabel">Inheritance</span> modes, the tree shows the fields (or data members)
+of the object. It uses meta-information generated by the message compiler to obtain the list of fields and their values.
+(This is true even for the built-in classes – the simulation kernel contains their description of msg format.)</p>
+<p>The only difference between these three modes is the way the fields are arranged. In <span class="guilabel">Grouped</span> mode, they are
+organized in categories, in <span class="guilabel">Flat</span> mode they form a simple alphabetical list, and in <span class="guilabel">Inheritance</span>
+mode they are organized based on which superclass they are inherited from.</p>
+<table>
+<colgroup>
+<col style="width: 50%"/>
+<col style="width: 50%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><figure class="align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspector-children.png"><img alt="../_images/Qtenv-inspector-children.png" src="../_images/Qtenv-inspector-children.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 72 </span><span class="caption-text">The object inspector in Children mode</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+<td><figure class="align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspector-inheritance.png"><img alt="../_images/Qtenv-inspector-inheritance.png" src="../_images/Qtenv-inspector-inheritance.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 73 </span><span class="caption-text">The object inspector in Inheritance mode</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+</tr>
+</tbody>
+</table>
+<p>In <span class="guilabel">Children</span> mode, the tree shows the child objects of the currently inspected object. The child list is
+obtained via the <code class="docutils literal notranslate"><span class="pre">forEachChild()</span></code> method of the object. This is very similar to how the <span class="guilabel">Object Navigator</span>
+works, but this can have an arbitrary root.</p>
+</section>
+<section id="the-network-display">
+<h3 id="the-network-display">The Network Display<a class="headerlink" href="#the-network-display" title="Permalink to this headline">¶</a></h3>
+<p>The network view provides a graphical view of the network and in general, modules. Graphical representation is based on
+display strings (<code class="docutils literal notranslate"><span class="pre">@display</span></code> properties in the NED file). You can go into any compound module by double-clicking its
+icon.</p>
+<p>Message sending, method calls and certain other events are animated in the graphical view. You can customize animation
+in the <span class="guilabel">Animation</span> page of the <span class="guilabel">Preferences</span> dialog.</p>
+<figure class="align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/Qtenv-network.png"><img alt="../_images/Qtenv-network.png" src="../_images/Qtenv-network.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 74 </span><span class="caption-text">The network display</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The built-in <code class="docutils literal notranslate"><span class="pre">cCanvas</span></code> of the inspected object is also rendered in this view together with the module contents to
+allow for overlaying custom annotations and animations. This canvas contains the figures declared by the <code class="docutils literal notranslate"><span class="pre">@figure</span></code>
+properties in the NED source of the module.</p>
+<p>By choosing the <span class="guilabel">Show/Hide Canvas Layers</span> item in the context menu of the inspected module, the displayed
+figures can be filtered based on the tags set on them.</p>
+<figure class="align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/Qtenv-figure-filter.png"><img alt="../_images/Qtenv-figure-filter.png" src="../_images/Qtenv-figure-filter.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 75 </span><span class="caption-text">Figure filtering dialog</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Since any figure can have any number of tags, a two-step filtering mechanism is applied to give sufficient control. The
+left side is a whitelist, while the right side is a blacklist. The example above would only let all the figures with the
+“oval” tag appear, except those that also have the “green” tag on them.</p>
+<p>If the inspected module has a built-in <code class="docutils literal notranslate"><span class="pre">cOsgCanvas</span></code> (and Qtenv is built with OSG support enabled), this inspector can
+also be switched into a 3D display mode with the globe icon on its toolbar. In this case, the 2D network and canvas
+display is replaced by the scene encapsulated by the <code class="docutils literal notranslate"><span class="pre">cOsgCanvas</span></code>.</p>
+<figure class="align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/Qtenv-osg.png"><img alt="../_images/Qtenv-osg.png" src="../_images/Qtenv-osg.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 76 </span><span class="caption-text">The network display in 3D mode</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The context menu of submodules makes further actions available (see below).</p>
+<figure class="align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/Qtenv-submod-contextmenu.png"><img alt="../_images/Qtenv-submod-contextmenu.png" src="../_images/Qtenv-submod-contextmenu.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 77 </span><span class="caption-text">Submodule context menu</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id22">
+<a class="reference internal image-reference" href="../_images/Qtenv-submod-utilities.png"><img alt="../_images/Qtenv-submod-utilities.png" src="../_images/Qtenv-submod-utilities.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 78 </span><span class="caption-text">The Utilities submenu</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="zooming-and-panning">
+<h4 id="zooming-and-panning">Zooming and Panning<a class="headerlink" href="#zooming-and-panning" title="Permalink to this headline">¶</a></h4>
+<p>There are several ways for zooming the canvas, both using the mouse and the keyboard:</p>
+<ul>
+<li><p>To zoom in around a point, double-click the canvas; use Shift + double-click to zoom out, or scroll while holding
+down Ctrl.</p>
+<p>You can also zoom around the center of the viewport with the looking glass buttons on the canvas toolbar.</p>
+</li>
+<li><p>For marquee zoom, drag out a rectangle with the left mouse button while holding down Ctrl; you can cancel the
+operation with the right mouse button.</p></li>
+<li><p>Panning: moving the mouse while holding down the left mouse button will move the canvas; this is often a more
+comfortable way to navigate the canvas than using the scroll bars. You can of course scroll in any direction with
+simply the mouse wheel, or the similar functionality of many touchpads.</p></li>
+</ul>
+</section>
+</section>
+<section id="the-log-viewer">
+<h3 id="the-log-viewer">The Log Viewer<a class="headerlink" href="#the-log-viewer" title="Permalink to this headline">¶</a></h3>
+<p>When you run the simulation, Qtenv will remember the output from logging statements (<code class="docutils literal notranslate"><span class="pre">EV</span> <span class="pre">&lt;&lt;</span> <span class="pre">"Hello</span> <span class="pre">World\n";</span></code>) and the
+messages sent between modules, and can present it to you in a meaningful manner. Only the output from the last N events
+is preserved (N being configurable in the <span class="guilabel">Preferences</span> dialog), and only in Step, Run and Fast Run modes.
+(Express mode can be so fast because such overhead is turned off while it’s active.)</p>
+<p>The <span class="guilabel">Log Viewer</span> shows log related to one compound module and its subtree. It has two modes:
+<span class="guilabel">Messages</span> and <span class="guilabel">Log</span> mode, the default being <span class="guilabel">Messages</span>. You can switch between the two
+modes with tool icons on the inspector’s local toolbar.</p>
+<p>In <span class="guilabel">Messages</span> mode, the window displays messages sent between the (immediate) submodules of the inspected
+compound module, and messages sent out of, or into the compound module. The embedded <span class="guilabel">Log Viewer</span> shows
+content related to the module inspected in the <span class="guilabel">Network Display</span> above it at any time. You can view details
+about any message in the <span class="guilabel">Object Inspector</span> by clicking on it, and access additional functions in its context
+menu.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In <span class="guilabel">Messages</span> mode, the <span class="guilabel">Info</span> column can be customized by writing and registering a custom
+<code class="docutils literal notranslate"><span class="pre">cMessagePrinter</span></code> class. This string is split at the tab characters (<code class="docutils literal notranslate"><span class="pre">'\t'</span></code>) into parts that are aligned in
+additional columns.</p>
+</div>
+<figure class="align-default" id="id23">
+<a class="reference internal image-reference" href="../_images/Qtenv-log-msgs.png"><img alt="../_images/Qtenv-log-msgs.png" src="../_images/Qtenv-log-msgs.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 79 </span><span class="caption-text">The log viewer showing message traffic</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In <span class="guilabel">Log</span> mode, the window displays log lines that belong to submodules under the inspected compound module
+(i.e. the whole module subtree.)</p>
+<figure class="align-default" id="id24">
+<a class="reference internal image-reference" href="../_images/Qtenv-log-textual.png"><img alt="../_images/Qtenv-log-textual.png" src="../_images/Qtenv-log-textual.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 80 </span><span class="caption-text">The log viewer showing module log</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>You can filter the content of the window to only include messages from specific modules. Open the log window’s context
+menu and select <span class="guilabel">Filter Window Contents</span>.</p>
+<figure class="align-default" id="id25">
+<a class="reference internal image-reference" href="../_images/Qtenv-log-filter.png"><img alt="../_images/Qtenv-log-filter.png" src="../_images/Qtenv-log-filter.png" style="width: 50%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 81 </span><span class="caption-text">The log filter dialog</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>General logging behavior, such as the prefix format, can be controlled in the <span class="guilabel">Preferences</span> dialog. The log
+level of each module (and its descendants) can be set in its context menu.</p>
+<p>It is also possible to open separate log windows for individual modules. A log window for a compound module displays the
+log from all of its submodule tree. To open a log window, find the module in the module tree or the network display,
+right-click it and choose <span class="guilabel">Open Component Log</span> from the context menu.</p>
+</section>
+</section>
+<section id="inspecting-objects">
+<h2 id="inspecting-objects">Inspecting Objects<a class="headerlink" href="#inspecting-objects" title="Permalink to this headline">¶</a></h2>
+<section id="object-inspectors">
+<h3 id="object-inspectors">Object Inspectors<a class="headerlink" href="#object-inspectors" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the inspectors embedded in the main window, Qtenv also lets you open floating inspector windows for
+objects. The screenshow below shows Qtenv with several inspectors open.</p>
+<figure class="align-default" id="id26">
+<a class="reference internal image-reference" href="../_images/Qtenv-with-inspectors.png"><img alt="../_images/Qtenv-with-inspectors.png" src="../_images/Qtenv-with-inspectors.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 82 </span><span class="caption-text">Qtenv with several floating inspectors open</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="browsing-the-registered-components">
+<h3 id="browsing-the-registered-components">Browsing the Registered Components<a class="headerlink" href="#browsing-the-registered-components" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id27">
+<a class="reference internal image-reference" href="../_images/Qtenv-inspect-menu-full.png"><img alt="../_images/Qtenv-inspect-menu-full.png" src="../_images/Qtenv-inspect-menu-full.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 83 </span><span class="caption-text">The Inspect menu</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Registered components (NED Types, classes, functions, enums) can be displayed with the <span class="menuselection">Inspect ‣ Available
+components</span> menu item. If an error message reports missing types or classes, you can check here whether the missing item
+is in fact available, i.e. registered correctly.</p>
+</section>
+<section id="querying-objects">
+<h3 id="querying-objects">Querying Objects<a class="headerlink" href="#querying-objects" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Find/Inspect Objects</span> dialog lets you search the simulation for objects that meet certain criteria. The
+criteria may be the object name, class name, the value of a field of the object, or the combination of those. The
+results are presented in a table which you can sort by columns, and double-click items in it to inspect them.</p>
+<p>Some possible use cases:</p>
+<ul class="simple">
+<li><p>Identifying bottlenecks in the network by looking at the list of all queues, and ordering them by length (i.e. have
+the result table sorted by the <span class="guilabel">Info</span> column)</p></li>
+<li><p>Finding nodes with the highest packet drop count. If the drop counts are watched variables (see <code class="docutils literal notranslate"><span class="pre">WATCH()</span></code> macro),
+you can get a list of them.</p></li>
+<li><p>Finding modules that leak messages. If the live message count on the status bar keeps climbing up, you can issue a
+search for all message objects, and see where the leaked messages hide.</p></li>
+<li><p>Easy access for some data structures or objects, for example routing tables. You can search by name or class name,
+and use the result list as a collection of hotlinks, sparing you manual navigation in the simulation’s object tree.</p></li>
+</ul>
+<figure class="align-default" id="id28">
+<a class="reference internal image-reference" href="../_images/Qtenv-find.png"><img alt="../_images/Qtenv-find.png" src="../_images/Qtenv-find.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 84 </span><span class="caption-text">Using the Find/Inspect Objects dialog for finding long queues</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The dialog lets you specify the search root, and the name and class name of the objects to find. The latter two accept
+wildcard patterns.</p>
+<p>The checkboxes in the dialog can be used to select the object category that interests you. If you select a category, all
+objects with that type (and any type derived from it) will be included in the search. Alternatively, if you specify
+object class as a class filter expression, the search dialog will try to match the object’s class name with the given
+string, meaning that objects of derived types will not be included.</p>
+<p>You can also provide a generic filter expression, which matches the object’s full path by default. Wildcards (<code class="docutils literal notranslate"><span class="pre">"?"</span></code>,
+<code class="docutils literal notranslate"><span class="pre">"*"</span></code>) are allowed. <code class="docutils literal notranslate"><span class="pre">"{a-exz}"</span></code> matches any character in the range <code class="docutils literal notranslate"><span class="pre">"a".."e"</span></code> plus <code class="docutils literal notranslate"><span class="pre">"x"</span></code> and <code class="docutils literal notranslate"><span class="pre">"z"</span></code>. You can
+match numbers: <code class="docutils literal notranslate"><span class="pre">"*.job{128..191}"</span></code> will match objects named <code class="docutils literal notranslate"><span class="pre">"job128"</span></code>, <code class="docutils literal notranslate"><span class="pre">"job129"</span></code>, , <code class="docutils literal notranslate"><span class="pre">"job191"</span></code>.
+<code class="docutils literal notranslate"><span class="pre">"job{128..}"</span></code> and <code class="docutils literal notranslate"><span class="pre">"job{..191}"</span></code> are also understood. You can combine patterns with <code class="docutils literal notranslate"><span class="pre">AND</span></code>, <code class="docutils literal notranslate"><span class="pre">OR</span></code> and <code class="docutils literal notranslate"><span class="pre">NOT</span></code> and
+parentheses (lowercase <code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">or</span></code>, <code class="docutils literal notranslate"><span class="pre">not</span></code> are also accepted). You can match other object fields such as queue
+length, message kind, etc., with the syntax <code class="docutils literal notranslate"><span class="pre">fieldname</span> <span class="pre">=~</span> <span class="pre">pattern</span></code>. If the pattern contains special characters or space,
+you need to enclose it in quotes. (HINT: You will want to start the pattern with <code class="docutils literal notranslate"><span class="pre">"*."</span></code> in most cases to match objects
+anywhere in the network!).</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.destAddr</span></code> : Matches all objects with the name <code class="docutils literal notranslate"><span class="pre">"destAddr"</span></code> (likely module parameters).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.node[8..10].*</span></code> : Matches anything inside module <code class="docutils literal notranslate"><span class="pre">node[8],</span> <span class="pre">node[9]</span></code> and <code class="docutils literal notranslate"><span class="pre">node[10]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">className</span> <span class="pre">=~</span> <span class="pre">omnetpp::cQueue</span> <span class="pre">AND</span> <span class="pre">NOT</span> <span class="pre">length</span> <span class="pre">=~</span> <span class="pre">0</span></code> : Matches non-empty queue objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">className</span> <span class="pre">=~</span> <span class="pre">omnetpp::cQueue</span> <span class="pre">AND</span> <span class="pre">length</span> <span class="pre">=~</span> <span class="pre">{10..}</span></code> : Matches queue objects with length&gt;=10.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kind</span> <span class="pre">=~</span> <span class="pre">3</span> <span class="pre">OR</span> <span class="pre">kind</span> <span class="pre">=~</span> <span class="pre">{7..9}</span></code> : Matches messages with message kind equal to 3, 7, 8 or 9 (only messages have a
+<code class="docutils literal notranslate"><span class="pre">"kind"</span></code> attribute).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">className</span> <span class="pre">=~</span> <span class="pre">IP*</span> <span class="pre">AND</span> <span class="pre">*.data-*</span></code> : Matches objects whose class name begins with <code class="docutils literal notranslate"><span class="pre">"IP"</span></code> and name begins with
+<code class="docutils literal notranslate"><span class="pre">"data-".</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">className</span> <span class="pre">=~</span> <span class="pre">omnetpp::cMessage</span> <span class="pre">AND</span> <span class="pre">byteLength</span> <span class="pre">=~</span> <span class="pre">{1500..}</span></code> : Matches messages whose class is not cMessage and
+byteLength is at least 1500 (only messages have a <code class="docutils literal notranslate"><span class="pre">"byteLength"</span></code> attribute).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">"TCP</span> <span class="pre">packet"</span> <span class="pre">OR</span> <span class="pre">"*.packet(15)"</span></code> : Quotation marks needed when pattern is a reserved word or
+contains whitespace or special characters</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Qtenv uses the <code class="docutils literal notranslate"><span class="pre">cObject::forEachChild</span></code> method to collect all objects from a tree recursively. If you have your own
+objects derived from <code class="docutils literal notranslate"><span class="pre">cObject</span></code>, you should redefine the <code class="docutils literal notranslate"><span class="pre">cObject::forEachChild</span></code> to function correctly with an
+object search.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The class names have to be fully qualified, that is, they should contain the namespace(s) they are in, regardless of
+the related setting in the <span class="guilabel">Preferences dialog</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are debugging the simulation with a source level debugger, you may also use the <span class="guilabel">Inspect by pointer</span>
+menu item. Let the debugger display the address of the object to be inspected, and paste it into the dialog. Please
+note that entering an invalid pointer will crash the simulation.</p>
+</div>
+</section>
+</section>
+<section id="the-preferences-dialog">
+<h2 id="the-preferences-dialog">The Preferences Dialog<a class="headerlink" href="#the-preferences-dialog" title="Permalink to this headline">¶</a></h2>
+<p>Select <span class="menuselection">File ‣ Preferences</span> from the menu to display the runtime environment’s configuration dialog. The
+dialog lets you adjust various display, network layouting and animation options.</p>
+<section id="general">
+<h3 id="general">General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id29">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-general.png"><img alt="../_images/Qtenv-pref-general.png" src="../_images/Qtenv-pref-general.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 85 </span><span class="caption-text">General settings</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">General</span> tab can be used to set the default user interface behavior. It is possible to set whether
+namespaces should be stripped off the displayed class names, and how often the user interface will be updated while the
+simulation runs in <span class="guilabel">Express</span> mode.</p>
+</section>
+<section id="logs">
+<h3 id="logs">Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id30">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-logs.png"><img alt="../_images/Qtenv-pref-logs.png" src="../_images/Qtenv-pref-logs.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 86 </span><span class="caption-text">Logging settings</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Logs</span> tab can be used to set the default logging behavior, such as the log level of modules that do not
+override it, the prefix format of event banners, and the size limit of the log buffer.</p>
+</section>
+<section id="configuring-the-layouting-algorithm">
+<h3 id="configuring-the-layouting-algorithm">Configuring the Layouting Algorithm<a class="headerlink" href="#configuring-the-layouting-algorithm" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id31">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-layouting.png"><img alt="../_images/Qtenv-pref-layouting.png" src="../_images/Qtenv-pref-layouting.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 87 </span><span class="caption-text">Layouting settings</span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Qtenv provides automatic layouting for submodules that do not have their locations specified in the NED files. The
+layouting algorithm can be fine-tuned on the <span class="guilabel">Layouting</span> page of this dialog.</p>
+</section>
+<section id="configuring-animation">
+<h3 id="configuring-animation">Configuring Animation<a class="headerlink" href="#configuring-animation" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id32">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-animation.png"><img alt="../_images/Qtenv-pref-animation.png" src="../_images/Qtenv-pref-animation.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 88 </span><span class="caption-text">Animation settings</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Qtenv provides automatic animation when you run the simulation. You can fine-tune the animation settings using the
+<span class="guilabel">Animation</span> page of the settings dialog. If you do not need all visual feedback Qtenv provides, you can
+selectively turn off some of the features:</p>
+<ul class="simple">
+<li><p>Animate messages: Turns on/off the visualization of messages passing between modules.</p></li>
+<li><p>Broadcast animation: Handles message broadcasts in a special way (zero-time messages sent within the same event will
+be animated concurrently).</p></li>
+<li><p>Show next event marker: Highlights the module which will receive the next event.</p></li>
+<li><p>Show a dotted arrow when a <code class="docutils literal notranslate"><span class="pre">sendDirect()</span></code> method call is executed.</p></li>
+<li><p>Show a flashing arrow when a method call occurs from one module to another. The call is only animated if the called
+method contains the <code class="docutils literal notranslate"><span class="pre">Enter_Method()</span></code> macro.</p></li>
+<li><p>The display of message names and classes can also be turned off.</p></li>
+</ul>
+</section>
+<section id="timeline-and-animation-filtering">
+<h3 id="timeline-and-animation-filtering">Timeline and Animation Filtering<a class="headerlink" href="#timeline-and-animation-filtering" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id33">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-filtering.png"><img alt="../_images/Qtenv-pref-filtering.png" src="../_images/Qtenv-pref-filtering.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 89 </span><span class="caption-text">Filtering</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Filtering</span> page of the dialog serves two purposes. First, it lets you filter the contents of the
+<span class="guilabel">Timeline</span>. You can hide all self-messages (timers), or all non-self messages, and you can further reduce the
+number of messages shown on the timeline by also hiding the non-animated messages, explained below.</p>
+<p>Second, you can suppress the animation of certain messages. For example, when your focus is routing protocol messages,
+you can suppress the animation of data traffic.</p>
+<p>The text box lets you specify several filters, one per line. You can filter messages by name, class name, or by any
+other property that appears in the <span class="guilabel">Fields</span> page of the <span class="guilabel">Object Inspector</span> when you focus it on the
+given message object.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you select <span class="guilabel">Exclude Messages Like ‘x’ From Animation</span> from the context menu of a message object
+somewhere in the UI, it will add a new filter on this dialog page.</p>
+</div>
+<p>For object names, wildcards (<code class="docutils literal notranslate"><span class="pre">"?"</span></code>, <code class="docutils literal notranslate"><span class="pre">"*"</span></code>) are allowed. <code class="docutils literal notranslate"><span class="pre">"{a-exz}"</span></code> matches any character in the range
+<code class="docutils literal notranslate"><span class="pre">"a".."e"</span></code> plus <code class="docutils literal notranslate"><span class="pre">"x"</span></code> and <code class="docutils literal notranslate"><span class="pre">"z"</span></code>. You can match numbers: <code class="docutils literal notranslate"><span class="pre">"job{128..191}"</span></code> will match <code class="docutils literal notranslate"><span class="pre">"job128"</span></code>, <code class="docutils literal notranslate"><span class="pre">"job129"</span></code>,
+<code class="docutils literal notranslate"><span class="pre">"job191"</span></code>. <code class="docutils literal notranslate"><span class="pre">"job{128..}"</span></code> and <code class="docutils literal notranslate"><span class="pre">"job{..191}"</span></code> are also understood. You can combine patterns with <code class="docutils literal notranslate"><span class="pre">AND</span></code>,
+<code class="docutils literal notranslate"><span class="pre">OR</span></code> and <code class="docutils literal notranslate"><span class="pre">NOT</span></code> and parentheses (lowercase and, or, not are also acceptable). You can match against other object
+fields such as message length, message kind, etc. with the syntax <code class="docutils literal notranslate"><span class="pre">fieldname</span> <span class="pre">=~</span> <span class="pre">pattern</span></code>. Put quotation marks around a
+pattern if it contains special characters.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">m*</span></code> : matches any object whose name begins with “m”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m*</span> <span class="pre">AND</span> <span class="pre">*-{0..250}</span></code> : matches any object whose name begins with “m” and ends with a dash and a number between 0
+and 250</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">*timer*</span></code> : matches any object whose name does not contain the substring “timer”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">(*timer*</span> <span class="pre">OR</span> <span class="pre">*timeout*)</span></code> : matches any object whose name contains neither “timer” nor “timeout”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kind</span> <span class="pre">=~</span> <span class="pre">3</span> <span class="pre">OR</span> <span class="pre">kind</span> <span class="pre">=~</span> <span class="pre">{7..9}</span></code> : matches messages with message kind equal to 3, 7, 8 or 9</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">className</span> <span class="pre">=~</span> <span class="pre">IP*</span> <span class="pre">AND</span> <span class="pre">data-*</span></code> : matches objects whose class name begins with “IP” and name begins with “data-”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">className</span> <span class="pre">=~</span> <span class="pre">omnetpp::cMessage</span> <span class="pre">AND</span> <span class="pre">byteLength</span> <span class="pre">=~</span> <span class="pre">{1500..}</span></code> : matches objects whose class is not cMessage and whose
+byteLength is at least 1500</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">"TCP</span> <span class="pre">packet"</span> <span class="pre">OR</span> <span class="pre">"*.packet(15)"</span></code> : Quotation marks needed when pattern is a reserved word or
+contains whitespace or special characters</p></li>
+</ul>
+<p>There is also a per-module setting the models can adjust programatically that can prevent any animations taking place
+when inspecting a given module (<code class="docutils literal notranslate"><span class="pre">setBuiltinAnimationsAllowed()</span></code>).</p>
+</section>
+<section id="configuring-fonts">
+<h3 id="configuring-fonts">Configuring Fonts<a class="headerlink" href="#configuring-fonts" title="Permalink to this headline">¶</a></h3>
+<figure class="align-default" id="id34">
+<a class="reference internal image-reference" href="../_images/Qtenv-pref-fonts.png"><img alt="../_images/Qtenv-pref-fonts.png" src="../_images/Qtenv-pref-fonts.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 90 </span><span class="caption-text">Font selection</span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Fonts</span> page of the settings dialog lets you select the typeface and font size for various user interface
+elements.</p>
+</section>
+<section id="the-qtenvrc-file">
+<h3 id="the-qtenvrc-file">The .qtenvrc File<a class="headerlink" href="#the-qtenvrc-file" title="Permalink to this headline">¶</a></h3>
+<p>Settings are stored in <code class="docutils literal notranslate"><span class="pre">.qtenvrc</span></code> files. There are two <code class="docutils literal notranslate"><span class="pre">.qtenvrc</span></code> files: one is stored in the current directory and
+contains project-specific settings like the list of open inspectors; the other is saved into the user’s home directory
+and contains global settings.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Inspectors are identified by their object names. If you have several components that share the same name (this is
+especially common for messages), you may end up with a lot of inspector windows when you start the simulation. In
+such cases, you may simply delete the <code class="docutils literal notranslate"><span class="pre">.qtenvrc</span></code> file.</p>
+</div>
+</section>
+</section>
+<section id="qtenv-and-c">
+<h2 id="qtenv-and-c">Qtenv and C++<a class="headerlink" href="#qtenv-and-c" title="Permalink to this headline">¶</a></h2>
+<p>This section describes which C++ API functions various parts of Qtenv employ to display data and otherwse perform their
+functions. Most functions are member functions of the <code class="docutils literal notranslate"><span class="pre">cObject</span></code> class.</p>
+<section id="id1">
+<h3 id="id1">Inspectors<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Inspectors display the hierarchical name (i.e. full path) and class name of the inspected object in the title using the
+<code class="docutils literal notranslate"><span class="pre">getFullPath()</span></code> and <code class="docutils literal notranslate"><span class="pre">getClassName()</span></code> <code class="docutils literal notranslate"><span class="pre">cObject</span></code> member functions. The <span class="guilabel">Go to parent</span> feature in
+inspectors uses the <code class="docutils literal notranslate"><span class="pre">getOwner()</span></code> method of <code class="docutils literal notranslate"><span class="pre">cObject</span></code>.</p>
+<p>The <span class="guilabel">Object Navigator</span> displays the full name and class name of each object (<code class="docutils literal notranslate"><span class="pre">getFullName()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">getClassName()</span></code>), and also the ID for classes that have one (<code class="docutils literal notranslate"><span class="pre">getId()</span></code> on <code class="docutils literal notranslate"><span class="pre">cMessage</span></code> and <code class="docutils literal notranslate"><span class="pre">cModule</span></code>). When you
+hover with the mouse, the tooltip displays the info string (<code class="docutils literal notranslate"><span class="pre">str()</span></code> method). The roots of the tree are the network
+module (<code class="docutils literal notranslate"><span class="pre">simulation.getSystemModule()</span></code>) and the FES (<code class="docutils literal notranslate"><span class="pre">simulation.getFES()</span></code>. Child objects are enumerated with the
+help of the <code class="docutils literal notranslate"><span class="pre">forEachChild()</span></code> method.</p>
+<p>The <span class="guilabel">Object Inspector</span> in <span class="guilabel">Children</span> mode displays the full name, class name and info string
+(<code class="docutils literal notranslate"><span class="pre">getFullName()</span></code>, <code class="docutils literal notranslate"><span class="pre">getClassName()</span></code>, <code class="docutils literal notranslate"><span class="pre">str()</span></code>) of child objects enumerated using <code class="docutils literal notranslate"><span class="pre">forEachChild()</span></code>.
+<code class="docutils literal notranslate"><span class="pre">forEachChild()</span></code> can only enumerate objects that are subclassed from <code class="docutils literal notranslate"><span class="pre">cObject</span></code>. If you want your non-<code class="docutils literal notranslate"><span class="pre">cObject</span></code>
+variables (e.g. primitive types or STL containers) to appear in the <span class="guilabel">Children</span> tree, you need to wrap them
+into <code class="docutils literal notranslate"><span class="pre">cObject</span></code>. The <code class="docutils literal notranslate"><span class="pre">WATCH()</span></code> macro does exactly that: it creates an object wrapper that displays the variable’s
+value via the wrapper’s <code class="docutils literal notranslate"><span class="pre">str()</span></code> method. There are watch macros for STL contains as well, they present the wrapped
+object to Qtenv in a more structured way, via custom class descriptors (cClassDescriptor, see below).</p>
+<p>One might ask how the <code class="docutils literal notranslate"><span class="pre">forEachChild()</span></code> method of modules can enumerate messages, queues, and other objects that are
+owned by the module. The answer is that the module class maintains a list of owned objects, and <code class="docutils literal notranslate"><span class="pre">cObject</span></code>
+automatically joins that list.</p>
+<p>The <span class="guilabel">Object Inspector</span> displays an object’s fields by making use of the class descriptor
+(<code class="docutils literal notranslate"><span class="pre">cClassDescriptor</span></code>) for that class. Class descriptors are automatically generated for new classes by the message
+compiler. Class descriptors for the OMNeT++ library classes are also generated by the message compiler, see
+<code class="docutils literal notranslate"><span class="pre">src/sim/sim_std.msg</span></code> in the source tree.</p>
+<p>The <span class="guilabel">Network Display</span> uses <code class="docutils literal notranslate"><span class="pre">cSubmoduleIterator</span></code> to enumerate submodules, and its <span class="guilabel">Go to parent
+module</span> function uses <code class="docutils literal notranslate"><span class="pre">getParentModule()</span></code>. Background and submodule rendering is based on display strings
+(<code class="docutils literal notranslate"><span class="pre">getDisplayString()</span></code> method of <code class="docutils literal notranslate"><span class="pre">cComponent</span></code>).</p>
+<p>The module log page of <span class="guilabel">Log Viewer</span> displays the output to <code class="docutils literal notranslate"><span class="pre">EV</span></code> streams from modules and channels.</p>
+<p>The message/packet traffic page of <span class="guilabel">Log Viewer</span> shows information based on stored copies of sent messages (the
+copy is created using <code class="docutils literal notranslate"><span class="pre">dup()</span></code>), and stored sendhop information. The <span class="guilabel">Name</span> column displays the message name
+(<code class="docutils literal notranslate"><span class="pre">getFullName()</span></code>). However, the <span class="guilabel">Info</span> column does not display the string returned from <code class="docutils literal notranslate"><span class="pre">str()</span></code>, but
+rather, strings produced by a <code class="docutils literal notranslate"><span class="pre">cMessagePrinter</span></code> object. Message printers can be dynamically registered.</p>
+</section>
+<section id="during-simulation">
+<h3 id="during-simulation">During Simulation<a class="headerlink" href="#during-simulation" title="Permalink to this headline">¶</a></h3>
+<p>Qtenv sets up a network by calling <code class="docutils literal notranslate"><span class="pre">simulation.setupNetwork()</span></code>, then immediately proceeds to invoke
+<code class="docutils literal notranslate"><span class="pre">callInitialize()</span></code> on the root module. During simulation, <code class="docutils literal notranslate"><span class="pre">simulation.takeNextEvent()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">simulation.executeEvent()</span></code> are called iteratively. When the simulation ends, Qtenv invokes <code class="docutils literal notranslate"><span class="pre">callFinish()</span></code> on the
+root module; the same happens when you select the <span class="guilabel">Conclude Simulation</span> menu item. The purpose of
+<code class="docutils literal notranslate"><span class="pre">callFinish()</span></code> is to record summary statistics at the end of a successful simulation run, so it will be skipped if an
+error occurs during simulation. On exit, and before a new network is set up, <code class="docutils literal notranslate"><span class="pre">simulation.deleteNetwork()</span></code> is called.</p>
+<p>The <span class="guilabel">Debug Next Event</span> menu item issues the <code class="docutils literal notranslate"><span class="pre">int3</span></code> x86 assembly instruction on Windows, and raises a
+<code class="docutils literal notranslate"><span class="pre">SIGTRAP</span></code> signal on other systems.</p>
+</section>
+</section>
+<section id="reference">
+<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<section id="command-line-options">
+<h3 id="command-line-options">Command-Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h3>
+<p>A simulation program built with Qtenv accepts the following command line switches:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code>: The program prints a help message and exits.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">Qtenv</span></code>: Causes the program to start with Qtenv. (This is the default, unless the program hasn’t been linked
+with Qtenv, or has another, custom environment library with a higher priority than Qtenv.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">filename</span></code>: Specifies the name of the configuration file. The default is <code class="docutils literal notranslate"><span class="pre">omnetpp.ini</span></code>. Multiple <code class="docutils literal notranslate"><span class="pre">-f</span></code>
+switches can be given; this allows you to partition your configuration file. For example, one file can contain your
+general settings, another one most of the module parameters, and a third one the module parameters you change
+frequently. The <code class="docutils literal notranslate"><span class="pre">-f</span></code> switch is optional and can be omitted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">filename</span></code>: Loads a shared library (<code class="docutils literal notranslate"><span class="pre">.so</span></code> file on Unix, <code class="docutils literal notranslate"><span class="pre">.dll</span></code> on Windows, and <code class="docutils literal notranslate"><span class="pre">.dylib</span></code> on Mac OS X).
+Multiple <code class="docutils literal notranslate"><span class="pre">-l</span></code> switches are accepted. Shared libraries may contain simple modules and other, arbitrary code. File
+names may be specified without the file extension and the <code class="docutils literal notranslate"><span class="pre">lib</span></code> name prefix (i.e. <code class="docutils literal notranslate"><span class="pre">foo</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">libfoo.so</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">filepath</span></code>: When present, overrides the <code class="docutils literal notranslate"><span class="pre">NEDPATH</span></code> environment variable and sets the source locations for
+simulation NED files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">configname</span></code>: Selects an INI configuration for execution.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">runnumber</span></code>: It has the same effect as (but takes priority over) the <span class="guilabel">qtenv-default-run=</span> INI file
+configuration option. Run filters are also accepted. If there is more than one matching run, they are grouped to the
+top of the combobox.</p></li>
+</ul>
+</section>
+<section id="environment-variables">
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMNETPP_IMAGE_PATH</span></code>: It controls where Qtenv will load images for network graphics (modules, background, etc.)
+from. The value should be a semicolon-separated list of directories, but on non-Windows systems, the colon is also
+accepted as separator. The default is <code class="docutils literal notranslate"><span class="pre">./bitmaps;./images;&lt;omnetpp&gt;/images</span></code>, that is, by default Qtenv looks into
+the <code class="docutils literal notranslate"><span class="pre">bitmaps</span></code> and <code class="docutils literal notranslate"><span class="pre">images</span></code> folder of the simulation, and <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the working directory of your
+installation. The directories will be scanned recursively, and subdirectory names become part of the icon name; for
+example, if an <code class="docutils literal notranslate"><span class="pre">images/</span></code> directory is listed, the file <code class="docutils literal notranslate"><span class="pre">images/misc/foo.png</span></code> will be registered as icon
+<code class="docutils literal notranslate"><span class="pre">misc/foo</span></code>. PNG, JPG and GIF files are accepted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OMNETPP_DEBUGGER_COMMAND</span></code>: When set, overrides the factory default for the command used to launch the just-in-time
+debugger (<code class="docutils literal notranslate"><span class="pre">debugger-attach-command</span></code>). It must contain ‘%u’ (which will be substituted with the process ID of the
+simulation), and must not contain any additional ‘%’ characters. Since the command has to return immediately, on
+Linux and macOS it is recommended that it ends with an ampersand (’&amp;’). Settings on the command line or in an
+<code class="docutils literal notranslate"><span class="pre">.ini</span></code> file take precedence over this environment variable.</p></li>
+</ul>
+</section>
+<section id="configuration-options">
+<h3 id="configuration-options">Configuration Options<a class="headerlink" href="#configuration-options" title="Permalink to this headline">¶</a></h3>
+<p>Qtenv accepts the following configuration options in the INI file.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qtenv-extra-stack</span></code>: Specifies the extra amount of stack (in kilobytes) that is reserved for each <code class="docutils literal notranslate"><span class="pre">activity()</span></code>
+simple module when the simulation is run under Qtenv. This value is significantly higher than the similar one for
+Cmdenv (handling GUI events requires a large amount of stack space).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qtenv-default-config</span></code>: Specifies which INI file configuration Qtenv should set up automatically after startup. If
+there is no such option, Qtenv will ask which configuration to set up.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qtenv-default-run</span></code>: Specifies which run of the selected configuration Qtenv should set up after startup. If there
+is no such option, Qtenv will ask.</p></li>
+</ul>
+<p>All other Qtenv settings can be changed via the GUI, and are saved into the <code class="docutils literal notranslate"><span class="pre">.qtenvrc</span></code> file in the user’s home
+directory or in the current directory.</p>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="launcher.html" title="Launching and Debugging"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Launching and Debugging </span>
+              </div>
+            </a>
+          
+          
+            <a href="sequence-chart.html" title="Sequence Charts"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Sequence Charts </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

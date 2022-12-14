@@ -1,0 +1,1413 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>C++ Development &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Launching and Debugging" href="launcher.html" />
+    <link rel="prev" title="Editing Message Files" href="msg-editor.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#userguide/cpp-development" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> C++ Development </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">User Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">User Guide</a>
+      <ul class="md-nav__list"> 
+    <li class="md-nav__item">
+    
+    
+      <a href="intro.html" class="md-nav__link">Introduction</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ned-editor.html" class="md-nav__link">Editing NED Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ini-editor.html" class="md-nav__link">Editing INI Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="msg-editor.html" class="md-nav__link">Editing Message Files</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> C++ Development </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">C++ Development</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-cpp-development--page-root" class="md-nav__link">C++ Development</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#prerequisites" class="md-nav__link">Prerequisites</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-a-c-project" class="md-nav__link">Creating a C++ Project</a>
+        </li>
+        <li class="md-nav__item"><a href="#editing-c-code" class="md-nav__link">Editing C++ Code</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-c-editor" class="md-nav__link">The C++ Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basic-functions" class="md-nav__link">Basic Functions</a>
+        </li>
+        <li class="md-nav__item"><a href="#view-documentation" class="md-nav__link">View Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-type" class="md-nav__link">Open Type</a>
+        </li>
+        <li class="md-nav__item"><a href="#exploring-the-code" class="md-nav__link">Exploring the Code</a>
+        </li>
+        <li class="md-nav__item"><a href="#refactoring" class="md-nav__link">Refactoring</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#include-browser-view" class="md-nav__link">Include Browser View</a>
+        </li>
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#type-hierarchy-view" class="md-nav__link">Type Hierarchy View</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#building-the-project" class="md-nav__link">Building the Project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basics" class="md-nav__link">Basics</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#build-output" class="md-nav__link">Build Output</a>
+        </li>
+        <li class="md-nav__item"><a href="#makefile-generation" class="md-nav__link">Makefile Generation</a>
+        </li>
+        <li class="md-nav__item"><a href="#cleaning-the-project" class="md-nav__link">Cleaning the Project</a>
+        </li>
+        <li class="md-nav__item"><a href="#referenced-projects-and-the-build-process" class="md-nav__link">Referenced Projects and the Build Process</a>
+        </li>
+        <li class="md-nav__item"><a href="#build-configurations" class="md-nav__link">Build Configurations</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#console-view" class="md-nav__link">Console View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-project" class="md-nav__link">Configuring the Project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#configuring-the-build-process" class="md-nav__link">Configuring the Build Process</a>
+        </li>
+        <li class="md-nav__item"><a href="#managing-build-configurations" class="md-nav__link">Managing Build Configurations</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-project-build-system" class="md-nav__link">Configuring the Project Build System</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#folders-and-makefiles" class="md-nav__link">Folders and Makefiles</a>
+        </li>
+        <li class="md-nav__item"><a href="#source-folders" class="md-nav__link">Source Folders</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Makefile Generation</a>
+        </li>
+        <li class="md-nav__item"><a href="#command-line-build" class="md-nav__link">Command-line Build</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-makefile-generation-for-a-folder" class="md-nav__link">Configuring Makefile Generation for a Folder</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-target-tab" class="md-nav__link">The <span class="guilabel">Target</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-scope-tab" class="md-nav__link">The <span class="guilabel">Scope</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-compile-tab" class="md-nav__link">The <span class="guilabel">Compile</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-link-tab" class="md-nav__link">The <span class="guilabel">Link</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-custom-tab" class="md-nav__link">The <span class="guilabel">Custom</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-preview-tab" class="md-nav__link">The <span class="guilabel">Preview</span> Tab</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-references-and-makefile-generation" class="md-nav__link">Project References and Makefile Generation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-features" class="md-nav__link">Project Features</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#motivation" class="md-nav__link">Motivation</a>
+        </li>
+        <li class="md-nav__item"><a href="#what-is-a-project-feature" class="md-nav__link">What is a Project Feature</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-project-features-dialog" class="md-nav__link">The Project Features Dialog</a>
+        </li>
+        <li class="md-nav__item"><a href="#what-happens-when-you-enable-disable-a-feature" class="md-nav__link">What Happens When You Enable/Disable a Feature</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-features-from-command-line" class="md-nav__link">Using Features from Command Line</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-oppfeatures-file" class="md-nav__link">The <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> File</a>
+        </li>
+        <li class="md-nav__item"><a href="#how-to-introduce-a-project-feature" class="md-nav__link">How to Introduce a Project Feature</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-files" class="md-nav__link">Project Files</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/cpp-development.rst.txt">Show Source</a> </li>
+
+  </ul>
+</nav>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="launcher.html" class="md-nav__link">Launching and Debugging</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="qtenv.html" class="md-nav__link">The Qtenv Graphical Runtime Environment</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="sequence-chart.html" class="md-nav__link">Sequence Charts</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="result-analysis.html" class="md-nav__link">Analyzing the Results</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="neddoc.html" class="md-nav__link">NED Documentation Generator</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="ide-extensions.html" class="md-nav__link">Extending the IDE</a>
+      
+    
+    </li></ul>
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../installguide/index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#userguide-cpp-development--page-root" class="md-nav__link">C++ Development</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#introduction" class="md-nav__link">Introduction</a>
+        </li>
+        <li class="md-nav__item"><a href="#prerequisites" class="md-nav__link">Prerequisites</a>
+        </li>
+        <li class="md-nav__item"><a href="#creating-a-c-project" class="md-nav__link">Creating a C++ Project</a>
+        </li>
+        <li class="md-nav__item"><a href="#editing-c-code" class="md-nav__link">Editing C++ Code</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-c-editor" class="md-nav__link">The C++ Editor</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basic-functions" class="md-nav__link">Basic Functions</a>
+        </li>
+        <li class="md-nav__item"><a href="#view-documentation" class="md-nav__link">View Documentation</a>
+        </li>
+        <li class="md-nav__item"><a href="#content-assist" class="md-nav__link">Content Assist</a>
+        </li>
+        <li class="md-nav__item"><a href="#navigation" class="md-nav__link">Navigation</a>
+        </li>
+        <li class="md-nav__item"><a href="#commenting" class="md-nav__link">Commenting</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-type" class="md-nav__link">Open Type</a>
+        </li>
+        <li class="md-nav__item"><a href="#exploring-the-code" class="md-nav__link">Exploring the Code</a>
+        </li>
+        <li class="md-nav__item"><a href="#refactoring" class="md-nav__link">Refactoring</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#include-browser-view" class="md-nav__link">Include Browser View</a>
+        </li>
+        <li class="md-nav__item"><a href="#outline-view" class="md-nav__link">Outline View</a>
+        </li>
+        <li class="md-nav__item"><a href="#type-hierarchy-view" class="md-nav__link">Type Hierarchy View</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#building-the-project" class="md-nav__link">Building the Project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#basics" class="md-nav__link">Basics</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#build-output" class="md-nav__link">Build Output</a>
+        </li>
+        <li class="md-nav__item"><a href="#makefile-generation" class="md-nav__link">Makefile Generation</a>
+        </li>
+        <li class="md-nav__item"><a href="#cleaning-the-project" class="md-nav__link">Cleaning the Project</a>
+        </li>
+        <li class="md-nav__item"><a href="#referenced-projects-and-the-build-process" class="md-nav__link">Referenced Projects and the Build Process</a>
+        </li>
+        <li class="md-nav__item"><a href="#build-configurations" class="md-nav__link">Build Configurations</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#console-view" class="md-nav__link">Console View</a>
+        </li>
+        <li class="md-nav__item"><a href="#problems-view" class="md-nav__link">Problems View</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-project" class="md-nav__link">Configuring the Project</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#configuring-the-build-process" class="md-nav__link">Configuring the Build Process</a>
+        </li>
+        <li class="md-nav__item"><a href="#managing-build-configurations" class="md-nav__link">Managing Build Configurations</a>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-the-project-build-system" class="md-nav__link">Configuring the Project Build System</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#folders-and-makefiles" class="md-nav__link">Folders and Makefiles</a>
+        </li>
+        <li class="md-nav__item"><a href="#source-folders" class="md-nav__link">Source Folders</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Makefile Generation</a>
+        </li>
+        <li class="md-nav__item"><a href="#command-line-build" class="md-nav__link">Command-line Build</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#configuring-makefile-generation-for-a-folder" class="md-nav__link">Configuring Makefile Generation for a Folder</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#the-target-tab" class="md-nav__link">The <span class="guilabel">Target</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-scope-tab" class="md-nav__link">The <span class="guilabel">Scope</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-compile-tab" class="md-nav__link">The <span class="guilabel">Compile</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-link-tab" class="md-nav__link">The <span class="guilabel">Link</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-custom-tab" class="md-nav__link">The <span class="guilabel">Custom</span> Tab</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-preview-tab" class="md-nav__link">The <span class="guilabel">Preview</span> Tab</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-references-and-makefile-generation" class="md-nav__link">Project References and Makefile Generation</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-features" class="md-nav__link">Project Features</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#motivation" class="md-nav__link">Motivation</a>
+        </li>
+        <li class="md-nav__item"><a href="#what-is-a-project-feature" class="md-nav__link">What is a Project Feature</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-project-features-dialog" class="md-nav__link">The Project Features Dialog</a>
+        </li>
+        <li class="md-nav__item"><a href="#what-happens-when-you-enable-disable-a-feature" class="md-nav__link">What Happens When You Enable/Disable a Feature</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-features-from-command-line" class="md-nav__link">Using Features from Command Line</a>
+        </li>
+        <li class="md-nav__item"><a href="#the-oppfeatures-file" class="md-nav__link">The <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> File</a>
+        </li>
+        <li class="md-nav__item"><a href="#how-to-introduce-a-project-feature" class="md-nav__link">How to Introduce a Project Feature</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#project-files" class="md-nav__link">Project Files</a>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/userguide/cpp-development.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="c-development">
+<h1 id="userguide-cpp-development--page-root">C++ Development<a class="headerlink" href="#userguide-cpp-development--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE contains editors, views and other tools to assist you while developing your C++ code. C++ files open in
+the IDE in the C++ source editor. The C++ source editor supports syntax highlighting, documentation tooltips, content
+assist, automatic indentation, code formatting, refactoring, and several other useful features. The IDE also allows you
+to configure the build, start the build process, launch simulations, and debug the model without leaving the IDE.</p>
+<p>Most of these features are provided by the Eclipse CDT (C/C++ Development Tooling) project (<a class="reference external" href="http://eclipse.org/cdt">http://eclipse.org/cdt</a>).
+This chapter briefly explains the basics of using CDT for developing simulation models. If you want to learn more about
+how to use CDT effectively, we recommend that you read the CDT documentation in the IDE help system (Help/Help Content).</p>
+<p>The OMNeT++ IDE extends CDT with the following features to make model development easier:</p>
+<ul class="simple">
+<li><p>A new OMNeT++ project creation wizard allows you to create simple, working simulation models in one step.</p></li>
+<li><p>Makefiles are automatically generated for your project based on the project build configuration. The built-in
+makefile generator is compatible with the command line <strong class="command">opp_makemake</strong> tool, and features deep makefiles, recursive
+make, cross-project references, invoking the message compiler, automatic linking with the OMNeT++ libraries; and can
+build executables, shared libraries or static libraries.</p></li>
+<li><p>Makefile generation and the project build system can be configured using a GUI interface.</p></li>
+<li><p>Project Features: Large projects can be partitioned into smaller units which can be independently excluded or
+included in the build. Disabling parts of the project can significantly reduce build time or make it possible to
+build the project at all.</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE (and the OMNeT++ simulation framework itself) requires a preinstalled compiler toolchain to function
+properly.</p>
+<ul class="simple">
+<li><p>On Windows: The OMNeT++ distribution comes with a preconfigured MinGW compiler toolchain, there is no need to
+manually install anything. By default, the IDE uses the Clang compiler from MinGW, but it is also possible to switch
+to the GCC compiler (also part of MinGW).</p></li>
+<li><p>On Linux: By default, the Clang compiler is used, but OMNeT++ falls back to use GCC if Clang is not present on the
+system. You have to install Clang or GCC on your system before trying to compile a simulation with OMNeT++. Please
+read the Install Guide for detailed instructions.</p></li>
+<li><p>On macOS: You need to install Xcode Developer Tools to get compiler support before trying to compile a simulation
+with OMNeT++. Please read the Install Guide for detailed instructions.</p></li>
+</ul>
+</section>
+<section id="creating-a-c-project">
+<h2 id="creating-a-c-project">Creating a C++ Project<a class="headerlink" href="#creating-a-c-project" title="Permalink to this headline">¶</a></h2>
+<p>To create an OMNeT++ project that supports C++ development, select <span class="menuselection">File ‣ New ‣ OMNeT++ Project</span>.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/Intro-NewProject.png"><img alt="../_images/Intro-NewProject.png" src="../_images/Intro-NewProject.png" style="width: 75%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 32 </span><span class="caption-text">Creating an OMNeT++ project</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This menu item will bring up the <span class="guilabel">New OMNeT++ Project</span> wizard. The wizard lets you create an OMNeT++-specific
+project, which includes support for NED, MSG and INI file editing, as well as C++ development of simple modules.</p>
+<p>On the first page of the wizard, specify the project name and ensure that the <span class="guilabel">Support C++ Development</span>
+checkbox is selected.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/CPP-NewProjectWizard.png"><img alt="../_images/CPP-NewProjectWizard.png" src="../_images/CPP-NewProjectWizard.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 33 </span><span class="caption-text">Setting project name and enabling C++ support</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Select a project template. A template defines the initial content and layout of the project.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/CPP-NewProjectWizard1.png"><img alt="../_images/CPP-NewProjectWizard1.png" src="../_images/CPP-NewProjectWizard1.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 34 </span><span class="caption-text">Selecting a project template</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Select a toolchain that is supported on your platform. Usually you will see only a single supported toolchain, so there
+is no need to change anything on the page.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/CPP-NewProjectWizard2.png"><img alt="../_images/CPP-NewProjectWizard2.png" src="../_images/CPP-NewProjectWizard2.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 35 </span><span class="caption-text">Selecting a toolchain</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Finally, select one or more from the preset build configurations. A configuration is a set of options that are
+associated with the build process. It is used mainly to build debug and release versions of your program.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/CPP-NewProjectWizard3.png"><img alt="../_images/CPP-NewProjectWizard3.png" src="../_images/CPP-NewProjectWizard3.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 36 </span><span class="caption-text">Selecting configurations</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Pressing the <span class="guilabel">Finish</span> button will create the project.</p>
+</section>
+<section id="editing-c-code">
+<h2 id="editing-c-code">Editing C++ Code<a class="headerlink" href="#editing-c-code" title="Permalink to this headline">¶</a></h2>
+<p>The OMNeT++ IDE comes with a C/C++ editor. In addition to standard editing features, the C/C++ editor provides syntax
+highlighting, content assistance, and other C++ specific functionality. The source is continually parsed as you type,
+and errors and warnings are displayed as markers on the editor rulers.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/CPP-Editor.png"><img alt="../_images/CPP-Editor.png" src="../_images/CPP-Editor.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 37 </span><span class="caption-text">C++ source editor</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="the-c-editor">
+<h3 id="the-c-editor">The C++ Editor<a class="headerlink" href="#the-c-editor" title="Permalink to this headline">¶</a></h3>
+<p>The C++ source editor provides the usual features of Eclipse-based text editors, such as syntax highlighting, clipboard
+cut/copy/paste, unlimited undo/redo, folding, find/replace and incremental search.</p>
+<p>The IDE scans and indexes the C++ files in your project in the background, and provides navigation and code analysis
+features on top of that knowledge; this database is kept up to date as you edit the source.</p>
+<section id="basic-functions">
+<h4 id="basic-functions">Basic Functions<a class="headerlink" href="#basic-functions" title="Permalink to this headline">¶</a></h4>
+<p>Some of the most useful features of the source editor:</p>
+<ul class="simple">
+<li><p>Undo <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Z</kbd></kbd>, Redo <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Y</kbd></kbd></p></li>
+<li><p>Switch between a C++ source and its matching header file <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">TAB</kbd></kbd></p></li>
+<li><p>Indent/unindent code blocks <kbd class="kbd docutils literal notranslate">TAB</kbd> / <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">TAB</kbd></kbd></p></li>
+<li><p>Correct indentation <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">I</kbd></kbd></p></li>
+<li><p>Move lines <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">UP</kbd></kbd> / <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">DOWN</kbd></kbd></p></li>
+<li><p>Find <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">F</kbd></kbd>, incremental search <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">J</kbd></kbd></p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The following functions can help you explore the IDE:</p>
+<ul class="simple">
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">L</kbd></kbd> pops up a window that lists all keyboard bindings, and</p></li>
+<li><p><kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">3</kbd></kbd> brings up a filtered list of all available commands.</p></li>
+</ul>
+</div>
+</section>
+<section id="view-documentation">
+<h4 id="view-documentation">View Documentation<a class="headerlink" href="#view-documentation" title="Permalink to this headline">¶</a></h4>
+<p>Hovering the mouse over an identifier will display its declaration and the documentation comment in a “tooltip” window.
+The window can be made persistent by hitting F2.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you are on Ubuntu and you see all-black tooltips, you need to change the tooltip colors in Ubuntu; see the Ubuntu
+chapter of the <a class="reference internal" href="../installguide/index.html#install-guide"><span class="std std-ref">Installation Guide</span></a> for details.</p>
+</div>
+</section>
+<section id="content-assist">
+<h4 id="content-assist">Content Assist<a class="headerlink" href="#content-assist" title="Permalink to this headline">¶</a></h4>
+<p>If you need help, just press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">SPACE</kbd></kbd>. The editor will offer possible completions (variable names, type names,
+argument lists, etc.).</p>
+</section>
+<section id="navigation">
+<h4 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h4>
+<p>Hitting <kbd class="kbd docutils literal notranslate">F3</kbd> or holding the <kbd class="kbd docutils literal notranslate">Ctrl</kbd> key and clicking an identifier will jump to the definition/declaration.</p>
+<p>The Eclipse platform’s bookmarking and navigation history facilities are also available in the C++ editor.</p>
+</section>
+<section id="commenting">
+<h4 id="commenting">Commenting<a class="headerlink" href="#commenting" title="Permalink to this headline">¶</a></h4>
+<p>To comment out the selected lines, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd>. To remove the comment, press <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">/</kbd></kbd> again.</p>
+</section>
+<section id="open-type">
+<h4 id="open-type">Open Type<a class="headerlink" href="#open-type" title="Permalink to this headline">¶</a></h4>
+<p>Pressing Ctrl+Shift+T will bring up the <span class="guilabel">Open Element</span> dialog which lets you type a class name, method name or
+other identifier, and opens its declaration in a new editor.</p>
+</section>
+<section id="exploring-the-code">
+<h4 id="exploring-the-code">Exploring the Code<a class="headerlink" href="#exploring-the-code" title="Permalink to this headline">¶</a></h4>
+<p>The editor offers various ways to explore the code: Open Declaration <kbd class="kbd docutils literal notranslate">F3</kbd>, Open Type Hierarchy <kbd class="kbd docutils literal notranslate">F4</kbd>, Open Call Hierarchy
+<kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">H</kbd></kbd>, Quick Outline <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">O</kbd></kbd>, Quick Type Hierarchy <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">T</kbd></kbd>, Explore Macro Expansion <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">=</kbd></kbd>, Search for
+References <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">G</kbd></kbd>, etc.</p>
+</section>
+<section id="refactoring">
+<h4 id="refactoring">Refactoring<a class="headerlink" href="#refactoring" title="Permalink to this headline">¶</a></h4>
+<p>Several refactoring operations are available, for example Rename <kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Shift</kbd>+<kbd class="kbd docutils literal notranslate">Alt</kbd>+<kbd class="kbd docutils literal notranslate">R</kbd></kbd>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Several features such as content assist, go to definition, type hierarchy and refactorings rely on the
+<em>Index</em>. The index contains the locations of all functions, classes, enums, defines, etc. in the project
+and referenced projects. Initial indexing of large projects may take a significant amount of time. The index is kept
+up to date mostly automatically, but occasionally it may be necessary to manually request reindexing the project.
+Index-related actions can be found in the <span class="guilabel">Index</span> submenu of the project’s context menu.</p>
+</div>
+</section>
+</section>
+<section id="include-browser-view">
+<h3 id="include-browser-view">Include Browser View<a class="headerlink" href="#include-browser-view" title="Permalink to this headline">¶</a></h3>
+<p>Dropping a C++ file into the <span class="guilabel">Include Browser View</span> displays the include files used by the C++ file (either
+directly or indirectly).</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/CPP-IncludeBrowserView.png"><img alt="../_images/CPP-IncludeBrowserView.png" src="../_images/CPP-IncludeBrowserView.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 38 </span><span class="caption-text">Include Browser</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="outline-view">
+<h3 id="outline-view">Outline View<a class="headerlink" href="#outline-view" title="Permalink to this headline">¶</a></h3>
+<p>During source editing, the <span class="guilabel">Outline View</span> gives you an overview of the structure of your source file and can
+be used to quickly navigate inside the file.</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/CPP-OutlineView.png"><img alt="../_images/CPP-OutlineView.png" src="../_images/CPP-OutlineView.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 39 </span><span class="caption-text">Navigating with Outline View</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="type-hierarchy-view">
+<h3 id="type-hierarchy-view">Type Hierarchy View<a class="headerlink" href="#type-hierarchy-view" title="Permalink to this headline">¶</a></h3>
+<p>Displaying the C++ type hierarchy may be helpful for understanding the inheritance relationships among your classes (and
+among OMNeT++ classes).</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/CPP-TypeHierarchy.png"><img alt="../_images/CPP-TypeHierarchy.png" src="../_images/CPP-TypeHierarchy.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 40 </span><span class="caption-text">C++ Type hierarchy</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="building-the-project">
+<h2 id="building-the-project">Building the Project<a class="headerlink" href="#building-the-project" title="Permalink to this headline">¶</a></h2>
+<section id="basics">
+<h3 id="basics">Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h3>
+<p>Once you have created your source files and configured your project settings, you can build the project by selecting
+<span class="guilabel">Build Project</span> from the <span class="guilabel">Project</span> menu or from the project context menu. You can also press
+<kbd class="kbd compound docutils literal notranslate"><kbd class="kbd docutils literal notranslate">Ctrl</kbd>+<kbd class="kbd docutils literal notranslate">B</kbd></kbd> to build all open projects in the workspace.</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/CPP-BuildProject.png"><img alt="../_images/CPP-BuildProject.png" src="../_images/CPP-BuildProject.png" style="width: 40%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 41 </span><span class="caption-text">Building a project</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="build-output">
+<h4 id="build-output">Build Output<a class="headerlink" href="#build-output" title="Permalink to this headline">¶</a></h4>
+<p>The build output (standard output and standard error) is displayed in the <span class="guilabel">Console View</span> as the build
+progresses. Errors and warnings parsed from the output are displayed in the <span class="guilabel">Problems View</span>. Double-clicking a
+line in the <span class="guilabel">Problems View</span> will jump to the corresponding source line. Conversely, the <span class="guilabel">Console
+View</span> is more useful when you want to look at the build messages in their natural order (<span class="guilabel">Problems View</span> is
+usually sorted), for example when you get a lot of build errors and you want to begin by looking at the first one.</p>
+</section>
+<section id="makefile-generation">
+<h4 id="makefile-generation">Makefile Generation<a class="headerlink" href="#makefile-generation" title="Permalink to this headline">¶</a></h4>
+<p>When you start the build process, a makefile will be created or refreshed in each folder where makefile creation is
+configured. After that, make will be invoked with the <code class="docutils literal notranslate"><span class="pre">all</span></code> target in the folder configured as build root.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>During the build process, the makefile will print out only the names of the compiled files. If you want to see the
+full command line used to compile each file, specify <code class="docutils literal notranslate"><span class="pre">V=1</span></code> (verbose on) on the make command line. To add this
+option, open <span class="menuselection">Project Properties ‣ C/C++ Build ‣ Behavior (tab)</span> and replace <code class="docutils literal notranslate"><span class="pre">all</span></code> with <code class="docutils literal notranslate"><span class="pre">all</span> <span class="pre">V=1</span></code> on
+the <span class="guilabel">Build</span> target line.</p>
+</div>
+</section>
+<section id="cleaning-the-project">
+<h4 id="cleaning-the-project">Cleaning the Project<a class="headerlink" href="#cleaning-the-project" title="Permalink to this headline">¶</a></h4>
+<p>To clean the project, choose <span class="guilabel">Clean</span> from the <span class="guilabel">Project</span> menu, or <span class="guilabel">Clean Project</span> from
+the project context menu. This will invoke <strong class="command">make</strong> with the <code class="docutils literal notranslate"><span class="pre">clean</span></code> target in the project’s build root folder, and
+also in referenced projects. To only clean the local project and keep referenced projects intact, use <span class="guilabel">Clean
+Local</span> item from the project context menu (see next section).</p>
+</section>
+<section id="referenced-projects-and-the-build-process">
+<h4 id="referenced-projects-and-the-build-process">Referenced Projects and the Build Process<a class="headerlink" href="#referenced-projects-and-the-build-process" title="Permalink to this headline">¶</a></h4>
+<p>When you start the build, the IDE will build the referenced projects first. When you clean the project, the IDE will
+also clean the referenced projects first. This is often inconvenient (especially if your project depends on a large
+third party project). To avoid cleaning the referenced projects, use <span class="guilabel">Clean Local</span> from the project context
+menu.</p>
+</section>
+<section id="build-configurations">
+<h4 id="build-configurations">Build Configurations<a class="headerlink" href="#build-configurations" title="Permalink to this headline">¶</a></h4>
+<p>A project is built using the active build configuration. A project may have several build configurations, where each
+configuration selects a compiler toolchain, debug or release mode, defines symbols, etc. To set the active build
+configuration, choose <span class="menuselection">Build Configurations ‣ Set Active</span> from the project context menu.</p>
+<figure class="align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/CPP-BuildConfiguration.png"><img alt="../_images/CPP-BuildConfiguration.png" src="../_images/CPP-BuildConfiguration.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 42 </span><span class="caption-text">Activating a build configuration</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="console-view">
+<h3 id="console-view">Console View<a class="headerlink" href="#console-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Console View</span> displays the output of the build process.</p>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/CPP-ConsoleView.png"><img alt="../_images/CPP-ConsoleView.png" src="../_images/CPP-ConsoleView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 43 </span><span class="caption-text">Build output in a console</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="problems-view">
+<h3 id="problems-view">Problems View<a class="headerlink" href="#problems-view" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="guilabel">Problems View</span> contains the errors and warnings generated by the build process. You can browse the
+problem list and double-click any message to go to the problem location in the source file. NED file and INI file
+problems are also reported in this view along with C++ problems. The editors are annotated with these markers, too.
+Hover over an error marker in the editor window to get the corresponding message as a tooltip.</p>
+<figure class="align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/CPP-ProblemsView.png"><img alt="../_images/CPP-ProblemsView.png" src="../_images/CPP-ProblemsView.png" style="width: 80%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 44 </span><span class="caption-text">C++ problems</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="configuring-the-project">
+<h2 id="configuring-the-project">Configuring the Project<a class="headerlink" href="#configuring-the-project" title="Permalink to this headline">¶</a></h2>
+<section id="configuring-the-build-process">
+<h3 id="configuring-the-build-process">Configuring the Build Process<a class="headerlink" href="#configuring-the-build-process" title="Permalink to this headline">¶</a></h3>
+<p>The make invocation can be configured on <span class="guilabel">C/C++ Build</span> page of the <span class="guilabel">Project Properties</span> dialog. Most
+settings are already set correctly and do not need to be changed. One exception is the <span class="guilabel">Enable parallel build</span>
+option on the <span class="guilabel">Behavior</span> tab that you may want to enable, especially if you have a multi-core computer.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not set the number of parallel jobs to be significantly higher than the number of CPU cores you have. In
+particular, never turn on the <span class="guilabel">Use unlimited jobs</span> option, as it will start an excessive number of compile
+processes, and can easy consume all available memory in the system.</p>
+</div>
+<p>We do not recommend that you change any setting on property pages under the <span class="guilabel">C/C++ Build</span> tree node.</p>
+</section>
+<section id="managing-build-configurations">
+<h3 id="managing-build-configurations">Managing Build Configurations<a class="headerlink" href="#managing-build-configurations" title="Permalink to this headline">¶</a></h3>
+<p>A project may have several build configurations, where each configuration describes the selected compiler toolchain,
+debug or release mode, any potential extra include and linker paths, defined symbols, etc. You can activate, create or
+delete build configurations under the <span class="guilabel">Build Configurations</span> submenu of the project context menu.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure that the names of all configurations contain the <code class="docutils literal notranslate"><span class="pre">debug</span></code> or the <code class="docutils literal notranslate"><span class="pre">release</span></code>
+substring. The IDE launcher uses the name of the configuration to switch the matching configuration depending whether
+you want to debug or run the simulation.</p>
+</div>
+</section>
+<section id="configuring-the-project-build-system">
+<h3 id="configuring-the-project-build-system">Configuring the Project Build System<a class="headerlink" href="#configuring-the-project-build-system" title="Permalink to this headline">¶</a></h3>
+<p>OMNeT++ uses makefiles to build the project. You can use a single makefile for the whole project, or a hiearchy of
+makefiles. Each makefile may be hand-written (i.e. provided by you), or generated automatically. The IDE provides
+several options for automatically created makefiles.</p>
+<p>The build system for an OMNeT++ project can be configured on the <span class="menuselection">OMNeT++ ‣ Makemake</span> page of the
+<span class="guilabel">Project Properties</span> dialog. All settings you do in this page will affect all build configurations.</p>
+<figure class="align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/CPP-SourceFolder.png"><img alt="../_images/CPP-SourceFolder.png" src="../_images/CPP-SourceFolder.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 45 </span><span class="caption-text">Configuring Makefiles</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="folders-and-makefiles">
+<h4 id="folders-and-makefiles">Folders and Makefiles<a class="headerlink" href="#folders-and-makefiles" title="Permalink to this headline">¶</a></h4>
+<p>The page displays the folder tree of the project. Using controls on the page (<span class="guilabel">Build</span> group in the top-right
+corner), you can declare that a selected folder contains a hand-written (custom) makefile, or tell the IDE to generate a
+makefile for you. Generated makefiles will be automatically refreshed before each build. If a makefile is configured for
+a folder, the makefile kind will be indicated with a small decoration on the folder icon.</p>
+<p>The build root folder is indicated with a small arrow. This is the folder in which the IDE’s <span class="guilabel">Build</span> function
+will invoke the make command, so it should contain a makefile. It is expected that this makefile will build the whole
+project, so it is supposed to invoke all other makefiles, either directly or indirectly. By default, the build root
+folder is the project root. This is usually fine, but if you really need to change the project build root, overwrite the
+<span class="guilabel">Build location</span> setting in the <span class="guilabel">C/C++ Build</span> page of the same dialog.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All generated makefiles will be named <code class="file docutils literal notranslate"><span class="pre">Makefile</span></code>; custom makefiles are also expected to have this name.</p>
+</div>
+</section>
+<section id="source-folders">
+<h4 id="source-folders">Source Folders<a class="headerlink" href="#source-folders" title="Permalink to this headline">¶</a></h4>
+<p>In addition to makefiles, you also need to specify where your C++ files are located (source folders). This is usually
+the <code class="file docutils literal notranslate"><span class="pre">src</span></code> folder of the project, or, for small projects, the project root. It is also possible to exclude folders from
+a source folder. The controls on the right-bottom part of the dialog (<span class="guilabel">Source</span> group) allow you to set up
+source folders and exclusions on the project. Source files that are outside source folders or are in an excluded folder
+will be ignored by both the IDE and the build process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Source folders and exclusions that you configure on this page actually modify the contents of the <span class="guilabel">Source
+Location</span> tab of the <span class="menuselection">C++ General ‣ Paths and Symbols</span> page of the project properties dialog; the changes
+will affect all build configurations.</p>
+</div>
+<p>Automatically created makefiles are by default <span class="guilabel">deep</span>, meaning that they include all (non-excluded) source
+files under them in the build. That is, a source file will be included in the build if it is both under a source folder
+and covered by a makefile. (This applies to automatically generated makefiles; the IDE has obviously no control over the
+behaviour of custom makefiles.)</p>
+</section>
+<section id="id1">
+<h4 id="id1">Makefile Generation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Makefile generation for the selected folder can be configured on the <span class="guilabel">Makemake Options</span> dialog, which can be
+brought up by clicking the <span class="guilabel">Options</span> button on the page. The dialog is described in the next section.</p>
+</section>
+<section id="command-line-build">
+<h4 id="command-line-build">Command-line Build<a class="headerlink" href="#command-line-build" title="Permalink to this headline">¶</a></h4>
+<p>To re-create your makefiles on the command line, you can export the settings by pressing the <span class="guilabel">Export</span> button.
+This action will create a file with the name <code class="file docutils literal notranslate"><span class="pre">makemakefiles</span></code>. After exporting, execute
+<strong class="command">make -f makemakefiles</strong> from the command line.</p>
+</section>
+</section>
+<section id="configuring-makefile-generation-for-a-folder">
+<h3 id="configuring-makefile-generation-for-a-folder">Configuring Makefile Generation for a Folder<a class="headerlink" href="#configuring-makefile-generation-for-a-folder" title="Permalink to this headline">¶</a></h3>
+<p>Makefile generation for a folder can be configured in the <span class="guilabel">Makemake Options</span> dialog. To access the dialog,
+open the <span class="menuselection">OMNeT++ ‣ Makemake</span> page in the <span class="guilabel">Project Properties</span> dialog, select the folder, make sure
+makefile generation is enabled for it, and click the <span class="guilabel">Options</span> button.</p>
+<p>The following sections describe each page of the dialog.</p>
+<section id="the-target-tab">
+<h4 id="the-target-tab">The <span class="guilabel">Target</span> Tab<a class="headerlink" href="#the-target-tab" title="Permalink to this headline">¶</a></h4>
+<p>On the first, <span class="guilabel">Target</span> tab of the dialog, you can specify how the final target of the makefile is created.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Target type</span>: The build target can be an executable, a shared or static library, or the linking step may
+be omitted altogether. Makemake options: <code class="docutils literal notranslate"><span class="pre">--make-so</span></code>, <code class="docutils literal notranslate"><span class="pre">--make-lib</span></code>, <code class="docutils literal notranslate"><span class="pre">--nolink</span></code></p></li>
+<li><p><span class="guilabel">Export this shared/static library for other projects</span>: This option is observed if a library (shared or
+static) is selected as target type, and works in conjunction with the <span class="guilabel">Link with libraries exported from
+referenced projects</span> option on the <span class="guilabel">Link</span> tab. Namely, referencing projects will automatically link with
+this library if both the library is exported from this project AND linking with exported libraries is enabled in the
+referencing project. Makemake option: <code class="docutils literal notranslate"><span class="pre">--meta:export-library</span></code></p></li>
+<li><p><span class="guilabel">Target name</span>: You may set the target name. The default value is derived from the project name. Makemake
+option: <code class="docutils literal notranslate"><span class="pre">-o</span></code> (If you are building a debug configuration, the target name will be implicitly suffixed by the
+<code class="docutils literal notranslate"><span class="pre">_dbg</span></code> string.)</p></li>
+<li><p><span class="guilabel">Output directory</span>: The output directory specifies where the object files and the final target will be
+created, relative to the project root. Makemake option: <code class="docutils literal notranslate"><span class="pre">-O</span></code></p></li>
+</ul>
+<figure class="align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/CPP-ConfigureProject2.png"><img alt="../_images/CPP-ConfigureProject2.png" src="../_images/CPP-ConfigureProject2.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 46 </span><span class="caption-text">Target definition</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="the-scope-tab">
+<h4 id="the-scope-tab">The <span class="guilabel">Scope</span> Tab<a class="headerlink" href="#the-scope-tab" title="Permalink to this headline">¶</a></h4>
+<figure class="align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/CPP-ConfigureProject.png"><img alt="../_images/CPP-ConfigureProject.png" src="../_images/CPP-ConfigureProject.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 47 </span><span class="caption-text">Scope of makefile</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Scope</span> tab allows you to configure the scope of the makefile and which source files will be included.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Deep compile</span>: When enabled, the makefile will compile the source files in the whole subdirectory tree
+(except excluded folders and folder covered by other makefiles). When disabled, the makefile only compiles sources in
+the makefile’s folder. Makemake option: <code class="docutils literal notranslate"><span class="pre">--deep</span></code></p></li>
+<li><p><span class="guilabel">Recursive make</span>: When enabled, the build will invoke make in all descendant folders that are configured to
+contain a makefile. Makemake option: <code class="docutils literal notranslate"><span class="pre">--meta:recurse</span></code> (resolves to multiple <code class="docutils literal notranslate"><span class="pre">-d</span></code> options)</p></li>
+<li><p><span class="guilabel">More » Additionally invoke make in the following directories</span>: If you want to invoke additional makefiles
+from this makefile, specify which directories should be visited (relative to this makefile). This option is useful if
+you want to invoke makefiles outside this source tree. Makemake option: <code class="docutils literal notranslate"><span class="pre">-d</span></code></p></li>
+</ul>
+</section>
+<section id="the-compile-tab">
+<h4 id="the-compile-tab">The <span class="guilabel">Compile</span> Tab<a class="headerlink" href="#the-compile-tab" title="Permalink to this headline">¶</a></h4>
+<figure class="align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/CPP-ConfigureProject3.png"><img alt="../_images/CPP-ConfigureProject3.png" src="../_images/CPP-ConfigureProject3.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 48 </span><span class="caption-text">Compiler options</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Compile</span> tab allows you to adjust the parameters passed to the compiler during the build process.</p>
+<p>Settings that affect the include path:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Export include path for other projects</span> makes this project’s include path available for other dependent
+projects. This is usually required if your project expects that other independent models will extend it in the
+future.</p></li>
+<li><p><span class="guilabel">Add include paths exported from referenced projects</span> allows a dependent project to use header files from
+the dependencies if those projects have exported their include path (i.e. the above option was turned on.)</p></li>
+<li><p><span class="guilabel">Add include dirs and other compile options from enabled project features</span>: Project features may require
+additional include paths and defines to compile properly. Enabling this option will add those command line arguments
+(specified in the <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> file) to the compiler command line.</p></li>
+</ul>
+<p>Source files:</p>
+<ul class="simple">
+<li><p><span class="guilabel">C++ file extension</span>: You can specify the source file extension you are using in the project (<code class="file docutils literal notranslate"><span class="pre">.cc</span></code> or
+<code class="file docutils literal notranslate"><span class="pre">.cpp</span></code>). We recommend that you use <code class="file docutils literal notranslate"><span class="pre">.cc</span></code> in your projects. Makemake option: <code class="docutils literal notranslate"><span class="pre">-e</span></code></p></li>
+</ul>
+<p>If you build a Windows DLL, symbols you want to be available from other DLLs (or executables) need to be explicitly
+exported from the DLL. Functions, variables and classes must be marked with <code class="docutils literal notranslate"><span class="pre">__declspec(dllexport)</span></code> when the DLL is
+compiled, and with <code class="docutils literal notranslate"><span class="pre">__declspec(dllimport)</span></code> when you reference them from external code. This is achieved by defining a
+macro which expands differently in the two cases. The OMNeT++ convention is to name the macro <code class="docutils literal notranslate"><span class="pre">FOO_API</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">FOO</span></code> is your project’s short name. The macro should be defined as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#if defined(FOO_EXPORT)</span>
+<span class="cp">#  define FOO_API OPP_DLLEXPORT</span>
+<span class="cp">#elif defined(FOO_IMPORT)</span>
+<span class="cp">#  define FOO_API OPP_DLLIMPORT</span>
+<span class="cp">#else</span>
+<span class="cp">#  define FOO_API</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>and the above definition should be manually placed into a header file which is included by all headers where the macro
+is used. <code class="docutils literal notranslate"><span class="pre">OPP_DLLEXPORT</span></code> and <code class="docutils literal notranslate"><span class="pre">OPP_DLLIMPORT</span></code> are provided by <code class="docutils literal notranslate"><span class="pre">&lt;omnetpp.h&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">FOO_EXPORT</span></code> / <code class="docutils literal notranslate"><span class="pre">FOO_IMPORT</span></code>
+that control the macro expansion will be provided by the generated makefile via a compile option.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">FOO_API</span></code> macro is used as illustrated in the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FOO_API</span> <span class="n">ExportedClass</span> <span class="p">{</span>
+   <span class="c1">// public methods will be automatically exported</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="n">FOO_API</span> <span class="nf">exportedFunction</span><span class="p">(...);</span>
+<span class="k">extern</span> <span class="kt">int</span> <span class="n">FOO_API</span> <span class="n">exportedGlobalVariable</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Settings for Windows DLLs:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Force compiling object files for use in DLLs</span>: If the makefile target is a DLL, OMNeT++ automatically
+compiles the sources for DLL (defines the <code class="docutils literal notranslate"><span class="pre">FOO_EXPORT</span></code> macro, etc.), regardless of the state of this option.
+Rather, this option is useful if the makefile target is <strong>not</strong> a DLL, but the code compiled here will
+eventually end up in a DLL. Makemake option: <code class="docutils literal notranslate"><span class="pre">-S</span></code></p></li>
+<li><p><span class="guilabel">DLL export/import symbol</span>: Name for the DLL import/export symbol, i.e. <code class="docutils literal notranslate"><span class="pre">FOO</span></code> in the above examples.
+Makemake option: <code class="docutils literal notranslate"><span class="pre">-p</span></code></p></li>
+</ul>
+</section>
+<section id="the-link-tab">
+<h4 id="the-link-tab">The <span class="guilabel">Link</span> Tab<a class="headerlink" href="#the-link-tab" title="Permalink to this headline">¶</a></h4>
+<p>Link options allow the user to fine-tune the linking steps at the end of the build process.</p>
+<figure class="align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/CPP-ConfigureProject4.png"><img alt="../_images/CPP-ConfigureProject4.png" src="../_images/CPP-ConfigureProject4.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 49 </span><span class="caption-text">Linker options</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><span class="guilabel">Link with libraries exported from referenced projects</span>: If your project references other projects that
+build static or dynamic libraries, you can instruct the linker to automatically link with those libraries by enabling
+this option. The libraries from the other projects must be exported via the <span class="guilabel">Export this shared/static
+library for other projects</span> option on the <span class="guilabel">Target</span> tab. Makemake option: <code class="docutils literal notranslate"><span class="pre">--meta:use-exported-libs</span></code></p></li>
+<li><p><span class="guilabel">Add libraries and other linker options from enabled project features</span>: Project features may require
+additional libraries and linker options to build properly. Enabling this option will add those command line arguments
+(specified in the <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> file) to the linker command line.</p></li>
+<li><p><span class="guilabel">User interface libraries to link with</span>: If the makefile target is an executable, you may specify which
+OMNeT++ user interface libraries (Cmdenv, Qtenv, or both) should be linked into the program. Makemake option: <code class="docutils literal notranslate"><span class="pre">-u</span></code></p></li>
+<li><p><span class="guilabel">More » Additional libraries to link with</span>: This box allows you to specify additional libraries to link
+with. Specify the library name without its path, possible prefix (<code class="docutils literal notranslate"><span class="pre">lib</span></code>) and file extension, and also without the
+<code class="docutils literal notranslate"><span class="pre">-l</span></code> option. The library must be on the linker path; the linker path can be edited on the <span class="guilabel">Library Paths</span>
+tab of the <span class="menuselection">C/C++ General ‣ Paths and Symbols</span> page of the <span class="guilabel">Project Properties</span> dialog. Makemake
+option: <code class="docutils literal notranslate"><span class="pre">-l</span></code></p></li>
+<li><p><span class="guilabel">More » Additional objects to link with</span>: Additional object files and libraries can be specified here. The
+files must be given with their full paths and file extension. Wildcards and makefile macros are also accepted.
+Example: <code class="file docutils literal notranslate"><span class="pre">$O/subdir/*.o</span></code>. Makemake option: none (files will become plain makemake arguments)</p></li>
+</ul>
+</section>
+<section id="the-custom-tab">
+<h4 id="the-custom-tab">The <span class="guilabel">Custom</span> Tab<a class="headerlink" href="#the-custom-tab" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="guilabel">Custom</span> tab allows the customization of the makefiles by inserting handwritten makefile fragments into
+the automatically generated makefile. This lets you contribute additional targets, rules, variables, etc.</p>
+<ul class="simple">
+<li><p><span class="guilabel">Makefrag</span>: If the folder contains a file named <code class="file docutils literal notranslate"><span class="pre">makefrag</span></code>, its contents will be automatically copied
+into the generated makefile, just above the first target rule. <code class="file docutils literal notranslate"><span class="pre">makefrag</span></code> allows you to customize the generated
+makefile to some extent; for example, you can add new targets (e.g. to generate documentation or run a test suite),
+new rules (e.g. to generate source files during the build), override the default target, add new dependencies to
+existing targets, overwrite variables, etc. The dialog lets you edit the contents of the <code class="file docutils literal notranslate"><span class="pre">makefrag</span></code> file directly
+(it will be saved when you accept the dialog).</p></li>
+<li><p><span class="guilabel">More » Fragment files to include</span>: Here, it is possible to explicitly specify a list of makefile fragment
+files to include, instead of the default <code class="file docutils literal notranslate"><span class="pre">makefrag</span></code>. Makemake option: <code class="docutils literal notranslate"><span class="pre">-i</span></code></p></li>
+</ul>
+</section>
+<section id="the-preview-tab">
+<h4 id="the-preview-tab">The <span class="guilabel">Preview</span> Tab<a class="headerlink" href="#the-preview-tab" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="guilabel">Preview</span> tab displays the command line options that will be passed to <strong class="command">opp_makemake</strong> to generate the
+makefile. It consists of two parts:</p>
+<ul class="simple">
+<li><p><span class="guilabel">Makemake options</span>: This is an editable list of makefile generation options. Most options map
+directly to checkboxes, edit fields and other controls on the previous tabs of the dialog. For example, if you check
+the <span class="guilabel">Deep compile</span> checkbox on the <span class="guilabel">Scope</span> tab, the <code class="docutils literal notranslate"><span class="pre">--deep</span></code> option will be added to the
+command line. Conversely, if you delete <code class="docutils literal notranslate"><span class="pre">--deep</span></code> from the command line options, that will cause the <span class="guilabel">Deep
+compile</span> checkbox to be unchecked. Some options are directly <strong class="command">opp_makemake</strong> options, others are “meta” options that
+will be resolved to one or more <strong class="command">opp_makemake</strong> options; see below.</p></li>
+<li><p><span class="guilabel">Makemake options modified with CDT settings and with meta-options resolved</span>: This is a read-only text
+field, displayed for information purposes only. Not all options in the above options list are directly understood by
+<strong class="command">opp_makemake</strong>; namely, the options that start with <code class="docutils literal notranslate"><span class="pre">--meta:</span></code> denote higher-level features offered by the IDE
+only. Meta options will be translated to <strong class="command">opp_makemake</strong> options by the IDE. For example,
+<code class="docutils literal notranslate"><span class="pre">--meta:auto-include-path</span></code> will be resolved by the IDE to multiple <code class="docutils literal notranslate"><span class="pre">-I</span></code> options, one for each directory in the
+C++ source trees of the project. This field shows the <strong class="command">opp_makemake</strong> options after the resolution of the meta
+options.</p></li>
+</ul>
+</section>
+</section>
+<section id="project-references-and-makefile-generation">
+<h3 id="project-references-and-makefile-generation">Project References and Makefile Generation<a class="headerlink" href="#project-references-and-makefile-generation" title="Permalink to this headline">¶</a></h3>
+<p>When your project references another project (say the INET Framework), your project’s build will be affected in the
+following way:</p>
+<ul class="simple">
+<li><p>Include path: Source folders in referenced projects will be automatically added to the include path of your makefile
+if the <span class="guilabel">Add include paths exported from referenced projects</span> option on the <span class="guilabel">Compile</span> tab is
+checked where the referenced projects also enable the <span class="guilabel">Export include path for other projects</span> option.</p></li>
+<li><p>Linking: If the <span class="guilabel">Link with libraries exported from referenced projects</span> option on the <span class="guilabel">Link</span> tab
+is enabled, then the makefile target will be linked with those libraries in referenced projects that have the
+<span class="guilabel">Export this shared/static library for other projects</span> option checked on the <span class="guilabel">Target</span> tab.</p></li>
+<li><p>NED types: NED types defined in a referenced project are automatically available in referencing projects.</p></li>
+</ul>
+</section>
+</section>
+<section id="project-features">
+<h2 id="project-features">Project Features<a class="headerlink" href="#project-features" title="Permalink to this headline">¶</a></h2>
+<section id="motivation">
+<h3 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h3>
+<p>Long compile times are often an inconvenience when working with large OMNeT++-based model frameworks like the INET
+Framework. The IDE feature named <span class="guilabel">Project Features</span> lets you reduce build times by excluding or disabling
+parts of the model framework that you do not use for your simulation study. For example, when you are working on mobile
+ad-hoc simulations in INET, you can disable the compilation of Ethernet, IPv6/MIPv6, MPLS, and other unrelated protocol
+models. The word <em>feature</em> refers to a piece of the project codebase that can be turned off as a whole.</p>
+<p>Additional benefits of project features include a less cluttered model palette in the NED editor, being able to exclude
+code that does not compile on your system, and enforcing cleaner separation of unrelated parts in the model framework.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A similar effect could also achieved via breaking up the model framework (e.g. INET) into several smaller projects,
+but that would cause other kinds of inconveniences for model developers and users alike.</p>
+</div>
+</section>
+<section id="what-is-a-project-feature">
+<h3 id="what-is-a-project-feature">What is a Project Feature<a class="headerlink" href="#what-is-a-project-feature" title="Permalink to this headline">¶</a></h3>
+<p>Features can be defined per project. As already mentioned, a feature is a piece of the project codebase that can be
+turned off as a whole, that is, excluded from the C++ sources (and thus from the build) and also from NED. Feature
+definitions are typically written and distributed by the author of the project; end users are only presented with the
+option of enabling/disabling those features. A feature definition contains:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ID</span></code>, which is a unique identifier inside the feature definition file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Feature</span> <span class="pre">name</span></code>, for example <code class="docutils literal notranslate"><span class="pre">"UDP"</span></code> or <code class="docutils literal notranslate"><span class="pre">"Mobility</span> <span class="pre">examples"</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Feature</span> <span class="pre">description</span></code>. This is a few sentences of text describing what the feature is or does; for example
+<code class="docutils literal notranslate"><span class="pre">"Implementation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">UDP</span> <span class="pre">protocol"</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Labels</span></code>. This is list of labels or keywords that facilitate grouping or finding features.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Initially</span> <span class="pre">enabled</span></code>. This is a boolean flag that determines the initial enablement of the feature.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Required</span> <span class="pre">features</span></code>. Some features may be built on top of others; for example, a HMIPv6 protocol
+implementation relies on MIPv6, which in turn relies on IPv6. Thus, HMIPv6 can only be enabled if MIPv6 and IPv6 are
+enabled as well. This is a space-separated list of feaure IDs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NED</span> <span class="pre">packages</span></code>. This is a space-separated list of NED package names that identify the code that implements
+the feature. When you disable the feature, NED types defined in those packages and their subpackages will be
+excluded; also, C++ code in the folders that correspond to the packages (i.e. in the same folders as excluded NED
+files) will also be excluded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Extra</span> <span class="pre">C++</span> <span class="pre">source</span> <span class="pre">folders</span></code>. If the feature contains C++ code that lives outside NED source folders
+(nontypical), those folders are listed here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Compile</span> <span class="pre">options</span></code>, for example <code class="docutils literal notranslate"><span class="pre">-DWITH_IPv6</span></code>. When the feature is enabled, the compiler options listed
+here are either added to the compiler command line of all C++ files or they can be used to generate a header file
+containing all these defines so that header file can be included in all C++ files. A typical use of this field is
+defining symbols (<code class="docutils literal notranslate"><span class="pre">WITH_xxx</span></code>) that allows you to write conditional code that only compiles when a given feature is
+enabled. Currently only the <code class="docutils literal notranslate"><span class="pre">-D</span></code> option (<em>define symbol</em>) is supported here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Linker</span> <span class="pre">options</span></code>. When the feature is enabled, the linker options listed here are added to the linker
+command line. A typical use of this field is linking with additional libraries that the feature’s code requires, for
+example libavcodec. Currently only the <code class="docutils literal notranslate"><span class="pre">-l</span></code> option (<span class="guilabel">link with library</span>) is supported here.</p></li>
+</ul>
+</section>
+<section id="the-project-features-dialog">
+<h3 id="the-project-features-dialog">The Project Features Dialog<a class="headerlink" href="#the-project-features-dialog" title="Permalink to this headline">¶</a></h3>
+<p>Features can be viewed, enabled and disabled on the <span class="guilabel">Project Features</span> page of the <span class="guilabel">Project
+Properties</span> dialog. The <span class="menuselection">Project ‣ Project Features</span> menu item is a direct shortcut to this property page.</p>
+<figure class="align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/CPP-Features.png"><img alt="../_images/CPP-Features.png" src="../_images/CPP-Features.png" style="width: 60%;"/></a>
+<figcaption>
+<p><span class="caption-number">Fig. 50 </span><span class="caption-text">The Project Features page</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The central area of the dialog page lists the features defined for the project. Hovering the mouse over a list item will
+show the description and other fields of the feature in a tooltip window. Check an item to enable the feature, and
+uncheck to disable.</p>
+<p>When you enable a feature that requires other features to work, the dialog will ask for permission to enable the
+required features as well. Also, if you disable a feature that others depend on, they will be disabled, too.</p>
+<p>The <span class="guilabel">Apply</span>, <span class="guilabel">OK</span> and <span class="guilabel">Cancel</span> buttons work as expected. <span class="guilabel">Restore Defaults</span>
+restores the features to their initial state (see the <span class="guilabel">Initially enabled</span> attribute above).</p>
+<p>Above the list there is a notification area in the dialog. If the IDE detects that your project’s configuration is
+inconsistent with the feature enablements, it will display a warning there, and offer a way to automatically fix the
+problems. Fixing means that the IDE will adjust the project’s NED and C++ settings to make them consistent with the
+feature enablements. Such check is also performed just before build.</p>
+</section>
+<section id="what-happens-when-you-enable-disable-a-feature">
+<h3 id="what-happens-when-you-enable-disable-a-feature">What Happens When You Enable/Disable a Feature<a class="headerlink" href="#what-happens-when-you-enable-disable-a-feature" title="Permalink to this headline">¶</a></h3>
+<p>When you enable or disable a feature on the <span class="guilabel">Project Features</span> page, a number of project settings will be
+modified:</p>
+<ul class="simple">
+<li><p>NED package exclusions. This corresponds to the contents of the <span class="guilabel">Excluded package subtrees</span> list on the
+<span class="guilabel">NED Source Folders</span> property page. When a feature is disabled, its NED packages will be excluded (added to
+the list), and vice versa.</p></li>
+<li><p>C++ folder exclusions. This can be viewed/edited on the <span class="guilabel">Makemake</span> property page, and also on the
+<span class="guilabel">Source Location</span> tab of the <span class="guilabel">C/C++ General &gt; Paths and Symbols</span> property page.</p></li>
+<li><p>Compile options. For example, if the feature defines preprocessor symbols (<code class="docutils literal notranslate"><span class="pre">-DWITH_xxx</span></code>), they can be used to
+generate a header file that contains the enabled macro definitions and that file can be included in all C++ files.</p></li>
+<li><p>Linker options. For example, if the feature defines additional libraries to link with, they will be displayed on the
+<span class="guilabel">Libraries</span> tab of the <span class="menuselection">C/C++ General ‣ Paths and Symbols</span> property page.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Feature enablements are saved to the <code class="file docutils literal notranslate"><span class="pre">.oppfeaturestate</span></code> file in the project root.</p>
+</div>
+</section>
+<section id="using-features-from-command-line">
+<h3 id="using-features-from-command-line">Using Features from Command Line<a class="headerlink" href="#using-features-from-command-line" title="Permalink to this headline">¶</a></h3>
+<p><span class="guilabel">Project Features</span> can be easily configured from the IDE, but command line tools (<strong class="command">opp_makemake</strong>, etc.) can
+also use them with the help of the <strong class="command">opp_featuretool</strong> command.</p>
+<p>If you want to build the project from the command line with the same feature combination the IDE is using, you need to
+generate the makefiles with the same <strong class="command">opp_makemake</strong> options that the IDE uses in that feature combination. The
+<strong class="command">opp_featuretool makemakeargs</strong> command (executed in the project’s root directory) will show all the required arguments
+that you need to specify for the <strong class="command">opp_makemake</strong> command to build the same output as the IDE. This allows you to keep
+the same features enabled no matter how you build your project.</p>
+<p>Alternatively, you can choose <span class="guilabel">Export</span> on the <span class="guilabel">Makemake</span> page, and copy/paste the options from the
+generated <code class="file docutils literal notranslate"><span class="pre">makemakefiles</span></code> file. This method is not recommended, because you must redo it manually each time after
+changing the enablement state of a feature.</p>
+</section>
+<section id="the-oppfeatures-file">
+<h3 id="the-oppfeatures-file">The <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> File<a class="headerlink" href="#the-oppfeatures-file" title="Permalink to this headline">¶</a></h3>
+<p>Project features are defined in the <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> file in your project’s root directory. This is an XML file, and it
+currently has to be written by hand (there is no specialized editor for it).</p>
+<p>The root element is <code class="docutils literal notranslate"><span class="pre">&lt;features&gt;</span></code>, and it may have several <code class="docutils literal notranslate"><span class="pre">&lt;feature&gt;</span></code> child elements, each defining a project
+feature. Attributes of the <code class="docutils literal notranslate"><span class="pre">&lt;features&gt;</span></code> element define the root(s) of the source folder(s) (<code class="docutils literal notranslate"><span class="pre">cppSourceRoots</span></code>) and
+the name of a generated header file that contains all defines specified by the <code class="docutils literal notranslate"><span class="pre">compilerFlags</span></code> attribute in the
+enabled features. The fields of a feature are represented with XML attributes; attribute names are <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>,
+<code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">initiallyEnabled</span></code>, <code class="docutils literal notranslate"><span class="pre">requires</span></code>, <code class="docutils literal notranslate"><span class="pre">labels</span></code>, <code class="docutils literal notranslate"><span class="pre">nedPackages</span></code>, <code class="docutils literal notranslate"><span class="pre">extraSourceFolders</span></code>,
+<code class="docutils literal notranslate"><span class="pre">compileFlags</span></code> and <code class="docutils literal notranslate"><span class="pre">linkerFlags</span></code>. Items within attributes that represent lists (<code class="docutils literal notranslate"><span class="pre">requires</span></code>, <code class="docutils literal notranslate"><span class="pre">labels</span></code>, etc.) are
+separated by spaces.</p>
+<p>Here is an example feature from the INET Framework:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;features</span> <span class="na">cppSourceRoots=</span><span class="s">"src"</span> <span class="na">definesFile=</span><span class="s">"src/inet/features.h"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;feature</span>
+        <span class="na">id=</span><span class="s">"TCP_common"</span>
+        <span class="na">name=</span><span class="s">"TCP Common"</span>
+        <span class="na">description =</span> <span class="s">"The common part of TCP implementations"</span>
+        <span class="na">initiallyEnabled =</span> <span class="s">"true"</span>
+        <span class="na">requires =</span> <span class="s">""</span>
+        <span class="na">labels =</span> <span class="s">""</span>
+        <span class="na">nedPackages =</span> <span class="s">"</span>
+<span class="s">                       inet.transport.tcp_common</span>
+<span class="s">                       inet.applications.tcpapp</span>
+<span class="s">                       inet.util.headerserializers.tcp</span>
+<span class="s">                      "</span>
+        <span class="na">extraSourceFolders =</span> <span class="s">""</span>
+        <span class="na">compileFlags =</span> <span class="s">"-DWITH_TCP_COMMON"</span>
+        <span class="na">linkerFlags =</span> <span class="s">""</span>
+    <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-introduce-a-project-feature">
+<h3 id="how-to-introduce-a-project-feature">How to Introduce a Project Feature<a class="headerlink" href="#how-to-introduce-a-project-feature" title="Permalink to this headline">¶</a></h3>
+<p>If you plan to introduce a project feature in your project, here’s what you’ll need to do:</p>
+<ul class="simple">
+<li><p>Isolate the code that implements the feature into a separate source directory (or several directories). This is
+because only whole folders can be declared as part of a feature, individual source files cannot.</p></li>
+<li><p>Check the remainder of the project. If you find source lines that reference code from the new feature, use
+conditional compilation (<code class="docutils literal notranslate"><span class="pre">#ifdef</span> <span class="pre">WITH_YOURFEATURE</span></code>) to make sure that code compiles (and either works sensibly or
+throws an error) when the new feature is disabled. (Your feature should define the <code class="docutils literal notranslate"><span class="pre">WITH_YOURFEATURE</span></code> symbol, i.e.
+<code class="docutils literal notranslate"><span class="pre">-DWITH_YOURFEATURE</span></code> will need to be added to the feature compile flags.)</p></li>
+<li><p>Add the feature description into the <code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> file of your project including the required feature
+dependencies.</p></li>
+<li><p>Test. At the minimum, test that your project compiles at all, both with the new feature enabled and disabled. More
+thorough, automated tests can be built using <code class="file docutils literal notranslate"><span class="pre">opp_featuretool</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="project-files">
+<h2 id="project-files">Project Files<a class="headerlink" href="#project-files" title="Permalink to this headline">¶</a></h2>
+<p>Eclipse, CDT and the OMNeT++ IDE uses several files in the project to store settings. These files are located in the
+project root directory, and they are normally hidden by the IDE in the <span class="guilabel">Project Explorer View</span>. The files
+include:</p>
+<ul class="simple">
+<li><p><code class="file docutils literal notranslate"><span class="pre">.project</span></code> : Eclipse stores the general project properties in this file including project name, dependencies from
+other projects, and project type (i.e. whether OMNeT++-specific features are supported or this is only a generic
+Eclipse project).</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.cproject</span></code> : This file contains settings specific to C++ development, including the build configurations; and
+per-configuration settings such as source folder locations and exclusions, include paths, linker paths, symbols; the
+build command, error parsers, debugger settings and so on.</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.oppbuildspec</span></code> : Contains settings specific to OMNeT++. This file stores per-folder makefile generation settings
+that can be configured on the <span class="guilabel">Makemake</span> page of the <span class="guilabel">Project Properties</span> dialog.</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.oppfeatures</span></code> : Optionally contains the definitions of project features.</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.oppfeaturestate</span></code> : Optionally contains the current enablement state of the features. (We do not recommend keeping
+this file under version control.)</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.nedfolders</span></code> : Contains the names of NED source folders; this is the information that can be configured on the
+<span class="guilabel">NED Source Folders</span> page of the <span class="guilabel">Project Properties</span> dialog.</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">.nedexclusions</span></code> : Contains the names of excluded NED packages.</p></li>
+</ul>
+<p>If you are creating a project where no C++ support is needed (i.e. you are using an existing precompiled simulation
+library and you edit only NED and Ini files), the <code class="file docutils literal notranslate"><span class="pre">.cproject</span></code> and <code class="file docutils literal notranslate"><span class="pre">.oppbuildspec</span></code> files will not be present in your
+project.</p>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+            <a href="msg-editor.html" title="Editing Message Files"
+               class="md-flex md-footer-nav__link md-footer-nav__link--prev"
+               rel="prev">
+              <div class="md-flex__cell md-flex__cell--shrink">
+                <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+              </div>
+              <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+                <span class="md-flex__ellipsis">
+                  <span
+                      class="md-footer-nav__direction"> Previous </span> Editing Message Files </span>
+              </div>
+            </a>
+          
+          
+            <a href="launcher.html" title="Launching and Debugging"
+               class="md-flex md-footer-nav__link md-footer-nav__link--next"
+               rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
+                class="md-flex__ellipsis"> <span
+                class="md-footer-nav__direction"> Next </span> Launching and Debugging </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink"><i
+                class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

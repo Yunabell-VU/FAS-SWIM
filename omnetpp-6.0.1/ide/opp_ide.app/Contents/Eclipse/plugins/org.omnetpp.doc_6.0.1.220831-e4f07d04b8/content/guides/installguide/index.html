@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Installation Guide</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="General Information" href="ch-intro.html" />
+    <link rel="prev" title="Extending the IDE" href="../userguide/ide-extensions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="installation-guide">
+<span id="install-guide"></span><h1>Installation Guide</h1>
+<p>Table of Contents</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ch-intro.html">General Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-intro.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-intro.html#supported-platforms">Supported Platforms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-windows-omnetpp.html">Windows - Using the MinGW64 Compiler Toolchain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#supported-windows-versions">Supported Windows Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#installing-omnet">Installing OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#configuring-and-building-omnet">Configuring and Building OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#starting-the-ide">Starting the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#reconfiguring-the-libraries">Reconfiguring the Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#portability-issues">Portability Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#additional-packages">Additional Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-windows-omnetpp.html#windows-using-windows-subsystem-for-linux-wsl-version-2">Windows - Using Windows Subsystem for Linux (WSL) version 2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#wsl-2-requirements">WSL 2 Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#enabling-wsl-2-on-windows">Enabling WSL 2 on Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#installing-an-ubuntu-distribution">Installing an Ubuntu distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#install-vcxserver">Install VcXserver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-windows-omnetpp.html#install-omnet-linux">Install OMNeT++ Linux</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-macos.html">macOS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#supported-releases">Supported Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#enabling-development-mode-in-terminal">Enabling Development Mode in Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#debugging-unsigned-code">Debugging Unsigned Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#running-omnet-on-apple-silicon">Running OMNeT++ on Apple Silicon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#additional-steps-required-on-macos-to-use-the-debugger">Additional Steps Required on macOS to Use the Debugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#downloading-and-unpacking-omnet">Downloading and Unpacking OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#configuring-and-building-omnet">Configuring and Building OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#starting-the-ide">Starting the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#using-the-ide">Using the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#reconfiguring-the-libraries">Reconfiguring the Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-macos.html#additional-packages">Additional Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-supported-linux.html">Linux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#supported-linux-distributions">Supported Linux Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#downloading-and-unpacking">Downloading and Unpacking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#configuring-and-building-omnet">Configuring and Building OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#starting-the-ide">Starting the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#using-the-ide">Using the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#reconfiguring-the-libraries">Reconfiguring the Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-supported-linux.html#additional-packages">Additional Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-ubuntu.html">Ubuntu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-ubuntu.html#supported-releases">Supported Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-ubuntu.html#opening-a-terminal">Opening a Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-ubuntu.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-fedora.html">Fedora 33</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-fedora.html#supported-releases">Supported Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-fedora.html#opening-a-terminal">Opening a Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-fedora.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-redhat.html">Red Hat</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-redhat.html#supported-releases">Supported Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-redhat.html#opening-a-terminal">Opening a Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-redhat.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-redhat.html#selinux">SELinux</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-opensuse.html">OpenSUSE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-opensuse.html#supported-releases">Supported Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-opensuse.html#opening-a-terminal">Opening a Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-opensuse.html#installing-the-prerequisite-packages">Installing the Prerequisite Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-generic-unix.html">Generic Unix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#determining-package-names">Determining Package Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#downloading-and-unpacking">Downloading and Unpacking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#configuring-and-building-omnet">Configuring and Building OMNeT++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#verifying-the-installation">Verifying the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#starting-the-ide">Starting the IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-generic-unix.html#optional-packages">Optional Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ch-build-options.html">Build Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch-build-options.html#configure-user-options">Configure.user Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-build-options.html#moving-the-installation">Moving the Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch-build-options.html#using-different-compilers">Using Different Compilers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

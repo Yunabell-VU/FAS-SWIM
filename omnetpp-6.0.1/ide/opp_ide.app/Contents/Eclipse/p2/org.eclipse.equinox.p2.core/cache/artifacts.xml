@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<repository name='download cache' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
+  <properties size='2'>
+    <property name='p2.system' value='true'/>
+    <property name='p2.timestamp' value='1661953950398'/>
+  </properties>
+  <mappings size='3'>
+    <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
+    <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
+    <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
+  </mappings>
+  <artifacts size='4'>
+    <artifact classifier='binary' id='org.omnetpp.ide.omnetpp.product.executable.cocoa.macosx.x86_64' version='6.0.1.220831-e4f07d04b8'>
+      <properties size='1'>
+        <property name='download.size' value='52245'/>
+      </properties>
+    </artifact>
+    <artifact classifier='binary' id='org.eclipse.platform_root' version='4.22.0.v20211124-1800'>
+      <properties size='1'>
+        <property name='download.size' value='196'/>
+      </properties>
+    </artifact>
+    <artifact classifier='binary' id='org.eclipse.cdt_root' version='10.6.2.202205170638'>
+      <properties size='1'>
+        <property name='download.size' value='3333'/>
+      </properties>
+    </artifact>
+    <artifact classifier='binary' id='org.eclipse.rcp_root' version='4.22.0.v20211124-1800'>
+      <properties size='1'>
+        <property name='download.size' value='21136'/>
+      </properties>
+    </artifact>
+  </artifacts>
+</repository>

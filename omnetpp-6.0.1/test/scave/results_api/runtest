@@ -1,0 +1,15 @@
+#! /bin/sh
+
+# exit on first error
+set -e
+
+rm -rf results
+
+opp_makemake -f -o scave
+make -j6 MODE=debug
+
+./scave_dbg -u Cmdenv
+
+opp_charttool run results_api_test.anf --no-show
+
+python3 standalone.py

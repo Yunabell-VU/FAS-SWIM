@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Red Hat</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OpenSUSE" href="ch-opensuse.html" />
+    <link rel="prev" title="Fedora 33" href="ch-fedora.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="red-hat">
+<h1>Red Hat</h1>
+<section id="supported-releases">
+<h2>Supported Releases</h2>
+<p>This chapter provides additional information for installing OMNeT++ on Red Hat Enterprise Linux installations. The
+overall installation procedure is described in the <em>Linux</em> chapter.</p>
+<p>The following Red Hat release is covered:</p>
+<ul class="simple">
+<li><p>Red Hat Enterprise Linux Desktop Workstation 8.x</p></li>
+</ul>
+<p>It was tested on the following architectures:</p>
+<ul class="simple">
+<li><p>Intel 64-bit</p></li>
+</ul>
+</section>
+<section id="opening-a-terminal">
+<h2>Opening a Terminal</h2>
+<p>Choose <em>Applications &gt; Accessories &gt; Terminal</em> from the menu.</p>
+</section>
+<section id="installing-the-prerequisite-packages">
+<h2>Installing the Prerequisite Packages</h2>
+<p>You can perform the installation using the graphical user interface or from the terminal, whichever you prefer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will need Red Hat Enterprise Linux Desktop Workstation for OMNeT++. The <em>Desktop Client</em> version does not
+contain development tools.</p>
+</div>
+<section id="command-line-installation">
+<h3>Command-Line Installation</h3>
+<p>To install the required packages, type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ su -c &#39;yum install make gcc gcc-c++ clang lld bison flex perl \
+    python3 python3-pip qt-devel libxml2-devel zlib-devel doxygen \
+    graphviz xdg-utils&#39;
+$ python3 -m pip install --user --upgrade numpy pandas matplotlib scipy \
+    seaborn posix_ipc
+</pre></div>
+</div>
+<p>To use 3D visualization support in Qtenv (recommended), you should install the OpenSceneGraph-devel (3.2 or later) and
+osgEarth-devel (2.7 or later) packages. These packages are not available from the official RedHat repository so you may
+need to get them from different sources (e.g. rpmfind.net).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The IDE requires GLIBC 2.28 version or later, so RedHat 6 and 7 is NOT supported.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may opt to use gcc instead of the clang compiler and/or use the system default linker instead of <em>lld</em> by setting
+the <code class="docutils literal notranslate"><span class="pre">PREFER_CLANG</span></code> and <code class="docutils literal notranslate"><span class="pre">PREFER_LLD</span></code> variables in the <em>configure.user</em> file. In this case, you don’t have to
+install the <code class="docutils literal notranslate"><span class="pre">clang</span></code> and <code class="docutils literal notranslate"><span class="pre">lld</span></code> packages. If you do not need the 3D visualization capabilities, you can disable
+them in the <em>configure.user</em> file, too.</p>
+</div>
+<p>To install additional (optional) packages for parallel simulation, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ su -c &#39;yum install openmpi-devel&#39;
+</pre></div>
+</div>
+<p>Note that <em>openmpi</em> will not be available by default, it needs to be activated in every session with the</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ module load openmpi_&lt;arch&gt;
+</pre></div>
+</div>
+<p>command, where <code class="docutils literal notranslate"><span class="pre">&lt;arch&gt;</span></code> is your architecture (usually <code class="docutils literal notranslate"><span class="pre">i386</span></code> or <code class="docutils literal notranslate"><span class="pre">x86_64</span></code>). When in doubt, use <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">avail</span></code> to
+display the list of available modules. If you need MPI in every session, you may add the <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span></code> command to your
+startup script (<code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>).`</p>
+</section>
+<section id="graphical-installation">
+<h3>Graphical Installation</h3>
+<p>The graphical installer can be launched by choosing <em>Applications &gt; Add/Remove Software</em> from the menu.</p>
+<p>Search for the following packages in the list. Select the checkboxes in front of the names, and pick the latest version
+of each package.</p>
+<p>The packages:</p>
+<ul class="simple">
+<li><p>make, gcc, gcc-c++, clang, lld, bison, flex, perl, python3, qt-devel, libxml2-devel, zlib-devel, doxygen, graphviz,
+openmpi-devel, xdg-utils</p></li>
+</ul>
+<p>Click <em>Apply</em>, then follow the instructions.</p>
+</section>
+</section>
+<section id="selinux">
+<h2>SELinux</h2>
+<p>You may need to turn off SELinux when running certain simulations. To do so, click on <em>System &gt; Administration &gt;
+Security Level &gt; Firewall</em>, go to the <em>SELinux</em> tab, and choose <em>Disabled</em>.</p>
+<p>You can verify the SELinux status by typing the <code class="docutils literal notranslate"><span class="pre">sestatus</span></code> command in a terminal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From OMNeT++ 4.1 on, makefiles that build shared libraries include the <code class="docutils literal notranslate"><span class="pre">chcon</span> <span class="pre">-t</span> <span class="pre">textrel_shlib_t</span> <span class="pre">lib&lt;name&gt;.so</span></code>
+command that properly sets the security context for the library. This should prevent the SELinux-related <em>“cannot
+restore segment prot after reloc: Permission denied”</em> error from occurring, unless you have a shared library which
+was built using an obsolete or hand-crafted makefile that does not contain the <code class="docutils literal notranslate"><span class="pre">chcon</span></code> command.</p>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-redhat.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

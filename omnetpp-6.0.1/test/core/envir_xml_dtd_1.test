@@ -1,0 +1,36 @@
+%description:
+If document has DTD, parser must use it for validation and attribute completion.
+Test that completion takes place.
+
+%file: test.dtd
+<!ELEMENT foo ( bar )>
+<!ATTLIST foo
+            one      CDATA "F1"
+>
+
+<!ELEMENT bar EMPTY>
+<!ATTLIST bar
+            one      CDATA "B1"
+            two      CDATA "B2"
+>
+
+%file: test.xml
+<?xml version="1.0" ?>
+<!DOCTYPE foo SYSTEM "./test.dtd">
+<foo>
+    <bar one="X"/>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%contains: stdout
+<foo one="F1">
+  <bar one="X" two="B2"/>
+</foo>

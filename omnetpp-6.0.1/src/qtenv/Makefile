@@ -1,0 +1,168 @@
+#
+# Definitions to be customized by 'configure'
+#
+
+CONFIGFILE = ../../Makefile.inc
+include $(CONFIGFILE)
+
+#
+# Local definitions
+#
+LIBNAME=$(LIB_PREFIX)oppqtenv$D
+TARGET_LIB_FILES=$(OMNETPP_LIB_DIR)/$(LIBNAME)$(LIB_SUFFIX)
+# On Windows, the targets are different (DLLs go into the bin dir and separate export libs are created)
+ifeq ($(PLATFORM),win32)
+  ifeq ($(SHARED_LIBS),yes)
+    TARGET_LIB_FILES=$(OMNETPP_BIN_DIR)/$(LIBNAME)$(DLL_LIB_SUFFIX) $(OMNETPP_LIB_DIR)/$(LIBNAME)$(IMPLIB_SUFFIX)
+    ifeq ($(TOOLCHAIN_NAME),clang-msabi)
+      ifeq ($(MODE),debug)
+        TARGET_LIB_FILES+=$(OMNETPP_BIN_DIR)/$(LIBNAME).pdb
+      endif
+    endif
+  endif
+endif
+
+O=$(OMNETPP_OUT_DIR)/$(CONFIGNAME)/src/qtenv
+
+# disable warnings for cleaner output on MinGW/clang
+COPTS = $(CFLAGS) -I"$(OMNETPP_INCL_DIR)" -I"$(OMNETPP_SRC_DIR)" $(QT_CFLAGS) -Wno-deprecated-declarations -Wno-ignored-attributes -Wno-inconsistent-missing-override
+DEFINES += -DUNICODE -DQT_NO_EMIT -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+IMPLIBS = -loppsim$D -loppenvir$D -lopplayout$D -loppcommon$D $(QT_LIBS)
+
+# Required only on macOS
+ifeq ($(PLATFORM),macos)
+  COPTS += -Wno-deprecated-declarations
+  LDFLAGS += -framework ApplicationServices
+endif
+
+ifeq ($(MODE),release)
+  DEFINES += -DQT_NO_DEBUG_OUTPUT
+endif
+
+ifeq ($(TOOLCHAIN_NAME),clang-msabi)
+# QT_COMPILING_QSTRING_COMPAT_CPP should be added only for clang-c2 compiler
+  DEFINES += -DQT_COMPILING_QSTRING_COMPAT_CPP -DQT_COMPILING_QIMAGE_COMPAT_CPP
+endif
+
+#
+# local tools
+#
+SOURCES=$(wildcard *.cc)
+UI_SRC=$(wildcard *.ui)
+UI_OUT=$(UI_SRC:%.ui=ui_%.h)
+MOC_SRC=$(filter-out ui_%.h, $(wildcard *.h))
+MOC_OUT=$(MOC_SRC:%.h=moc_%.cpp)
+RESOURCES_SRC=$(sort $(wildcard *.qrc) icons_dark.qrc) # sort is there just to make the list unique
+RESOURCES_OUT=$(RESOURCES_SRC:%.qrc=qrc_%.cpp)
+GENERATED_SOURCES=$(UI_OUT) $(MOC_OUT) $(RESOURCES_OUT)
+OBJS=$(SOURCES:%.cc=$O/%.o) $(MOC_OUT:%.cpp=$O/%.o) $(RESOURCES_OUT:%.cpp=$O/%.o)
+SVGICONS=$(wildcard icons/tools/*.svg icons/objects/*.svg) # will contain all existing tool and object icons, light or dark
+LIGHT_SVGICONS=$(filter-out %_dark.svg,$(SVGICONS)) # these ones will be used as source
+DARK_SVGICONS=$(LIGHT_SVGICONS:%.svg=%_dark.svg) # these will be (re)generated
+
+# macro is used in $(EXPORT_DEFINES) with clang-msabi when building a shared lib
+EXPORT_MACRO = -DQTENV_EXPORT
+
+# we want to recompile everything if COPTS changes,
+# so we store COPTS into $COPTS_FILE (if COPTS has changed since last build)
+# and make the object files depend on it
+COPTS_FILE = $O/.last-copts
+ifneq ("$(COPTS)","$(shell cat $(COPTS_FILE) 2>/dev/null || echo '')")
+  $(shell $(MKPATH) "$O")
+  $(file >$(COPTS_FILE),$(COPTS))
+endif
+
+.PHONY: all clean qtenv-osg
+.SECONDARY: $(OBJS) $O/$(LIBNAME)$(LIB_SUFFIX) $(GENERATED_SOURCES)
+
+# disabling all implicit rules
+.SUFFIXES :
+
+#
+# Automatic rules
+#
+
+$O/%.o: %.cc $(CONFIGFILE) $(GENERATED_SOURCES) $(COPTS_FILE)
+	@mkdir -p $O
+	$(qecho) "$<"
+	$(Q)$(CXX) -c $(CXXFLAGS) $(COPTS) $(EXPORT_DEFINES) $(IMPORT_DEFINES) -o $@ $<
+
+$O/%.o: %.cpp $(CONFIGFILE) $(GENERATED_SOURCES)
+	@mkdir -p $O
+	$(qecho) "$<"
+	$(Q)$(CXX) -c $(CXXFLAGS) $(COPTS) $(EXPORT_DEFINES) $(IMPORT_DEFINES) -o $@ $<
+
+qrc_%.cpp: %.qrc
+	$(Q)$(RCC) -name $(basename $<) -o $@ $<
+
+ui_%.h: %.ui
+	$(Q)$(UIC) -o $@ $<
+
+moc_%.cpp: %.h
+	$(Q)$(MOC) --no-notes $(DEFINES) -o $@ $<
+
+#
+# Targets
+#
+all : $(TARGET_LIB_FILES)
+
+ifeq ($(WITH_OSG),yes)
+all: qtenv-osg
+qtenv-osg: $(TARGET_LIB_FILES)
+	$(Q)$(MAKE) -C osg
+endif
+
+ifeq ($(SHARED_LIBS),yes)
+# dynamically linked library (on all platforms except Windows)
+$O/%$(SO_LIB_SUFFIX) : $(OBJS)
+	@mkdir -p $O
+	@echo Creating shared library: $@
+	$(Q)$(SHLIB_LD) $(LDFLAGS) -o $O/$(LIBNAME)$(SO_LIB_SUFFIX) $(OBJS) $(IMPLIBS)
+
+# dynamically linked library + import lib (on Windows)
+$O/%$(DLL_LIB_SUFFIX) $O/%$(IMPLIB_SUFFIX): $(OBJS)
+	@mkdir -p $O
+	@echo Creating DLL and import library: $@
+	$(Q)$(SHLIB_LD) $(LDFLAGS) -o $O/$(LIBNAME)$(DLL_LIB_SUFFIX) $(OBJS) $(IMPLIBS) $(LDFLAG_IMPLIB)$O/$(LIBNAME)$(IMPLIB_SUFFIX)
+else
+# statically linked library (on all platforms)
+$O/%$(A_LIB_SUFFIX) : $(OBJS)
+	@mkdir -p $O
+	@echo Creating static library: $@
+	$(Q)$(AR_CR) $(ARFLAG_OUT)$O/$(LIBNAME)$(A_LIB_SUFFIX) $(OBJS)
+	$(Q)$(RANLIB) $O/$(LIBNAME)$(A_LIB_SUFFIX)
+endif
+
+# copy files to the bin and lib directories from the out directory
+$(OMNETPP_BIN_DIR)/% $(OMNETPP_LIB_DIR)/%: $O/% $(CONFIGFILE)
+	@mkdir -p $(OMNETPP_BIN_DIR) $(OMNETPP_LIB_DIR)
+	@echo Copying to: $@
+	$(Q)cp $< $@
+	$(Q)$(SHLIB_POSTPROCESS) $@
+
+$O/$(LIBNAME).pdb: $O/$(LIBNAME)$(DLL_LIB_SUFFIX)
+
+clean:
+	$(qecho) Cleaning qtenv
+	$(Q)rm -rf $O $(GENERATED_SOURCES) $(TARGET_LIB_FILES) $(DARK_SVGICONS) icons_dark.qrc
+	$(Q)$(MAKE) clean -C osg
+
+# dark mode icons (being actually lighter)
+%_dark.svg: %.svg
+	$(Q)sed \
+	    -e 's|fill="#404040"|fill="#F0F0F0"|g' \
+	    -e 's|stroke="#404040"|stroke="#F0F0F0"|g' \
+	    -e 's|<svg|<!-- AUTOGENERATED FROM $(notdir $<) -->  <svg|' \
+	    $< > $@
+
+# a resource containing the dark-mode variants of icons
+icons_dark.qrc: icons.qrc $(DARK_SVGICONS)
+	$(Q)sed \
+	    -e 's|<RCC>|<RCC>    <!-- AUTOGENERATED FROM icons.qrc -->|' \
+	    -e 's|\.svg</file>|_dark\.svg</file>|g' \
+	    icons.qrc > icons_dark.qrc
+
+$(RESOURCES_OUT): $(RESOURCES_SRC) $(wildcard icons/tools/* icons/logo/* icons/objects/*)
+
+-include $(OBJS:%=%.d)
+

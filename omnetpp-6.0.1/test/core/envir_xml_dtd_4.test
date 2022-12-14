@@ -1,0 +1,29 @@
+%description:
+If document has DTD, parser must use it for validation and attribute completion.
+Syntax error in DTD -- should produce an error
+
+%file: test.dtd
+<!ELEMENT foo ( bar )>
+<!ATTLIST foo
+            one      CDATA "F1"
+
+%file: test.xml
+<?xml version="1.0" ?>
+<!DOCTYPE foo SYSTEM "./test.dtd">
+<foo>
+    <bar one="X"/>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%exitcode: 1
+
+%contains: stderr
+Parse error

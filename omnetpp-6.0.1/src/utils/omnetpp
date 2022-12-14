@@ -1,0 +1,3 @@
+#!/bin/sh
+PRODUCT=OMNeT++
+. $(dirname $0)/opp_ide

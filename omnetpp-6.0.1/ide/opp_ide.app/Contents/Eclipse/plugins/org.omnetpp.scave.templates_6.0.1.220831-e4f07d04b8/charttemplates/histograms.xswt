@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xswt xmlns:x="http://sweet_swt.sf.net/xswt">
+
+  <import xmlns="http://sweet_swt.sf.net/xswt">
+    <package name="java.lang"/>
+    <package name="org.eclipse.swt.widgets" />
+    <package name="org.eclipse.swt.graphics" />
+    <package name="org.eclipse.swt.layout" />
+    <package name="org.eclipse.swt.custom" />
+    <package name="org.omnetpp.common.wizard.support" />
+    <package name="org.omnetpp.ned.editor.wizards.support" />
+    <package name="org.omnetpp.cdt.wizard.support" />
+  </import>
+  <layout x:class="GridLayout"/>
+
+  <x:children>
+
+    <!-- page generated from the following spec:
+Baseline,
+Bar type:Solid/Outline,
+Data type:Count/Probability density/Cumulative density,
+Show over_underflow cell?
+    -->
+
+    <group text="Histograms">
+      <layoutData x:class="GridData" horizontalSpan="1" horizontalAlignment="FILL" grabExcessHorizontalSpace="true" verticalAlignment="FILL" grabExcessVerticalSpace="false"/>
+      <layout x:class="GridLayout" numColumns="2"/>
+      <x:children>
+
+    <!-- Baseline -->
+    <label text="Baseline:"/>
+    <text x:id="baseline" x:id.default="0" x:style="BORDER">
+      <layoutData x:class="GridData" horizontalAlignment="FILL" grabExcessHorizontalSpace="true"/>
+    </text>
+
+    <!-- Bar type:Solid/Outline -->
+    <label text="Draw style:"/>
+    <combo x:id="drawstyle" x:id.default="Solid" x:style="BORDER|READ_ONLY">
+      <add x:p0="Solid"/>
+      <add x:p0="Outline"/>
+    </combo>
+
+    <button x:id="normalize" x:id.default="false" text="Normalize" x:style="CHECK">
+      <layoutData x:class="GridData" horizontalSpan="2"/>
+    </button>
+
+    <button x:id="cumulative" x:id.default="false" text="Cumulative" x:style="CHECK">
+      <layoutData x:class="GridData" horizontalSpan="2"/>
+    </button>
+
+    <!-- Show over_underflow cell? -->
+    <button x:id="show_overflows" x:id.default="true" text="Show under/overflows" x:style="CHECK">
+      <layoutData x:class="GridData" horizontalSpan="2"/>
+    </button>
+
+      </x:children>
+    </group>
+  </x:children>
+</xswt>

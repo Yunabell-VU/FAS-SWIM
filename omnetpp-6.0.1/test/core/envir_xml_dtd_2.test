@@ -1,0 +1,23 @@
+%description:
+If document has DTD, parser must use it for validation and attribute completion.
+No DOCTYPE -- no complaint.
+
+%file: test.xml
+<?xml version="1.0" ?>
+<foo>
+    <bar one="X"/>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%contains-regex: stdout
+<foo>[ \n]*
+  <bar one="X"/>
+</foo>

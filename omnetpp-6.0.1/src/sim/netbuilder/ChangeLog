@@ -1,0 +1,484 @@
+2022-08-27  Andras Varga
+
+	* cNedDeclaration: cosmetics: Rename args, swap order of args, rename method
+	(mergeProperties() -> updateProperties())
+
+2022-04-11  ------ omnetpp-6.0 released ------
+
+2021-11-04  Andras Varga
+
+	* Mandate @mutable property for NED parameters that support being changed at
+	runtime. To disable the check for models that don't have the necessary
+	@mutable annotations added, add parameter-mutability-check=false to
+	omnetpp.ini.
+
+2021-07-10  Andras Varga
+
+	* cNedNetworkBuilder: eliminate submodMap variable
+
+2021-06-23  Andras Varga
+
+	* cNedNetworkBuilder::doGate(): adjusted to recent cModule changes
+	(use addGateVector() instead of addGate() for gate vector creation).
+
+2021-06-16  Andras Varga
+
+	* Report location for evaluation errors in parameter values set from NED files
+
+2021-06-09  Andras Varga
+
+	* NED: Allow the body of a parametric submodule to assign apparently nonexistent
+	parameters.
+
+	Example:
+
+	        app: <default("FooApp")> like IApp {
+	           parameters:
+	               address = parent.address;
+	               sleepTime = 1s;
+	       }
+
+	If FooApp has a sleepTime parameter but IApp does not, then running with
+	the defaults is fine, but changing to another IApp type that does NOT
+	have a sleepTime parameter will stop the simulation with an error.
+
+	Solution: inside a parametric submodule type, we simply ignore parameter
+	assignments that assign nonexistent parameters.
+
+2021-06-09  Andras Varga
+
+	* NED: fix parametric channel type with type given as default expression
+
+	The expression text was mistakenly interpreted as parameter name.
+
+	Example:
+	   a.out++ --> <default(channelType+"")> like IFooChannel --> b.in++;
+
+	It would give the following error:
+
+	    Error: Unknown parameter '"bubu"+channelType+""'
+
+2021-05-31  Andras Varga
+
+	* NED: Implemented @omittedTypename property
+
+	@omittedTypename allows one to specify a NED type to use when typename=""
+	is specified for a parametric submodule or channel, or to remove (skip
+	creating) that submodule, submodule vector element, or channel
+	altogether.
+
+	@omittedTypename can be specified on a module interface or channel
+	interface, or on a submodule or connection. It should contain a single
+	(optional) value. The value names the type to use. If it is absent, the
+	submodule or channel will not be created. (The connection will be created
+	without a channel object.)
+
+2021-05-05  Andras Varga
+
+	* Rudimentary support for the new "parent.something" syntax
+
+2021-03-31  Andras Varga
+
+	* More helpful error message for the "no gate left for '++' operator"
+	NED error
+
+2021-03-22  Andras Varga
+
+	* cNedDeclaration: cosmetics
+
+2020-11-13  Attila Torok
+
+	* Modernizing: Use in-class member initializers wherever possible;
+	use "=default" syntax for copy constructors where appropriate.
+	Tool: clang-tidy plus manual editing where needed.
+
+2019-11-19  Andras Varga
+
+	* Support @class() property on NED parameters of type "object".
+	Two variants: @class(classname) and @class(classname?); the difference
+	is that parameters declared without question mark don't accept nullptr
+	as value, while the ones with question mark do.
+
+	The referenced class must be registered via Register_Class() or
+	Register_Abstract_Class().
+
+2019-10-24  Andras Varga
+
+	* Added support for NED parameters of type "object".
+
+2019-10-23  Andras Varga
+
+	* Follow change: AstNode::getSourceLocation() return type changed from
+	const char * to std::string.
+
+2019-10-21  Andras Varga
+
+	* cNedNetworkBuilder: When processing a parameter assignment in NED,
+	call cParImpl::setBaseDirectory() with the location of NED file.
+	This is needed for e.g. xmldoc() to be able to interpret the file name
+	as relative to the directory the expression comes from.
+
+2019-04-13  Andras Varga
+
+	* cNedNetworkBuilder: improved error message: mention parameter name
+	when an error occurs while setting up a parameter.
+
+2019-03-11  Andras Varga
+
+	* cNedNetworkBuilder: Ported NED to the new Expression class.
+
+	The main change is the removal of duality in parsing/processing NED
+	expressions. Expressions in NED files and INI files used to be parsed/built
+	in totally different ways; now we use cDynamicExpression (which relies on
+	the Expression class) for both. Consequences: cExpressionBuilder was
+	eliminated; expression parsing turned OFF in NED parser (we don't use the
+	AST built by it).
+
+2020-01-06  ------ omnetpp-5.6 released ------
+
+2019-10-22  Andras Varga
+
+	* NED feature: allow reconnecting already connected gates by specifying
+	the @reconnect property in the connection.
+
+2019-05-15  ------ omnetpp-5.5 released ------
+
+2018-06-25  ------ omnetpp-5.4.1 released ------
+
+2018-06-11  ------ omnetpp-5.4 released ------
+
+2018-05-23  Andras Varga
+
+	* NED: Added "exists" operator. Syntax: exists(<submodulename>)
+
+2018-05-18  Andras Varga
+
+	* NED: implement "typename" in submodule "if" and other expressions
+
+	Note: typename is not allowed in a submodule VECTOR's condition, because
+	type is elementwise, and we want the condition to apply to the vector as
+	a whole (we don't want to allow "holes" in the submodule vector)
+
+2018-05-18  Andras Varga
+
+	* cNedNetworkBuilder: fix: allow empty typename value to be used.
+	Before, empty string meant "no value specified here", and search went on.
+
+2018-05-17  Andras Varga
+
+	* cNedNetworkBuilder: use cDynamicExpression not cParImpl for
+	build-time expression evaluation.
+
+2018-04-11  ------ omnetpp-5.3 released ------
+
+2017-11-26  Andras Varga
+
+	* Follow renames in the nedxml library: NEDElement -> ASTNode,
+	NED->Ned in class/function names, etc.
+
+2017-12-12  Andras Varga
+
+	* Follow cPar longValue()->intValue() method rename.
+
+2017-12-12  Andras Varga
+
+	* Follow cPar change: cPar now uses intpar_t (alias of int64_t) to
+	represent integers.
+
+2017-12-08  ------ omnetpp-5.2.1 released ------
+
+2017-09-18  ------ omnetpp-5.2 released ------
+
+2017-04-06  Andras Varga
+
+	* Modernizing: use C++11's range-based for loops where applicable, using
+	clang-tidy's modernize-loop-convert.
+
+	* Modernizing: replace INT64_PRINTF_FORMAT and LL with C++11's PRId64.
+	Note: PRId64 includes the "d" that was not part of INT64_PRINTF_FORMAT
+	alias LL.
+
+2017-05-08  ------ omnetpp-5.1.1 released ------
+
+2017-03-31  ------ omnetpp-5.1 released ------
+
+2017-02-06  ------ omnetpp-5.1pre3 released ------
+
+2016-12-23  ------ omnetpp-5.1pre2 released ------
+
+2016-11-08  Andras Varga
+
+	* Fixed NED_parampattern_5.test
+
+2016-08-23  Andras Varga
+
+	* Follow cComponentType change: added getNedSource() to subclasses
+
+2016-08-23  Andras Varga
+
+	* Follow changes: detailedInfo() removed, info() renamed to str()
+
+2016-04-13  ------ omnetpp-5.0 released ------
+
+2016-04-01  Andras Varga
+
+	* Edited comments to improve the generated C++ documentation (doxygen)
+
+2016-03-10  ------ omnetpp-5.0rc released ------
+
+2015-12-07  ------ omnetpp-5.0b3 released ------
+
+2015-10-16  Andras Varga
+
+	* omnetpp namespace made permanent (cannot be turned off):
+	- removed configure option and preprocessor symbol USE_NAMESPACE
+	- removed related macros: NAMESPACE_BEGIN, NAMESPACE_END,
+	  USING_NAMESPACE, OPP, OPP_STR, OPP_PREFIX etc.
+
+2015-07-20  ------ omnetpp-5.0b2 released ------
+
+2015-06-16  Andras Varga
+
+	* Cleanup: prefer ++it to it++ (less copying)
+
+2015-06-12  Andras Varga
+
+	* Adapted to simkernel iterator API changes (added operator* and
+	operator->, deprecated operator())
+
+2015-06-08  Andras Varga
+
+	* Cleanup: code formatting
+
+2015-05-22  Andras Varga
+
+	* Modernizing: added the 'override' keyword (C++11) to overridden methods;
+	it becomes blank when using with an older compiler.
+
+2015-05-21  Rudolf Hornig
+
+	* Modernizing: replaced NULLs by 'nullptr' (C++11); it is defined as 0
+	when using an older compiler.
+
+2015-04-20  Andras Varga
+
+	* Cleanup: use C++ names of C headers (e.g. <cstdio> instead of <stdio.h>)
+
+2015-04-12  Andras Varga
+
+	* Cleanup: copyright years updated
+
+2015-04-08  Andras Varga
+
+	* Modernizing:
+
+	- Use a fixed include path (-Iinclude -Isrc) for all source folders
+	  under src/, and qualify cross-folder #includes with the folder
+	  name (e.g. change #include "stringutil.h" to #include "common/stringutil.h").
+	  This increases readbility and reduces the chance of including a wrong
+	  header.
+
+	- In source files, sort #include statements by folder.
+
+2015-03-04  ------ omnetpp-5.0b1 released ------
+
+2014-11-27  ------ omnetpp-4.6 released ------
+
+2014-06-30  ------ omnetpp-4.5 released ------
+
+2014-02-03  Andras Varga
+
+	* Follow the removal of cCompoundModule from the simulation library.
+	From now on, compound modules are instantiated with cModule.
+
+2014-02-13  ------ omnetpp-4.4.1 released ------
+
+2013-12-20  ------ omnetpp-4.4 released ------
+
+2013-09-12  ------ omnetpp-4.3.1 released ------
+
+2013-04-02  ------ omnetpp-4.3 released ------
+
+2013-02-08  ------ omnetpp-4.3rc1 released ------
+
+2012-01-14  Andras Varga
+
+	* added named connections support (both explicit connection name, and
+	@defaultname channel type property; see the manual for details)
+
+2012-03-13  ------ omnetpp-4.2.2 released ------
+
+2012-01-17  ------ omnetpp-4.2.1 released ------
+
+2011-10-28  ------ omnetpp-4.2 released ------
+
+2011-09-11  ------ omnetpp-4.2rc1 released ------
+
+2011-05-05  ------ omnetpp-4.2b2 released ------
+
+2011-04-20  Andras Varga
+
+	* "type-name" per-object config option has been renamed to "typename",
+	for consistency with NED. (It is now an exception to the rule that
+	all per-object options have a hyphen in their names.)
+
+2011-04-19  Andras Varga
+
+	* implemented "typename" patterns, a way of assigning type to
+	parametric submodule types without using parameters. The syntax
+	is like deep parameter assignments, where the last component of
+	the pattern is ".typename". Rules are the same as with deep param
+	assignments: the innermost matching pattern with a non-default
+	value will be effective; and default value can be overridden,
+	i.e. the outermost pattern with a default(...) value will be the
+	actual default (that becomes effective when the inifile does not
+	specify a value via **.type-name). "typename" is not accepted in the
+	body of the parametric submodule itself, because the value expression
+	would have to be evaluated in the context of a submodule that
+	does not exist yet.
+
+	Example:
+	  network Net {
+	      parameters:
+	          server.tcp.typename = "TCP_NSC";
+	          host*.tcp.typename = default("TCP_lwIP");
+	      submodule:
+	          server: StandardHost {...}
+	          ...
+	  }
+
+2011-04-08  Andras Varga
+
+	* implemented conditional submodules, see nedxml/ChangeLog for details
+
+2011-02-23  ------ omnetpp-4.2b1 released ------
+
+2010-02-17  Andras Varga
+
+	* fix: deep parameter assignments containing parameter references
+	or the "index" operator were evaluated in the wrong context (in the
+	context of the module whose parameter was assigned, instead of the
+	context where the expression occurred in the code).
+
+2010-06-11  ------ omnetpp-4.1 released ------
+
+2010-05-31  ------ omnetpp-4.1rc2 released ------
+
+2010-04-20  ------ omnetpp-4.1b4 released ------
+
+2010-04-19  Andras Varga
+
+	* implemented submodule @dynamic property: submodules declared dynamic
+	(with @dynamic() or @dynamic(true)) will not be instantiated
+	automatically, it is expected that they will be created at runtime
+	by other modules. However, they can still be graphically edited in the
+	IDE, and the ini file editor can provide content assist for setting
+	their parameters.
+
+2010-03-14  ------ omnetpp-4.1b3 released ------
+
+2009-01-27 Andras Varga
+
+	* fix: when subclassing from a compound module, parameter assignments
+	in the super type's "submodules" block did not take effect
+
+2009-xx-xx Andras Varga
+
+	* INCOMPATIBLE NED SEMANTICS CHANGE 4.0:
+	    fixed parameter values CANNOT be overwritten from subclasses or submodule sections
+	         (this is for consistency with pattern assignments)
+
+2009-03-12  ------ omnetpp-4.0 released ------
+
+2009-02-27  ------ omnetpp-4.0rc2 released ------
+
+2008-12-12  ------ omnetpp-4.0rc1 released ------
+
+	* Netbuilder was basically reimplemented for OMNeT++ 4.0.
+
+2006-10-21  ------ omnetpp-3.3 released ------
+
+2006-01-12  ------ omnetpp-3.2p1 released ------
+
+2005-10-19  ------ omnetpp-3.2 released ------
+
+2005-09-12  Andras Varga
+
+	* fix in loadnedfile.cc [reported by Johnny Lai]
+
+2005-08-08  Andras Varga
+
+	* cnednetworkbuilder.cc: assign submodule parameters, gatesizes etc
+	in that submodule's context (use cContextSwitcher); same for network.
+	This is mainly needed for ModNameParamResolver to work correctly
+	($MODULE_NAME etc for XPath expressions are taken from the module
+	in context).
+
+2005-08-07  Andras Varga
+
+	* cnednetworkbuilder.cc: don't look for module type if module vector
+	size is zero
+
+2005-07-26  Andras Varga
+
+	* cnednetworkbuilder.cc: didn't check gate directions on connecting
+
+2005-04-08  Andras Varga
+
+	* cnednetworkbuilder.cc: background display strings were not set
+	properly
+
+2005-03-31  ------ omnetpp-3.1 released ------
+
+2005-03-19  Andras Varga
+
+	* cnednetworkbuilder.cc: didn't handle connection display strings
+
+2005-01-06  Andras Varga
+
+	* cnednetworkbuilder.cc/.h: implemented "connections nocheck"
+
+2004-12-29  ------ omnetpp-3.0 released ------
+
+2004-12-10  Andras Varga
+
+	* cnednetworkbuilder.cc/.h: several fixes in expression evaluation code
+
+2004-11-23  ------ omnetpp-3.0b1 released ------
+
+2004-11-03  ------ omnetpp-3.0a9 released ------
+
+2004-10-04  ------ omnetpp-3.0a8 released ------
+
+2004-09-24  ------ omnetpp-3.0a7 released ------
+
+2004-07-22  ------ omnetpp-3.0a6 released ------
+
+2004-06-24
+
+	* loadned.cc: added support for "xml" NED parameter type
+
+2004-06-07  ------ omnetpp-3.0a5 released ------
+
+2004-05-15  ------ omnetpp-3.0a4 released ------
+
+2004-03-22  ------ omnetpp-3.0a3 released ------
+
+2004-03-03  ------ omnetpp-3.0a2 released ------
+
+2004-02-10  Andras Varga
+
+	* cnednetworkbuilder.cc: support for multiple conditional gatesizes and
+	parameters sections; fixes in expr handling
+
+2004-02-09  Andras Varga
+
+	* loading of simple module interfaces from NED files made possible
+
+	* fixed bug in "sizeof" handling
+
+2004-02-04  ------ omnetpp-3.0pre1 released ------
+
+2003-11-09  Andras Varga
+
+	* initial checkin of dynamic network building code.

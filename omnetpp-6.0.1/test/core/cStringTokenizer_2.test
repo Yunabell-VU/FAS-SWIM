@@ -1,0 +1,33 @@
+%description:
+verify delimiters with cStringTokenizer
+
+%activity:
+
+const char *str = "a b---c - /-- d/ e";
+
+const char *token;
+
+cStringTokenizer tok1(str, "- ");
+while ((token = tok1.nextToken())!=nullptr)
+    EV << ":" << token;
+EV << ".\n";
+
+cStringTokenizer tok2(str, "- ");
+while ((token = tok2.nextToken())!=nullptr)
+    EV << ":" << token;
+EV << ".\n";
+
+// change delimiter along the way
+cStringTokenizer tok3(str, "- ", cStringTokenizer::NO_TRIM);
+tok3.nextToken();
+tok3.nextToken();
+tok3.setDelimiterChars("/");
+while ((token = tok3.nextToken())!=nullptr)
+    EV << ":" << token;
+EV << ".\n";
+
+%contains: stdout
+:a:b:c:/:d/:e.
+:a:b:c:/:d/:e.
+:--c - :-- d: e.
+

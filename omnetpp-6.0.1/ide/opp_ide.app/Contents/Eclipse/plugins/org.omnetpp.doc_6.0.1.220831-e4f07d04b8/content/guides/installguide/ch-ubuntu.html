@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Ubuntu</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fedora 33" href="ch-fedora.html" />
+    <link rel="prev" title="Linux" href="ch-supported-linux.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ubuntu">
+<h1>Ubuntu</h1>
+<section id="supported-releases">
+<h2>Supported Releases</h2>
+<p>This chapter provides additional information for installing OMNeT++ on Ubuntu Linux installations. The overall
+installation procedure is described in the <em>Linux</em> chapter.</p>
+<p>The following Ubuntu releases are covered:</p>
+<ul class="simple">
+<li><p>Ubuntu 20.04 LTS or 22.04 LTS</p></li>
+</ul>
+<p>They were tested on the following architectures:</p>
+<ul class="simple">
+<li><p>Intel/AMD 64-bit</p></li>
+</ul>
+<p>The instructions below assume that you use the default desktop and the bash shell. If you use another desktop
+environment or shell, you may need to adjust the instructions accordingly.</p>
+</section>
+<section id="opening-a-terminal">
+<h2>Opening a Terminal</h2>
+<p>Type <em>terminal</em> in your program launcher and click on the Terminal icon.</p>
+</section>
+<section id="installing-the-prerequisite-packages">
+<h2>Installing the Prerequisite Packages</h2>
+<p>You can perform the installation using the graphical user interface or from the terminal, whichever you prefer.</p>
+<section id="command-line-installation">
+<h3>Command-Line Installation</h3>
+<p>Before starting the installation, refresh the database of available packages. Type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+</pre></div>
+</div>
+<p>To install the required packages, type in the terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install build-essential clang lld gdb bison flex perl \
+    python3 python3-pip qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools \
+    libqt5opengl5-dev libxml2-dev zlib1g-dev doxygen graphviz \
+    libwebkit2gtk-4.0-37 xdg-utils
+$ python3 -m pip install --user --upgrade numpy pandas matplotlib scipy \
+    seaborn posix_ipc
+</pre></div>
+</div>
+<p>To use Qtenv with 3D visualization support, install the development packages for OpenSceneGraph (3.4 or later) and the
+osgEarth (2.9 or later) packages. (You may need to enable the <em>Universe</em> software repository in Software Sources.
+and also enable <cite>WITH_OSGEARTH</cite> in <cite>configure.user</cite>.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install openscenegraph-plugin-osgearth libosgearth-dev
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Ubuntu 22.04 no longer provides the <cite>libosgearth</cite> package so osgEarth must be installed
+from sources. OpenSceneGraph can still be installed using
+<cite>sudo apt-get install libopenscenegraph-dev</cite>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The IDE requires GLIBC 2.28 version or later, so you Ubuntu 18.04 is NOT supported because it comes with GLIBC 2.27.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may opt to use gcc instead of the clang compiler and/or use the system default linker instead of <em>lld</em> by setting
+the <code class="docutils literal notranslate"><span class="pre">PREFER_CLANG</span></code> and <code class="docutils literal notranslate"><span class="pre">PREFER_LLD</span></code> variables in the <em>configure.user</em> file. In this case, you don’t have to
+install the <code class="docutils literal notranslate"><span class="pre">clang</span></code> and <code class="docutils literal notranslate"><span class="pre">lld</span></code> packages. If you do not need the 3D visualization capabilities, you can disable
+them in the <em>configure.user</em> file, too.</p>
+</div>
+<p>To enable the optional parallel simulation support you will need to install the MPI packages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install mpi-default-dev
+</pre></div>
+</div>
+<p>At the confirmation questions (<em>Do you want to continue? [Y/N]</em>), answer <em>Y</em>.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/terminal-package-install.png"><img alt="../_images/terminal-package-install.png" src="../_images/terminal-package-install.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 148 </span><span class="caption-text">Command-Line Package Installation</span></p>
+</figcaption>
+</figure>
+</section>
+<section id="graphical-installation">
+<h3>Graphical Installation</h3>
+<p>Open the dash and type <em>Synaptic</em>.</p>
+<p>Since software installation requires root permissions, Synaptic will ask you to type your password.</p>
+<p>Search for the following packages in the list, click the squares before the names, then choose <em>Mark for installation</em>
+or <em>Mark for upgrade</em>.</p>
+<p>If the <em>Mark additional required changes?</em> dialog comes up, choose the <em>Mark</em> button.</p>
+<p>The packages:</p>
+<ul class="simple">
+<li><p>required: build-essential, gcc, g++, bison, flex, perl, qtbase5-dev, qtchooser, qt5-qmake, qtbase5-dev-tools,
+python3, doxygen, graphviz, libwebkit2gtk-4.0-37, xdg-utils</p></li>
+<li><p>recommended: libopenscenegraph-dev, openscenegraph-plugin-osgearth, libosgearth-dev, mpi-default-dev, libxml2-dev, zlib1g-dev</p></li>
+</ul>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/ubuntu-synaptic.png"><img alt="../_images/ubuntu-synaptic.png" src="../_images/ubuntu-synaptic.png" style="width: 75.0%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 149 </span><span class="caption-text">Synaptic Package Manager</span></p>
+</figcaption>
+</figure>
+<p>Click <em>Apply</em>, then in the <em>Apply the following changes?</em> window, click <em>Apply</em> again. In the <em>Changes applied</em> window,
+click <em>Close</em>.</p>
+<p>After this, you still have to install some required Python packages from command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m pip install --user --upgrade numpy pandas matplotlib scipy \
+    seaborn posix_ipc
+</pre></div>
+</div>
+</section>
+<section id="post-installation-steps">
+<h3>Post-Installation Steps</h3>
+<section id="setting-up-debugging">
+<h4>Setting Up Debugging</h4>
+<p>By default, Ubuntu does not allow ptracing of non-child processes by non-root users. That is, if you want to be able to
+debug simulation processes by attaching to them with a debugger, or similar, you want to be able to use OMNeT++
+just-in-time debugging (<code class="docutils literal notranslate"><span class="pre">debugger-attach-on-startup</span></code> and <code class="docutils literal notranslate"><span class="pre">debugger-attach-on-error</span></code> configuration options), you need
+to explicitly enable them.</p>
+<p>To temporarily allow ptracing non-child processes, enter the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+</pre></div>
+</div>
+<p>To permanently allow it, edit <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.d/10-ptrace.conf</span></code> and change the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="o">.</span><span class="n">yama</span><span class="o">.</span><span class="n">ptrace_scope</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>to read</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="o">.</span><span class="n">yama</span><span class="o">.</span><span class="n">ptrace_scope</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-ubuntu.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

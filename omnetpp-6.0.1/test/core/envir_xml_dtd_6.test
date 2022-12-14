@@ -1,0 +1,40 @@
+%description:
+If document has DTD, parser must use it for validation and attribute completion.
+Document doesn't conform to DTD: extra attribute -- should be an error.
+
+%file: test.dtd
+<!ELEMENT foo ( bar )>
+<!ATTLIST foo
+            one      CDATA "F1"
+>
+
+<!ELEMENT bar EMPTY>
+<!ATTLIST bar
+            one      CDATA "B1"
+            two      CDATA "B2"
+>
+
+%file: test.xml
+<?xml version="1.0" ?>
+<!DOCTYPE foo SYSTEM "./test.dtd">
+<foo>
+    <bar one="X" extraAttr="something"/>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%exitcode: 1
+
+%contains: stderr
+DTD validation failed, see stderr for detailed report
+
+%contains: stderr
+No declaration for attribute extraAttr of element bar
+

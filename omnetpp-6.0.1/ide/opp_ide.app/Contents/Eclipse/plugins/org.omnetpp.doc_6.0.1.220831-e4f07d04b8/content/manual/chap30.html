@@ -1,0 +1,2709 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta name="copyright" content="OpenSim Ltd.">
+  <meta NAME="Author" CONTENT="Andras Varga">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="STYLESHEET" href="../book.css"  type="text/css">
+  <title>OMNeT++ - Simulation Manual</title>
+</head>
+<style type="text/css">
+  hr.pgbr { color: #f5f5f5; margin-top: 40px; margin-bottom: 10px; }
+  ul.dl { padding-left: 30px; text-indent: -30px; list-style: none; }
+  pre { margin: 4px 8px 4px 2px; padding: 8px 10px; background:#fffff4; border: 1px solid #dddddd; }
+  pre.ned { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.msg { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.cpp { background:#f5f5f5; border-left: 4px solid #ccccff; }
+  pre.inifile { background:#fffff0; border-left: 4px solid #e5e533; }
+  pre.filelisting { background:#f0f0f0; border-left: 4px solid #d9d9d9; }
+  pre.xml { background:#fff0f0; border-left: 4px solid #ffa0a0; }
+  pre.commandline { background:#fffff0; border-left: 4px solid #606060; }
+  td,th { text-align:left; vertical-align:top; border:1px solid; padding:3pt; border-color:#000000; }
+  div.caption { margin-top: 10px; }
+  a[href] { color: #202080; text-decoration: none; }
+  a:visited { text-decoration: none; }
+  # a:hover { text-decoration: underline; }
+
+  table.matrix { display:inline-block; vertical-align: middle; position: relative; border: 0px; background:#ffffff; margin-left:8pt; margin-right:8pt; }
+  table.matrix:before, table.matrix:after { content: ""; position: absolute; top: 0; border: 1px solid #000; width: 6px; height: 100%; }
+  table.matrix:before { left: -6px; border-right: 0px; }
+  table.matrix:after { right: -6px; border-left: 0px; }
+  table.matrix td { padding: 5px; text-align: center; border: 0px; }
+
+  a.headerlink { visibility: hidden; }
+</style>
+<body>
+
+<p><hr><b><a href="chap29.html">[Prev]</A>&nbsp;<a href="toc.html#toc_30.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p><hr class='pgbr'><h1><a name="cha:chart-api"/>30 Appendix L&#58; Python API for Chart Scripts<a class="headerlink" href="#cha:chart-api" title="Permalink to this headline">¶</a></h1>
+
+<p>This chapter describes the API of the Python modules available
+for chart scripts. These modules are available in the Analysis Tool
+in the IDE, in <tt>opp_charttool</tt>, and may also be used
+in standalone Python scripts.
+
+<p>Some conventional import aliases appear in code fragments throughout this
+chapter, such as <tt>np</tt> for NumPy and <tt>pd</tt> for Pandas.
+
+<p><h2><a name="cha:chart-api:modules"/>30.1 Modules<a class="headerlink" href="#cha:chart-api:modules" title="Permalink to this headline">¶</a></h2>
+
+
+
+<h3><a name="cha:chart-api:omnetpp.scave.results"/>30.1.1 Module omnetpp.scave.results<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results" title="Permalink to this headline">¶</a></h3>
+
+<p><p> Provides access to simulation results loaded from OMNeT++ result files (.sca,
+.vec). The results are returned as Pandas <tt>DataFrame</tt>'s of various formats.
+
+<p><p> The module can be used in several ways, depending on the environment it is run
+in, and on whether the set of result files to query are specified in a stateful
+or a stateless way:
+
+<p><ol>
+  <li> 
+
+<p><p> Inside a chart script in the Analysis Tool in the Simulation IDE. In that
+mode, the set of result files to take as input are defined on the "Inputs"
+page of the editor. The <tt>get_results()</tt>, <tt>get_scalars()</tt> and similar methods
+are invoked with a filter string as first argument to select the appropriate
+subset of results from the result files. Note that this mode of operation is
+stateful: The state is set up appropriately by the IDE before the chart
+script is run.
+
+<p><p> A similar thing happens when charts in an analysis (.anf) file are run from
+within <tt>opp_charttool</tt>: the tool sets up the module state before running the
+chart script, so that the getter methods invoked with a filter string will
+return result from the set of result files saved as "inputs" in the anf file.
+  <li> 
+
+<p><p> Standalone stateful mode. In order to use <tt>get_results()</tt>, <tt>get_scalars()</tt>
+and similar methods with a filter string, the module needs to be configured
+via the <tt>set_inputs()</tt>/<tt>add_inputs()</tt> functions to tell it the set of result
+files to use as input for the queries. (Doing so is analogous to filling in
+the "Inputs" page in the IDE).
+  <li> 
+
+<p><p> Stateless mode. It is possible to load the result files (in whole or a subset
+of results in them) into memory as a "raw" <tt>DataFrame</tt> using
+<tt>read_result_files()</tt>, and then use <tt>get_scalars()</tt>, <tt>get_vectors()</tt> and
+other getter functions with the dataframe as their first argument to produce
+<tt>DataFrame</tt>'s of other formats. Note that when going this route, a filter
+string can be specified to <tt>read_result_files()</tt> but not to the getter
+methods. However, Pandas already provides several ways for filtering the rows
+of a dataframe, for example by indexing with logical operators on columns, or
+using the <tt>df.query()</tt>, <tt>df.pipe()</tt> or <tt>df.apply()</tt> methods.
+
+<p></ol>
+
+<p>
+<p> <b>Filter expressions</b>
+
+<p><p> The <tt>filter_or_dataframe</tt> parameters in all functions must contain either a
+filter string, or a "raw" dataframe produced by <tt>read_result_files()</tt>. When it
+contains a filter string, the function operates on the set of result files
+configured earlier (see stateful mode above).
+
+<p><p> Filter strings of all functions have the same syntax. It is always evaluated
+independently on every loaded result item or metadata entry, and its value
+determines whether the given item or piece of metadata is included in the
+returned <tt>DataFrame</tt>.
+
+<p><p> A filter expression is composed of terms that can be combined with the <tt>AND</tt>,
+<tt>OR</tt>, <tt>NOT</tt> operators, and parentheses. A term filters for the value of some
+property of the item, and has the form <tt>&lt;property&gt; =~ &lt;pattern&gt;</tt>, or simply
+<tt>&lt;pattern&gt;</tt>. The latter is equivalent to <tt>name =~ &lt;pattern&gt;</tt>.
+
+<p><p> The following properties are available:
+
+<p><ul>
+  <li> <tt>name</tt>: Name of the result or item.
+  <li> <tt>module</tt>: Full path of the result's module.
+  <li> <tt>type</tt>: Type of the item. Value is one of: <tt>scalar</tt>, <tt>vector</tt>, <tt>parameter</tt>,
+<tt>histogram</tt>, <tt>statistics</tt>.
+  <li> <tt>isfield</tt>: <tt>true</tt> is the item is a synthetic scalar that represents a field of
+statistic or a vector, <tt>false</tt> if not.
+  <li> <tt>file</tt>: File name of the result or item.
+  <li> <tt>run</tt>: Unique run ID of the run that contains the result or item.
+  <li> <tt>runattr:&lt;name&gt;</tt>: Run attribute of the run that contains the result or item.
+Example: <tt>runattr:measurement</tt>.
+  <li> <tt>attr:&lt;name&gt;</tt>: Attribute of the result. Example: <tt>attr:unit</tt>.
+  <li> <tt>itervar:&lt;name&gt;</tt>: Iteration variable of the run that contains the result or
+item. Example: <tt>itervar:numHosts</tt>.
+  <li> <tt>config:&lt;key&gt;</tt>: Configuration key of the run that contains the result or item.
+Example: <tt>config:sim-time-limit</tt>, <tt>config:**.sendIaTime</tt>.
+
+<p></ul>
+
+<p>
+<p> Patterns may contain the following wildcards:
+
+<p><ul>
+  <li> <tt>?</tt> matches any character except '.'
+  <li> <tt>*</tt> matches zero or more characters except '.'
+  <li> <tt>**</tt> matches zero or more characters (any character)
+  <li> <tt>{a-z}</tt> matches a character in range a-z
+  <li> <tt>{^a-z}</tt> matches a character not in range a-z
+  <li> <tt>{32..255}</tt> any number (i.e. sequence of digits) in range 32..255 (e.g. <tt>99</tt>)
+  <li> <tt>[32..255]</tt> any number in square brackets in range 32..255 (e.g. <tt>[99]</tt>)
+  <li> <tt>\</tt> takes away the special meaning of the subsequent character
+
+<p></ul>
+
+<p>
+<p> Patterns only need to be surrounded with quotes if they contain whitespace or
+other characters that would cause ambiguity in parsing the expression.
+
+<p><p> Example: <tt>module =~ "**.host*" AND (name =~ "pkSent*" OR name =~ "pkRecvd*")</tt>
+
+<p><p> <b>The "raw" dataframe format</b>
+
+<p><p> This dataframe format is a central one, because the content of "raw" dataframes
+correspond exactly to the content result files, i.e. it is possible to convert
+between result files and the "raw" dataframe format without data loss. The "raw"
+dataframe format also corresponds in a one-to-one manner to the "CSV-R" export
+format of the Simulation IDE and <tt>opp_scavetool</tt>.
+
+<p><p> The outputs of the <tt>get_results()</tt> and <tt>read_result_files()</tt> functions are in
+this format, and the dataframes that can be passed as input into certain query
+functions (<tt>get_scalars()</tt>, <tt>get_vectors()</tt>, <tt>get_runs()</tt>, etc.) are also
+expected in the same format.
+
+<p><p> Columns of the <tt>DataFrame</tt>:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>:  Identifies the simulation run
+  <li> <tt>type</tt> <i>(string)</i>: Row type, one of the following: scalar, vector, statistics,
+histogram, runattr, itervar, param, attr
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: Name of the result item (scalar, statistic, histogram or
+vector)
+  <li> <tt>attrname</tt> <i>(string)</i>: Name of the run attribute or result item attribute (in
+the latter case, the module and name columns identify the result item the
+attribute belongs to)
+  <li> <tt>attrvalue</tt> <i>(string)</i>: Value of run and result item attributes, iteration
+variables, saved ini param settings (runattr, attr, itervar, param)
+  <li> <tt>value</tt> <i>(double or string)</i>: Output scalar or parameter value
+  <li> <tt>count</tt>, <tt>sumweights</tt>, <tt>mean</tt>, <tt>min</tt>, <tt>max</tt>, <tt>stddev</tt> <i>(double)</i>: Fields of the
+statistics or histogram
+  <li> <tt>binedges</tt>, <tt>binvalues</tt> <i>(np.array)</i>: Histogram bin edges and bin values.
+<tt>len(binedges)==len(binvalues)+1</tt>
+  <li> <tt>underflows</tt>, <tt>overflows</tt> <i>(double)</i>: Sum of weights (or counts) of underflown
+and overflown samples of histograms
+  <li> <tt>vectime</tt>, <tt>vecvalue</tt> <i>(np.array)</i>: Output vector time and value arrays
+
+<p></ul>
+
+<p>
+<p> <b>Requesting metadata columns</b>
+
+<p><p> Several query functions have the <tt>include_attrs</tt>, <tt>include_runattrs</tt>,
+<tt>include_itervars</tt>, <tt>include_param_assignments</tt>, and <tt>include_config_entries</tt>
+boolean options. When such an option is turned on, it will add extra columns
+into the returned <tt>DataFrame</tt>, one for each result attribute, run attribute,
+iteration variable, etc. When there is a name clash among items of different
+types, the column name for the second one will be modified by adding its type
+after an underscore (<tt>_runattr</tt>, <tt>_itervar</tt>, <tt>_config</tt>, <tt>_param</tt>).
+
+<p><ul>
+  <li> <tt>include_attrs</tt>: Adds the attributes of the result in question
+  <li> <tt>include_runattrs</tt>: Adds the run attributes of the (result's) run
+  <li> <tt>include_itervars</tt>: Adds the iteration variables of the (result's) run
+  <li> <tt>include_config_entries</tt>: Adds all configuration entries of the (result's)
+ run, including parameter parameter assignments and per-object configuration
+ options. If this option is turned on, <tt>include_param_assignments</tt> has no
+ effect.
+  <li> <tt>include_param_assignments</tt>: Adds the configuration entries that set module or
+ channel parameters. This is a subset of the entries added by
+ <tt>include_config_entries</tt>.
+
+<p></ul>
+
+<p>
+<p> Note that values in metadata columns are generally strings (with missing values
+represented as <tt>None</tt> or <tt>nan</tt>). The Pandas <tt>to_numeric()</tt> function or
+<tt>utils.to_numeric()</tt> can be used to convert values to <tt>float</tt> or <tt>int</tt> where
+needed.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:ResultQueryError"/>30.1.1.1 Class ResultQueryError<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:ResultQueryError" title="Permalink to this headline">¶</a></h4>
+
+<p>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-serial"/>30.1.1.2 get_serial()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-serial" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_serial()</tt>
+
+<p>
+<p> Returns an integer that is incremented every time the set of loaded results
+change, typically as a result of the IDE loading, reloading or unloading
+a scalar or vector result file. The serial can be used for invalidating
+cached intermediate results when their input changes.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:set-inputs"/>30.1.1.3 set_inputs()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:set-inputs" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_inputs(filenames)</tt>
+
+<p>
+<p> Specifies the set of simulation result files (.vec, .sca) to use as input
+for the query functions. The argument may be a single string, or a list of
+strings. Each string is interpreted as a file or directory path, and may
+also contain wildcards. In addition to <tt>?</tt> and <tt>*</tt>, <tt>**</tt> (which is able to
+match several directory levels) is also accepted as wildcard. If a path
+corresponds to a directory, it is interpreted as <tt>[ "&lt;dir&gt;/**/*.sca", "&lt;dir&gt;/**/*.vec" ]</tt>, that is, all result files will be loaded from that
+directory and recursively all its subdirectories.
+
+<p><p> Examples: <tt>set_inputs("results/")</tt>, <tt>set_inputs("results/**.sca")</tt>,
+<tt>set_inputs(["config1/*.sca", *config2/*.sca"])</tt>.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:add-inputs"/>30.1.1.4 add_inputs()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:add-inputs" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>add_inputs(filenames)</tt>
+
+<p>
+<p> Appends to the set of simulation result files (.vec, .sca) to use as input
+for the query functions.  The argument may be a single string, or a list of
+strings. Each string is interpreted as a file or directory path, and may
+also contain wildcards (<tt>?</tt>, <tt>*</tt>, <tt>**</tt>). See <tt>set_inputs()</tt> for more details.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:read-result-files"/>30.1.1.5 read_result_files()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:read-result-files" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>read_result_files(filenames, filter_expression=None, include_fields_as_scalars=False, vector_start_time=-inf, vector_end_time=inf)</tt>
+
+<p>
+<p> Loads the simulation result files specified in the first argument
+<tt>filenames</tt>, and returns the filtered set of results and metadata as a
+Pandas <tt>DataFrame</tt>.
+
+<p><p> The <tt>filenames</tt> argument specifies the set of simulation result files (.vec,
+.sca) to load.  The argument may be a single string, or a list of strings.
+Each string is interpreted as a file or directory path, and may also contain
+wildcards (<tt>?</tt>, <tt>*</tt>, <tt>**</tt>). See <tt>set_inputs()</tt> for more details on this
+format.
+
+<p><p> It is possible to limit the set of results to return by specifying a filter
+expression, and vector start/end times.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filenames</tt> <i>(string, or list of strings)</i>: Specifies the result files to
+load.
+  <li> <tt>filter_expression</tt> <i>(string)</i>: The filter expression to select the desired
+items to load. Example: <tt>module =~ "*host*" AND name =~ "numPacket*"</tt>
+  <li> <tt>include_fields_as_scalars</tt> <i>(bool)</i>: Optional. If <tt>True</tt>, the fields of
+statistics and histograms (<tt>:min</tt>, <tt>:mean</tt>, etc.) are also returned as
+synthetic scalars.
+  <li> <tt>vector_start_time</tt>, <tt>vector_end_time</tt> <i>(double)</i>: Optional time limits to
+trim the data of vector type results. The unit is seconds, the interval is
+left-closed, right-open.
+
+<p></ul>
+
+<p>
+<p> Returns: a <tt>DataFrame</tt> in the "raw" format (see the corresponding section of
+the module documentation for details).
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-results"/>30.1.1.6 get_results()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-results" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_results(filter_or_dataframe="", row_types=None, omit_unused_columns=True, include_fields_as_scalars=False, start_time=-inf, end_time=inf)</tt>
+
+<p>
+<p> Returns a filtered set of results and metadata in a Pandas <tt>DataFrame</tt>. The
+items can be any type, even mixed together in a single <tt>DataFrame</tt>. They are
+selected from the complete set of data referenced by the analysis file
+(<tt>.anf</tt>), including only those for which the given <tt>filter_or_dataframe</tt>
+evaluates to <tt>True</tt>.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string or dataframe)</i>: The filter expression to
+select the desired items from the inputs, or a dataframe in the "raw"
+format. Example: <tt>module =~ "*host*" AND name =~ "numPacket*"</tt>
+  <li> <tt>row_types</tt>: Optional. When given, filters the returned rows by type.
+Should be a unique list, containing any number of these strings:
+<tt>"runattr"</tt>, <tt>"itervar"</tt>, <tt>"config"</tt>, <tt>"scalar"</tt>, <tt>"vector"</tt>,
+<tt>"statistic"</tt>, <tt>"histogram"</tt>, <tt>"param"</tt>, <tt>"attr"</tt>
+  <li> <tt>omit_unused_columns</tt> <i>(bool)</i>: Optional. If <tt>True</tt>, all columns that would
+only contain <tt>None</tt> are removed from the returned DataFrame
+  <li> <tt>include_fields_as_scalars</tt> <i>(bool)</i>: Optional. If <tt>True</tt>, the fields of
+statistics and histograms (<tt>:min</tt>, <tt>:mean</tt>, etc.) are also returned as
+synthetic scalars.
+  <li> <tt>start_time</tt>, <tt>end_time</tt> <i>(double)</i>: Optional time limits to trim the data
+of vector type results. The unit is seconds, both the <tt>vectime</tt> and
+<tt>vecvalue</tt> arrays will be affected, the interval is left-closed,
+right-open.
+
+<p></ul>
+
+<p>
+<p> Returns: a <tt>DataFrame</tt> in the "raw" format (see the corresponding section of
+the module documentation for details).
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-runs"/>30.1.1.7 get_runs()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-runs" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_runs(filter_or_dataframe="", include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of runs, identified by their run ID.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string or dataframe)</i>: The filter expression to
+select the desired run from the inputs, or a dataframe in the "raw" format
+(e.g. one returned by <tt>read_result_files()</tt>). Example: <tt>runattr:network =~ "Aloha" AND config:Aloha.slotTime =~ 0</tt>
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the result, pivoted into
+columns. See the "Metadata columns" section of the module documentation
+for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> Additional metadata items (run attributes, iteration variables, etc.), as
+requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-runattrs"/>30.1.1.8 get_runattrs()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-runattrs" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_runattrs(filter_or_dataframe="", include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of run attributes.
+
+<p><p> The set of run attributes is fixed: <tt>configname</tt>, <tt>datetime</tt>, <tt>experiment</tt>,
+<tt>inifile</tt>, <tt>iterationvars</tt>, <tt>iterationvarsf</tt>, <tt>measurement</tt>, <tt>network</tt>,
+<tt>processid</tt>, <tt>repetition</tt>, <tt>replication</tt>, <tt>resultdir</tt>, <tt>runnumber</tt>,
+<tt>seedset</tt>.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string or dataframe)</i>: The filter expression to
+select the desired run attributes from the inputs, or a dataframe in the
+"raw" format. Example: <tt>name =~ *date* AND config:Aloha.slotTime =~ 0</tt>
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the result, pivoted into
+columns. See the "Metadata columns" section of the module documentation
+for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>name</tt> <i>(string)</i>: The name of the run attribute
+  <li> <tt>value</tt> <i>(string)</i>: The value of the run attribute
+  <li> Additional metadata items (run attributes, iteration variables, etc.)
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-itervars"/>30.1.1.9 get_itervars()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-itervars" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_itervars(filter_or_dataframe="", include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of iteration variables.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string or dataframe)</i>: The filter expression to
+select the desired iteration variables from the inputs, or a dataframe in
+the "raw" format. Example: <tt>name =~ iaMean AND config:Aloha.slotTime =~ 0</tt>
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the result, pivoted into
+columns. See the "Metadata columns" section of the module documentation
+for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>name</tt> <i>(string)</i>: The name of the iteration variable
+  <li> <tt>value</tt> <i>(string)</i>: The value of the iteration variable.
+  <li> Additional metadata items (run attributes, iteration variables, etc.), as
+requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-scalars"/>30.1.1.10 get_scalars()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-scalars" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_scalars(filter_or_dataframe="", include_attrs=False, include_fields=False, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of scalar results.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired scalars, or a dataframe in the "raw" format. Example: <tt>name =~ "channelUtilization*" AND runattr:replication =~ "#0"</tt>
+  <li> <tt>include_attrs</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, result attributes
+(like <tt>unit</tt> or <tt>source</tt> for example) are appended to the DataFrame,
+pivoted into columns.
+  <li> <tt>include_fields</tt> <i>(bool)</i>: Optional. If <tt>True</tt>, the fields of statistics and
+histograms (<tt>:min</tt>, <tt>:mean</tt>, etc.) are also returned as synthetic scalars.
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the DataFrame, pivoted
+into columns. See the "Metadata columns" section of the module
+documentation for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: The name of the scalar
+  <li> <tt>value</tt> <i>(double)</i>: The value of the scalar
+  <li> Additional metadata items (result attributes, run attributes, iteration
+variables, etc.), as requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-parameters"/>30.1.1.11 get_parameters()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-parameters" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_parameters(filter_or_dataframe="", include_attrs=False, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of parameters - actually computed values of
+individual <tt><a href="../api/classomnetpp_1_1cPar.html">cPar</a></tt> instances in the fully built network.
+
+<p><p> Parameters are considered "pseudo-results", similar to scalars - except
+their values are strings. Even though they act mostly as input to the actual
+simulation run, the actually assigned value of individual <tt><a href="../api/classomnetpp_1_1cPar.html">cPar</a></tt> instances
+is valuable information, as it is the result of the network setup process.
+For example, even if a parameter is set up as an expression like <tt>normal(3, 0.4)</tt> from <tt>omnetpp.ini</tt>, the returned DataFrame will contain the single
+concrete value picked for every instance of the parameter.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired parameters, or a dataframe in the "raw" format. Example: <tt>name =~ "x" AND module =~ Aloha.server</tt>
+  <li> <tt>include_attrs</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, result attributes
+(like <tt>unit</tt> for example) are appended to the DataFrame, pivoted into
+columns.
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the DataFrame, pivoted
+into columns. See the "Metadata columns" section of the module
+documentation for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: The name of the parameter
+  <li> <tt>value</tt> <i>(string)</i>: The value of the parameter.
+  <li> Additional metadata items (result attributes, run attributes, iteration
+variables, etc.), as requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-vectors"/>30.1.1.12 get_vectors()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-vectors" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_vectors(filter_or_dataframe="", include_attrs=False, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False, start_time=-inf, end_time=inf)</tt>
+
+<p>
+<p> Returns a filtered list of vector results.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired vectors, or a dataframe in the "raw" format. Example: <tt>name =~ "radioState*" AND runattr:replication =~ "#0"</tt>
+  <li> <tt>include_attrs</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, result attributes
+(like <tt>unit</tt> or <tt>source</tt> for example) are appended to the DataFrame,
+pivoted into columns.
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the DataFrame, pivoted
+into columns. See the "Metadata columns" section of the module
+documentation for details.
+  <li> <tt>start_time</tt>, <tt>end_time</tt> <i>(double)</i>: Optional time limits to trim the data
+of vector type results. The unit is seconds, both the <tt>vectime</tt> and
+<tt>vecvalue</tt> arrays will be affected, the interval is left-closed,
+right-open.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: The name of the vector
+  <li> <tt>vectime</tt>, <tt>vecvalue</tt> <i>(np.array)</i>: The simulation times and the
+corresponding values in the vector
+  <li> Additional metadata items (result attributes, run attributes, iteration
+variables, etc.), as requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-statistics"/>30.1.1.13 get_statistics()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-statistics" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_statistics(filter_or_dataframe="", include_attrs=False, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of statistics results.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired statistics, or a dataframe in the "raw" format. Example: <tt>name =~ "collisionLength:stat" AND itervar:iaMean =~ "5"</tt>
+  <li> <tt>include_attrs</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, result attributes
+(like <tt>unit</tt> or <tt>source</tt> for example) are appended to the DataFrame,
+pivoted into columns.
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the DataFrame, pivoted
+into columns. See the "Metadata columns" section of the module
+documentation for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: The name of the vector
+  <li> <tt>count</tt>, <tt>sumweights</tt>, <tt>mean</tt>, <tt>stddev</tt>, <tt>min</tt>, <tt>max</tt> <i>(double)</i>: The
+characteristic mathematical properties of the statistics result
+  <li> Additional metadata items (result attributes, run attributes, iteration
+variables, etc.), as requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-histograms"/>30.1.1.14 get_histograms()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-histograms" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_histograms(filter_or_dataframe="", include_attrs=False, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of histogram results.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired histograms, or a dataframe in the "raw" format. Example: <tt>name =~ "collisionMultiplicity:histogram" AND itervar:iaMean =~ "2"</tt>
+  <li> <tt>include_attrs</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, result attributes
+(like <tt>unit</tt> or <tt>source</tt> for example) are appended to the DataFrame,
+pivoted into columns.
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the DataFrame, pivoted
+into columns. See the "Metadata columns" section of the module
+documentation for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>module</tt> <i>(string)</i>: Hierarchical name (a.k.a. full path) of the module that
+recorded the result item
+  <li> <tt>name</tt> <i>(string)</i>: The name of the vector
+  <li> <tt>count</tt>, <tt>sumweights</tt>, <tt>mean</tt>, <tt>stddev</tt>, <tt>min</tt>, <tt>max</tt> <i>(double)</i>: The
+characteristic mathematical properties of the histogram
+  <li> <tt>binedges</tt>, <tt>binvalues</tt> <i>(np.array)</i>: The histogram edge locations and the
+weighted sum of the collected samples in each bin. <tt>len(binedges) == len(binvalues) + 1</tt>
+  <li> <tt>underflows</tt>, <tt>overflows</tt> <i>(double)</i>: The weighted sum of the samples that
+fell outside of the histogram bin range in the two directions
+  <li> Additional metadata items (result attributes, run attributes, iteration
+variables, etc.), as requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-config-entries"/>30.1.1.15 get_config_entries()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-config-entries" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_config_entries(filter_or_dataframe, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of config entries. That is: parameter assignment
+patterns; and global and per-object config options.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired config entries, or a dataframe in the "raw" format. Example: <tt>name =~ sim-time-limit AND itervar:numHosts =~ 10</tt>
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the result, pivoted into
+columns. See the "Metadata columns" section of the module documentation
+for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>name</tt> <i>(string)</i>: The name of the config entry
+  <li> <tt>value</tt> <i>(string)</i>: The value of the config entry
+  <li> Additional metadata items (run attributes, iteration variables, etc.), as
+requested
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.results:get-param-assignments"/>30.1.1.16 get_param_assignments()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.results:get-param-assignments" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_param_assignments(filter_or_dataframe, include_runattrs=False, include_itervars=False, include_param_assignments=False, include_config_entries=False)</tt>
+
+<p>
+<p> Returns a filtered list of parameter assignment patterns. The result is a
+subset of what <tt>get_config_entries</tt> would return with the same arguments.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>filter_or_dataframe</tt> <i>(string)</i>: The filter expression to select the
+desired parameter assignments, or a dataframe in the "raw" format.
+Example: <tt>name =~ **.flowID AND itervar:numHosts =~ 10</tt>
+  <li> <tt>include_runattrs</tt>, <tt>include_itervars</tt>, <tt>include_param_assignments</tt>,
+<tt>include_config_entries</tt> <i>(bool)</i>: Optional. When set to <tt>True</tt>, additional
+pieces of metadata about the run is appended to the result, pivoted into
+columns. See the "Metadata columns" section of the module documentation
+for details.
+
+<p></ul>
+
+<p>
+<p> Columns of the returned DataFrame:
+
+<p><ul>
+  <li> <tt>runID</tt> <i>(string)</i>: Identifies the simulation run
+  <li> <tt>name</tt> <i>(string)</i>: The parameter assignment pattern
+  <li> <tt>value</tt> <i>(string)</i>: The assigned value
+  <li> Additional metadata items (run attributes, iteration variables, etc.), as
+requested
+
+<p></ul>
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.chart"/>30.1.2 Module omnetpp.scave.chart<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart" title="Permalink to this headline">¶</a></h3>
+
+<p><p> Provides access to the properties of the current chart for the chart script.
+
+<p><p> Note that this module is stateful. It is set up appropriately by the OMNeT++
+IDE or <tt>opp_charttool</tt> before the chart script is run.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:ChartScriptError"/>30.1.2.1 Class ChartScriptError<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:ChartScriptError" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Raised by chart scripts when they encounter an error.
+A message parameter can be passed to the constructor,
+which will be displayed on the plot area in the IDE.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:get-properties"/>30.1.2.2 get_properties()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:get-properties" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_properties()</tt>
+
+<p>
+<p> Returns the currently set properties of the chart as a <tt>dict</tt>
+whose keys and values are both all strings.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:get-property"/>30.1.2.3 get_property()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:get-property" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_property(key)</tt>
+
+<p>
+<p> Returns the value of a single property of the chart, or <tt>None</tt> if there is
+no property with the given name (key) set on the chart.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:get-name"/>30.1.2.4 get_name()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:get-name" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_name()</tt>
+
+<p>
+<p> Returns the name of the chart as a string.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:get-chart-type"/>30.1.2.5 get_chart_type()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:get-chart-type" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_chart_type()</tt>
+
+<p>
+<p> Returns the chart type, one of the strings "bar"/"histogram"/"line"/"matplotlib"
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:is-native-chart"/>30.1.2.6 is_native_chart()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:is-native-chart" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>is_native_chart()</tt>
+
+<p>
+<p> Returns True if this chart uses the IDE's built-in plotting widgets.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:set-suggested-chart-name"/>30.1.2.7 set_suggested_chart_name()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:set-suggested-chart-name" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_suggested_chart_name(name)</tt>
+
+<p>
+<p> Sets a proposed name for the chart. The IDE may offer this name to the user
+when saving the chart.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.chart:set-observed-column-names"/>30.1.2.8 set_observed_column_names()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.chart:set-observed-column-names" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_observed_column_names(column_names)</tt>
+
+<p>
+<p> Sets the DataFrame column names observed during the chart script.
+The IDE may use it for content assist when the user edits the legend format string.
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.ideplot"/>30.1.3 Module omnetpp.scave.ideplot<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot" title="Permalink to this headline">¶</a></h3>
+
+<p><p> This module is the interface for displaying plots using the IDE's native
+(non-Matplotlib) plotting widgets from chart scripts. The API is intentionally
+very close to <tt>matplotlib.pyplot</tt>: most functions and the parameters they accept
+are a subset of <tt>pyplot</tt>'s interface. If one restricts themselves to a subset of
+Matplotlib's functionality, switching between <tt>omnetpp.scave.ideplot</tt> and
+<tt>matplotlib.pyplot</tt> in a chart script may be as simple as much as editing the
+<tt>import</tt> statement.
+
+<p><p> When the API is used outside the context of a native plotting widget (such as
+during the run of <tt>opp_charttool</tt>, or in IDE during image export), the functions
+are emulated with Matplotlib.
+
+<p><p> Note that this module is stateful. It is set up appropriately by the OMNeT++ IDE
+or <tt>opp_charttool</tt> before the chart script is run.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:is-native-plot"/>30.1.3.1 is_native_plot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:is-native-plot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>is_native_plot()</tt>
+
+<p>
+<p> Returns True if the script is running in the context of a native plotting
+widget, and False otherwise.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:plot"/>30.1.3.2 plot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:plot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot(xs, ys, key=None, label=None, drawstyle=None, linestyle=None, linewidth=None, color=None, marker=None, markersize=None)</tt>
+
+<p>
+<p> Plot y versus x as lines and/or markers. Call <tt>plot</tt> multiple times
+to plot multiple sets of data.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>x</tt>, <tt>y</tt> <i>(array-like or scalar)</i>: The horizontal / vertical coordinates of the data points.
+  <li> <tt>key</tt> <i>(string)</i>: Identifies the series in the native plot widget.
+  <li> <tt>label</tt> <i>(string)</i>: Series label for the legend
+  <li> <tt>drawstyle</tt> <i>(string)</i>: Matplotlib draw style ('default', 'steps', 'steps-pre', 'steps-mid', 'steps-post')
+  <li> <tt>linestyle</tt> <i>(string)</i>: Matplotlib line style ('-', '--', '-.', ':', etc}
+  <li> <tt>linewidth</tt> <i>(float)</i>: Line width in pixels
+  <li> <tt>color</tt> <i>(string)</i>: Matplotlib color name or abbreviation ('b' for blue, 'g' for green, etc.)
+  <li> <tt>marker</tt> <i>(string)</i>: Matplotlib marker name ('.', ',', 'o', 'x', '+', etc.)
+  <li> <tt>markersize</tt> <i>(float)</i>: Size of markers in pixels.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:hist"/>30.1.3.3 hist()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:hist" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>hist(x, bins, key=None, density=False, weights=None, cumulative=False, bottom=None, histtype="stepfilled", color=None, label=None, linewidth=None, underflows=0.0, overflows=0.0, minvalue=nan, maxvalue=nan)</tt>
+
+<p>
+<p> Make a histogram plot. This function adds one histogram the bar plot; make
+multiple calls to add multiple histograms.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>x</tt> <i>(array-like)</i>: Input values.
+  <li> <tt>bins</tt> <i>(array-like)</i>: Bin edges, including left edge of first bin and right edge of last bin.
+  <li> <tt>key</tt> <i>(string)</i>: Identifies the series in the native plot widget.
+  <li> <tt>density</tt> <i>(bool)</i>: See <tt>mpl.hist()</tt>.
+  <li> <tt>weights</tt> <i>(array-like)</i>: Weights.
+  <li> <tt>cumulative</tt> <i>(bool)</i>: See <tt>mpl.hist()</tt>.
+  <li> <tt>bottom</tt> <i>(float)</i>: Location of the bottom baseline for bins.
+  <li> <tt>histtype</tt> <i>(string)</i>: Whether to fill the area under the plot. Accepted values are 'step' and 'stepfilled'.
+  <li> <tt>color</tt> <i>(string)</i>: Matplotlib color name or abbreviation ('b' for blue, 'g' for green, etc.)
+  <li> <tt>label</tt> <i>(string)</i>: Series label for the legend
+  <li> <tt>linewidth</tt> <i>(float)</i>: Line width in pixels
+  <li> <tt>underflows</tt>, <tt>overflows</tt>: Number of values / sum of weights outside the histogram bins in both directions.
+  <li> <tt>minvalue</tt>, <tt>maxvalue</tt>: The minimum and maximum value, or <tt>nan</tt> if unknown.
+
+<p></ul>
+
+<p>
+<p> Restrictions:
+
+<p><ol>
+  <li> Overflow bin data (minvalue, maxvalue, underflows and overflows) is not accepted by <tt>pyplot.hist()</tt>.
+  <li> The native plot widget only accepts a precomputed histogram (using the trick documented for <tt>pyplot.hist()</tt>)
+
+<p></ol>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:bar"/>30.1.3.4 bar()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:bar" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>bar(x, height, width=0.8, key=None, label=None, color=None, edgecolor=None)</tt>
+
+<p>
+<p> Make a bar plot. This function adds one series to the bar plot; make
+multiple calls to add multiple series.
+
+<p><p> The bars are positioned at x with the given alignment. Their dimensions
+are given by width and height. The vertical baseline is bottom (default 0).
+
+<p><p> Each of x, height, width, and bottom may either be a scalar applying to
+all bars, or it may be a sequence of length N providing a separate value
+for each bar.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>x</tt> <i>(sequence of scalars)</i>: The x coordinates of the bars.
+  <li> <tt>height</tt> <i>(scalar or sequence of scalars)</i>: The height(s) of the bars.
+  <li> <tt>width</tt> <i>(scalar or array-like)</i>: The width(s) of the bars.
+  <li> <tt>key</tt> <i>(string)</i>: Identifies the series in the native plot widget.
+  <li> <tt>label</tt> <i>(string)</i>: The label of the series the bars represent .
+  <li> <tt>color</tt> <i>(string)</i>: The fill color of the bars.
+  <li> <tt>edgecolor</tt> <i>(string)</i>: The edge color of the bars.
+
+<p></ul>
+
+<p>
+<p> The native plot implementation has the following restrictions:
+
+<p><ul>
+  <li> widths are automatic (parameter is ignored)
+  <li> x coordinates are automatic (values are ignored)
+  <li> height must be a sequence (cannot be a scalar)
+  <li> in multiple calls to bar(), the lengths of the height sequence must be
+equal (i.e. all series must have the same number of values)
+  <li> default color is grey (Matplotlib assigns a different color to each series)
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:set-property"/>30.1.3.5 set_property()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:set-property" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_property(key, value)</tt>
+
+<p>
+<p> Sets one property of the native plot widget to the given value. When invoked
+outside the contex of a native plot widget, the function does nothing.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>key</tt> <i>(string)</i>: Name of the property.
+  <li> <tt>value</tt> <i>(string)</i>: The value to set. If any other type than string is passed in, it will be converted to string.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:set-properties"/>30.1.3.6 set_properties()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:set-properties" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_properties(props)</tt>
+
+<p>
+<p> Sets several properties of the native plot widget. It is functionally equivalent to
+repeatedly calling <tt>set_property</tt> with the entries of the <tt>props</tt> dictionary.
+When invoked outside the contex of a native plot widget (TODO?), the function does nothing.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>props</tt> <i>(dict)</i>: The properties to set.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:get-supported-property-keys"/>30.1.3.7 get_supported_property_keys()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:get-supported-property-keys" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_supported_property_keys()</tt>
+
+<p>
+<p> Returns the list of property names that the native plot widget supports, such as
+'Plot.Title', 'X.Axis.Max' and 'Legend.Display', among many others.
+
+<p><p> Note: This method has no equivalent in <tt>pyplot</tt>. When the script runs outside the IDE  (TODO?),
+the method returns an empty list.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:set-warning"/>30.1.3.8 set_warning()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:set-warning" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_warning(warning: str)</tt>
+
+<p>
+<p> Displays the given warning text in the plot.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:title"/>30.1.3.9 title()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:title" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>title(label: str)</tt>
+
+<p>
+<p> Sets the plot title to the given string.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:xlabel"/>30.1.3.10 xlabel()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:xlabel" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>xlabel(xlabel: str)</tt>
+
+<p>
+<p> Sets the label of the X axis to the given string.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:ylabel"/>30.1.3.11 ylabel()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:ylabel" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>ylabel(ylabel: str)</tt>
+
+<p>
+<p> Sets the label of the Y axis to the given string..
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:xlim"/>30.1.3.12 xlim()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:xlim" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>xlim(left=None, right=None)</tt>
+
+<p>
+<p> Sets the limits of the X axis.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>left</tt> <i>(float)</i>: The left xlim in data coordinates. Passing None leaves the limit unchanged.
+  <li> <tt>right</tt> <i>(float)</i>: The right xlim in data coordinates. Passing None leaves the limit unchanged.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:ylim"/>30.1.3.13 ylim()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:ylim" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>ylim(bottom=None, top=None)</tt>
+
+<p>
+<p> Sets the limits of the Y axis.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>bottom</tt> <i>(float)</i>: The bottom ylim in data coordinates. Passing None leaves the limit unchanged.
+  <li> <tt>top</tt> <i>(float)</i>: The top ylim in data coordinates. Passing None leaves the limit unchanged.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:xscale"/>30.1.3.14 xscale()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:xscale" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>xscale(value: str)</tt>
+
+<p>
+<p> Sets the scale of the X axis. Possible values are 'linear' and 'log'.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:yscale"/>30.1.3.15 yscale()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:yscale" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>yscale(value: str)</tt>
+
+<p>
+<p> Sets the scale of the Y axis.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:xticks"/>30.1.3.16 xticks()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:xticks" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>xticks(ticks=None, labels=None, rotation=0)</tt>
+
+<p>
+<p> Sets the current tick locations and labels of the x-axis.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>ticks</tt> <i>(array_like)</i>: A list of positions at which ticks should be placed. You can pass an empty list to disable xticks.
+  <li> <tt>labels</tt> <i>(array_like)</i>: A list of explicit labels to place at the given locs.
+  <li> <tt>rotation</tt> <i>(float)</i>: Label rotation in degrees.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:grid"/>30.1.3.17 grid()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:grid" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>grid(b=True, which="major")</tt>
+
+<p>
+<p> Configure the grid lines.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>b</tt> <i>(bool or <tt>None</tt>)</i>: Whether to show the grid lines.
+  <li> <tt>which</tt> <i>('major', 'minor' or 'both')</i>: The grid lines to apply the changes on.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.ideplot:legend"/>30.1.3.18 legend()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.ideplot:legend" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>legend(show=None, frameon=None, loc=None)</tt>
+
+<p>
+<p> Place a legend on the axes.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>show</tt> <i>(bool or <tt>None</tt>)</i>: Whether to show the legend. TODO does pyplot have this?
+  <li> <tt>frameon</tt> <i>(bool or <tt>None</tt>)</i>: Control whether the legend should be drawn on a patch (frame).
+  Default is <tt>None</tt>, which will take the value from the resource file.
+  <li> <tt>loc</tt> <i>(string or <tt>None</tt>)</i>: The location of the legend. Possible values are
+  'best', 'upper right', 'upper left', 'lower left', 'lower right', 'right',
+  'center left', 'center right', 'lower center', 'upper center', 'center'
+  (these are the values supported by Matplotlib), plus additionally
+  'outside top left', 'outside top center', 'outside top right',
+  'outside bottom left', 'outside bottom center', 'outside bottom right',
+  'outside left top', 'outside left center', 'outside left bottom',
+  'outside right top', 'outside right center', 'outside right bottom'.
+
+<p></ul>
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.utils"/>30.1.4 Module omnetpp.scave.utils<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils" title="Permalink to this headline">¶</a></h3>
+
+<p><p> A collection of utility function for data manipulation and plotting, built
+on top of Pandas data frames and the <tt>chart</tt> and <tt>ideplot</tt> packages from
+<tt>omnetpp.scave</tt>. Functions in this module have been written largely to the
+needs of the chart templates that ship with the IDE.
+
+<p><p> There are some functions which are (almost) mandatory elements in a chart script.
+These are the following.
+
+<p><p> If you want style settings in the chart dialog to take effect:
+
+<p><ul>
+  <li> <tt>preconfigure_plot()</tt>
+  <li> <tt>postconfigure_plot()</tt>
+
+<p></ul>
+
+<p>
+<p> If you want image/data export to work:
+
+<p><ul>
+  <li> <tt>export_image_if_needed()</tt>
+  <li> <tt>export_data_if_needed()</tt>
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:make-legend-label"/>30.1.4.1 make_legend_label()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:make-legend-label" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>make_legend_label(legend_cols, row, props={})</tt>
+
+<p>
+<p> Produces a reasonably good label text (to be used in a chart legend) for a result row from
+a DataFrame. The legend label is produced as follows.
+
+<p><p> First, a base version of the legend label is produced:
+
+<p><ol>
+  <li> If the DataFrame contains a <tt>legend</tt> column, its content is used
+  <li> Otherwise, if there is a <tt>legend_format</tt> property, it is used as a format string
+for producing the legend label. The format string may contain references to other
+columns of the DataFrame in the "$name" or "${name}" form.
+  <li> Otherwise, the legend label is concatenated from the columns listed in <tt>legend_cols</tt>,
+a list whose contents is usually produced using the <tt>extract_label_columns()</tt> function.
+
+<p></ol>
+
+<p>
+<p> Second, if there is a <tt>legend_replacements</tt> property, the series of regular expression
+find/replace operations described in it are performed. <tt>legend_replacements</tt> is expected
+to be a multi-line string, where each line contains a replacement in the customary
+"/findstring/replacement/" form. "findstring" should be a valid regex, and "replacement"
+is a string that may contain match group references ("\1", "\2", etc.). If "/" is unsuitable
+as separator, other characters may also be used; common choices are "|" and "!".
+Similar to the format string (<tt>legend_format</tt>), both "findstring" and "replacement"
+may contain column references in the "$name" or "${name}" form. (Note that "findstring"
+may still end in "$" to match the end of the string, it won't collide with column references.)
+
+<p><p> Possible errors:
+
+<p><ul>
+  <li> References to nonexistent columns in <tt>legend_format</tt> or <tt>legend_replacements</tt> (<tt>KeyError</tt>)
+  <li> Malformed regex in the "findstring" parts of <tt>legend_replacements</tt> (<tt>re.error</tt>)
+  <li> Invalid group reference in the "replacement" parts of <tt>legend_replacements</tt> (<tt>re.error</tt>)
+
+<p></ul>
+
+<p>
+<p> Parameters:
+
+<p><ul>
+  <li> <tt>row</tt> <i>(named tuple)</i>: The row from the dataframe.
+  <li> <tt>props</tt> <i>(dict)</i>: The properties that control how the legend is produced
+  <li> <tt>legend_cols</tt> <i>(list of strings)</i>: The names of columns chosen for the legend.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-bars"/>30.1.4.2 plot_bars()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-bars" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_bars(df, errors_df=None, meta_df=None, props={})</tt>
+
+<p>
+<p> Creates a bar plot from the dataframe, with styling and additional input
+coming from the properties. Each row in the dataframe defines a series.
+
+<p><p> Group names (displayed on the x axis) are taken from the column index.
+
+<p><p> The name of the variable represented by the values can be passed in as
+the <tt>variable_name</tt> argument (as it is not present in the dataframe); if so,
+it will become the y axis label.
+
+<p><p> Error bars can be drawn by providing an extra dataframe of identical
+dimensions as the main one. Error bars will protrude by the values in the
+errors dataframe both up and down (i.e. range is 2x error).
+
+<p><p> To make the legend labels customizable, an extra dataframe can be provided,
+which contains any columns of metadata for each series.
+
+<p><p> Colors are assigned automatically. The <tt>cycle_seed</tt> property allows you
+to select other combinations if the default one is not suitable.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: the dataframe
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+  <li> <tt>variable_name</tt> <i>(string)</i>: The name of the variable represented by the values.
+  <li> <tt>errors_df</tt>: dataframe with the errors (in y axis units)
+  <li> <tt>meta_df</tt>: dataframe with the metadata about each series
+
+<p></ul>
+
+<p>
+<p> Notable properties that affect the plot:
+
+<p><ul>
+  <li> <tt>baseline</tt>: The y value at which the x axis is drawn.
+  <li> <tt>bar_placement</tt>: Selects the arrangement of bars: aligned, overlap, stacked, etc.
+  <li> <tt>xlabel_rotation</tt>: Amount of counter-clockwise rotation of x axis labels a.k.a. group names, in degrees.
+  <li> <tt>title</tt>: Plot title (autocomputed if missing).
+  <li> <tt>cycle_seed</tt>: Alters the sequence in which colors are assigned to series.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-vectors"/>30.1.4.3 plot_vectors()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-vectors" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_vectors(df, props, legend_func=make_legend_label)</tt>
+
+<p>
+<p> Creates a line plot from the dataframe, with styling and additional input
+coming from the properties. Each row in the dataframe defines a series.
+
+<p><p> Colors and markers are assigned automatically. The <tt>cycle_seed</tt> property
+allows you to select other combinations if the default one is not suitable.
+
+<p><p> A function to produce the legend labels can be passed in. By default,
+<tt>make_legend_label()</tt> is used, which offers many ways to influence the
+legend via dataframe columns and chart properties. In the absence of
+more specified settings, the legend is normally computed from columns which best
+differentiate among the vectors.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: the dataframe
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+  <li> <tt>legend_func</tt>: the function to produce custom legend labels
+
+<p></ul>
+
+<p>
+<p> Columns of the dataframe:
+
+<p><ul>
+  <li> <tt>vectime</tt>, <tt>vecvalue</tt> <i>(Numpy <tt>ndarray</tt>'s of matching sizes)</i>: the x and y coordinates for the plot
+  <li> <tt>interpolationmode</tt> <i>(str, optional)</i>: this column normally comes from a result attribute, and determines how the points will be connected
+  <li> <tt>legend</tt> <i>(optional)</i>: legend label for the series; if missing, legend labels are derived from other columns
+  <li> <tt>name</tt>, <tt>title</tt>, <tt>module</tt>, etc. <i>(optional)</i>: provide input for the legend
+
+<p></ul>
+
+<p>
+<p> Notable properties that affect the plot:
+
+<p><ul>
+  <li> <tt>title</tt>: plot title (autocomputed if missing)
+  <li> <tt>drawstyle</tt>: Matplotlib draw style; if present, it overrides the draw style derived from <tt>interpolationmode</tt>.
+  <li> <tt>linestyle</tt>, <tt>linecolor</tt>, <tt>linewidth</tt>, <tt>marker</tt>, <tt>markersize</tt>: styling
+  <li> <tt>cycle_seed</tt>: Alters the sequence in which colors and markers are assigned to series.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-vectors-separate"/>30.1.4.4 plot_vectors_separate()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-vectors-separate" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_vectors_separate(df, props, legend_func=make_legend_label)</tt>
+
+<p>
+<p> This is very similar to <tt>plot_vectors</tt>, with identical usage.
+The only difference is in the end result, where each vector will
+be plotted in its own separate set of axes (coordinate system),
+arranged vertically, with a shared X axis during navigation.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-histograms"/>30.1.4.5 plot_histograms()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-histograms" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_histograms(df, props, legend_func=make_legend_label)</tt>
+
+<p>
+<p> Creates a histogram plot from the dataframe, with styling and additional input
+coming from the properties. Each row in the dataframe defines a histogram.
+
+<p><p> Colors are assigned automatically.  The <tt>cycle_seed</tt> property allows you to
+select other combinations if the default one is not suitable.
+
+<p><p> A function to produce the legend labels can be passed in. By default,
+<tt>make_legend_label()</tt> is used, which offers many ways to influence the
+legend via dataframe columns and chart properties. In the absence of
+more specified settings, the legend is normally computed from columns which best
+differentiate among the histograms.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: The dataframe.
+  <li> <tt>props</tt> <i>(dict)</i>: The properties.
+  <li> <tt>legend_func</tt> <i>(function)</i>: The function to produce custom legend labels.
+ See <tt>utils.make_legend_label()</tt> for prototype and semantics.
+
+<p></ul>
+
+<p>
+<p> Columns of the dataframe:
+
+<p><ul>
+  <li> <tt>binedges</tt>, <tt>binvalues</tt> <i>(array-like, <tt>len(binedges)==len(binvalues)+1</tt>)</i>:
+ The bin edges and the bin values (count or sum of weights) for the histogram.
+  <li> <tt>min</tt>, <tt>max</tt>, <tt>underflows</tt>, <tt>overflows</tt> <i>(float, optional)</i>: The minimum/maximum
+ values, and the bin values for the underflow/overflow bins. These four columns
+ must either be all present or all absent from the dataframe.
+  <li> <tt>legend</tt> <i>(string, optional)</i>: Legend label for the series. If missing,
+ legend labels are derived from other columns.
+  <li> <tt>name</tt>, <tt>title</tt>, <tt>module</tt>, etc. <i>(optional)</i>: Provide input for the legend.
+
+<p></ul>
+
+<p>
+<p> Notable properties that affect the plot:
+
+<p><ul>
+  <li> <tt>normalize</tt> <i>(bool)</i>: If true, normalize the sum of the bin values to 1. If
+<tt>normalize</tt> is true (and <tt>cumulative</tt> is false), the probability density
+ function (PDF) will be displayed.
+  <li> <tt>cumulative</tt> <i>(bool)</i>: If true, show each bin as the sum of the previous bin
+ values plus itself. If both <tt>normalize</tt> and <tt>cumulative</tt> are true, that
+ results in the cumulative density function (CDF) being displayed.
+  <li> <tt>show_overflows</tt> <i>(bool)</i>: If true, show the underflow/overflow bins.
+  <li> <tt>title</tt>: Plot title (autocomputed if missing).
+  <li> <tt>drawstyle</tt>: Selects whether to fill the area below the histogram line.
+  <li> <tt>linestyle</tt>, <tt>linecolor</tt>, <tt>linewidth</tt>: Styling.
+  <li> <tt>cycle_seed</tt>: Alters the sequence in which colors and markers are assigned to series.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-lines"/>30.1.4.6 plot_lines()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-lines" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_lines(df, props, legend_func=make_legend_label)</tt>
+
+<p>
+<p> Creates a line plot from the dataframe, with styling and additional input
+coming from the properties. Each row in the dataframe defines a line.
+
+<p><p> Colors are assigned automatically.  The <tt>cycle_seed</tt> property allows you to
+select other combinations if the default one is not suitable.
+
+<p><p> A function to produce the legend labels can be passed in. By default,
+<tt>make_legend_label()</tt> is used, which offers many ways to influence the
+legend via dataframe columns and chart properties. In the absence of
+more specified settings, the legend is normally computed from columns which best
+differentiate among the lines.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: The dataframe.
+  <li> <tt>props</tt> <i>(dict)</i>: The properties.
+  <li> <tt>legend_func</tt> <i>(function)</i>: The function to produce custom legend labels.
+ See <tt>utils.make_legend_label()</tt> for prototype and semantics.
+
+<p></ul>
+
+<p>
+<p> Columns of the dataframe:
+
+<p><ul>
+  <li> <tt>x</tt>, <tt>y</tt> <i>(array-like, <tt>len(x)==len(y)</tt>)</i>: The X and Y coordinates of the points.
+  <li> <tt>error</tt> <i>(array-like, <tt>len(x)==len(y)</tt>, optional)</i>:
+ The half lengths of the error bars for each point.
+  <li> <tt>legend</tt> <i>(string, optional)</i>: Legend label for the series. If missing,
+ legend labels are derived from other columns.
+  <li> <tt>name</tt>, <tt>title</tt>, <tt>module</tt>, etc. <i>(optional)</i>: Provide input for the legend.
+
+<p></ul>
+
+<p>
+<p> Notable properties that affect the plot:
+
+<p><ul>
+  <li> <tt>title</tt>: Plot title (autocomputed if missing).
+  <li> <tt>linewidth</tt>: Line width.
+  <li> <tt>marker</tt>: Marker style.
+  <li> <tt>linestyle</tt>, <tt>linecolor</tt>, <tt>linewidth</tt>: Styling.
+  <li> <tt>error_style</tt>: If <tt>error</tt> is present, controls how the error is shown.
+ Accepted values: "Error bars", "Error band"
+  <li> <tt>cycle_seed</tt>: Alters the sequence in which colors and markers are assigned to series.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:plot-boxwhiskers"/>30.1.4.7 plot_boxwhiskers()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:plot-boxwhiskers" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>plot_boxwhiskers(df, props, legend_func=make_legend_label)</tt>
+
+<p>
+<p> Creates a box and whiskers plot from the dataframe, with styling and additional
+input coming from the properties. Each row in the dataframe defines one set
+of a box and two whiskers.
+
+<p><p> Colors are assigned automatically.  The <tt>cycle_seed</tt> property allows you to
+select other combinations if the default one is not suitable.
+
+<p><p> A function to produce the legend labels can be passed in. By default,
+<tt>make_legend_label()</tt> is used, which offers many ways to influence the
+legend via dataframe columns and chart properties. In the absence of
+more specified settings, the legend is normally computed from columns which best
+differentiate among the boxes.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: The dataframe.
+  <li> <tt>props</tt> <i>(dict)</i>: The properties.
+  <li> <tt>legend_func</tt> <i>(function)</i>: The function to produce custom legend labels.
+ See <tt>utils.make_legend_label()</tt> for prototype and semantics.
+
+<p></ul>
+
+<p>
+<p> Columns of the dataframe:
+
+<p><ul>
+  <li> <tt>min</tt>, <tt>max</tt>, <tt>mean</tt>, <tt>stddev</tt>, <tt>count</tt> <i>(float)</i>: The minimum/maximum
+ values, mean, standard deviation, and sample count of the data.
+  <li> <tt>legend</tt> <i>(string, optional)</i>: Legend label for the series. If missing,
+ legend labels are derived from other columns.
+  <li> <tt>name</tt>, <tt>title</tt>, <tt>module</tt>, etc. <i>(optional)</i>: Provide input for the legend.
+
+<p></ul>
+
+<p>
+<p> Notable properties that affect the plot:
+
+<p><ul>
+  <li> <tt>title</tt>: Plot title (autocomputed if missing).
+  <li> <tt>cycle_seed</tt>: Alters the sequence in which colors and markers are assigned to series.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:customized-box-plot"/>30.1.4.8 customized_box_plot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:customized-box-plot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>customized_box_plot(percentiles, labels=None, axes=None, redraw=True, *args, **kwargs)</tt>
+
+<p>
+<p> Generates a customized box-and-whiskers plot based on explicitly specified
+percentile values. This method is necessary because <tt>pyplot.boxplot()</tt> insists
+on computing the stats from the raw data (which we often don't have) itself.
+
+<p><p> The data are in the <tt>percentiles</tt> argument, which should be list of tuples.
+One box will be drawn for each tuple. Each tuple contains 6 elements (or 5,
+because the last one is optional):
+
+<p><p> (<i>q1_start</i>, <i>q2_start</i>, <i>q3_start</i>, <i>q4_start</i>, <i>q4_end</i>, <i>fliers</i>)
+
+<p><p> The first five elements have following meaning:
+
+<p><ul>
+  <li> <i>q1_start</i>: y coord of bottom whisker cap
+  <li> <i>q2_start</i>: y coord of bottom of the box
+  <li> <i>q3_start</i>: y coord of median mark
+  <li> <i>q4_start</i>: y coord of top of the box
+  <li> <i>q4_end</i>: y coord of top whisker cap
+
+<p></ul>
+
+<p>
+<p> The last element, <i>fliers</i>, is a list, containing the values of the
+outlier points.
+
+<p><p> x coords of the box-and-whiskers plots are automatic.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>percentiles</tt>: The list of tuples.
+  <li> <tt>labels</tt>: If provided, the legend labels for the boxes.
+  <li> <tt>axes</tt>: The axes object of the plot.
+  <li> <tt>redraw</tt>: If False, redraw is deferred.
+  <li> <tt>args</tt>, <tt>kwargs</tt>: Passed to <tt>axes.boxplot()</tt>.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:preconfigure-plot"/>30.1.4.9 preconfigure_plot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:preconfigure-plot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>preconfigure_plot(props)</tt>
+
+<p>
+<p> Configures the plot according to the given properties, which normally
+get their values from setting in the "Configure Chart" dialog.
+Calling this function before plotting was performed should be a standard
+part of chart scripts.
+
+<p><p> A partial list of properties taken into account for native plots:
+
+<p><ul>
+  <li> property keys understood by the plot widget, see <tt>ideplot.get_supported_property_keys()</tt>
+
+<p></ul>
+
+<p>
+<p> And for Matplotlib plots:
+
+<p><ul>
+  <li> <tt>plt.style</tt>
+  <li> properties listed in the <tt>matplotlibrc</tt> property
+  <li> properties prefixed with <tt>matplotlibrc.</tt>
+
+<p></ul>
+
+<p>
+<p> Parameters:
+
+<p><ul>
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:postconfigure-plot"/>30.1.4.10 postconfigure_plot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:postconfigure-plot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>postconfigure_plot(props)</tt>
+
+<p>
+<p> Configures the plot according to the given properties, which normally
+get their values from setting in the "Configure Chart" dialog.
+Calling this function after plotting was performed should be a standard part
+of chart scripts.
+
+<p><p> A partial list of properties taken into account:
+
+<p><ul>
+  <li> <tt>yaxis_title</tt>, <tt>yaxis_title</tt>, <tt>xaxis_min</tt>,  <tt>xaxis_max</tt>, <tt>yaxis_min</tt>,
+<tt>yaxis_max</tt>, <tt>xaxis_log</tt>, <tt>yaxis_log</tt>, <tt>legend_show</tt>, <tt>legend_border</tt>,
+<tt>legend_placement</tt>, <tt>grid_show</tt>, <tt>grid_density</tt>
+  <li> properties listed in the <tt>plot.properties</tt> property
+
+<p></ul>
+
+<p>
+<p> Parameters:
+
+<p><ul>
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:export-image-if-needed"/>30.1.4.11 export_image_if_needed()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:export-image-if-needed" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>export_image_if_needed(props)</tt>
+
+<p>
+<p> If a certain property is set, save the plot in the selected image format.
+Calling this function should be a standard part of chart scripts, as it is what
+makes the "Export image" functionality of the IDE and <tt>opp_charttool</tt> work.
+
+<p><p> Note that for export, even IDE-native charts are rendered using Matplotlib.
+
+<p><p> The properties that are taken into account:
+
+<p><ul>
+  <li> <tt>export_image</tt> <i>(boolean)</i>: Controls whether to perform the exporting. This is
+ normally <tt>false</tt>, and only set to <tt>true</tt> by the IDE or opp_charttool when
+ image export is requested.
+  <li> <tt>image_export_format</tt>: The default is SVG. Accepted formats (and their names) are the ones supported by Matplotlib.
+  <li> <tt>image_export_folder</tt>: The folder in which the image file is to be created.
+  <li> <tt>image_export_filename</tt>: The output file name. If it has no extension,
+ one will be added based on the format. If missing or empty, a sanitized
+ version of the chart name is used.
+  <li> <tt>image_export_width</tt>: Image width in inches (default: 6")
+  <li> <tt>image_export_height</tt>: Image height in inches (default: 4")
+  <li> <tt>image_export_dpi</tt>: DPI setting, default 96. For raster image formats, the
+ image dimensions are produced as width (or height) times dpi.
+
+<p></ul>
+
+<p>
+<p> Note that these properties come from two sources to allow meaningful batch
+export. <tt>export_image</tt>, <tt>image_export_format</tt>, <tt>image_export_folder</tt> and
+<tt>image_export_dpi</tt> come from the export dialog because they are common
+to all charts, while <tt>image_export_filename</tt>, <tt>image_export_width</tt> and
+<tt>image_export_height</tt> come from the chart properties because they are
+specific to each chart. Note that <tt>image_export_dpi</tt> is used for controlling
+the resolution (for raster image formats) while letting charts maintain
+their own aspect ratio and relative sizes.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:get-image-export-filepath"/>30.1.4.12 get_image_export_filepath()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:get-image-export-filepath" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_image_export_filepath(props)</tt>
+
+<p>
+<p> Returns the file path for the image to export based on the
+<tt>image_export_format</tt>, <tt>image_export_folder</tt> and
+<tt>image_export_filename</tt> properties given in <tt>props</tt>.
+If a relative filename is returned, it is relative to the
+working directory when the image export takes place.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:export-data-if-needed"/>30.1.4.13 export_data_if_needed()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:export-data-if-needed" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>export_data_if_needed(df, props, **kwargs)</tt>
+
+<p>
+<p> If a certain property is set, save the dataframe in CSV format.
+Calling this function should be a standard part of chart scripts, as it is what
+makes the "Export data" functionality of the IDE and <tt>opp_charttool</tt> work.
+
+<p><p> The properties that are taken into account:
+
+<p><ul>
+  <li> <tt>export_data</tt> <i>(boolean)</i>: Controls whether to perform the exporting. This is
+ normally <tt>false</tt>, and only set to <tt>true</tt> by the IDE or opp_charttool when
+ data export is requested.
+  <li> <tt>data_export_folder</tt>: The folder in which the CSV file is to be created.
+  <li> <tt>data_export_filename</tt>: The output file name. If missing or empty, a
+ sanitized version of the chart name is used.
+
+<p></ul>
+
+<p>
+<p> Note that these properties come from two sources to allow meaningful batch
+export. <tt>export_data</tt> and <tt>image_export_folder</tt> come from the export dialog
+because they are common to all charts, and <tt>image_export_filename</tt> comes
+from the chart properties because it is specific to each chart.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt>: the dataframe to save
+  <li> <tt>props</tt> <i>(dict)</i>: the properties
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:get-data-export-filepath"/>30.1.4.14 get_data_export_filepath()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:get-data-export-filepath" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_data_export_filepath(props)</tt>
+
+<p>
+<p> Returns the file path for the data to export based on the
+<tt>data_export_format</tt>, <tt>data_export_folder</tt> and
+<tt>data_export_filename</tt> properties given in <tt>props</tt>.
+If a relative filename is returned, it is relative to the
+working directory when the data export takes place.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:histogram-bin-edges"/>30.1.4.15 histogram_bin_edges()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:histogram-bin-edges" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>histogram_bin_edges(values, bins=None, range=None, weights=None)</tt>
+
+<p>
+<p> An improved version of numpy.histogram_bin_edges.
+This will only return integer edges for input arrays consisting entirely of integers
+(unless the <tt>bins</tt> are explicitly given otherwise).
+In addition, the rightmost edge will always be strictly greater than the maximum of <tt>values</tt>
+(unless explicitly given otherwise in <tt>range</tt>).
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:confidence-interval"/>30.1.4.16 confidence_interval()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:confidence-interval" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>confidence_interval(alpha, data)</tt>
+
+<p>
+<p> Returns the half-length of the confidence interval of the mean of <tt>data</tt>, assuming
+normal distribution, for the given confidence level <tt>alpha</tt>.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>alpha</tt> <i>(float)</i>: Confidence level, must be in the [0..1] range.
+  <li> <tt>data</tt> <i>(array-like)</i>: An array containing the values.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:pivot-for-barchart"/>30.1.4.17 pivot_for_barchart()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:pivot-for-barchart" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>pivot_for_barchart(df, groups, series, confidence_level=None)</tt>
+
+<p>
+<p> Turns a DataFrame containing scalar results (in the format returned
+by <tt>results.get_scalars()</tt>) into a 3-tuple of a value, an error, and
+a metadata DataFrame, which can then be passed to <tt>utils.plot_bars()</tt>.
+The error dataframe is None if no confidence level is given.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt> <i>(pandas.DataFrame)</i>: The dataframe to pivot.
+  <li> <tt>groups</tt> <i>(list)</i>: A list of column names, the values in which will
+ be used as names for the bar groups.
+  <li> <tt>series</tt> <i>(list)</i>: A list of column names, the values in which will
+ be used as names for the bar series.
+  <li> <tt>confidence_level</tt> <i>(float, optional)</i>:
+ The confidence level to use when computing the sizes of the error bars.
+
+<p></ul>
+
+<p>
+<p> Returns:
+
+<p><ul>
+  <li> A triplet of DataFrames containing the pivoted data: (values, errors, metadata)
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:pivot-for-scatterchart"/>30.1.4.18 pivot_for_scatterchart()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:pivot-for-scatterchart" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>pivot_for_scatterchart(df, xaxis_itervar, group_by, confidence_level=None)</tt>
+
+<p>
+<p> Turns a DataFrame containing scalar results (in the format returned
+by <tt>results.get_scalars()</tt>) into a DataFrame which can then be
+passed to <tt>utils.plot_lines()</tt>.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt> <i>(pandas.DataFrame)</i>: The dataframe to pivot.
+  <li> <tt>xaxis_itervar</tt> <i>(string)</i>: The name of the iteration variable whose
+ values are to be used as X coordinates.
+  <li> <tt>group_by</tt> <i>(list)</i>: A list of column names, the values in which will
+ be used to group the scalars into lines.
+  <li> <tt>confidence_level</tt> <i>(float, optional)</i>:
+ The confidence level to use when computing the sizes of the error bars.
+
+<p></ul>
+
+<p>
+<p> Returns:
+
+<p><ul>
+  <li> A DataFrame containing the pivoted data, with these columns:
+<tt>name</tt>, <tt>x</tt>, <tt>y</tt>, and optionally <tt>error</tt> - if <tt>confidence_level</tt> is given.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:get-confidence-level"/>30.1.4.19 get_confidence_level()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:get-confidence-level" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_confidence_level(props)</tt>
+
+<p>
+<p> Returns the confidence level from the <tt>confidence_level</tt> property,
+converted to a <tt>float</tt>. Also accepts "none" (returns <tt>None</tt> in this case),
+and percentage values (e.g. "95%").
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:perform-vector-ops"/>30.1.4.20 perform_vector_ops()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:perform-vector-ops" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>perform_vector_ops(df, operations: str)</tt>
+
+<p>
+<p> Performs the given vector operations on the dataframe, and returns the
+resulting dataframe. Vector operations primarily affect the <tt>vectime</tt>
+and <tt>vecvalue</tt> columns of the dataframe, which are expected to contain
+<tt>ndarray</tt>'s of matching lengths.
+
+<p><p> <tt>operations</tt> is a multiline string where each line denotes an operation;
+they are applied in sequence. The syntax of one operation is:
+
+<p><p> [(<tt>compute</tt>|<tt>apply</tt>) <tt>:</tt> ] <i>opname</i> [ <tt>(</tt> <i>arglist</i> <tt>)</tt> ] [ <tt>#</tt> <i>comment</i> ]
+
+<p><p> Blank lines and lines only containing a comment are also accepted.
+
+<p><p> <i>opname</i> is the name of the function, optionally qualified with its package name.
+If the package name is omitted, <tt>omnetpp.scave.vectorops</tt> is assumed.
+
+<p><p> <tt>compute</tt> and <tt>apply</tt> specify whether the newly computed vectors will replace
+the input row in the DataFrame (<i>apply</i>) or added as extra lines (<i>compute</i>).
+The default is <i>apply</i>.
+
+<p><p> See the contents of the <tt>omnetpp.scave.vectorops</tt> package for more information.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:set-plot-title"/>30.1.4.21 set_plot_title()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:set-plot-title" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>set_plot_title(title, suggested_chart_name=None)</tt>
+
+<p>
+<p> Sets the plot title. It also sets the suggested chart name (the name that
+the IDE offers when adding a temporary chart to the Analysis file.)
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:fill-missing-titles"/>30.1.4.22 fill_missing_titles()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:fill-missing-titles" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>fill_missing_titles(df)</tt>
+
+<p>
+<p> Utility function to fill missing values in the <tt>title</tt> and <tt>moduledisplaypath</tt>
+columns from the <tt>name</tt> and <tt>module</tt> columns. (Note that <tt>title</tt> and <tt>moduledisplaypath</tt>
+normally come from result attributes of the same name.)
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:extract-label-columns"/>30.1.4.23 extract_label_columns()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:extract-label-columns" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>extract_label_columns(df, props)</tt>
+
+<p>
+<p> Utility function to make a reasonable guess as to which column of
+the given DataFrame is most suitable to act as a chart title and
+which ones can be used as legend labels.
+
+<p><p> Ideally a "title column" should be one in which all lines have the same
+value, and can be reasonably used as a title. This is often the <tt>title</tt>
+or <tt>name</tt> column.
+
+<p><p> Label columns should be a minimal set of columns whose corresponding
+value tuples uniquely identify every line in the DataFrame. These will
+primarily be iteration variables and run attributes.
+
+<p><p> Returns:
+
+<p><p> A pair of a string and a list; the first value is the name of the
+"title" column, and the second one is a list of pairs, each
+containing the index and the name of a "label" column.
+
+<p><p> Example: <tt>('title', [(8, 'numHosts'), (7, 'iaMean')])</tt>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:make-chart-title"/>30.1.4.24 make_chart_title()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:make-chart-title" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>make_chart_title(df, title_cols)</tt>
+
+<p>
+<p> Produces a reasonably good chart title text from a result DataFrame,
+given a selected list of "title" columns.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:select-best-partitioning-column-pair"/>30.1.4.25 select_best_partitioning_column_pair()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:select-best-partitioning-column-pair" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>select_best_partitioning_column_pair(df, props=None)</tt>
+
+<p>
+<p> Choose two columns from the dataframe which best partitions the rows
+of the dataframe, and returns their names as a pair. Returns (<tt>None</tt>, <tt>None</tt>)
+if no such pair was found. This method is useful for creating e.g. a bar plot.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:select-groups-series"/>30.1.4.26 select_groups_series()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:select-groups-series" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>select_groups_series(df, props)</tt>
+
+<p>
+<p> Extracts the column names to be used for groups and series from the <tt>df</tt> DataFrame,
+for pivoting. The columns whose names are to be used as group names are given in
+the "groups" property in <tt>props</tt>, as a comma-separated list.
+The names for the series are selected similarly, based on the "series" property.
+There should be no overlap between these two lists.
+
+<p><p> If both "groups" and "series" are given (non-empty), they are simply returned
+as lists after some sanity checks.
+If both of them are empty, a reasonable guess is made for which columns should
+be used, and (["module"], ["name"]) is used as a fallback.
+
+<p><p> The data in <tt>df</tt> should be in the format as returned by <tt>result.get_scalars()</tt>,
+and the result can be used directly by <tt>utils.pivot_for_barchart()</tt>.
+
+<p><p> Returns:
+    - (group_names, series_names): A pair of lists of strings containing the
+      selected names for the groups and the series, respectively.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:select-xaxis-and-groupby"/>30.1.4.27 select_xaxis_and_groupby()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:select-xaxis-and-groupby" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>select_xaxis_and_groupby(df, props)</tt>
+
+<p>
+<p> Extracts an iteration variable name and the column names to be used for grouping from
+the <tt>df</tt> DataFrame, for pivoting. The columns whose names are to be used as group
+names are given in the "group_by" property in <tt>props</tt>, as a comma-separated list.
+The name of the iteration variable is selected similarly, from the "xaxis_itervar" property.
+The "group_by" list should not contain the given "xaxis_itervar" name.
+
+<p><p> If both "xaxis_itervar" and "group_by" are given (non-empty), they are simply returned
+after some sanity checks, with "group_by" split into a list.
+If both of them are empty, a reasonable guess is made for which columns should be used.
+
+<p><p> The data in <tt>df</tt> should be in the format as returned by <tt>result.get_scalars()</tt>,
+and the result can be used directly by <tt>utils.pivot_for_scatterchart()</tt>.
+
+<p><p> Returns:
+    - (xaxis_itervar, group_by): An iteration variable name, and a list of strings
+      containing the selected column names to be used as groups.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:assert-columns-exist"/>30.1.4.28 assert_columns_exist()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:assert-columns-exist" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>assert_columns_exist(df, cols, message="Expected column missing from DataFrame")</tt>
+
+<p>
+<p> Ensures that the dataframe contains the given columns. If any of them are missing,
+the function raises an error with the given message.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>cols</tt> <i>(list of strings)</i>: Column names to check.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:to-numeric"/>30.1.4.29 to_numeric()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:to-numeric" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>to_numeric(df, columns=None, errors="ignore", downcast=None)</tt>
+
+<p>
+<p> Convenience function. Runs <tt>pandas.to_numeric</tt> on the given
+(or all) columns of <tt>df</tt>. If any of the given columns doesn't
+exist, throws an error.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>df</tt> <i>(DataFrame)</i>: The DataFrame to operate on
+  <li> <tt>columns</tt> <i>(list of strings)</i>: The list of column names to convert.
+If not given, all columns will be converted.
+  <li> <tt>errors</tt>, <tt>downcast</tt> <i>(string)</i>: Will be passed to <tt>pandas.to_numeric()</tt>
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:parse-rcparams"/>30.1.4.30 parse_rcparams()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:parse-rcparams" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>parse_rcparams(rc_content)</tt>
+
+<p>
+<p> Accepts a multiline string that contains rc file content in Matplotlib's
+RcParams syntax, and returns its contents as a dictionary. Parse errors
+and duplicate keys are reported via exceptions.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:make-fancy-xticklabels"/>30.1.4.31 make_fancy_xticklabels()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:make-fancy-xticklabels" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>make_fancy_xticklabels(ax)</tt>
+
+<p>
+<p> Only useful for Matplotlib plots. It causes the x tick labels to be rotated
+by the minimum amount necessary so that they don't overlap. Note that the
+necessary amount of rotation typically depends on the horizontal zoom level.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.utils:split"/>30.1.4.32 split()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.utils:split" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>split(s, sep=",")</tt>
+
+<p>
+<p> Split a string with the given separator (by default with comma), trim
+the surrounding whitespace from the items, and return the result as a
+list. Returns an empty list for an empty or all-whitespace input string.
+(Note that in contrast, <tt>s.split(',')</tt> will return an empty array,
+even for <tt>s=''</tt>.)
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.vectorops"/>30.1.5 Module omnetpp.scave.vectorops<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops" title="Permalink to this headline">¶</a></h3>
+
+<p><p> Contains operations that can be applied to vectors.
+
+<p><p> In the IDE, operations can be applied to vectors on a vector chart by means
+of the plot's context menu and by editing the <i>Vector Operations</i> field in
+the chart configuration dialog.
+
+<p><p> Every vector operation is implemented as a function. The notation used
+in the documentation of the individual functions is:
+
+<p><ul>
+  <li> <i>y[k]</i>: The kth value in the input
+  <li> <i>t[k]</i>: The kth timestamp in the input
+  <li> <i>yout[k]</i>: The kth value in the output
+  <li> <i>tout[k]</i>: The kth timestamp in the output
+
+<p></ul>
+
+<p>
+<p> A vector operation function accepts a DataFrame row as the first positional
+argument, and optionally additional arguments specific to its operation.
+When the function is invoked, the row will contain a <tt>vectime</tt> and a <tt>vecvalue</tt>
+column (both containing NumPy <tt>ndarray</tt>'s) that are the input of the operation.
+The function should return a similar row, with updated <tt>vectime</tt> and a <tt>vecvalue</tt>
+columns.
+
+<p><p> Additionally, the operation may update the <tt>name</tt> and <tt>title</tt> columns (provided
+they exist) to reflect the processing in the name. For example, an operation
+that computes <i>mean</i> may return <tt>mean(%s)</tt> as name and <tt>Mean of %s</tt> as title
+(where <tt>%s</tt> indicates the original name/title).
+
+<p><p> The <tt>aggregate()</tt> and <tt>merge()</tt> functions are special. They receive a DataFrame
+instead of a row in the first argument, and return new DataFrame with the result.
+
+<p><p> Vector operations can be applied to a DataFrame using <tt>utils.perform_vector_ops(df,ops)</tt>.
+<tt>ops</tt> is a multiline string where each line denotes an operation; they are
+applied in sequence. The syntax of one operation is:
+
+<p><p> [(<tt>compute</tt>|<tt>apply</tt>) <tt>:</tt> ] <i>opname</i> [ <tt>(</tt> <i>arglist</i> <tt>)</tt> ] [ <tt>#</tt> <i>comment</i> ]
+
+<p><p> <i>opname</i> is the name of the function, optionally qualified with its package name.
+If the package name is omitted, <tt>omnetpp.scave.vectorops</tt> is assumed.
+
+<p><p> <tt>compute</tt> and <tt>apply</tt> specify whether the newly computed vectors will replace
+the input row in the DataFrame (<i>apply</i>) or added as extra lines (<i>compute</i>).
+The default is <i>apply</i>.
+
+<p><p> To register a new vector operation, define a function that fulfills the above interface
+(e.g. in the chart script, or an external <tt>.py</tt> file, that the chart script imports),
+with the <tt>omnetpp.scave.vectorops.vector_operation</tt> decorator on it.
+
+<p><p> Make sure that the registered function does not modify the data of the NumPy array
+instances in the rows, because it would have an unwanted effect when used in <tt>compute</tt>
+(as opposed to <tt>apply</tt>) mode.
+
+<p><p> Example:
+<pre class="filelisting">
+from omnetpp.scave import vectorops
+
+@vectorops.vector\_operation("Fooize", "foo(42)")
+def foo(r, arg1, arg2=5):
+    \# r.vectime = r.vectime * 2    \# &lt;- this is okay
+    \# r.vectime *= 2               \# &lt;- this is NOT okay!
+
+    r.vectime = r.vectime * arg1 + arg2
+    if "title" in r:
+        r.title = r.title + ", but fooized" \# this is also okay
+    return r
+
+</pre>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:perform-vector-ops"/>30.1.5.1 perform_vector_ops()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:perform-vector-ops" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>perform_vector_ops(df, operations: str)</tt>
+
+<p>
+<p> See: utils.perform_vector_ops
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:vector-operation"/>30.1.5.2 vector_operation()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:vector-operation" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>vector_operation(label: str = None, example: str = None)</tt>
+
+<p>
+<p> Returns, or acts as, a decorator; to be used on methods you wish to register as vector operations.
+Parameters:
+
+<p><ul>
+  <li> <tt>label</tt>: will be shown on the GUI for the user
+  <li> <tt>example</tt>: should be string, containing a valid invocation of the function
+
+<p></ul>
+
+<p>
+<p> Alternatively, this can also be used directly as decorator (without calling it first).
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:lookup-operation"/>30.1.5.3 lookup_operation()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:lookup-operation" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>lookup_operation(module, name)</tt>
+
+<p>
+<p> Returns a function from the registered vector operations by name, and optionally module.
+<tt>module</tt> and <tt>name</tt> are both strings. <tt>module</tt> can also be <tt>None</tt>, in which case it is ignored.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:aggregate"/>30.1.5.4 aggregate()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:aggregate" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>aggregate(df, function="average")</tt>
+
+<p>
+<p> Aggregates several vectors into a single one, aggregating the
+y values <i>at the same time coordinate</i> with the specified function.
+Possible values: 'sum', 'average', 'count', 'maximum', 'minimum'
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:merge"/>30.1.5.5 merge()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:merge" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>merge(df)</tt>
+
+<p>
+<p> Merges several series into a single one, maintaining increasing
+time order in the output.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:mean"/>30.1.5.6 mean()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:mean" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>mean(r)</tt>
+
+<p>
+<p> Computes mean on (0,t): yout[k] = sum(y[i], i=0..k) / (k+1).
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:sum"/>30.1.5.7 sum()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:sum" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>sum(r)</tt>
+
+<p>
+<p> Sums up values: yout[k] = sum(y[i], i=0..k)
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:add"/>30.1.5.8 add()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:add" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>add(r, c)</tt>
+
+<p>
+<p> Adds a constant to all values in the input: yout[k] = y[k] + c
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:compare"/>30.1.5.9 compare()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:compare" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>compare(r, threshold, less=None, equal=None, greater=None)</tt>
+
+<p>
+<p> Compares value against a threshold, and optionally replaces it with a constant.
+yout[k] = if y[k] &lt; threshold and less != None then less;
+     else if y[k] == threshold and equal != None then equal;
+     else if y[k] &gt; threshold and greater != None then greater;
+     else y[k]
+The last three parameters are all independently optional.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:crop"/>30.1.5.10 crop()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:crop" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>crop(r, t1, t2)</tt>
+
+<p>
+<p> Discards values outside the [t1, t2] interval.
+The time values are in seconds.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:difference"/>30.1.5.11 difference()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:difference" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>difference(r)</tt>
+
+<p>
+<p> Subtracts the previous value from every value: yout[k] = y[k] - y[k-1]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:diffquot"/>30.1.5.12 diffquot()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:diffquot" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>diffquot(r)</tt>
+
+<p>
+<p> Calculates the difference quotient of every value and the subsequent one:
+yout[k] = (y[k+1]-y[k]) / (t[k+1]-t[k])
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:divide-by"/>30.1.5.13 divide_by()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:divide-by" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>divide_by(r, a)</tt>
+
+<p>
+<p> Divides every value in the input by a constant: yout[k] = y[k] / a
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:divtime"/>30.1.5.14 divtime()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:divtime" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>divtime(r)</tt>
+
+<p>
+<p> Divides every value in the input by the corresponding time: yout[k] = y[k] / t[k]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:expression"/>30.1.5.15 expression()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:expression" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>expression(r, expression, as_time=False)</tt>
+
+<p>
+<p> Replaces the value with the result of evaluating the Python arithmetic expression
+given as a string: yout[k] = eval(expression). The expression may use
+the following variables: <tt>t</tt>, <tt>y</tt>, <tt>tprev</tt>, <tt>yprev</tt>, <tt>tnext</tt>, <tt>ynext</tt>, <tt>k</tt>, <tt>n</tt>
+which stand for t[k], y[k], t[k-1], y[k-1], t[k+1] and y[k+1], k, and the
+size of vector, respectively.
+
+<p><p> If <tt>as_time</tt> is <tt>True</tt>, the result will be assigned to the time variable
+instead of the value variable.
+
+<p><p> Note that for efficiency, the expression will be evaluated only once,
+with the variables being <tt>np.ndarray</tt> instances instead of scalar <tt>float</tt> values.
+Thus, the result is computed using vector operations instead of looping
+through all vector indices in Python. Expression syntax remains the usual.
+Most Numpy mathematical functions can be used without module prefix; other
+Numpy functions can be used by prefixing them with <tt>np.</tt>.
+
+<p><p> Examples: <tt>2*y+0.5</tt>, <tt>abs(floor(y))</tt>, <tt>(y-yprev)/(t-tprev)</tt>, <tt>fmin(yprev,ynext)</tt>,
+<tt>cumsum(y)</tt>, <tt>nan_to_num(y)</tt>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:integrate"/>30.1.5.16 integrate()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:integrate" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>integrate(r, interpolation="sample-hold")</tt>
+
+<p>
+<p> Integrates the input as a step function ("sample-hold" or "backward-sample-hold")
+or with linear ("linear") interpolation.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:lineartrend"/>30.1.5.17 lineartrend()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:lineartrend" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>lineartrend(r, a)</tt>
+
+<p>
+<p> Adds a linear component with the given steepness to the input series: yout[k] = y[k] + a * t[k]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:modulo"/>30.1.5.18 modulo()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:modulo" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>modulo(r, m)</tt>
+
+<p>
+<p> Computes floating point reminder (modulo) of the input values with a constant: yout[k] = y[k] % m
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:movingavg"/>30.1.5.19 movingavg()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:movingavg" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>movingavg(r, alpha)</tt>
+
+<p>
+<p> Applies the exponentially weighted moving average filter with
+the given smoothing coefficient in range (0.0, 1.0]:
+yout[k] = yout[k-1] + alpha * (y[k]-yout[k-1])
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:multiply-by"/>30.1.5.20 multiply_by()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:multiply-by" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>multiply_by(r, a)</tt>
+
+<p>
+<p> Multiplies every value in the input by a constant: yout[k] = a * y[k]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:removerepeats"/>30.1.5.21 removerepeats()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:removerepeats" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>removerepeats(r)</tt>
+
+<p>
+<p> Removes repeated (consecutive) y values
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:slidingwinavg"/>30.1.5.22 slidingwinavg()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:slidingwinavg" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>slidingwinavg(r, window_size, min_samples=None)</tt>
+
+<p>
+<p> Replaces every value with the mean of values in the window:
+yout[k] = sum(y[i], i=(k-winsize+1)..k) / winsize
+If min_samples is also given, allows each window to have only that many
+valid (not missing [at the ends], and not NaN) samples in each window.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:subtractfirstval"/>30.1.5.23 subtractfirstval()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:subtractfirstval" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>subtractfirstval(r)</tt>
+
+<p>
+<p> Subtract the first value from every subsequent value: yout[k] = y[k] - y[0]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timeavg"/>30.1.5.24 timeavg()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timeavg" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timeavg(r, interpolation)</tt>
+
+<p>
+<p> Average over time (integral divided by time), possible
+parameter values: 'sample-hold', 'backward-sample-hold', 'linear'
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timediff"/>30.1.5.25 timediff()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timediff" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timediff(r)</tt>
+
+<p>
+<p> Sets each value to the elapsed time (delta) since the previous value:
+tout[k] = t[k] - t[k-1]
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timeshift"/>30.1.5.26 timeshift()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timeshift" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timeshift(r, dt)</tt>
+
+<p>
+<p> Shifts the input series in time by a constant (in seconds): tout[k] = t[k] + dt
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timedilation"/>30.1.5.27 timedilation()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timedilation" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timedilation(r, c)</tt>
+
+<p>
+<p> Dilates the input series in time by a constant factor: tout[k] = t[k] * c
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timetoserial"/>30.1.5.28 timetoserial()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timetoserial" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timetoserial(r)</tt>
+
+<p>
+<p> Replaces time values with their index: tout[k] = k
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timewinavg"/>30.1.5.29 timewinavg()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timewinavg" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timewinavg(r, window_size=1)</tt>
+
+<p>
+<p> Calculates time average: Replaces the input values with one every 'window_size'
+interval (in seconds), that is the mean of the original values in that interval.
+tout[k] = k * winSize,
+yout[k] = average of y values in the [(k-1) * winSize, k * winSize) interval
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:timewinthruput"/>30.1.5.30 timewinthruput()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:timewinthruput" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>timewinthruput(r, window_size=1)</tt>
+
+<p>
+<p> Calculates time windowed throughput:
+tout[k] = k * winSize,
+yout[k] = sum of y values in the [(k-1) * winSize, k * winSize) interval divided by window_size
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.vectorops:winavg"/>30.1.5.31 winavg()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.vectorops:winavg" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>winavg(r, window_size=10)</tt>
+
+<p>
+<p> Calculates batched average: replaces every 'winsize' input values
+with their mean. Time is the time of the first value in the batch.
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.analysis"/>30.1.6 Module omnetpp.scave.analysis<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis" title="Permalink to this headline">¶</a></h3>
+
+<p><p> This module allows reading, writing, creating and editing
+OMNeT++ Analysis (.anf) files, querying their contents, and
+running the charts scripts they contain. The main user of this
+module is <tt>opp_charttool</tt>.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.analysis:DialogPage"/>30.1.6.1 Class DialogPage<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:DialogPage" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Represents a dialog page in a <tt>Chart</tt>. Dialog pages have an ID, a label
+(which the IDE displays on the page's tab in the <i>Chart Properties</i> dialog),
+and XSWT content (which describes the UI controls on the page).
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:DialogPage:--init--"></a>
+
+<p>
+<tt>DialogPage(self, id: str = None, label: str = "", content: str = "")</tt>
+
+<p>
+
+<p>
+<h4><a name="cha:chart-api:omnetpp.scave.analysis:Chart"/>30.1.6.2 Class Chart<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:Chart" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Represents a chart in an <tt>Analysis</tt>. Charts have an ID, a name, a chart script
+(a Python script that mainly uses Pandas and the <tt>omnetpp.scave.*</tt> modules),
+dialog pages (which make up the contents of the Chart Properties dialog in the IDE),
+and properties (which are what the <i>Chart Properties</i> dialog in the IDE edits).
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Chart:--init--"></a>
+
+<p>
+<tt>Chart(self, id: str = None, name: str = "", type: str = "MATPLOTLIB", template: str = None, icon: str = None, script: str = "", dialog_pages=[], properties={})</tt>
+
+<p>
+
+<p>
+<h4><a name="cha:chart-api:omnetpp.scave.analysis:Folder"/>30.1.6.3 Class Folder<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:Folder" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Represents a folder in an <tt>Analysis</tt>. Folders may contain charts and further folders.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Folder:--init--"></a>
+
+<p>
+<tt>Folder(self, id: str = None, name: str = "", items=[])</tt>
+
+<p>
+
+<p>
+<h4><a name="cha:chart-api:omnetpp.scave.analysis:Workspace"/>30.1.6.4 Class Workspace<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:Workspace" title="Permalink to this headline">¶</a></h4>
+
+<p><p> This is an abstraction of an IDE workspace, and makes it possible to map
+workspace paths to filesystem paths. This is necessary because the inputs
+in the <tt>Analysis</tt> are workspace paths. The class tolerates if workspace
+metadata (the <tt>.metadata</tt> subdirectory) is missing; then it looks for projects
+in directories adjacent to other known projects.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:--init--"></a>
+
+<p>
+<tt>Workspace(self, workspace_dir=None, project_locations=None)</tt>
+
+<p>
+<p> Accepts the workspace location, plus a dict that contains the (absolute,
+or workspace-location-relative) location of projects by name. The latter is
+useful for projects that are NOT at the &lt;workspace_dir&gt;/&lt;projectname&gt; location.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:find-enclosing-project"></a>
+
+<p>
+<tt>Workspace.find_enclosing_project(self, file=None)</tt>
+
+<p>
+<p> Find the project name searching from the given directory (or the current
+dir if not given) upwards. Project directories of the Eclipse-based IDE
+can be recognized by having a <tt>.project</tt> file in them.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:find-enclosing-project-location"></a>
+
+<p>
+<tt>Workspace.find_enclosing_project_location(file=None)</tt>
+
+<p>
+<p> Utility function: Find the project directory searching from the
+given directory (or the current dir if not given) upwards. Project
+directories of the Eclipse-based IDE can be recognized by having a
+<tt>.project</tt> file in them.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:find-workspace"></a>
+
+<p>
+<tt>Workspace.find_workspace(dir=None)</tt>
+
+<p>
+<p> Utility function: Find the IDE workspace directory searching from the
+given directory (or the current dir if not given) upwards. The workspace
+directory of the Eclipse-based IDE can be recognized by having a <tt>.metadata</tt>
+subdir. If the workspace is not found, None is returned.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:get-all-referenced-projects"></a>
+
+<p>
+<tt>Workspace.get_all_referenced_projects(self, project_name, include_self=False)</tt>
+
+<p>
+<p> Returns a list of projects that are referenced by the given project, even transitively.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:get-project-location"></a>
+
+<p>
+<tt>Workspace.get_project_location(self, project_name)</tt>
+
+<p>
+<p> Returns the location of the given workspace project in the filesystem path.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:get-project-name"></a>
+
+<p>
+<tt>Workspace.get_project_name(self, project_dir)</tt>
+
+<p>
+<p> Returns the "real" name of the project from the <tt>.project</tt> (project
+description) file in the given project directory.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:get-referenced-projects"></a>
+
+<p>
+<tt>Workspace.get_referenced_projects(self, project_name)</tt>
+
+<p>
+<p> Returns a list of projects that are referenced by the given project.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Workspace:to-filesystem-path"></a>
+
+<p>
+<tt>Workspace.to_filesystem_path(self, wspath)</tt>
+
+<p>
+<p> Translate workspace paths to filesystem path.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.analysis:Analysis"/>30.1.6.5 Class Analysis<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:Analysis" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Represents an OMNeT++ Analysis, i.e. the contents of an  <tt>anf</tt> file. Methods
+allow reading/writing <tt>anf</tt> files, and running the charts in them for interactive
+display, image/data export or other side effects.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:--init--"></a>
+
+<p>
+<tt>Analysis(self, inputs=[], items=[])</tt>
+
+<p>
+
+<p>
+<a name="cha:chart-api:omnetpp.scave.analysis:Analysis:collect-charts"></a>
+
+<p>
+<tt>Analysis.collect_charts(self, folder=None)</tt>
+
+<p>
+<p> Collects and returns a list of all charts in the specified folder, or
+in this Analysis if no folder is given.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:export-data"></a>
+
+<p>
+<tt>Analysis.export_data(self, chart, wd, workspace, format="csv", target_folder=None, filename=None, enforce=True, extra_props={})</tt>
+
+<p>
+<p> Runs a chart script for data export. This method just calls <tt>run_chart()</tt>
+with extra properties that instruct the chart script to perform data export.
+(It is assumed that the chart script invokes <tt>utils.export_data_if_needed()</tt>
+or implements equivalent functionality).
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:export-image"></a>
+
+<p>
+<tt>Analysis.export_image(self, chart, wd, workspace, format="svg", target_folder=None, filename=None, width=None, height=None, dpi=96, enforce=True, extra_props={})</tt>
+
+<p>
+<p> Runs a chart script for image export. This method just calls <tt>run_chart()</tt>
+with extra properties that instruct the chart script to perform image export.
+(It is assumed that the chart script invokes <tt>utils.export_image_if_needed()</tt>
+or implements equivalent functionality).
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:from-anf-file"></a>
+
+<p>
+<tt>Analysis.from_anf_file(anf_file_name)</tt>
+
+<p>
+<p> Reads the given anf file and returns its content as an <tt>Analysis</tt> object.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:get-item-path"></a>
+
+<p>
+<tt>Analysis.get_item_path(self, item)</tt>
+
+<p>
+<p> Returns the path of the item (Chart or Folder) within the Analysis
+as list of path segments (Folder items). The returned list includes
+both the root folder of the Analysis and the item itself. If the
+item is not part of the Analysis, None is returned.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:get-item-path-as-string"></a>
+
+<p>
+<tt>Analysis.get_item_path_as_string(self, item, separator=" / ")</tt>
+
+<p>
+<p> Returns the path of the item (Chart or Folder) within the Analysis as a
+string. Segments are joined with the given separator. The returned
+string includes the item name itself, but not the root folder (i.e. for
+items in the root folder, the path string equals to the item name). If
+the item is not part of the Analysis, None is returned.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:run-chart"></a>
+
+<p>
+<tt>Analysis.run_chart(self, chart, wd, workspace, extra_props={}, show=False)</tt>
+
+<p>
+<p> Runs a chart script with the given working directory, workspace, and extra
+properties in addition to the chart's properties. If <tt>show=True</tt>, it calls
+<tt>plt.show()</tt> if it was not already called by the script.
+
+<p><a name="cha:chart-api:omnetpp.scave.analysis:Analysis:to-anf-file"></a>
+
+<p>
+<tt>Analysis.to_anf_file(self, filename)</tt>
+
+<p>
+<p> Saves the analysis to the given .anf file.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.analysis:load-anf-file"/>30.1.6.6 load_anf_file()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.analysis:load-anf-file" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>load_anf_file(anf_file_name)</tt>
+
+<p>
+<p> Reads the given anf file and returns its content as an <tt>Analysis</tt> object.
+This is synonym for <tt>Analysis.from_anf_file()</tt>.
+
+<p><h3><a name="cha:chart-api:omnetpp.scave.charttemplate"/>30.1.7 Module omnetpp.scave.charttemplate<a class="headerlink" href="#cha:chart-api:omnetpp.scave.charttemplate" title="Permalink to this headline">¶</a></h3>
+
+<p><p> Loading and instantiating chart templates.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.charttemplate:ChartTemplate"/>30.1.7.1 Class ChartTemplate<a class="headerlink" href="#cha:chart-api:omnetpp.scave.charttemplate:ChartTemplate" title="Permalink to this headline">¶</a></h4>
+
+<p><p> Represents a chart template.
+
+<p><a name="cha:chart-api:omnetpp.scave.charttemplate:ChartTemplate:--init--"></a>
+
+<p>
+<tt>ChartTemplate(self, id: str, name: str, type: str, icon: str, script: str, dialog_pages, properties)</tt>
+
+<p>
+<p> Creates a chart template from the given data elements.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>id</tt> <i>(string)</i>: A short string that uniquely identifies the chart template.
+  <li> <tt>name</tt> <i>(string)</i>: Name of the chart template.
+  <li> <tt>type</tt> <i>(string)</i>: Chart type, one of: "bar"/"histogram"/"line"/"matplotlib".
+  <li> <tt>icon</tt> <i>(string)</i>: Name of the icon to be used for charts of this type.
+  <li> <tt>script</tt> <i>(string)</i>: The Python chart script.
+  <li> <tt>dialog_pages</tt> <i>(list of <tt>DialogPage</tt>)</i>: Pages of the "Configure Chart" dialog.
+  <li> <tt>properties</tt> <i>(string-&gt;string dictionary)</i>: Initial values for chart properties.
+
+<p></ul>
+
+<p><a name="cha:chart-api:omnetpp.scave.charttemplate:ChartTemplate:create-chart"></a>
+
+<p>
+<tt>ChartTemplate.create_chart(self, id: int = None, name: str = None, props=None)</tt>
+
+<p>
+<p> Creates and returns a chart object (<tt>org.omnetpp.scave.Chart</tt>) from
+this chart template. Chart properties will be set to the default
+values defined by the chart template. If a <tt>props</tt> argument is present,
+property values in it will overwrite the defaults.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>id</tt> <i>(string)</i>: A numeric string that identifies the chart within the
+ Analysis. Auto-assigned if missing.
+  <li> <tt>name</tt> <i>(string)</i>: Name for the chart. If missing, the chart template name
+ will be used.
+  <li> <tt>props</tt> <i>(string-&gt;string dictionary)</i>: Chart properties to set. It may not
+ introduce new properties, i.e. the keys must be subset of the property
+ keys defined in the chart template.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.charttemplate:get-chart-template-locations"/>30.1.7.2 get_chart_template_locations()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.charttemplate:get-chart-template-locations" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>get_chart_template_locations()</tt>
+
+<p>
+<p> Returns a list of locations (directories) where the chart templates that
+come with the IDE can be found.
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.charttemplate:load-chart-templates"/>30.1.7.3 load_chart_templates()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.charttemplate:load-chart-templates" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>load_chart_templates(dirs=[], add_default_locations=True)</tt>
+
+<p>
+<p> Loads chart templates from the given list of directories, and returns them
+in a dictionary. Chart templates are loaded from files with the <tt>.properties</tt>
+extension.
+
+<p><p> Parameters:
+
+<p><ul>
+  <li> <tt>dirs</tt> <i>(string list)</i>: A short string that uniquely identifies the chart template.
+  <li> <tt>add_default_locations</tt> <i>(bool)</i>: Whether the directories returned by <tt>get_chart_template_locations()</tt>
+should also be searched in addition to the specified directory list.
+
+<p></ul>
+
+<p>
+<p> Returns:
+
+<p><ul>
+  <li> A string-&gt;ChartTemplate dictionary, with chart template IDs used as keys.
+
+<p></ul>
+
+<p><h4><a name="cha:chart-api:omnetpp.scave.charttemplate:load-chart-template"/>30.1.7.4 load_chart_template()<a class="headerlink" href="#cha:chart-api:omnetpp.scave.charttemplate:load-chart-template" title="Permalink to this headline">¶</a></h4>
+
+<p>
+<tt>load_chart_template(properties_file)</tt>
+
+<p>
+<p> Loads the chart template from the specified <tt>.properties</tt> file, and
+returns it as a <tt>ChartTemplate</tt> object.
+
+<p><hr><b><a href="chap29.html">[Prev]</A>&nbsp;<a href="toc.html#toc_30.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p>
+
+</body>
+</html>

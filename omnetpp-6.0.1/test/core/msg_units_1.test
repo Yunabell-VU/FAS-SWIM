@@ -1,0 +1,28 @@
+%description:
+Check units usage
+
+%file: test.msg
+
+cplusplus {{
+#include "../lib/Units.h"
+}}
+
+namespace inet::units::values;
+
+class m {@existingClass;@descriptor(false);}
+class W {@existingClass;@descriptor(false);}
+
+namespace @TESTNAME@;
+
+message Foo {
+    inet::units::values::m distance;
+    inet::units::values::W power;
+}
+
+%includes:
+#include "test_m.h"
+
+%activity:
+
+Foo tmp;
+EV << tmp.str() << "\n";

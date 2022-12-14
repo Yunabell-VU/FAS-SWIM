@@ -1,0 +1,40 @@
+Signature-Version: 1.0
+Created-By: 11.0.9 (Oracle Corporation)
+SHA-256-Digest-Manifest: gREx2OnVftHRQF9KowwYQvCeI+7tslwXK0ECWSpvKDw=
+SHA-256-Digest-Manifest-Main-Attributes: G9s44GMet6KdVS1iBIl9T0rC+wiwTmQ
+ ekz8YFpDf+XQ=
+
+Name: plugin.xml
+SHA-256-Digest: lWBvXoaGvn2Q81iAkCoSN9e2krqzd1xw2v38o+kckZI=
+
+Name: icons/django_logo.png
+SHA-256-Digest: N3apDsiSrB7wNovOtfgr2a5PUsAWIjDl9jbYMa0stCM=
+
+Name: META-INF/maven/org.python.pydev/org.python.pydev.django/pom.xml
+SHA-256-Digest: 84t1/SPuMmOqX1ygdW9G7UmcoXAmI2komU1u+PVAEUQ=
+
+Name: icons/django_nature.png
+SHA-256-Digest: B7Md+WlzJWbVy4nZssulSOGqdwoUsqgrIQFOqX6C+6k=
+
+Name: icons/django_remove_nature.png
+SHA-256-Digest: eAzPtoftvJeU8vUUzUuUQ9lnXctiMD8vemoIUjNik8U=
+
+Name: LICENSE.txt
+SHA-256-Digest: kKR//0aU3zBgl9SCeCpwoQ+GrOEHBzEb90XcPTX/6Do=
+
+Name: icons/djangoNature.gif
+SHA-256-Digest: ax7OTv+dV1e5v6vYhFTDxddDZdPM6x1rFuOMRN78LX8=
+
+Name: pydev_django.jar
+SHA-256-Digest: YoH4t21FIFfofH8T+pp7WQRgHeQ4dRy00IMBwiLVOdw=
+
+Name: icons/django_7x7.png
+SHA-256-Digest: PbR3CwB6VyoFUHw5ROks0MvTOjEfjwG1JbqwiUc3Ml0=
+
+Name: META-INF/maven/org.python.pydev/org.python.pydev.django/pom.proper
+ ties
+SHA-256-Digest: 7SZtMYEeHXEnKcxGUK6Y0YsngiLE35A5InsqWZAOxLw=
+
+Name: icons/django_16x16.png
+SHA-256-Digest: bit5u2Mo7yzub7DNp2+TmOqCrcc3rizcsru9oQT4D5Q=
+

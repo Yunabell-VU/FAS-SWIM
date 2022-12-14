@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Editing NED Files" href="ned-editor.html" />
+    <link rel="prev" title="User Guide" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="introduction">
+<h1>Introduction</h1>
+<p>The OMNeT++ simulation IDE is based on the Eclipse platform and extends it with new editors, views, wizards, and other
+functionality. OMNeT++ adds functionality for creating and configuring models (NED and INI files), performing batch
+executions and analyzing the simulation results, while Eclipse provides C++ editing, SVN/GIT integration and other
+optional features (UML modeling, bug-tracker integration, database access, etc.) via various open-source and commercial
+plug-ins. The environment will be instantly recognizable to those at home with the Eclipse platform.</p>
+<section id="the-workbench">
+<h2>The Workbench</h2>
+<p>The Eclipse main window consists of various Views and Editors. These are collected into Perspectives that define which
+Views and Editors are visible and how they are sized and positioned.</p>
+<p>Eclipse is a very flexible system. You can move, resize, hide and show various panels, editors and navigators. This
+allows you to customize the IDE to your liking, but it also makes it more difficult to describe. First, we need to make
+sure that we are looking at the same thing.</p>
+<p>The OMNeT++ IDE provides a “Simulation perspective” to work with simulation-related NED, INI and MSG files. To switch to
+the simulation perspective, select <span class="menuselection">Window ‣ Open Perspective ‣ Simulation</span>.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/Intro-SelectPerspective.png"><img alt="../_images/Intro-SelectPerspective.png" src="../_images/Intro-SelectPerspective.png" style="width: 50%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Selecting the “Simulation Perspective” in Eclipse</span></p>
+</figcaption>
+</figure>
+<p>Most interface elements within Eclipse are can be moved or docked freely so you can construct your own workbench to fit
+your needs.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/Intro-DefaultLayout.png"><img alt="../_images/Intro-DefaultLayout.png" src="../_images/Intro-DefaultLayout.png" style="width: 100%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Default layout of the OMNeT++ IDE</span></p>
+</figcaption>
+</figure>
+<p>The <span class="guilabel">Project Explorer</span> on the top left part of the screen shows the projects and their content in your
+workspace. In the example above, the <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code> demo project is open. You can see the various <code class="file docutils literal notranslate"><span class="pre">.ned</span></code>,
+<code class="file docutils literal notranslate"><span class="pre">.ini</span></code> and other files inside. A number of views are docked at the bottom of the window.</p>
+<p>The screenshot shows the open README.txt file in the editor area. When a user double-clicks on a file, Eclipse
+automatically launches the editor associated with that particular file type.</p>
+<p>The <span class="guilabel">Properties View</span> contains information on the particular object that is selected in the editor area, or
+one of the other views that serve as a selection provider. The <span class="guilabel">Problems View</span> references code lines where
+Eclipse encountered problems.</p>
+<p>Several OMNeT++-specific views exist that can be used during development. We will discuss how you can use them
+effectively in a later chapter. You can open any View by selecting <span class="menuselection">Window ‣ Show View</span> from the menu.</p>
+</section>
+<section id="workspaces">
+<h2>Workspaces</h2>
+<p>A workspace is basically a directory where all your projects are located. You may create and use several workspaces and
+switch between them as needed. During the first run, the OMNeT++ IDE offers to open the samples directory as the
+workspace, so you will be able to experiment with the available examples immediately. Once you start working on your own
+projects, we recommend that you create your own workspace by selecting <span class="menuselection">File ‣ Switch Workspace ‣ Other</span> .
+You can switch between workspaces, as necessary. Please be aware that the OMNeT++ IDE restarts with each switch in
+workspaces. This is normal. You can browse workspace content in the <span class="guilabel">Project Explorer</span>, <span class="guilabel">Navigator</span>,
+<span class="guilabel">C/C++ Projects</span> and similar views. We recommend using <span class="guilabel">Project Explorer</span>.</p>
+</section>
+<section id="the-simulation-perspective">
+<h2>The Simulation Perspective</h2>
+<p>The OMNeT++ IDE defines the <span class="guilabel">Simulation Perspective</span> so that it is specifically geared towards the design of
+simulations. The <span class="guilabel">Simulation Perspective</span> is simply a set of conveniently selected views, arranged to make the
+creation of NED, INI and MSG files easier. If you are working with INI and NED files a lot, we recommend selecting this
+perspective. Other perspectives are optimized for different tasks like C++ development or debugging.</p>
+</section>
+<section id="configuring-omnet-preferences">
+<h2>Configuring OMNeT++ Preferences</h2>
+<p>The OMNeT++ IDE preferences dialog is available through the standard preferences menu, which is under the main Window
+menu item. These settings are global and shared between all projects. The OMNeT++ install locations are automatically
+filled in for you after installation. The default settings for the NED documentation generation assume that the PATH
+environment variable is already set, so that third party tools can be found. The license configuration settings specify
+the preferred license type or a custom license text. The IDE will copy the license into new files and projects. The
+license will also be shown in the generated NED documentation.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/Intro-Preferences.png"><img alt="../_images/Intro-Preferences.png" src="../_images/Intro-Preferences.png" style="width: 75%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Configuring OMNeT++ preferences</span></p>
+</figcaption>
+</figure>
+<p>Use the Browse buttons to find files or folders easily. Specify full path for executables if you do not want to extend
+the PATH environment variable.</p>
+</section>
+<section id="creating-omnet-projects">
+<h2>Creating OMNeT++ Projects</h2>
+<p>In Eclipse, all files are within projects, so you will need a suitable project first. The project needs to be one
+designated as an OMNeT++ Project (in Eclipse lingo, it should have the OMNeT++ Nature). The easiest way to create such a
+project is to use a wizard. Choose <span class="menuselection">File ‣ New ‣ OMNeT++ Project</span> from the menu, specify a project name, and
+click the <span class="guilabel">Finish</span> button. If you do not plan to write simple modules, you may unselect the <span class="guilabel">C++
+Support</span> checkbox which will disable all C++ related features for the project.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/Intro-NewProjectWizard.png"><img alt="../_images/Intro-NewProjectWizard.png" src="../_images/Intro-NewProjectWizard.png" style="width: 50%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Creating a new OMNeT++ project</span></p>
+</figcaption>
+</figure>
+</section>
+<section id="project-references">
+<h2>Project References</h2>
+<p>Most aspects of a project can be configured in the <span class="guilabel">Project Properties</span> dialog. The dialog is accessible via
+the <span class="menuselection">Project ‣ Properties</span> menu item, or by right-clicking the project in <span class="guilabel">Project Explorer</span> and
+choosing <span class="guilabel">Properties</span> from the context menu.</p>
+<p>An important Eclipse concept is that a project may reference other projects in the workspace; project references can be
+configured in the <span class="guilabel">Project References</span> page of the properties dialog. To update the list of referenced
+projects, simply check those projects in the list that your project depends on, then click <span class="guilabel">Apply</span>. Note that
+circular references are not allowed (i.e. the dependency graph must be a tree).</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/Intro-ProjectReferences.png"><img alt="../_images/Intro-ProjectReferences.png" src="../_images/Intro-ProjectReferences.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Setting project dependencies</span></p>
+</figcaption>
+</figure>
+<p>In the OMNeT++ IDE, all NED types, C++ code and build artifacts (executables, libraries) in a project are available to
+other projects that reference the given project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To see an example of project references, check the <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> and <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code> example projects. In this
+example, <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> references <code class="docutils literal notranslate"><span class="pre">queueinglib</span></code>. <code class="docutils literal notranslate"><span class="pre">Queuinglib</span></code> provides simple modules (NED files, and a prebuilt
+shared library that contains the code of the simple modules), and makes those modules available to <code class="docutils literal notranslate"><span class="pre">queuenet</span></code> that
+contains simulations (networks and ini files) built from them.</p>
+</div>
+</section>
+<section id="getting-help">
+<h2>Getting Help</h2>
+<p>You may access the online help system from the <span class="menuselection">Help ‣ Help Contents</span> menu item. The OMNeT++ IDE is built on
+top of Eclipse, so if you are not familiar with Eclipse, we recommend reading the <span class="guilabel">Workbench User Guide</span> and
+the <span class="guilabel">C/C++ Development User Guide</span> before starting to use OMNeT++-specific features.</p>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/userguide/intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

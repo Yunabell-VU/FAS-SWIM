@@ -1,0 +1,512 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta name="copyright" content="OpenSim Ltd.">
+  <meta NAME="Author" CONTENT="Andras Varga">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="STYLESHEET" href="../book.css"  type="text/css">
+  <title>OMNeT++ - Simulation Manual</title>
+</head>
+<style type="text/css">
+  hr.pgbr { color: #f5f5f5; margin-top: 40px; margin-bottom: 10px; }
+  ul.dl { padding-left: 30px; text-indent: -30px; list-style: none; }
+  pre { margin: 4px 8px 4px 2px; padding: 8px 10px; background:#fffff4; border: 1px solid #dddddd; }
+  pre.ned { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.msg { background:#f5fff5; border-left: 4px solid #ccffcc; }
+  pre.cpp { background:#f5f5f5; border-left: 4px solid #ccccff; }
+  pre.inifile { background:#fffff0; border-left: 4px solid #e5e533; }
+  pre.filelisting { background:#f0f0f0; border-left: 4px solid #d9d9d9; }
+  pre.xml { background:#fff0f0; border-left: 4px solid #ffa0a0; }
+  pre.commandline { background:#fffff0; border-left: 4px solid #606060; }
+  td,th { text-align:left; vertical-align:top; border:1px solid; padding:3pt; border-color:#000000; }
+  div.caption { margin-top: 10px; }
+  a[href] { color: #202080; text-decoration: none; }
+  a:visited { text-decoration: none; }
+  # a:hover { text-decoration: underline; }
+
+  table.matrix { display:inline-block; vertical-align: middle; position: relative; border: 0px; background:#ffffff; margin-left:8pt; margin-right:8pt; }
+  table.matrix:before, table.matrix:after { content: ""; position: absolute; top: 0; border: 1px solid #000; width: 6px; height: 100%; }
+  table.matrix:before { left: -6px; border-right: 0px; }
+  table.matrix:after { right: -6px; border-left: 0px; }
+  table.matrix td { padding: 5px; text-align: center; border: 0px; }
+
+  a.headerlink { visibility: hidden; }
+</style>
+<body>
+
+<p><hr><b><a href="chap21.html">[Prev]</A>&nbsp;<a href="chap23.html">[Next]</A>&nbsp;<a href="toc.html#toc_22.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p><h1><a name="cha:ned-functions"/>22 Appendix D&#58; NED Functions<a class="headerlink" href="#cha:ned-functions" title="Permalink to this headline">¶</a></h1>
+
+<p>The functions that can be used in NED expressions and ini files are the
+following. The question mark (as in &#8220;<tt>rng?</tt>&#8221;) marks optional arguments.
+
+
+<p><h2><a name="sec:ned-functions:category-conversion"/>22.1 Category "conversion":<a class="headerlink" href="#sec:ned-functions:category-conversion" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>bool</b> : <tt>bool bool(any x)</tt> <br>
+    Converts x to bool, and returns the result. For numeric values, 0 and nan
+    become false and other values become true; for strings, "true" becomes true
+    and everything else becomes false.
+
+<p><li><b>double</b> : <tt>quantity double(any x)</tt> <br>
+    Converts x to double, and returns the result. A boolean argument becomes 0
+    or 1; a string is interpreted as number; an object argument causes an
+    error. Units are preserved.
+
+<p><li><b>int</b> : <tt>intquantity int(any x)</tt> <br>
+    Converts x to int, and returns the result. A boolean argument becomes 0 or
+    1; a double is converted using floor(); a string is interpreted as number;
+    an object argument causes an error. Units are preserved.
+
+<p><li><b>string</b> : <tt>string string(any x)</tt> <br>
+    Converts x to string, and returns the result.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-io"/>22.2 Category "i/o":<a class="headerlink" href="#sec:ned-functions:category-io" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>absFilePath</b> : <tt>string absFilePath(string filename)</tt> <br>
+    Converts filename to an absolute filesystem path. Absolute paths are
+    returned unchanged; relative paths are understood as relative to the
+    location of the ini or NED file where the call occurs (see baseDir()).
+
+<p><li><b>baseDir</b> : <tt>string baseDir()</tt> <br>
+    Returns the absolute filesystem path to the directory of the ini or NED
+    file where the baseDir() call occurs.
+
+<p><li><b>parseCSV</b> : <tt>any parseCSV(string str)</tt> <br>
+    Parses the given string as a comma-separated CSV, and returns it as an
+    array of arrays. Elements can be boolean (true/false), numeric (integer or
+    double, with or without measurement unit), quoted string, or unquoted
+    string. Items that cannot be parsed as any of the more specific types are
+    interpreted as unquoted strings. See readCSV() for details of the the
+    accepted CSV flavor.
+
+<p><li><b>parseExtendedCSV</b> : <tt>any parseExtendedCSV(string str)</tt> <br>
+    Parses the given string as a comma-separated CSV, and returns it as an
+    array of arrays. Elements are parsed as NED expressions, and are evaluated
+    in the caller's context. See readCSV() for details of the the accepted CSV
+    flavor.
+
+<p><li><b>parseExtendedJSON</b> : <tt>any parseExtendedJSON(string str)</tt> <br>
+    Parses the given string as Extended JSON, and returns its contents.
+    Extended JSON allows any value to be a valid NED expression (instead of
+    just constants allowed by strict JSON), and some extensions to the object
+    syntax. Actually, as the NED expression syntax includes JSON-like arrays
+    and objects, "parsing" is done simply by evaluating the string as a NED
+    expression in the caller's context.
+
+<p><li><b>parseJSON</b> : <tt>any parseJSON(string str)</tt> <br>
+    Parses the given string as JSON, and returns its contents. The syntax is
+    more permissive than standard JSON: it additionally allows the special
+    numeric values `nan`, `inf` and `-inf`, the use of measurement units, and
+    object keys are also accepted without quotation marks if it doesn't
+    interfere with parsing.
+
+<p><li><b>parseXML</b> : <tt>xml parseXML(string xmlstring, string xpath?)</tt> <br>
+    Parses the given XML string into a <a href="../api/classomnetpp_1_1cXMLElement.html">cXMLElement</a> tree, and returns the root
+    element. When called with two arguments, it returns the first element from
+    the tree that matches the expression given in simplified XPath syntax.
+
+<p><li><b>readCSV</b> : <tt>any readCSV(string filename)</tt> <br>
+    Parses the content of the given text file as comma-separated CSV, and
+    returns it as an array of arrays. Elements can be boolean (`true` or
+    `false`), numeric (integer or double, with or without measurement unit),
+    quoted string, or unquoted string. Items that cannot be parsed as any of
+    the more specific types are interpreted as unquoted strings. CSV parsing
+    rules: separator is comma; blank (whitespace-only) lines are ignored; lines
+    that contain hash mark `#` on column 1 are considered comments and are
+    ignored; items are trimmed of leading and trailing whitespace before
+    processing; no line continuation with backslash; quoted strings may be
+    delimited with single or double quotes; quoted strings may contain C-like
+    backslash escapes; no support for splitting strings over multiple lines; no
+    special treatment for the first (possibly header) line.
+
+<p><li><b>readExtendedCSV</b> : <tt>any readExtendedCSV(string filename)</tt> <br>
+    Parses the content of the given text file as comma-separated CSV, and
+    returns it as an array of arrays. Elements are parsed as NED expressions,
+    and are evaluated in the caller's context. See readCSV() for details of the
+    the accepted CSV flavor.
+
+<p><li><b>readExtendedJSON</b> : <tt>any readExtendedJSON(string filename)</tt> <br>
+    Parses the given text file as Extended JSON, and returns its contents.
+    Extended JSON allows any value to be a valid NED expression (instead of
+    just constants allowed by strict JSON), and some extensions to the object
+    syntax. Actually, as the NED expression syntax includes JSON-like arrays
+    and objects, "parsing" is done simply by evaluating the content as a NED
+    expression in the caller's context.
+
+<p><li><b>readFile</b> : <tt>string readFile(string filename)</tt> <br>
+    Opens the specified text file, and returns its content as a string. If
+    filename is a relative path, it is understood as relative to the location
+    of the ini or NED file where the readFile() call occurs.
+
+<p><li><b>readJSON</b> : <tt>any readJSON(string filename)</tt> <br>
+    Parses the given text file as JSON, and returns its contents. The syntax is
+    more permissive than standard JSON: it additionally allows the special
+    numeric values `nan`, `inf` and `-inf`, the use of measurement units, and
+    object keys are also accepted without quotation marks if it doesn't
+    interfere with parsing.
+
+<p><li><b>readXML</b> : <tt>xml readXML(string filename, string xpath?)</tt> <br>
+    Parses the given XML file into a <a href="../api/classomnetpp_1_1cXMLElement.html">cXMLElement</a> tree, and returns the root
+    element. When called with two arguments, it returns the first element from
+    the tree that matches the expression given in simplified XPath syntax.
+
+<p><li><b>resolveFile</b> : <tt>string resolveFile(string directory, string filename)</tt> <br>
+    Joins its arguments as file paths, except that when the second argument is
+    an absolute filesystem path, it is returned unchanged. This is purely a
+    string operation; neither directory nor filename needs to exist in the file
+    system.
+
+<p><li><b>workingDir</b> : <tt>string workingDir()</tt> <br>
+    Returns the current working directory.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-math"/>22.3 Category "math":<a class="headerlink" href="#sec:ned-functions:category-math" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>acos</b> : <tt>double acos(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>asin</b> : <tt>double asin(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>atan</b> : <tt>double atan(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>atan2</b> : <tt>double atan2(double, double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>ceil</b> : <tt>double ceil(double)</tt> <br>
+    Rounds up; see standard C function of the same name
+
+<p><li><b>cos</b> : <tt>double cos(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>exp</b> : <tt>double exp(double)</tt> <br>
+    Exponential; see standard C function of the same name
+
+<p><li><b>fabs</b> : <tt>quantity fabs(quantity x)</tt> <br>
+    Returns the absolute value of the quantity.
+
+<p><li><b>floor</b> : <tt>double floor(double)</tt> <br>
+    Rounds down; see standard C function of the same name
+
+<p><li><b>fmod</b> : <tt>quantity fmod(quantity x, quantity y)</tt> <br>
+    Returns the floating-point remainder of x/y; unit conversion takes place if
+    needed.
+
+<p><li><b>hypot</b> : <tt>double hypot(double, double)</tt> <br>
+    Length of the hypotenuse; see standard C function of the same name
+
+<p><li><b>log</b> : <tt>double log(double)</tt> <br>
+    Natural logarithm; see standard C function of the same name
+
+<p><li><b>log10</b> : <tt>double log10(double)</tt> <br>
+    Base-10 logarithm; see standard C function of the same name
+
+<p><li><b>max</b> : <tt>quantity max(quantity a, quantity b)</tt> <br>
+    Returns the greater one of the two quantities; unit conversion takes place
+    if needed.
+
+<p><li><b>min</b> : <tt>quantity min(quantity a, quantity b)</tt> <br>
+    Returns the smaller one of the two quantities; unit conversion takes place
+    if needed.
+
+<p><li><b>pow</b> : <tt>double pow(double, double)</tt> <br>
+    Power; see standard C function of the same name
+
+<p><li><b>sin</b> : <tt>double sin(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p><li><b>sqrt</b> : <tt>double sqrt(double)</tt> <br>
+    Square root; see standard C function of the same name
+
+<p><li><b>tan</b> : <tt>double tan(double)</tt> <br>
+    Trigonometric function; see standard C function of the same name
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-misc"/>22.4 Category "misc":<a class="headerlink" href="#sec:ned-functions:category-misc" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>dup</b> : <tt>object dup(object obj)</tt> <br>
+    Clones the given object by calling its dup() C++ method.
+
+<p><li><b>eval</b> : <tt>any eval(string expr)</tt> <br>
+    Evaluates the NED expression in the call site's context.
+
+<p><li><b>firstAvailable</b> : <tt>string firstAvailable(...)</tt> <br>
+    Accepts any number of strings, interprets them as NED type names (qualified
+    or unqualified), and returns the first one that exists and its C++
+    implementation class is also available. Throws an error if none of the
+    types are available.
+
+<p><li><b>get</b> : <tt>any get(object arrayOrMap, any keyOrIndex)</tt> <br>
+    Obtain a value from a NED map or array. Examples: get([10,20,30], 1)
+    returns 20; get(foo:10,bar:20, 'foo') returns 10. Note that get(x,i) may
+    also be written as x.get(i), with the two being completely equivalent.
+
+<p><li><b>select</b> : <tt>any select(int index, ...)</tt> <br>
+    Returns the &lt;index&gt;th item from the rest of the argument list; numbering
+    starts from 0.
+
+<p><li><b>simTime</b> : <tt>quantity simTime()</tt> <br>
+    Returns the current simulation time.
+
+<p><li><b>size</b> : <tt>int size(object arrayOrMap)</tt> <br>
+    Returns the length of an array, or the number of elements in a map.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-ned"/>22.5 Category "ned":<a class="headerlink" href="#sec:ned-functions:category-ned" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>ancestorIndex</b> : <tt>int ancestorIndex(int numLevels)</tt> <br>
+    Returns the index of the ancestor module numLevels levels above the module
+    or channel in context.
+
+<p><li><b>fullName</b> : <tt>string fullName()</tt> <br>
+    Returns the full name of the module or channel in context.
+
+<p><li><b>fullPath</b> : <tt>string fullPath()</tt> <br>
+    Returns the full path of the module or channel in context.
+
+<p><li><b>parentIndex</b> : <tt>int parentIndex()</tt> <br>
+    Returns the index of the parent module, which has to be part of module
+    vector.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-random-continuous"/>22.6 Category "random/continuous":<a class="headerlink" href="#sec:ned-functions:category-random-continuous" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>beta</b> : <tt>double beta(double alpha1, double alpha2, int rng?)</tt> <br>
+    Returns a random number from the Beta distribution
+
+<p><li><b>cauchy</b> : <tt>quantity cauchy(quantity a, quantity b, int rng?)</tt> <br>
+    Returns a random number from the Cauchy distribution
+
+<p><li><b>chi_square</b> : <tt>double chi_square(int k, int rng?)</tt> <br>
+    Returns a random number from the Chi-square distribution
+
+<p><li><b>erlang_k</b> : <tt>quantity erlang_k(int k, quantity mean, int rng?)</tt> <br>
+    Returns a random number from the Erlang distribution
+
+<p><li><b>exponential</b> : <tt>quantity exponential(quantity mean, int rng?)</tt> <br>
+    Returns a random number from the Exponential distribution
+
+<p><li><b>gamma_d</b> : <tt>quantity gamma_d(double alpha, quantity theta, int rng?)</tt> <br>
+    Returns a random number from the Gamma distribution
+
+<p><li><b>lognormal</b> : <tt>double lognormal(double m, double w, int rng?)</tt> <br>
+    Returns a random number from the Lognormal distribution
+
+<p><li><b>normal</b> : <tt>quantity normal(quantity mean, quantity stddev, int rng?)</tt> <br>
+    Returns a random number from the Normal distribution
+
+<p><li><b>pareto_shifted</b> : <tt>quantity pareto_shifted(double a, quantity b, quantity c, int rng?)</tt> <br>
+    Returns a random number from the Pareto-shifted distribution
+
+<p><li><b>student_t</b> : <tt>double student_t(int i, int rng?)</tt> <br>
+    Returns a random number from the Student-t distribution
+
+<p><li><b>triang</b> : <tt>quantity triang(quantity a, quantity b, quantity c, int rng?)</tt> <br>
+    Returns a random number from the Triangular distribution
+
+<p><li><b>truncnormal</b> : <tt>quantity truncnormal(quantity mean, quantity stddev, int rng?)</tt> <br>
+    Returns a random number from the truncated Normal distribution
+
+<p><li><b>uniform</b> : <tt>quantity uniform(quantity a, quantity b, int rng?)</tt> <br>
+    Returns a random number from the Uniform distribution
+
+<p><li><b>weibull</b> : <tt>quantity weibull(quantity a, quantity b, int rng?)</tt> <br>
+    Returns a random number from the Weibull distribution
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-random-discrete"/>22.7 Category "random/discrete":<a class="headerlink" href="#sec:ned-functions:category-random-discrete" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>bernoulli</b> : <tt>int bernoulli(double p, int rng?)</tt> <br>
+    Returns a random number from the Bernoulli distribution
+
+<p><li><b>binomial</b> : <tt>int binomial(int n, double p, int rng?)</tt> <br>
+    Returns a random number from the Binomial distribution
+
+<p><li><b>geometric</b> : <tt>int geometric(double p, int rng?)</tt> <br>
+    Returns a random number from the Geometric distribution
+
+<p><li><b>intuniform</b> : <tt>int intuniform(intquantity a, intquantity b, int rng?)</tt> <br>
+    Returns a random integer uniformly distributed over [a,b]
+
+<p><li><b>intuniformexcl</b> : <tt>int intuniformexcl(intquantity a, intquantity b, int rng?)</tt> <br>
+    Returns a random integer uniformly distributed over [a,b), that is, [a,b-1]
+
+<p><li><b>negbinomial</b> : <tt>int negbinomial(int n, double p, int rng?)</tt> <br>
+    Returns a random number from the Negbinomial distribution
+
+<p><li><b>poisson</b> : <tt>int poisson(double lambda, int rng?)</tt> <br>
+    Returns a random number from the Poisson distribution
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-strings"/>22.8 Category "strings":<a class="headerlink" href="#sec:ned-functions:category-strings" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>choose</b> : <tt>string choose(int index, string list)</tt> <br>
+    Interprets list as a space-separated list, and returns the item at the
+    given index. Negative and out-of-bounds indices cause an error.
+
+<p><li><b>contains</b> : <tt>bool contains(string s, string substr)</tt> <br>
+    Returns true if string s contains substr as substring
+
+<p><li><b>endsWith</b> : <tt>bool endsWith(string s, string substr)</tt> <br>
+    Returns true if s ends with the substring substr.
+
+<p><li><b>expand</b> : <tt>string expand(string s)</tt> <br>
+    Expands $ variables ($configname, $runnumber, etc.) in the given
+    string, and returns the result.
+
+<p><li><b>indexOf</b> : <tt>int indexOf(string s, string substr)</tt> <br>
+    Returns the position of the first occurrence of substring substr in s, or
+    -1 if s does not contain substr.
+
+<p><li><b>length</b> : <tt>int length(string s)</tt> <br>
+    Returns the length of the string
+
+<p><li><b>replace</b> : <tt>string replace(string s, string substr, string repl, int startPos?)</tt> <br>
+    Replaces all occurrences of substr in s with the string repl. If startPos
+    is given, search begins from position startPos in s.
+
+<p><li><b>replaceFirst</b> : <tt>string replaceFirst(string s, string substr, string repl, int startPos?)</tt> <br>
+    Replaces the first occurrence of substr in s with the string repl. If
+    startPos is given, search begins from position startPos in s.
+
+<p><li><b>startsWith</b> : <tt>bool startsWith(string s, string substr)</tt> <br>
+    Returns true if s begins with the substring substr.
+
+<p><li><b>substring</b> : <tt>string substring(string s, int pos, int len?)</tt> <br>
+    Return the substring of s starting at the given position, either to the end
+    of the string or maximum len characters
+
+<p><li><b>substringAfter</b> : <tt>string substringAfter(string s, string substr)</tt> <br>
+    Returns the substring of s after the first occurrence of substr, or the
+    empty string if s does not contain substr.
+
+<p><li><b>substringAfterLast</b> : <tt>string substringAfterLast(string s, string substr)</tt> <br>
+    Returns the substring of s after the last occurrence of substr, or the
+    empty string if s does not contain substr.
+
+<p><li><b>substringBefore</b> : <tt>string substringBefore(string s, string substr)</tt> <br>
+    Returns the substring of s before the first occurrence of substr, or the
+    empty string if s does not contain substr.
+
+<p><li><b>substringBeforeLast</b> : <tt>string substringBeforeLast(string s, string substr)</tt> <br>
+    Returns the substring of s before the last occurrence of substr, or the
+    empty string if s does not contain substr.
+
+<p><li><b>tail</b> : <tt>string tail(string s, int len)</tt> <br>
+    Returns the last len character of s, or the full s if it is shorter than
+    len characters.
+
+<p><li><b>toLower</b> : <tt>string toLower(string s)</tt> <br>
+    Converts s to all lowercase, and returns the result.
+
+<p><li><b>toUpper</b> : <tt>string toUpper(string s)</tt> <br>
+    Converts s to all uppercase, and returns the result.
+
+<p><li><b>trim</b> : <tt>string trim(string s)</tt> <br>
+    Discards whitespace from the start and end of s, and returns the result.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-units"/>22.9 Category "units":<a class="headerlink" href="#sec:ned-functions:category-units" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>convertUnit</b> : <tt>quantity convertUnit(quantity x, string unit)</tt> <br>
+    Converts x to the given unit.
+
+<p><li><b>dropUnit</b> : <tt>double dropUnit(quantity x)</tt> <br>
+    Removes the unit of measurement from quantity x.
+
+<p><li><b>replaceUnit</b> : <tt>quantity replaceUnit(quantity x, string unit)</tt> <br>
+    Replaces the unit of x with the given unit.
+
+<p><li><b>unitOf</b> : <tt>string unitOf(quantity x)</tt> <br>
+    Returns the unit of the given quantity.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-xml"/>22.10 Category "xml":<a class="headerlink" href="#sec:ned-functions:category-xml" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>xml</b> : <tt>xml xml(string xmlstring, string xpath?)</tt> <br>
+    Parses the given XML string into a <a href="../api/classomnetpp_1_1cXMLElement.html">cXMLElement</a> tree, and returns the root
+    element. When called with two arguments, it returns the first element from
+    the tree that matches the expression given in simplified XPath syntax.
+    Note: This is an alias to the parseXML() function.
+
+<p><li><b>xmldoc</b> : <tt>xml xmldoc(string filename, string xpath?)</tt> <br>
+    Parses the given XML file into a <a href="../api/classomnetpp_1_1cXMLElement.html">cXMLElement</a> tree, and returns the root
+    element. When called with two arguments, it returns the first element from
+    the tree that matches the expression given in simplified XPath syntax.
+    Note: This is an alias to the readXML() function.
+
+<p>
+</ul>
+
+<p><h2><a name="sec:ned-functions:category-units-conversion"/>22.11 Category "units/conversion":<a class="headerlink" href="#sec:ned-functions:category-units-conversion" title="Permalink to this headline">¶</a></h2>
+
+<p><ul class="dl">
+<li><b>&lt;unit_name&gt;</b> : <tt>quantity &lt;unit_name&gt;(quantity x)</tt> <br>
+    All measurement unit names can be used as one-argument functions that
+    convert from a compatible unit or a dimensionless number. Substitute
+    underscore for any hyphen in the name, and '_per_' for any slash:
+    milliampere-hour --&gt; milliampere_hour(), meter/sec --&gt; meter_per_sec().
+
+<p>    d(), day(), h(), hour(), min(), minute(), s(), second(), ms(),
+    millisecond(), us(), microsecond(), ns(), nanosecond(), ps(), picosecond(),
+    fs(), femtosecond(), as(), attosecond(), bps(), bit_per_sec(), kbps(),
+    kilobit_per_sec(), Mbps(), megabit_per_sec(), Gbps(), gigabit_per_sec(),
+    Tbps(), terabit_per_sec(), B(), byte(), KiB(), kibibyte(), MiB(),
+    mebibyte(), GiB(), gibibyte(), TiB(), tebibyte(), kB(), kilobyte(), MB(),
+    megabyte(), GB(), gigabyte(), TB(), terabyte(), b(), bit(), Kib(),
+    kibibit(), Mib(), mebibit(), Gib(), gibibit(), Tib(), tebibit(), kb(),
+    kilobit(), Mb(), megabit(), Gb(), gigabit(), Tb(), terabit(), rad(),
+    radian(), deg(), degree(), m(), meter(), cm(), centimeter(), mm(),
+    millimeter(), um(), micrometer(), nm(), nanometer(), km(), kilometer(),
+    W(), watt(), mW(), milliwatt(), uW(), microwatt(), nW(), nanowatt(), pW(),
+    picowatt(), fW(), femtowatt(), kW(), kilowatt(), MW(), megawatt(), GW(),
+    gigawatt(), Hz(), hertz(), kHz(), kilohertz(), MHz(), megahertz(), GHz(),
+    gigahertz(), THz(), terahertz(), kg(), kilogram(), g(), gram(), K(),
+    kelvin(), J(), joule(), kJ(), kilojoule(), MJ(), megajoule(), Ws(),
+    watt_second(), Wh(), watt_hour(), kWh(), kilowatt_hour(), MWh(),
+    megawatt_hour(), V(), volt(), kV(), kilovolt(), mV(), millivolt(), A(),
+    ampere(), mA(), milliampere(), uA(), microampere(), Ohm(), ohm(), mOhm(),
+    milliohm(), kOhm(), kiloohm(), MOhm(), megaohm(), mps(), meter_per_sec(),
+    kmps(), kilometer_per_sec(), kmph(), kilometer_per_hour(), C(), coulomb(),
+    As(), ampere_second(), mAs(), milliampere_second(), Ah(), ampere_hour(),
+    mAh(), milliampere_hour(), ratio(), ratio(), pct(), percent(), dBW(),
+    decibel_watt(), dBm(), decibel_milliwatt(), dBmW(), decibel_milliwatt(),
+    dBV(), decibel_volt(), dBmV(), decibel_millivolt(), dBA(),
+    decibel_ampere(), dBmA(), decibel_milliampere(), dB(), decibel(), etc.
+</ul>
+
+<hr class='pgbr'><p><hr><b><a href="chap21.html">[Prev]</A>&nbsp;<a href="chap23.html">[Next]</A>&nbsp;<a href="toc.html#toc_22.">[TOC]</a>&nbsp;<a href="usman.html">[Chapters]</a></b><hr></p>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+%description:
+Entities declared in an external DTD are substituted.
+
+%file: test.dtd
+<!ENTITY xrul "xml rulez">
+<!ELEMENT foo ANY>
+<!ELEMENT bar ANY>
+<!ATTLIST bar
+   att   CDATA  #IMPLIED
+>
+
+%file: test.xml
+<?xml version="1.0" ?>
+<!DOCTYPE foo SYSTEM "./test.dtd">
+<foo>
+    <bar att="&xrul;!">Hey, &xrul;!</bar>
+</foo>
+
+%activity:
+#ifndef WITH_LIBXML
+EV << "#SKIPPED: No LibXML parser, required for DTD validation.\n";
+return;
+#endif
+
+cXMLElement *node = getEnvir()->getXMLDocument("test.xml");
+EV << node->getXML();
+
+%contains: stdout
+<bar att="xml rulez!">Hey, xml rulez!</bar>

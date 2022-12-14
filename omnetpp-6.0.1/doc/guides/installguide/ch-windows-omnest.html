@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.pipeline.stopwords" content="True">
+  <meta name="lang:search.pipeline.trimmer" content="True">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+
+  
+    <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto:300,400,400i,700&display=fallback" rel="stylesheet">
+
+    <style>
+      body,
+      input {
+        font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif
+      }
+
+      code,
+      kbd,
+      pre {
+        font-family: "Roboto Mono", "Courier New", Courier, monospace
+      }
+    </style>
+  
+
+  <link rel="stylesheet" href="../_static/stylesheets/application.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-palette.css"/>
+  <link rel="stylesheet" href="../_static/stylesheets/application-fixes.css"/>
+  
+  <link rel="stylesheet" href="../_static/fonts/material-icons.css"/>
+  
+  <meta name="theme-color" content="#3f51b5">
+  <script src="../_static/javascripts/modernizr.js"></script>
+  
+  <script>
+      window.ga = window.ga || function () {
+          (ga.q = ga.q || []).push(arguments)
+      };
+      ga.l = +new Date;
+      ga('create', 'UA-240922-2', 'auto');
+      ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+  
+    <title>Windows - Using the Installer &#8212; OMNeT++ 6.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/material.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  
+   
+
+  </head>
+  <body dir=ltr
+        data-md-color-primary=blue data-md-color-accent=light-blue>
+  
+  <svg class="md-svg">
+    <defs data-children-count="0">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      
+    </defs>
+  </svg>
+  
+  <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
+  <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
+  <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+  <a href="#installguide/ch-windows-omnest" tabindex="1" class="md-skip"> Skip to content </a>
+  <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex navheader">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../index.html" title="OMNeT++ 6.0.1 documentation"
+           class="md-header-nav__button md-logo">
+          
+            &nbsp;
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          <span class="md-header-nav__topic">OMNeT++</span>
+          <span class="md-header-nav__topic"> Windows - Using the Installer </span>
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" action="../search.html" method="GET" name="search">
+      <input type="text" class="md-search__input" name="q" placeholder="Search"
+             autocapitalize="off" autocomplete="off" spellcheck="false"
+             data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+          </div>
+        </div>
+      
+      
+  
+  <script src="../_static/javascripts/version_dropdown.js"></script>
+  <script>
+    var json_loc = "../"versions.json"",
+        target_loc = "../../",
+        text = "Versions";
+    $( document ).ready( add_version_dropdown(json_loc, target_loc, text));
+  </script>
+  
+
+    </div>
+  </nav>
+</header>
+
+  
+  <div class="md-container">
+    
+    
+    
+  <nav class="md-tabs" data-md-component="tabs">
+    <div class="md-tabs__inner md-grid">
+      <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">OMNeT++ 6.0.1 documentation</a></li>
+      </ul>
+    </div>
+  </nav>
+    <main class="md-main">
+      <div class="md-main__inner md-grid" data-md-component="container">
+        
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../index.html" title="OMNeT++ 6.0.1 documentation" class="md-nav__button md-logo">
+      
+        <img src="../_static/" alt=" logo" width="48" height="48">
+      
+    </a>
+    <a href="../index.html"
+       title="OMNeT++ 6.0.1 documentation">OMNeT++</a>
+  </label>
+    <div class="md-nav__source">
+      <a href="https://github.com/omnetpp/omnetpp/" title="Go to repository" class="md-source" data-md-source="github">
+
+    <div class="md-source__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="28" height="28">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    omnetpp
+  </div>
+</a>
+    </div>
+  
+  
+
+  
+  <ul class="md-nav__list">
+    <li class="md-nav__item">
+    
+    
+      <a href="../userguide/index.html" class="md-nav__link">User Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="index.html" class="md-nav__link">Installation Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-overview/ide-overview.html" class="md-nav__link">Overview of the OMNeT++ IDE</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-developersguide/ide-developersguide.html" class="md-nav__link">IDE Developers Guide</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
+      <a href="../ide-customization-guide/ide-customization-guide.html" class="md-nav__link">IDE Customization Guide</a>
+      
+    
+    </li>
+  </ul>
+  
+
+</nav>
+              </div>
+            </div>
+          </div>
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#installguide-ch-windows-omnest--page-root" class="md-nav__link">Windows - Using the Installer</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#supported-windows-versions" class="md-nav__link">Supported Windows Versions</a>
+        </li>
+        <li class="md-nav__item"><a href="#pre-installation-steps" class="md-nav__link">Pre-installation Steps</a>
+        </li>
+        <li class="md-nav__item"><a href="#installing-omnet" class="md-nav__link">Installing OMNeT++</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-the-ide" class="md-nav__link">Using the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#using-omnet-with-the-mingw-gcc-compiler" class="md-nav__link">Using OMNeT++ with the MinGW GCC Compiler</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#compiling-simulations-on-the-command-line" class="md-nav__link">Compiling Simulations on the Command Line</a>
+        </li>
+        <li class="md-nav__item"><a href="#recompiling-omnet" class="md-nav__link">Recompiling OMNeT++</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#using-omnet-with-microsoft-visual-studio-clang-compiler" class="md-nav__link">Using OMNeT++ with Microsoft Visual Studio Clang compiler</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#compiling-simulations-on-the-command-line-ms-abi" class="md-nav__link">Compiling Simulations on the Command Line (MS ABI)</a>
+        </li>
+        <li class="md-nav__item"><a href="#compiling-simulations-from-the-ide" class="md-nav__link">Compiling Simulations from the IDE</a>
+        </li>
+        <li class="md-nav__item"><a href="#id1" class="md-nav__link">Recompiling OMNeT++</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#switching-compilers" class="md-nav__link">Switching Compilers</a>
+        </li>
+        <li class="md-nav__item"><a href="#additional-packages" class="md-nav__link">Additional Packages</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#mpi" class="md-nav__link">MPI</a>
+        </li>
+        <li class="md-nav__item"><a href="#akaroa" class="md-nav__link">Akaroa</a>
+        </li>
+        <li class="md-nav__item"><a href="#systemc" class="md-nav__link">SystemC</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
+        </li>
+    
+<li class="md-nav__item"><a class="md-nav__extra_link" href="../_sources/installguide/ch-windows-omnest.rst.txt">Show Source</a> </li>
+
+<li id="searchbox" class="md-nav__item"></li>
+
+  </ul>
+</nav>
+              </div>
+            </div>
+          </div>
+        
+        <div class="md-content">
+          <article class="md-content__inner md-typeset" role="main">
+            
+  <section id="windows-using-the-installer">
+<h1 id="installguide-ch-windows-omnest--page-root">Windows - Using the Installer<a class="headerlink" href="#installguide-ch-windows-omnest--page-root" title="Permalink to this headline">¶</a></h1>
+<section id="supported-windows-versions">
+<h2 id="supported-windows-versions">Supported Windows Versions<a class="headerlink" href="#supported-windows-versions" title="Permalink to this headline">¶</a></h2>
+<p>OMNeT++ supports 64-bit versions of Windows.</p>
+</section>
+<section id="pre-installation-steps">
+<h2 id="pre-installation-steps">Pre-installation Steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
+<p>Download <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-win64.exe</span></code> from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The MinGW GCC and Clang compilers are bundled with OMNeT++. You do not need to install any additional compiler to
+work with OMNeT++. These comilers use the industry standard Itanium C++ ABI
+(<a class="reference external" href="http://itanium-cxx-abi.github.io/cxx-abi/">http://itanium-cxx-abi.github.io/cxx-abi/</a>. If you would like to use Microsoft ABI compliant compilers from <em>MS
+Visual Studio</em> or <em>MS Build Tools</em>, you should install <em>MSVC v142 - VS 2019 C++ x64/x86 build tools</em> (from Build
+Tools 2019 or Visual Studio 2019) along with the <em>Microsoft Windows 10 SDK</em> and the <em>C++ Clang tools for Windows
+(9.0.0 - x64/x86)</em> component, before installing OMNeT++.</p>
+</div>
+</section>
+<section id="installing-omnet">
+<h2 id="installing-omnet">Installing OMNeT++<a class="headerlink" href="#installing-omnet" title="Permalink to this headline">¶</a></h2>
+<p>Find the downloaded installation file using Windows Explorer, and double-click the file. This will start the
+installation process.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/win-downloaded.png"><img alt="../_images/win-downloaded.png" src="../_images/win-downloaded.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">Starting the installer</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>To start the installation, accept the Licensing agreements:</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/win-license.png"><img alt="../_images/win-license.png" src="../_images/win-license.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">License agreement</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Select an installation target directory. Please make sure that the installation path does not contain spaces.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/win-installdir.png"><img alt="../_images/win-installdir.png" src="../_images/win-installdir.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">Selecting the installation directory</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>On the next page you have to specify which compiler you intend to use with OMNeT++. This can be the bundled MinGW GCC
+compiler (recommended), or the Clang compiler from Microsoft Visual Studio/MS Build Tools 2019. If you do not install
+any pre-built binary packages (none), you have to compile OMNeT++ manually after the installation has finished.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/win-compiler.png"><img alt="../_images/win-compiler.png" src="../_images/win-compiler.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">Compiler selection</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>On the last page, you can optionally create program launcher icons for your desktop, too.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/win-optional.png"><img alt="../_images/win-optional.png" src="../_images/win-optional.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">Installation options</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>After this step the installation process starts, and all files required by OMNeT++ will be copied to the installation
+folder.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/win-progress.png"><img alt="../_images/win-progress.png" src="../_images/win-progress.png" style="width: 75.0%;"/></a>
+<figcaption>
+<p><span class="caption-text">Installation options</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Finally, a new Start Menu folder is created (along with desktop shortcuts). You can start the <em>OMNeT++ Shell</em> or the
+<em>OMNeT++ IDE</em> by clicking on the icons.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you want to work from the command line, use the provided <em>OMNeT++ Shell</em>. This shell sets all environment
+variables and the path necessary to run OMNeT++ simulations.</p>
+</div>
+</section>
+<section id="using-the-ide">
+<h2 id="using-the-ide">Using the IDE<a class="headerlink" href="#using-the-ide" title="Permalink to this headline">¶</a></h2>
+<p>Once the installation has finished, you can start using OMNeT++ by launching the IDE. The IDE can be launched with the
+corresponding Start Menu or desktop shortcut, or by typing <code class="docutils literal notranslate"><span class="pre">omnetpp</span></code> at the OMNeT++ Shell prompt.</p>
+<p>In the IDE, each simulation example is a separate project. To build an example, open its project using the context menu
+(right-click, <em>Open Project</em>), and click the <em>Run</em> button on the toolbar. To rebuild the example, first make sure that
+the correct configuration is selected (context menu, <em>Build Configurations</em> &gt; <em>Set Active</em>), then choose <em>Clean Project</em>
+and <em>Build Project</em> from the context menu.</p>
+<p>The IDE is documented in detail in the <em>User Guide</em>.</p>
+</section>
+<section id="using-omnet-with-the-mingw-gcc-compiler">
+<h2 id="using-omnet-with-the-mingw-gcc-compiler">Using OMNeT++ with the MinGW GCC Compiler<a class="headerlink" href="#using-omnet-with-the-mingw-gcc-compiler" title="Permalink to this headline">¶</a></h2>
+<p>The bundled MinGW GCC compiler is preconfigured for OMNeT++. Note that only the bundled version of MinGW has been
+tested and is supported with OMNeT++.</p>
+<p>If you have installed the pre-compiled binary package for the MinGW compiler, make sure that the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/bin</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/lib</span></code> directories contain the correct executables and libraries. You should see <code class="docutils literal notranslate"><span class="pre">libopp*.dll</span></code> files
+in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/bin</span></code> directory and similarly named <code class="docutils literal notranslate"><span class="pre">*.a</span></code> files in <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/lib</span></code>. If you do not see them,
+check the “Switching Compilers” or the “Recompiling OMNeT++” section before proceeding.</p>
+<p>To test the installation, try to run models from the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/samples</span></code> directory.</p>
+<section id="compiling-simulations-on-the-command-line">
+<h3 id="compiling-simulations-on-the-command-line">Compiling Simulations on the Command Line<a class="headerlink" href="#compiling-simulations-on-the-command-line" title="Permalink to this headline">¶</a></h3>
+<p>To build simulations from the command line, the following directories have to be included in the path:
+<code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\bin</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\tools\win64\usr\bin</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\tools\win64\mingw64\bin</span></code>.</p>
+<p>OMNeT++ provides a <em>OMNeT++ MinGW Shell</em> window (<code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code>), which sets the path and environment variables.</p>
+<p>Before compiling a model, you must generate a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for it. Change into the model directory and execute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ opp_makemake -f --deep
+</pre></div>
+</div>
+<p>This command will generate a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> that can compile all your .cc files in the model directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<p>will compile and build your project.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Be sure to check the <em>Manual</em> for all the options and features of <code class="docutils literal notranslate"><span class="pre">opp_makemake</span></code>.</p>
+</div>
+</section>
+<section id="recompiling-omnet">
+<h3 id="recompiling-omnet">Recompiling OMNeT++<a class="headerlink" href="#recompiling-omnet" title="Permalink to this headline">¶</a></h3>
+<p>Open the <em>OMNeT++ MinGW Shell</em> window and type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+</pre></div>
+</div>
+<p>This command will detect all required software on your machine, and configure your build environment. The configuration
+process creates a file called <code class="docutils literal notranslate"><span class="pre">Makefile.inc</span></code> in your installation root. This file will be included in all of your
+makefiles, and contains all variables, paths and settings for the build process.</p>
+<p>If you do not have binary files in your <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory (no pre-compiled binaries were installed), you should compile
+OMNeT++ now manually by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The above command creates both debug and release versions of the libraries. If you want to create only one type, use
+the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">MODE=debug</span></code> or <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">MODE=release</span></code> commands.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you have a dual-core machine, you can speed up the compilation by adding the <code class="docutils literal notranslate"><span class="pre">-j2</span></code> option to the <code class="docutils literal notranslate"><span class="pre">make</span></code>
+command line, which enables parallel build support.</p>
+</div>
+</section>
+</section>
+<section id="using-omnet-with-microsoft-visual-studio-clang-compiler">
+<h2 id="using-omnet-with-microsoft-visual-studio-clang-compiler">Using OMNeT++ with Microsoft Visual Studio Clang compiler<a class="headerlink" href="#using-omnet-with-microsoft-visual-studio-clang-compiler" title="Permalink to this headline">¶</a></h2>
+<p>OMNeT++ comes with pre-built binaries for the Clang compiler. If you have installed the pre-compiled binary package
+for the Clang compiler, make sure that the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/bin</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/lib</span></code> directories contain the correct
+executables and libraries. You should see <code class="docutils literal notranslate"><span class="pre">opp*.dll</span></code> files in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/bin</span></code> directory and <code class="docutils literal notranslate"><span class="pre">opp*.lib</span></code>
+files in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/lib</span></code> directory. If you do not see them, check the “Switching Compilers” or the “Recompiling
+OMNeT++” section before proceeding.</p>
+<p>To test the installation try to run models from the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/samples</span></code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be sure to modify the path to point to your Visual Studio installation (VS_INSTALL_DIR) and Clang compiler version
+(ClangToolsInstallDir) in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\vcenv.cmd</span></code> file. By default, the file is using the MS Build Tools 2019
+installation on your C: drive. If you have installed Visual Stuido instead of the Build Tools package, you must
+modify this file.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For now, the OMNeT++ IDE cannot be used for debugging Visual C++ binaries. This is a limitation of the Eclipse
+CDT component that OMNeT++ build on. We recommend that you use the Visual Studio IDE for debugging.</p>
+</div>
+<section id="compiling-simulations-on-the-command-line-ms-abi">
+<h3 id="compiling-simulations-on-the-command-line-ms-abi">Compiling Simulations on the Command Line (MS ABI)<a class="headerlink" href="#compiling-simulations-on-the-command-line-ms-abi" title="Permalink to this headline">¶</a></h3>
+<p>To build simulations from the command line, the following directories have to be included in the path:
+<code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\bin</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\tools\win64\usr\bin</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\tools\win64\visualc\bin</span></code> plus the
+directories required by Visual Studio Clang itself. To include the required Visual C++ directories, VC provides a
+batch file called <code class="docutils literal notranslate"><span class="pre">vcvars64.bat</span></code> in its <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory.</p>
+<p>OMNeT++ provides a <em>OMNeT++ Visual C++ Shell</em> window (<code class="docutils literal notranslate"><span class="pre">vcenv.cmd</span></code>), which sets the path and environment
+variables and properly class also the <code class="docutils literal notranslate"><span class="pre">vcvars64.bat</span></code> file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may need to adjust your Visual Studio/MS Build Tools and Clang installation directory in the <code class="docutils literal notranslate"><span class="pre">vcenv.cmd</span></code> file.</p>
+</div>
+<p>Before compiling a model, you must generate a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for it. Change into the model directory and execute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">opp_makemake</span> <span class="o">-</span><span class="n">f</span> <span class="o">--</span><span class="n">deep</span>
+</pre></div>
+</div>
+<p>This command will generate a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> file that can compile all your .cc files in the model directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">make</span>
+</pre></div>
+</div>
+<p>will build your project.</p>
+</section>
+<section id="compiling-simulations-from-the-ide">
+<h3 id="compiling-simulations-from-the-ide">Compiling Simulations from the IDE<a class="headerlink" href="#compiling-simulations-from-the-ide" title="Permalink to this headline">¶</a></h3>
+<p>Before compiling simulations from the IDE, make sure that the correct build configuration (<em>debug</em> or <em>release</em>) is
+selected then choose <code class="docutils literal notranslate"><span class="pre">Build</span></code> in the <code class="docutils literal notranslate"><span class="pre">Project</span></code> menu.</p>
+</section>
+<section id="id1">
+<h3 id="id1">Recompiling OMNeT++<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Open the <em>OMNeT++ Visual C++ Shell</em> window (<code class="docutils literal notranslate"><span class="pre">vcenv.cmd</span></code>). Make sure that <code class="docutils literal notranslate"><span class="pre">USE_MS_ABI</span></code> is set to <em>yes</em> (and
+uncommented) in the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file and configure the installation with <code class="docutils literal notranslate"><span class="pre">./configure</span></code>.</p>
+<p>If you do not have binary files in your <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory (no pre-compiled binaries were installed), you should compile
+OMNeT++ now manually by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">make</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="switching-compilers">
+<h2 id="switching-compilers">Switching Compilers<a class="headerlink" href="#switching-compilers" title="Permalink to this headline">¶</a></h2>
+<p>If you want to switch compilers after you have installed OMNeT++, we recommend uninstalling the software and
+reinstalling it with the selected new compiler.</p>
+<p>It is also possible to manually change the compiler used:</p>
+<p>First you have to delete all executable files generated by that compiler.</p>
+<p>Open the <em>OMNeT++ MinGW Shell</em> window (<code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code>) and clean OMNeT++ by executing the following command in
+<code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make cleanall
+</pre></div>
+</div>
+<p>Pre-built binaries are stored in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;/store</span></code> directory. You must extract their content in the root
+OMNeT++ directory. Execute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ 7za x store/mingw-bin.7z
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ 7za x store/clangc2-bin.7z
+</pre></div>
+</div>
+<p>depending on your compiler. After extracting the executables you will be able to run the sample simulations immediately.</p>
+<p>Finally, you may need to modify the shortcut that is used to start the IDE. Open the shortcut properties and change the
+command to “mingw.env ide” or “vcenv.cmd ide” depending on the compiler you intend to use.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be sure to modify the path to your Visual Studio installation (VS_INSTALL_DIR) and Clang compiler version
+(ClangToolsInstallDir) in the <code class="docutils literal notranslate"><span class="pre">&lt;installdir&gt;\vcenv.cmd</span></code> file if you are switching between different versions of
+Visual Studio or MS Build Tools.</p>
+</div>
+</section>
+<section id="additional-packages">
+<h2 id="additional-packages">Additional Packages<a class="headerlink" href="#additional-packages" title="Permalink to this headline">¶</a></h2>
+<p>Note that Doxygen and GraphViz are already included in the OMNeT++ package, and will be used by the IDE automatically.</p>
+<section id="mpi">
+<h3 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permalink to this headline">¶</a></h3>
+<p>MPI is only needed if you would like to run parallel simulations.</p>
+<p>There are several MPI implementations for Windows, and OMNeT++ does not mandate any specific one. We recommend
+DeinoMPI, which can be downloaded from <a class="reference external" href="http://mpi.deino.net">http://mpi.deino.net</a>.</p>
+<p>DeinoMPI ships with binaries compiled with MSVC. After installing DeinoMPI, adjust the <code class="docutils literal notranslate"><span class="pre">MPI_DIR</span></code> setting in
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code>, and recompile OMNeT++ with the version of MSVC that matches the DeinoMPI binaries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In general, if you would like to run parallel simulations, we recommend that you use Linux, macOS, or another
+unix-like platform.</p>
+</div>
+</section>
+<section id="akaroa">
+<h3 id="akaroa">Akaroa<a class="headerlink" href="#akaroa" title="Permalink to this headline">¶</a></h3>
+<p>Akaroa 2.6.7, which is the latest version at the time of writing, does not support Windows. You may try to port it using
+the porting guide from the Akaroa distribution.</p>
+</section>
+<section id="systemc">
+<h3 id="systemc">SystemC<a class="headerlink" href="#systemc" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>SystemC integration is not available on Windows, because the bundled SystemC reference implementation is not
+supported with MinGW or Clang.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="md-footer">
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+          
+          
+        </a>
+        
+      </nav>
+    </div>
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+          <div class="md-footer-copyright__highlight">
+              &#169; Copyright 1992-2021, András Varga and OpenSim Ltd..
+              
+          </div>
+            Created using
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.1.0.
+             and
+            <a href="https://github.com/bashtage/sphinx-material/">Material for
+              Sphinx</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="../_static/javascripts/application.js"></script>
+  <script>app.initialize({version: "1.0.4", url: {base: ".."}})</script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+%description:
+Test that we don't leak objects from expression evaluation
+
+%file: test.ned
+
+simple Test
+{
+    parameters:
+        @isNetwork(true);
+        bool b @mutable = false;
+        int i @mutable = 0;
+        double d @mutable = 0;
+        string s @mutable = "";
+        xml x @mutable = xml("<root/>");
+        object o @mutable = nullptr;
+}
+
+%activity:
+
+for (auto p : { "b", "i", "d", "s", "x", "o" }) {
+    for (auto expr : { "string([])", "string({})", "[]", "[{},{},{}]", "3+cos([])", "1+[]", "{}+[]" }) {
+        try {
+            EV << p << " = " << expr << " --> ";
+            par(p).parse(expr);
+            par(p).convertToConst();
+            EV << par(p).str() << "\n";
+        }
+        catch(std::exception& e) {
+            EV << "ERROR: " << e.what() << "\n";
+        }
+    }
+    EV << "\n";
+}
+
+
+
+%contains: stdout
+b = string([]) --> ERROR: Cannot assign parameter 'b': Cannot cast from type string to bool
+b = string({}) --> ERROR: Cannot assign parameter 'b': Cannot cast from type string to bool
+b = [] --> ERROR: Cannot assign parameter 'b': Cannot cast from type object to bool
+b = [{},{},{}] --> ERROR: Cannot assign parameter 'b': Cannot cast from type object to bool
+b = 3+cos([]) --> ERROR: Cannot assign parameter 'b': cos(): Cannot cast '[]' from type 'object' to 'double'
+b = 1+[] --> ERROR: Cannot assign parameter 'b': operator '+': Numeric arguments expected, got integer and object
+b = {}+[] --> ERROR: Cannot assign parameter 'b': operator '+': Numeric arguments expected, got object and object
+
+i = string([]) --> ERROR: Cannot assign parameter 'i': Cannot cast "[]" from type string to integer
+i = string({}) --> ERROR: Cannot assign parameter 'i': Cannot cast "{}" from type string to integer
+i = [] --> ERROR: Cannot assign parameter 'i': Cannot cast [] from type object to integer
+i = [{},{},{}] --> ERROR: Cannot assign parameter 'i': Cannot cast [{}, {}, {}] from type object to integer
+i = 3+cos([]) --> ERROR: Cannot assign parameter 'i': cos(): Cannot cast '[]' from type 'object' to 'double'
+i = 1+[] --> ERROR: Cannot assign parameter 'i': operator '+': Numeric arguments expected, got integer and object
+i = {}+[] --> ERROR: Cannot assign parameter 'i': operator '+': Numeric arguments expected, got object and object
+
+d = string([]) --> ERROR: Cannot assign parameter 'd': Cannot cast "[]" from type string to double
+d = string({}) --> ERROR: Cannot assign parameter 'd': Cannot cast "{}" from type string to double
+d = [] --> ERROR: Cannot assign parameter 'd': Cannot cast [] from type object to double
+d = [{},{},{}] --> ERROR: Cannot assign parameter 'd': Cannot cast [{}, {}, {}] from type object to double
+d = 3+cos([]) --> ERROR: Cannot assign parameter 'd': cos(): Cannot cast '[]' from type 'object' to 'double'
+d = 1+[] --> ERROR: Cannot assign parameter 'd': operator '+': Numeric arguments expected, got integer and object
+d = {}+[] --> ERROR: Cannot assign parameter 'd': operator '+': Numeric arguments expected, got object and object
+
+s = string([]) --> "[]"
+s = string({}) --> "{}"
+s = [] --> ERROR: Cannot assign parameter 's': Cannot cast from type object to string
+s = [{},{},{}] --> ERROR: Cannot assign parameter 's': Cannot cast from type object to string
+s = 3+cos([]) --> ERROR: Cannot assign parameter 's': cos(): Cannot cast '[]' from type 'object' to 'double'
+s = 1+[] --> ERROR: Cannot assign parameter 's': operator '+': Numeric arguments expected, got integer and object
+s = {}+[] --> ERROR: Cannot assign parameter 's': operator '+': Numeric arguments expected, got object and object
+
+x = string([]) --> ERROR: Cannot assign parameter 'x': Cannot cast from type string to XML
+x = string({}) --> ERROR: Cannot assign parameter 'x': Cannot cast from type string to XML
+x = [] --> ERROR: Cannot assign parameter 'x': check_and_cast(): Cannot cast (omnetpp::cValueArray*)Test.tmp.array26 to type 'omnetpp::cXMLElement *'
+x = [{},{},{}] --> ERROR: Cannot assign parameter 'x': check_and_cast(): Cannot cast (omnetpp::cValueArray*)Test.tmp.array27 to type 'omnetpp::cXMLElement *'
+x = 3+cos([]) --> ERROR: Cannot assign parameter 'x': cos(): Cannot cast '[]' from type 'object' to 'double'
+x = 1+[] --> ERROR: Cannot assign parameter 'x': operator '+': Numeric arguments expected, got integer and object
+x = {}+[] --> ERROR: Cannot assign parameter 'x': operator '+': Numeric arguments expected, got object and object
+
+o = string([]) --> (omnetpp::cValueHolder)holder: "[]"
+o = string({}) --> (omnetpp::cValueHolder)holder: "{}"
+o = [] --> []
+o = [{},{},{}] --> [{}, {}, {}]
+o = 3+cos([]) --> ERROR: Cannot assign parameter 'o': cos(): Cannot cast '[]' from type 'object' to 'double'
+o = 1+[] --> ERROR: Cannot assign parameter 'o': operator '+': Numeric arguments expected, got integer and object
+o = {}+[] --> ERROR: Cannot assign parameter 'o': operator '+': Numeric arguments expected, got object and object
+
+%not-contains: stdout
+undisposed object

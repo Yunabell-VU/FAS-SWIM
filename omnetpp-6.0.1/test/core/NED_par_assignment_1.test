@@ -1,0 +1,85 @@
+%description:
+Test parameter assignment from various types
+
+%file: test.ned
+
+simple Test
+{
+    parameters:
+        @isNetwork(true);
+        bool b @mutable = false;
+        int i @mutable = 0;
+        double d @mutable = 0;
+        string s @mutable = "";
+        xml x @mutable = xml("<root/>");
+        object o @mutable = nullptr;
+}
+
+%activity:
+
+for (auto p : { "b", "i", "d", "s", "x", "o" }) {
+    for (auto expr : { "true", "12", "3.14", "\"hello\"", "[]", "nullptr", "undefined" }) {
+        try {
+            EV << p << " = " << expr << " --> ";
+            par(p).parse(expr);
+            par(p).convertToConst();
+            EV << par(p).str() << "\n";
+        }
+        catch(std::exception& e) {
+            EV << "ERROR: " << e.what() << "\n";
+        }
+    }
+    EV << "\n";
+}
+
+%contains: stdout
+b = true --> true
+b = 12 --> ERROR: Cannot assign '12' to parameter 'Test.b': Cannot cast from type integer to bool
+b = 3.14 --> ERROR: Cannot assign '3.14' to parameter 'Test.b': Cannot cast from type double to bool
+b = "hello" --> ERROR: Cannot assign '"hello"' to parameter 'Test.b': Cannot cast from type string to bool
+b = [] --> ERROR: Cannot assign parameter 'b': Cannot cast from type object to bool
+b = nullptr --> ERROR: Cannot assign 'nullptr' to parameter 'Test.b': Cannot cast from type object to bool
+b = undefined --> ERROR: Cannot assign 'undefined' to parameter 'Test.b': Cannot cast from type undefined to bool
+
+i = true --> ERROR: Cannot assign 'true' to parameter 'Test.i': Cannot cast true from type bool to integer
+i = 12 --> 12
+i = 3.14 --> ERROR: Cannot assign '3.14' to parameter 'Test.i': Cannot cast 3.14 from type double to integer (note: no implicit conversion from double to int)
+i = "hello" --> ERROR: Cannot assign '"hello"' to parameter 'Test.i': Cannot cast "hello" from type string to integer
+i = [] --> ERROR: Cannot assign parameter 'i': Cannot cast [] from type object to integer
+i = nullptr --> ERROR: Cannot assign 'nullptr' to parameter 'Test.i': Cannot cast nullptr from type object to integer
+i = undefined --> ERROR: Cannot assign 'undefined' to parameter 'Test.i': Cannot cast undefined from type undefined to integer
+
+d = true --> ERROR: Cannot assign 'true' to parameter 'Test.d': Cannot cast true from type bool to double
+d = 12 --> 12
+d = 3.14 --> 3.14
+d = "hello" --> ERROR: Cannot assign '"hello"' to parameter 'Test.d': Cannot cast "hello" from type string to double
+d = [] --> ERROR: Cannot assign parameter 'd': Cannot cast [] from type object to double
+d = nullptr --> ERROR: Cannot assign 'nullptr' to parameter 'Test.d': Cannot cast nullptr from type object to double
+d = undefined --> ERROR: Cannot assign 'undefined' to parameter 'Test.d': Cannot cast undefined from type undefined to double
+
+s = true --> ERROR: Cannot assign 'true' to parameter 'Test.s': Cannot cast from type bool to string
+s = 12 --> ERROR: Cannot assign '12' to parameter 'Test.s': Cannot cast from type integer to string
+s = 3.14 --> ERROR: Cannot assign '3.14' to parameter 'Test.s': Cannot cast from type double to string
+s = "hello" --> "hello"
+s = [] --> ERROR: Cannot assign parameter 's': Cannot cast from type object to string
+s = nullptr --> ERROR: Cannot assign 'nullptr' to parameter 'Test.s': Cannot cast from type object to string
+s = undefined --> ERROR: Cannot assign 'undefined' to parameter 'Test.s': Cannot cast from type undefined to string
+
+x = true --> ERROR: Cannot assign 'true' to parameter 'Test.x': Cannot cast from type bool to XML
+x = 12 --> ERROR: Cannot assign '12' to parameter 'Test.x': Cannot cast from type integer to XML
+x = 3.14 --> ERROR: Cannot assign '3.14' to parameter 'Test.x': Cannot cast from type double to XML
+x = "hello" --> ERROR: Cannot assign '"hello"' to parameter 'Test.x': Cannot cast from type string to XML
+x = [] --> ERROR: Cannot assign parameter 'x': check_and_cast(): Cannot cast (omnetpp::cValueArray*)Test.tmp.array5 to type 'omnetpp::cXMLElement *'
+x = nullptr --> nullptr
+x = undefined --> ERROR: Cannot assign 'undefined' to parameter 'Test.x': Cannot cast from type undefined to XML
+
+o = true --> (omnetpp::cValueHolder)holder: true
+o = 12 --> (omnetpp::cValueHolder)holder: 12
+o = 3.14 --> (omnetpp::cValueHolder)holder: 3.14
+o = "hello" --> (omnetpp::cValueHolder)holder: "hello"
+o = [] --> []
+o = nullptr --> nullptr
+o = undefined --> (omnetpp::cValueHolder)holder: undefined
+
+%not-contains: stdout
+undisposed object

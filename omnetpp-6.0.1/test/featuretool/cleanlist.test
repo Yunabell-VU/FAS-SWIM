@@ -1,0 +1,30 @@
+%description:
+Testing opp_featuretool with a clean project: only .oppfeatures and .nedfolders exist.
+Lists features; creates '.oppfeaturestate' and '.nedexclusions' as side effect.
+
+%prerun-command: ../../lib/createSrcFolders
+%prerun-command: cp ../../data/.nedfolders ../../data/.oppfeatures .
+%prerun-command: rm -f .oppfeaturestate .nedexclusions
+
+%testprog: opp_featuretool -v list
+
+%postrun-command: ../../lib/fileExistingCheck
+
+%contains: postrun-command(1).out
+'.oppfeatures' found.
+'.oppfeaturestate' found.
+'.nedfolders' found.
+'.nedexclusions' found.
+
+%contains: stdout
+    + F_A
+    - F_B
+    - F_C
+    - F_D
+    + F_E
+
+%contains: test.err
+opp_featuretool: Warning: NED package 'org.foo.bbb' is part of the disabled feature 'F_B', but it is not excluded in '.nedexclusions', fixing
+opp_featuretool: Warning: NED package 'org.foo.ccc' is part of the disabled feature 'F_C', but it is not excluded in '.nedexclusions', fixing
+opp_featuretool: Warning: NED package 'org.foo.ddd' is part of the disabled feature 'F_D', but it is not excluded in '.nedexclusions', fixing
+

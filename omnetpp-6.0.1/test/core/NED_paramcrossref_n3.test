@@ -1,0 +1,27 @@
+%description:
+Referencing a later submodule's parameter is currently not implemented, should be reported as error.
+
+%file: test.ned
+
+module Node
+{
+    parameters:
+        int p;
+}
+
+network Test
+{
+    submodules:
+        a: Node {p = 1;}
+        b: Node {p = parent.a.p;} // OK
+
+        c: Node {p = parent.d.p;} // Error: d not declared yet
+        d: Node {p = 5;}
+}
+
+%exitcode: 1
+
+%contains: stderr
+Cannot assign parameter 'p': 'parent.d.p': Submodule 'd' not found
+
+

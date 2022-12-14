@@ -1,0 +1,1344 @@
+2022-05-18  Attila Torok
+
+	* Fix build by including <memory> for std::unique_ptr
+
+	* build: Disable implicit make rules by setting .SUFFIXES to empty
+
+2022-04-11  ------ omnetpp-6.0 released ------
+
+2022-04-07  Attila Torok
+
+	* Fix Doxygen grouping of functions and macros
+
+2022-04-06  Andras Varga
+
+	* SqliteVectorFileWriter: fix memory leak found by AddressSanitizer
+	(VectorData were leaked).
+
+2022-04-06  Andras Varga
+
+	* expression.y: fix memory leak found by AddressSanitizer
+
+2022-04-06  Andras Varga
+
+	* expression.y: eliminate UndefinedBehaviorSanitizer warning in
+	double->int64_t conversion.
+
+2022-04-05  Andras Varga
+
+	* UnitConversion: eliminate "signed integer overflow" reported by
+	UndefinedBehaviorSanitizer
+
+2022-03-22  Levente Mészáros
+
+	* BigDecimal: avoid overflow in PowersOfTenInitializer
+
+2022-01-27  Andras Varga
+
+	* stringutil.h: added opp_isvalididentifier()
+
+2021-12-10  Andras Varga
+
+	* PushDir: improve error reporting
+
+2021-11-30  Andras Varga
+
+	* Expression: Add evaluateForType(), which is potentially useful for
+	validating expressions in ini/ned files.
+
+2021-11-06  Andras Varga
+
+	* PatternMacher: bugfix in str()
+
+2021-11-05  Andras Varga
+
+	* MatchExpression: fix crash on matchableObject->getAsString() returning
+	nullptr.
+
+2021-11-05  Andras Varga
+
+	* any_ptr: let two nullptrs of different types be equal.
+
+2021-07-20  Andras Varga
+
+	* Expression: added dynamically resolved variables/members/funcs/methods.
+
+2021-10-12  Andras Varga
+
+	* OmnetppScalarFileWriter: make sure bin edges don't alias in the
+	output due to unsufficient printing precision.
+
+2021-10-06  Andras Varga
+
+	* Create exprutil.h by factoring out functions from nedsupport.cc
+
+2021-08-27  Andras Varga
+
+	* MatchExpression: delete default copy/move ctor, as they are not suitable.
+
+2021-07-29  Andras Varga
+
+	* stringutil.h:
+	- added opp_streq()
+	- opp_findmatchingparen(): support more kinds of "parens"
+
+2021-07-22  Andras Varga
+
+	* Added omnetpp::common::any_ptr.  It is a copy of omnetpp::any_ptr from
+	include/. It needs to be duplicated because <omnetpp.h> and src/common/
+	cannot share code for technical reasons.
+
+	* ExprValue: Store any_ptr instead of cObject, and follow through
+	with changes: type OBJECT renamed to POINTER, objectValue() renamed
+	to pointerValue(), etc.
+
+2021-06-29  Rudolf Hornig
+
+	* Added missing COMMON_API
+
+2021-06-28  Andras Varga
+
+	* opp_typename(): support nullptr_t ("Dn")
+
+2021-06-18  Zoltan Bojthe
+
+	* stlutil.h: Added missing template parameters
+
+2021-06-20  Andras Varga
+
+	* Added opp_insidemain() and opp_exiting(), needed by StringPool.
+
+2021-06-15  Andras Varga
+
+	* ExprValue: use opp_staticpooledstring for unit strings
+
+2021-06-12  Andras Varga
+
+	* StringPool -> StaticStringPool
+	* Added StringPool (refcounted)
+	* Added opp_pooledstring, opp_staticpooledstring
+
+2021-06-10  Andras Varga
+
+	* Expression: more precise error message when a function or method
+	cannot be translated
+
+2021-06-09  Andras Varga
+
+	* exprnodes.h: implemented '==' and '!=' for type==OBJECT
+
+2021-06-09  Andras Varga
+
+	* exprnodes.h: factor out CompareNode::compare()
+
+2021-06-07  Attila Torok
+
+	* BigDecimal::parse(): fix bug in parsing of "inf"
+
+2021-06-04  Attila Torok
+
+	* Update the bundled sqlite3 amalgamation sources.
+
+2021-05-26  Andras Varga
+
+	* stringutil.h: added opp_indexedname()
+
+2021-06-02  Andras Varga
+
+	* Added AstNode::unparse()
+
+2021-06-01  Andras Varga
+
+	* ExprNode: added asPrinted() utility function; AstNode::str() fix
+
+2021-05-25  Andras Varga
+
+	* ExprNode: on errors, always prepend message with the name of the
+	node.
+
+	Added str() which is a description of the node, primarily for error
+	messages. E.g. for operators, str() returns "operator '<name>'", and
+	functions, "<name>()".
+
+	If prepending with str() is not needed, override makeErrorMessage().
+
+2021-05-11  Andras Varga
+
+	* AstNode::str(): format change in the output.
+
+2021-05-17  Andras Varga
+
+	* stringutil.h: various changes for a cleaner API:
+
+	- opp_split_and_trim() -> opp_splitandtrim() (for consistency
+	  with the rest of the public stringutil.h methods)
+	- opp_split: disallow empty separator
+	- opp_join(): added skipEmpty flag
+	- opp_format() -> opp_formati64()
+	- opp_strupr() / opp_strlwr() removed
+	- opp_removestart()/opp_removeend(): use std::string
+	- eliminate opp_concat() (uses static buffer)
+	- opp_findmatchingquote(): removed, it was duplicate
+	- added opp_strndup()
+
+2021-05-13  Andras Varga
+
+	* Cosmetics on '// namespace' comments
+
+2021-05-05  Andras Varga
+
+	* StringTokenizer rewritten to support honoring quotes/parens,
+	trimming, and skipping of empty tokens.
+
+	Essentially, StringTokenizer2's functionality was merged into
+	StringTokenizer.
+
+	Incompatible change:
+
+	When using non-whitespace separator (e.g. comman), StringTokenizer now
+	TRIMS the items, while the old one did not. This can be turned off with
+	the NO_TRIM option.
+
+	Change of functionality from StringTokenizer2:
+
+	The possibility to escape paren and quote characters outside string
+	constants using backslash, i.e. the use of \(, \), etc was dropped.
+
+	Rationale:
+
+	1. That would have required copying the token's chars (as opposed to
+	   modifying in-place by overwriting separators with NULs), and pose
+	   additional complexity.
+
+	2. Such escaping functionality is NOT supported by either NED/MSG
+	   @properties, or the C preprocessor (i.e. you can't pass a value
+	   that contains unbalanced parens into a macro, \( or \) results
+	   in parse errors in the macro call), so perhaps the ini ${} syntax
+	   can do without it too (that's the only place where this feature was
+	   used).
+
+	Details:
+	- StringTokenizer's existing functionality remained unchanged
+	- StringTokenizer2 is now redundant, removed
+
+2021-05-11  Andras Varga
+
+	* More consistent naming for stringutil.h functions
+
+2021-05-11  Andras Varga
+
+	* stringutil.h: add new string splitter methods, and use them instead of
+	StringTokenizer(...).asVector()
+
+2021-05-03  Andras Varga
+
+	* concatDirAndFile(): Return path unchanged if baseDir=""
+
+2021-05-04  Andras Varga
+
+	* expression.y: eliminate shift/reduce conflicts
+
+2021-05-04  Andras Varga
+
+	* expression.y: JSON: accept extra comma at the end of lists
+
+2020-01-13  Andras Varga
+
+	* expression.y: JSON: accept bare numbers, true/false/nan/inf/null as map keys.
+
+2021-04-29  Andras Varga
+
+	* More modernizing (NULL->nullptr, use auto for iterator)
+
+2021-04-23  Attila Torok
+
+	include,common: Turn some macros into proper variadic ones
+	(Enter_Method[_Silent], TRACE_CALL, and TPRINTF)
+
+2021-04-16  Attila Torok
+
+	* Fix printf format string bugs, add format(printf) attributes
+
+2021-04-16  Andras Varga
+
+	* UnitConversion: getBestUnit(): explicitly list "best" unit
+	candidates for each unit.
+
+2021-04-15  Andras Varga
+
+	* UnitConversion: added getBestUnit()
+
+2021-04-15  Andras Varga
+
+	* UnitConversion: cache baseUnitDesc for each unit, to reduce number of lookups.
+
+2021-04-15  Andras Varga
+
+	* UnitConversion: added micrometer and nanometer as units
+
+2021-04-15  Andras Varga
+
+	*  checked_int_cast(double): resolve compile-time warning.
+	Also, the refactored code better expresses the function's intention. Note
+	that casting double to int *truncates* (rounds towards zero).
+
+2021-04-14  Andras Varga
+
+	* Fix recently introduced bug in cStringPool and StringPool; plus test
+
+2021-04-09  Andras Varga
+
+	* StringPool: change from std::set to std::unordered_set for performance.
+
+2021-03-30  Rudolf Hornig
+
+	* Add destructor to opp_runtime_error to fix build error on macOS.
+
+2021-03-25  Levente Meszaros
+
+	* Added JavaMatchableObject that makes match expressions accessible from Java.
+
+2021-02-05  Levente Meszaros
+
+	* Added optional file locking to FileReader and implemented
+	explicit file change synhronization mechanism.
+
+2021-03-20  Andras Varga
+
+	* FileReader change: make it nicer (without macro, w/o hardcoding
+	static buffer)
+
+2021-02-05  Levente Meszaros
+
+	* Added FileReader methods to support Java usage.
+	These methods must be able to return a Java null and a properly
+	terminated string.
+
+2021-02-05  Levente Meszaros
+
+	* Added a tokensVector() method to LineTokenizer for easier use
+	from Java (SWIG).
+
+2020-12-10  Levente Meszaros
+
+	* Added a generic platform independent FileLock class.
+
+2021-02-17  Andras Varga
+
+	* UnitConversion: Enforce decreasing order of magnitude in compound
+	quantities to make the syntax less error-prone. E.g. "1s 2s 3s"
+	used to parse as 6s, now it is a syntax error.
+
+2021-03-05  Andras Varga
+
+	* Expressions: Factor out ArrayNode/ObjectNode abstract ExprNode classes
+
+2021-03-04  Andras Varga
+
+	* Expression: nits
+
+2020-12-02  Andras Varga
+
+	* sqliteresultfileschema.h: modernize: Use raw string constant.
+
+2020-11-12  Andras Varga
+
+	* Expression: added lambda-based ExprNode classes.
+
+2020-11-13  Attila Torok
+
+	* Modernizing: Use in-class member initializers wherever possible;
+	use "=default" syntax for copy constructors where appropriate.
+	Tool: clang-tidy plus manual editing where needed.
+
+2020-10-14  Rudolf Hornig
+
+	* matchexpression.y: Fix for Bison 3
+
+2020-09-17  Attila Torok
+
+	* Added a modified sgr_macro.h, originally by YOSHIOKA Takuma,
+	from https://github.com/lo48576/sgr_macro
+
+2020-04-30  Andras Varga
+
+	* BigDecimal: Eliminated "BigDecimal: Cannot convert Nil to double" error.
+
+2020-04-22  Andras Varga
+
+	* stlutil.h: Added hash_combine and pair_hash
+
+2020-04-16  Andras Varga
+
+	* MatchExpressionLexer: Fix: Match expressions containing empty strings
+	did not work. Example: runattr:measurement =~ ""
+
+2020-03-05  Andras Varga
+
+	* fileutil.h: Added collectMatchingFiles(), a function that can glob "**"
+	wildcards.
+
+2020-03-06  Andras Varga
+
+	* fileutil.h: Added isAbsolutePath(); fix in PushDir error message.
+
+2019-11-26  Andras Varga
+
+	* opp_latexQuote(): Fix quoting bug.
+
+2019-11-23  Andras Varga
+
+	* opp_indentlines(): Nothing to do if indent is empty.
+
+2019-11-12  Andras Varga
+
+	* Expression: Refine grammar: Allow '::' in object's type name in JSON
+	notation, to allow specifying namespace.
+
+2019-11-07  Attila Torok
+
+	* stlutil.h: Add contains() for unordered_set.
+
+2019-11-07  Andras Varga
+
+	* Matchexpression: Remove implicit OR and funcall-style field matcher
+	syntaxes. They look confusing, and made it different to tell apart concise
+	notation from expression-style notation.
+
+2019-11-08  Andras Varga
+
+	* Expression: Accept string constants with apostrophes too (makes it
+	possible to write quotation marks in strings without escaping with
+	backslash).
+
+2019-11-07  Andras Varga
+
+	* Expression: Accept JSON syntax: "null" in addition to "nullptr",
+	object keys with quotes.
+
+2019-10-28  Andras Varga
+
+	* Expression: Grammar extended to accept JSON-line expressions. Added
+	support for JSON object and array notation, and the nullptr keyword.
+
+	Array syntax: [ expr, expr, ... ]
+	Object syntax: optional_name { key1: value1, key2: value2, ... }
+
+2019-11-07  Andras Varga
+
+	* opp_typename(): Performance optimization (became about 2x faster).
+
+	- Eliminate the implicit conversion of the mangledName ptr to std::string
+	  before each lookup.
+	- Use hash table instead of tree-based map (may be faster).
+
+2019-11-07  Andras Varga
+
+	* opp_typename() moved to here from src/sim. Motivation: we need it e.g. in
+	Expression too.
+
+2019-11-05  Attila Torok
+
+	* MatchExpression: Update flags only after the pattern was parsed
+	successfully. Leave them alone if an exception was thrown by parser or
+	generator.
+
+2019-10-28  Attila Torok
+
+	* Update the bundled SQLite sources to version 3.30.1 (2019-10-10).
+
+2019-10-29  Attila Torok
+
+	* MatchExpression: Allow empty string as match-nothing expr.
+
+2019-10-24  Andras Varga
+
+	* Expression: Change the parser to accept arbitrary number of args.
+	(We need to use Bison's "semantic data types", %union for that.)
+
+2019-09-05  Attila Torok
+
+	* OmnetppScalarFileWriter/OmnetppVectorFileWriter: quote all strings
+	written as needed.
+
+2019-07-29  Attila Torok
+
+	* Expression: Updated lexer to accept ":" in the middle of identifiers.
+	Example: attr:unit or packetDrop:count in result filters.
+
+2019-08-26  Attila Torok
+
+	* stlutil.h: Added small optimization to remove(vector, value).
+	It seemed to help a lot in a Wireless INET simulation, in
+	qtenv::Inspector::removeFromToHistory().
+
+2019-08-01  Andras Varga
+
+	* intutil.h: intpar_t renamed to intval_t. intval_t is the type we use for
+	generic "large" integers, e.g. in the Expression class and in module
+	parameters. It is currently a signed 64-bit type.
+
+2019-07-30  Andras Varga
+
+	* Result files: Result file version number bumped from 2 to 3, due to recent
+	file format changes.
+
+2017-07-16  Andras Varga
+
+	* Histogram class: store binEdges, binValues plus underflow/overflow instead
+	of bins. The new representation is more correct (underflow/overflow are not
+	really bins because they are infinite width), and also more inline with
+	Python's histogram representation.
+
+	Result file formats are currently unaffected (still "bin" lines, with the
+	first/last bin storing the underflows/overflows.)
+
+2019-07-18  Andras Varga
+
+	* Result files: Save the attributes of parameters (such as @unit) as well.
+
+	Native vector/scalar files: "par" lines may be followed by "attr" lines.
+
+	SQLite result files: Added a new table named "paramAttr", with the columns
+	"paramId", "attrName" and "attrValue".
+
+2018-07-09  Andras Varga
+
+	* Result files: Allow recording actual values of module/channel parameters.
+	This implies a slight file format change for the native (textual) result
+	files, and schema change for the SQLite result files.
+
+	Native vector/scalar files: Values are written into lines of the format
+	"par <componentfullpath> <parametername> <value>".
+
+	SQLite result files: Added a new table named "parameter", with the
+	columns "paramId", "runId", "moduleName", "paramName" and "paramValue".
+
+	Note that the value is written in the syntax it would have to be written in
+	a NED file or in omnetpp.ini. That is, string constants include the
+	quotation marks, and the value of volatile expressions is the expression
+	itself, i.e. the value normal(0,1) of a volatile parameter will be recorded
+	as such (and not the value from its random evaluation).
+
+	Also note that the native file format uses optional quoting (strings are
+	only quoted if necessary), which means that string constants need be written
+	out with *double* quoting, i.e. the value 'hello' will appear in the file as
+	"\"hello\"". This is necessary because due to optional quoting, the parser
+	drops the first layer of quotation marks.
+
+2018-07-09  Andras Varga
+
+	* Result files: Save the full (flattened) contents of the inifile
+	configuration, not only parameter assignment entries as before.
+	This comes with a slight file format change for the native
+	(textual) result files, and schema change for the SQLite result files.
+
+	Native vector/scalar files: Configuration entries are written into
+	lines of the format "config <key> <value>". The old "param" lines
+	of similar syntax are no longer written, but still understood by
+	the readers.
+
+	SQLite result files: The "runParam" table was renamed to "runConfig",
+	and its columns were also similarly renamed: "paramKey", "paramValue"
+	and "paramOrder" became "configKey", "configValue" and "configOrder".
+	Files in the old format are not understood.
+
+2019-07-08  Andras Varga
+
+	* exprnodes.h: added VariableNode, IndexedVariableNode, MemberNode,
+	IndexedMemberNode, MethodNode; changed FunctionNode
+
+2019-04-29  Andras Varga
+
+	* Moved XML parser here from nedxml. In an effort to reduce OMNeT++'s
+	dependencies from external libraries, we added Yxml, Yoran Heling's small
+	and fast SAX-style XML parser (https://dev.yorhel.nl/yxml) with a liberal
+	license, to the codebase. At the same time, we removed Expat support.
+	LibXML2 support remained, but very few users will actually need it.
+
+	Also some refactoring/cleanup:
+	- use subclassing instead of #ifdefs to support multiple parsers
+	- use exceptions to report parse error instead of error code + getErrorMessage()
+	- removed some methods from SaxHandler (comments, CDATA start/end)
+	- removed undocumented xinclude support
+
+	Use of LibXML2 is optional. Note that no significant functionality is lost
+	when LibXML2 support is turned off. XML module parameters as well as NED and
+	MSG AST XML export/import are handled by Yxml just fine. LibXML2 is only
+	required when DTD-based validation (and possibly, default value completion)
+	or Schema-based validation is needed. Also note that Yxml-based parsing
+	scales much better (OMNeT++ uses the DOM API of LibXML, which has much
+	higher memory requirements than a SAX parser).
+
+2019-05-02  Andras Varga
+
+	* StringPool: added contains(); cosmetic change (store const char*
+	instead of char*).
+
+2019-04-30  Andras Varga
+
+	* opp_xmlQuote() fix: ampersand must be quoted too.
+
+2019-04-16  Andras Varga
+
+	* Move unit conversion functions from NED to common::Expression.
+
+2019-04-11  Andras Varga
+
+	*  Expression: '%' to allow quantities as args.
+
+2019-04-11  Andras Varga
+
+	* Expression: '%' op to mandate integer args (backward INCOMPATIBLE change)
+
+2019-04-14  Andras Varga
+
+	* Expression: fix for the '<=>' and '=~' operators.
+
+2019-03-12  Andras Varga
+
+	* MatchExpression changed to use Expression internally.
+	Main advantage: shortcutting boolean operators (AND, OR).
+
+2019-02-28  Andras Varga
+
+	* ADDED GENERIC EXPRESSION EVALUATOR CLASS.
+
+	This is kind of a big deal. The Expression class is a from-scratch rewrite
+	of the old Expression class, with the intent of creating generic extensible
+	expression evaluator that can be used *everywhere*. Everywhere means: NED
+	expressions, object matching, scenario constraint, statistics recording,
+	result selection in scavetool/IDE, etc. The new class is tree-based instead
+	of stack-based, because with stack machines one cannot (easily) do
+	shotcutting evaluation of logical operators (AND,OR).
+
+	About the Expression class:
+	- Representation is an expression tree (ExprNode*), which can be extended
+	  with new node types as needed.
+	- Parser understands a generic expression syntax; interpretation (mapping
+	  to expression tree) is done by AST translators that the user can
+	  contribute/extend/replace.
+	- ExprValue is pretty much a copy of cNedValue, minus XML, plus cObject*.
+	- Code in operator nodes was derived from cDynamicExpression --
+	  computations should behave exactly as in existing NED expressions
+	  (which are cDynamicExpression-based).
+	- ExprNodeFactory utility class exists.
+	- The 'undefined' value (type=UNDEF) behaves a bit like NaN, anything
+	  involving 'undefined' will evaluate to 'undefined'.
+	- Logical operators (AND,OR) and inline-if (?:) perform shortcut.
+	- Supports constant folding.
+
+	Other:
+	- intutil.h was factored out from random functions throughout
+
+	Reuse existing parsers instead of writing a shiny new one; however,
+	reverse-Polish based intermediate representation was converted to a
+	simple AST representation (Expression::AstNode).
+
+	AST tree (AstNode*) is translated into expression tree (ExprNode*) using
+	translators (AstTranslator). Main method translateToExpressionTree()
+	allows full freedom in translating the tree (context-sensitive, and not
+	constrained one-to-one mapping). For basic needs, subclass
+	BasicAstTranslator.
+
+	More syntax accepted:
+	- match operator (str =~ "**.module")
+	- thre-way comparson, a.k.a. spaceship operator (<=>)
+	- ident[idx], ident.ident, ident.method(...)
+	- nan,inf,undefined
+	- bang operator (!) syntax, currently unused
+
+	NOTE: The fact that logical operators and inline-if are now shortcutting may
+	change the fingerprint of some simulations, due to consuming fewer random
+	numbers during expression evaluation.
+
+2019-04-11  Andras Varga
+
+	* opp_runtime_error: Added std::string constructor; removed unnecessary
+	destructor.
+
+2019-04-04  Rudolf Hornig
+
+	* Makefile improvements.
+
+2019-04-09  Andras Varga
+
+	* UnitConversion: lookupUnit() sped up by using hash table.
+
+2019-04-08  Andras Varga
+
+	* UnitConversion: added Ws, Wh, kWh, MWh.
+
+2019-04-02  Andras Varga
+
+	* opp_join(): Skip empty items.
+
+2019-04-01  Andras Varga
+
+	* UnitConversion: Clarification in method comments.
+
+2019-04-01  Andras Varga
+
+	* UnitConversion: Only accept minus sign at the front, to reduce
+	chance of misunderstanding in arithmetic expressions. I.e. "-5s100ms"
+	is valid as a quantity string (means -5.1s), but "5s-100ms" is no longer.
+
+2019-03-21  Andras Varga
+
+	* stringutil.h: opp_concat(): throw error on overflowing static buffer.
+
+2019-03-21  Andras Varga
+
+	* stringutil.h: Added opp_removestart().
+
+2019-03-18  Andras Varga
+
+	* stringutil.h: Added opp_join() for two std::strings.
+
+2019-03-03  Andras Varga
+
+	* PatternMatcher: added str().
+
+2019-03-03  Andras Varga
+
+	* PatternMatcher: Added a bunch of const qualifiers to method signatures.
+
+2019-02-21  Attila Torok
+
+	* LineTokenizer: Reallocates its internal buffer for longer lines. (Before
+	it threw an error if fixed-size buffer was overflown.)
+
+2019-02-26  Andras Varga
+
+	* fileutil.h: Added collectFiles().
+
+2019-02-22  Andras Varga
+
+	* fileutil.h: Added filenameOf() and removeFileExtension().
+
+2019-02-21  Andras Varga
+
+	* stringutil.h: Added opp_garble().
+
+2017-04-24  Andras Varga
+
+	* MatchExpression: Added 'field=~pattern' syntax as alternative to
+	'field(pattern)'.
+
+2019-01-10  Rudolf Hornig
+
+	* Makefile: Added support to build on Windows using MS ABI compatibility
+	(i.e Visual C++ libraries).
+
+2018-03-21  Andras Varga
+
+	* UnitConversion: no longer accept 0 without measurement unit.
+
+	Reason: It is confusing when the unit is dB or dBm. E.g. in
+	omnetpp.ini, should "**.power = 0" mean 0W or 0dBm?
+
+2017-04-26  Andras Varga
+
+	* stringutil.h: added opp_formatdouble()
+
+2020-01-06  ------ omnetpp-5.6 released ------
+
+2019-11-07  Attila Torok
+
+	* stlutil.h: Add contains() for unordered_set.
+
+2019-08-26  Attila Torok
+
+	* stlutil.h: Added small optimization to remove(vector, value).
+	It seemed to help a lot in a Wireless INET simulation, in
+	qtenv::Inspector::removeFromToHistory().
+
+2019-05-15  ------ omnetpp-5.5 released ------
+
+2019-04-25  Andras Varga
+
+	* StringPool: added contains()
+
+2019-04-30  Andras Varga
+
+	* opp_xmlQuote() fix: ampersand must be quoted too
+
+2019-03-03  Andras Varga
+
+	* PatternMatcher: added str()
+
+2019-02-21  Attila Torok
+
+	* LineTokenizer now reallocates its internal buffer for longer lines.
+
+2019-03-08  Andras Varga
+
+	* SQLite scheme: fix inet-#417: remove NOT NULL from vector values
+
+2019-01-29  Andras Varga
+
+	* SqliteVectorFileWriter:fix occasional "db==nullptr" error
+	It happens when Envir calls flush() when the file was not yet opened
+
+2018-12-17  Andras Varga
+
+	* OmnetppVectorFileWriter: fix VectorData leak
+
+2018-06-25  ------ omnetpp-5.4.1 released ------
+
+2018-06-15  Andras Varga
+
+	* Check for write errors when using std::ofstream
+
+2018-06-13  Andras Varga
+
+	* MatchExpression: MatchExpressionLexer was leaked in parsePattern()
+
+2018-06-11  ------ omnetpp-5.4 released ------
+
+2018-06-07  Andras Varga
+
+	* opp_ttoa(): accept positive scale exponents too
+
+2018-06-05  Andras Varga
+
+	* UnitConversion: added K, Ohm, mOhm, kOhm, MOhm, pct (percent)
+
+2018-05-31  Andras Varga
+
+	* UnitConversion: allow casting nan to any unit
+
+2018-06-01  Andras Varga
+
+	* opp_dtoa(): print inf and nan in platform-independent way
+
+2018-05-28  Andras Varga
+
+	* UnitConversion: allow bit<->byte conversion
+
+	* UnitConversion: added logarithmic units:
+	 - dBW (decibel-watt)
+	 - dBm (decibel-milliwatt)
+	 - dBV (decibel-volt)
+	 - dBmV (decibel-millivolt)
+	 - dBA (decibel-ampere)
+	 - dBmA (decibel-milliampere)
+ 	 - dB (decibel) <--> ratio
+
+2018-05-24  Andras Varga
+
+	* UnitConversion: added some less commonly used units:
+	 - binary and decimal multiples of bit: Kib (kibibit),
+	   Mib (mebibit), Gib (gibibit), Tib (tebibit), kb (kilobit)
+	   Mb (megabit), etc.
+	 - uW, nW, pW, fW (microwatt, etc.)
+	 - THz (terahertz)
+	 - kmps (kilometer/sec)
+	 - deg, rad
+
+2018-04-11  ------ omnetpp-5.3 released ------
+
+2018-02-06  Rudolf Hornig
+
+	* OmnetppScalarFileWriter: fix a bug on Windows (only) where the sca
+	file version number was written into the file several times.
+
+2018-02-06  Rudolf Hornig
+
+	* opp_vsscanf(): fixed overflow detection for long long; added support
+	for support for %lld and %llu
+
+2018-01-17  Andras Varga
+
+	* SQLite result files: changes in the "histogramBin" table:
+	- rename colums: "baseValue" -> "lowerEdge", "cellValue" -> "binValue"
+	- "binValue" column changed from INTEGER to NUMERIC (for weighted stats)
+
+2018-01-17  Andras Varga
+
+	* stringutil.cc: refine error messages in opp_strtol() and similar functions
+
+2017-10-17  Andras Varga
+
+	* stlutil.h: added missing contains() function
+
+2017-12-11  Andras Varga
+
+	* stringutil.h/cc: refactoring on opp_strto...() functions
+
+2017-12-12  Andras Varga
+
+	* stringutil.h/cc: added opp_strtoll(), opp_atoll(), opp_strtoull(),
+	opp_atoull()
+
+2017-12-08  ------ omnetpp-5.2.1 released ------
+
+2017-11-10  Andras Varga
+
+	* expression.h/cc: fixed leak in Expression::Elem::operator()= functions
+
+2017-09-18  ------ omnetpp-5.2 released ------
+
+2017-08-22  Andras Varga
+
+	* unitconversion.cc: reordering (for consistency w/ manual)
+
+2017-04-06  Andras Varga
+
+	* Modernizing: use C++11's range-based for loops where applicable, using
+	clang-tidy's modernize-loop-convert.
+
+	* Modernizing: replace INT64_PRINTF_FORMAT and LL with C++11's PRId64.
+	Note: PRId64 includes the "d" that was not part of INT64_PRINTF_FORMAT
+	alias LL.
+
+2017-07-12  Andras Varga
+
+	* New result file writers: added support for recording weighted statistics
+	- Statistics class changed to accommodate weighted statistics
+	- SQLite recorder: added isWeighted column to statistic table
+
+2017-07-03  Andras Varga
+
+	* New result file writers: fix for empty attr names. They occur when
+	@statistic declarations contain extra semicolons inside	the parens
+
+2017-06-30  Andras Varga
+
+	* New result file writers: fix crash in endRecordingForRun() when file was
+	not open
+
+2017-04-06  Andras Varga
+
+	* Refined CsvWriter and JsonWriter classes, used for exporting results
+	in respective formats from scavetool and the IDE.
+
+2017-04-04  Andras Varga
+
+	* New result file writers: save iteration variables separately from
+	run attributes. NOTE: This changes result file format!
+
+	- omnetpp recorders: introduced "itervar" lines
+	- SQLite recorder: added runItervar table
+
+2017-03-31  Andras Varga
+
+	* New result file writers: preserve order of "param" entries. These
+	entries contain a copy of the parameter assignment lines from omnetpp.ini,
+	so their order is important.
+
+	- omnetpp recorders: ensure order of "param" lines in the file mirror the
+	  order in the ini file
+	- SQLite recorder: added a paramOrder column to the RunParam table.
+
+2017-03-30  Andras Varga
+
+	* SQLite result files: histBin table renamed to histogramBin
+
+2017-04-04  Andras Varga
+
+	* stringutils: opp_formatTable() fix: it printed one more LF than needed
+
+2017-03-30  Andras Varga
+
+	* SQLite result files: added "isHistogram" column to "statistic" table.
+
+2017-03-29  Andras Varga
+
+	* SQLite result file reader: loading of vector attrs and run params was missing
+
+2017-03-28  Andras Varga
+
+	* SQLite result file writers:
+	- database schema factored out to separate file to avoid duplication
+	- camelize remaining names in the database (Note: sqlite is case insensitive)
+
+2017-06-22  Andras Varga
+
+	* New result file writers: OmnetppVectorFileWriter produced incorrect index
+	file in certain cases
+
+2017-05-25  Rudolf Hornig
+
+	* Updated makefiles for speeding up the build:
+	- generated files are created only once, even when using parallel build
+	- binaries are copied to their final destination using proper makefile
+	  targets
+
+2017-05-25  Attila Torok
+
+	* common/stlutil: Add containsKey() for unordered_map.
+
+2017-03-30  Andras Varga
+
+	* Result file writers: whitespace changes in the output, for consistency.
+
+2017-05-08  ------ omnetpp-5.1.1 released ------
+
+2017-03-31  ------ omnetpp-5.1 released ------
+
+2017-03-27  Attila Torok
+
+	* opp_stringf buffer size limit removed.
+
+2017-03-16  Andras Varga
+
+	* Added result file writer classes:
+	OmnetppScalarFileWriter, OmnetppVectorFileWriter,
+	SqliteScalarFileWriter, SqliteVectorFileWriter.
+
+	Factored out from envir's result file manager classes.
+
+	This is needed so that the sim kernel, scavetool and the IDE can
+	share the same code for writing result files.
+
+2017-03-04  Andras Varga
+
+	* Added the Statistics and Histogram classes, factored out from the
+	scave library. Needed by the result file writers, see next change.
+
+2017-03-07  Andras Varga
+
+	* stringutil.h: added opp_ttoa(), factored out from the sim library
+	(SimTime::ttoa()).
+
+2017-03-17  Andras Varga
+
+	* Assert() macro:
+	   - fix: qualify opp_runtime_error with namespace
+	   - fix: expand to ((void)0) in release mode
+	   - error message edited for clarity
+
+2017-02-18  Andras Varga
+
+	* Added FormattedPrinter class (useful for printing help in command-line
+	programs)
+
+2017-02-21  Andras Varga
+
+	* stringutil.h: Added opp_split(), opp_formatTable()
+
+2017-02-17  Andras Varga
+
+	* stringutil.h:  added opp_join() for vectors, added quoteChar arg
+
+2017-03-16  Andras Varga
+
+	* Added JsonWriter class (needed for Python export in the scave library)
+
+2017-02-16  Andras Varga
+
+	* Added CsvWriter class (needed for CSV export in the scave library)
+
+2017-02-10  Andras Varga
+
+	* stlutil.h: addAll() functions
+
+2017-03-19  Andras Varga
+
+	* UnitConversion: added missing kW, MW, GW
+
+2017-03-08  Andras Varga
+
+	* StringPool: cosmetics
+
+2017-02-06  ------ omnetpp-5.1pre3 released ------
+
+2016-12-23  ------ omnetpp-5.1pre2 released ------
+
+2016-12-16  Rudolf Hornig
+
+	* Suppress shift/reduce warnings in .y files by specifying the
+	expected number of conflicts (%expect).
+
+2016-12-15  Rudolf Hornig
+
+	* Fixed parser generator warnings (BOM in UTF-8 is now correctly
+	skipped)
+
+2016-11-23  Zoltan Bojthe
+
+	* Added sqlite3.cc/h
+
+2016-11-29  Attila Torok
+
+	* LCGRandom: disallow invalid LCGRandom seeds
+
+2016-11-18  Andras Varga
+
+	* fileutil.h: added isFile()
+
+2016-11-11  Andras Varga
+
+	* CallTracer: output format tweak
+
+2016-10-30  Andras Varga
+
+	* Adjustments on error messages
+
+2016-10-27  Andras Varga
+
+	* stringutil.h: more const std::string& arguments instead of const char *.
+
+	We don't like mixing const char * and std::string in method signatures,
+	as it results in too many .c_str() at call sites, and in some cases
+	prevents optimizing std::string assignments (e.g. refcounting+COW).
+
+2016-10-21  Andras Varga
+
+	* EnumStringIterator (used for resolving run number lists): fix: properly
+	skip empty ranges, tolerate spaces. It used to return the start of the
+	range, e.g. 5..1 expanded to 5.
+
+2016-10-20  Andras Varga
+
+	* expression.y: accept '=' as alternative to '=='
+
+2016-09-30  Levente Meszaros
+
+	* unitconversion.cc: Added coulomb [C] and related units As, mAs, Ah, mAh.
+
+2016-09-25  Andras Varga
+
+	* Added stlutil.h
+
+2016-09-25  Andras Varga
+
+	* matchexpression.h: added MatchableStringMap
+
+	* stringutil.h: opp_indentlines() fix: do not add indent after last line
+
+2016-09-25  Andras Varga
+
+	* stringutil.h: added opp_sanitizeFileName() and opp_filenameencode()
+
+2016-11-30  Rudolf Hornig
+
+	* The updated build system now uses the ./configure file only to detect
+	certain flags and libraries. Most of the build logic is handled by the
+	Makefile.inc file itslef. This allows you to enable/disable optional
+	components (i.e. Tkenv,Qtenv,OSG and osgEarth support) without even
+	re-running the ./configure file.
+
+2016-08-23  Andras Varga
+
+	* stringutil.h: added opp_xmlQuote()
+
+2016-08-22  Andras Varga
+
+	* opp_vsscanf(): %g to mean float not double, for consistency with scanf()
+
+2016-07-15  Andras Varga
+
+	* Expression: evaluator methods made const
+
+2016-07-11  Andras Varga
+
+	* Expression: parser: allow variables with a syntax of module paths,
+	i.e. dot-separated sequence of name or name[index] segments.
+
+2016-07-07  Mihaly Palenik
+
+	* stringutil.h: added opp_format() for formatting integers with digit
+	groups.
+
+2016-06-23  Rudolf Hornig
+
+	* The makefile now uses compiler-generated dependency files.
+
+2016-04-13  ------ omnetpp-5.0 released ------
+
+2016-03-10  ------ omnetpp-5.0rc released ------
+
+2016-02-15  Attila Torok
+
+	* Fixed global colors map, it's guaranteed to be constructed before use.
+
+2016-01-18  Andras Varga
+
+	* Added opp_substringbeforelast() and opp_substringafterlast().
+
+2015-12-07  ------ omnetpp-5.0b3 released ------
+
+2015-11-17  Andras Varga
+
+	* UnitConversion: added femtosecond and attosecond, as they are needed
+	for the new simtime-resolution config option.
+
+2015-10-16  Andras Varga
+
+	* omnetpp namespace made permanent (cannot be turned off):
+	- removed configure option and preprocessor symbol USE_NAMESPACE
+	- removed related macros: NAMESPACE_BEGIN, NAMESPACE_END,
+	  USING_NAMESPACE, OPP, OPP_STR, OPP_PREFIX etc.
+
+2015-08-10  Attila Torok
+
+	Added the colorutil files with SVG color names, currently used by
+	cCanvas and Qtenv.
+
+2015-07-20  ------ omnetpp-5.0b2 released ------
+
+2015-06-30  Andras Varga
+
+	* opp_strnistr() fix (did not match at the end of the string)
+
+2015-06-19  Andras Varga
+
+	* expression.lex: fix #830 "kernel crashes when adding '//' to parameter
+	lines in ini-files". The expression parser was not supposed to support
+	"//" comments in the first place
+
+2015-06-11  Andras Varga
+
+	* UnitConversion: put back kB/MB/GB/TB with the correct (base 10) meaning.
+	Note: base 2 units also exist: KiB, MiB, GiB, TiB.
+
+2015-06-08  Andras Varga
+
+	* Cleanup: longer header guards
+
+2015-06-08  Andras Varga
+
+	* Cleanup: code formatting
+
+2015-05-15  Andras Varga
+
+	* CommonStringPool renamed to StringPool (due to namespaces, it no longer
+	conflicts with StringPools in other source folders)
+
+2015-05-15  Andras Varga
+
+	* Cleanup: use per-folder nested namespaces: omnetpp::envir, omnetpp::tkenv,
+	omnetpp::layout, omnetpp::common, omnetpp::eventlog, etc.
+
+2015-05-22  Andras Varga
+
+	* Modernizing: added the 'override' keyword (C++11) to overridden methods;
+	it becomes blank when using with an older compiler.
+
+2015-05-21  Rudolf Hornig
+
+	* Modernizing: replaced NULLs by 'nullptr' (C++11); it is defined as 0
+	when using an older compiler.
+
+2015-04-20  Andras Varga
+
+	* Cleanup: use C++ names of C headers (e.g. <cstdio> instead of <stdio.h>)
+
+2015-04-12  Andras Varga
+
+	* Cleanup: copyright years updated
+
+2015-04-08  Andras Varga
+
+	* Modernizing:
+
+	- Use a fixed include path (-Iinclude -Isrc) for all source folders
+	  under src/, and qualify cross-folder #includes with the folder
+	  name (e.g. change #include "stringutil.h" to #include "common/stringutil.h").
+	  This increases readbility and reduces the chance of including a wrong
+	  header.
+
+	- In source files, sort #include statements by folder.
+
+2015-03-04  ------ omnetpp-5.0b1 released ------
+
+2015-02-07  Andras Varga
+
+	During development in the 5.0 branch (2013-2014):
+
+	* stringutil.cc/h: new utility functions: opp_strnistr(), opp_urldecode(),
+	opp_makedatetimestring(), opp_join()
+
+	* TRACE macro renamed to TRACE_CALL due to conflict with new module logging API
+
+2014-11-27  ------ omnetpp-4.6 released ------
+
+2014-06-30  ------ omnetpp-4.5 released ------
+
+2014-02-13  ------ omnetpp-4.4.1 released ------
+
+2013-12-20  ------ omnetpp-4.4 released ------
+
+2013-11-21  Rudolf Hornig
+
+	* Updated to compile with both bison 2.3 and 3.0
+
+2013-11-14  Rudolf Hornig
+
+	* Fixes for compiling with clang
+
+2013-09-12  ------ omnetpp-4.3.1 released ------
+
+2013-04-02  ------ omnetpp-4.3 released ------
+
+2013-02-08  ------ omnetpp-4.3rc1 released ------
+
+2013-01-09  Andras Varga
+
+	* Renamed methods of cMatchExpression::Matchable:
+	    getDefaultAttribute() -> getAsString()
+	    getAttribute(const char *name) -> getAsString(const char *attribute)
+
+2012-10-03  Andras Varga
+
+	* fix in Expression: '-2m' was evaluated to '2' (meter was lost)
+
+2012-01-14  Andras Varga
+
+	* MatchExpression: OR operator made optional.
+	E.g. now "Host" or "Router" or "Switch" can be written as "Host Router Switch",
+	which is more natural at places (code that so far took a space-separated
+	list of possible items, like node selectors in INET's configurator,
+	can now be naturally extended to have more power by using
+	MatchExpression, without affecting existing users or making OR mandatory).
+
+2012-03-13  ------ omnetpp-4.2.2 released ------
+
+2012-01-17  ------ omnetpp-4.2.1 released ------
+
+2011-10-28  ------ omnetpp-4.2 released ------
+
+2011-09-11  ------ omnetpp-4.2rc1 released ------
+
+2011-05-06  Andras Varga
+
+	* unitconversion.cc: addressed bug #369:
+	- added "mps" (m/s) and "kmph" (km/h) as recognized units.
+	- several units have been renamed to be more standards compliant:
+	  Kbps -> kbps, KB -> KiB, MB -> MiB, GB -> GiB, TB -> TiB;
+	- added explanations to "Cannot convert" error messages about the
+	renamed units
+
+2011-05-06  Andras Varga
+
+	* fileutil.cc: fix bug #284: isDirectory() should not throw exception
+	if file or directory does not exist
+
+2011-05-05  ------ omnetpp-4.2b2 released ------
+
+2011-02-23  ------ omnetpp-4.2b1 released ------
+
+2010-06-11  ------ omnetpp-4.1 released ------
+
+2010-05-31  ------ omnetpp-4.1rc2 released ------
+
+2010-04-20  ------ omnetpp-4.1b4 released ------
+
+2010-03-14  ------ omnetpp-4.1b3 released ------
+
+2009-03-12  ------ omnetpp-4.0 released ------
+
+2009-02-27  ------ omnetpp-4.0rc2 released ------
+
+2008-12-12  ------ omnetpp-4.0rc1 released ------
+
+2008-11-26  Andras Varga
+
+	* library renamed to oppcommon ("common" was too common)
+
+2008-02-23  Andras Varga
+
+	* Started the ChangeLog. The Common library was added in omnetpp-4.0,
+	and it contains classes and functions used by all parts of OMNeT++.

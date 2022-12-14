@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>NED Documentation Generator</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extending the IDE" href="ide-extensions.html" />
+    <link rel="prev" title="Analyzing the Results" href="result-analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ned-documentation-generator">
+<h1>NED Documentation Generator</h1>
+<section id="overview">
+<h2>Overview</h2>
+<p>This chapter describes how to use the NED Documentation Generator from the IDE.</p>
+<p>Please refer to the OMNeT++ Manual for a complete description of the documentation generation features and the available
+syntax in NED and MSG file comments.</p>
+<p>The generator has several project-specific settings that can be set from the project context menu through the Properties
+menu item. The output folders for both NED documentation and C++ documentation can be set separately. The
+doxygen-specific configuration is read from the text file <code class="file docutils literal notranslate"><span class="pre">doxy.cfg</span></code> by default. The IDE provides a sensible default
+configuration for doxygen in case you do not want to go through all the available options. The generated HTML uses CSS
+to make its style customizable. You can provide your own style sheet if the default does not meet your needs. In
+general, all project-specific settings have good defaults that work well with the documentation generator.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/NEDDOC-ProjectProperties.png"><img alt="../_images/NEDDOC-ProjectProperties.png" src="../_images/NEDDOC-ProjectProperties.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 137 </span><span class="caption-text">Configuring project-specific settings</span></p>
+</figcaption>
+</figure>
+<p>To generate NED documentation, you need to select one or more projects. Then, either go to the main <span class="guilabel">Project</span> menu or to
+the project context menu and select the <span class="guilabel">Generate NED Documentation</span> menu item. This will bring up the configuration
+dialog where you can set various settings for the current generation before starting it.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/NEDDOC-ProjectMenu.png"><img alt="../_images/NEDDOC-ProjectMenu.png" src="../_images/NEDDOC-ProjectMenu.png" style="width: 25%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 138 </span><span class="caption-text">Opening the NED documentation generator</span></p>
+</figcaption>
+</figure>
+<p>The IDE can generate documentation for multiple projects at the same time. Other options control the content of the
+documentation including what kind of diagrams will be generated and whether NED sources should be included. You can
+enable doxygen to generate C++ documentation that will be cross-linked from the NED documentation. The tool can generate
+the output into each project as configured in the project-specific settings, or into a separate directory. The latter is
+useful for exporting standalone documentation for several complex projects at once.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/NEDDOC-Configuration.png"><img alt="../_images/NEDDOC-Configuration.png" src="../_images/NEDDOC-Configuration.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 139 </span><span class="caption-text">Configuring the NED documentation generator</span></p>
+</figcaption>
+</figure>
+<p>The NED generation process might take a while for big projects, so please be patient. For example, the INET project’s
+complete documentation including the C++ doxygen documentation takes a few minutes to build. You can follow the process
+in the IDE’s progress monitor.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/NEDDOC-Progress.png"><img alt="../_images/NEDDOC-Progress.png" src="../_images/NEDDOC-Progress.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 140 </span><span class="caption-text">Generating NED documentation in progress</span></p>
+</figcaption>
+</figure>
+<p>The result is a number of cross-linked HTML pages that can be opened by double-clicking the generated <code class="file docutils literal notranslate"><span class="pre">index.html</span></code>.
+On the left side, you will see a navigation tree, while on the right side there will be an overview of the project. If
+you have not yet added a <code class="docutils literal notranslate"><span class="pre">&#64;titlepage</span></code> directive into your NED comments, then the overview page will display a default
+content.</p>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/NEDDOC-Documentation.png"><img alt="../_images/NEDDOC-Documentation.png" src="../_images/NEDDOC-Documentation.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 141 </span><span class="caption-text">The resulting NED documentation</span></p>
+</figcaption>
+</figure>
+<p>The documentation contains various inheritance and usage diagrams that make it easier to understand complex models. The
+diagrams are also cross-linked, so that when you click on a box, the corresponding model element’s documentation will be
+opened. The NED model elements are also exported graphically from the NED Editor. These static images provide
+cross-referencing navigation for submodules.</p>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/NEDDOC-UsageDiagram.png"><img alt="../_images/NEDDOC-UsageDiagram.png" src="../_images/NEDDOC-UsageDiagram.png" style="width: 60%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 142 </span><span class="caption-text">NED usage diagram</span></p>
+</figcaption>
+</figure>
+<p>There are also a number of tables that summarize various aspects of modules, networks, messages, packets, etc. The most
+interesting is the list of assignable parameters. It shows all parameters from all submodules down the hierarchy that do
+not have fixed values. These can be set either through inheritance, encapsulation or from the INI file as experiments.</p>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/NEDDOC-AssignableParameters.png"><img alt="../_images/NEDDOC-AssignableParameters.png" src="../_images/NEDDOC-AssignableParameters.png" style="width: 80%;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 143 </span><span class="caption-text">NED assignable parameters</span></p>
+</figcaption>
+</figure>
+<p>There are other tables that list parameters, properties, gates, using modules or networks, and various other data along
+with the corresponding descriptions. In general, all text might contain cross-links to other modules, messages, classes,
+etc. to make navigation easier.</p>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/userguide/neddoc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

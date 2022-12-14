@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Windows - Using the MinGW64 Compiler Toolchain</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/omnetpp.css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="macOS" href="ch-macos.html" />
+    <link rel="prev" title="General Information" href="ch-intro.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="windows-using-the-mingw64-compiler-toolchain">
+<h1>Windows - Using the MinGW64 Compiler Toolchain</h1>
+<section id="supported-windows-versions">
+<h2>Supported Windows Versions</h2>
+<p>OMNeT++ is supported only on 64-bit versions of Windows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>32-bit Windows versions are no longer supported. If you need 32-bit builds on Windows, we recommend using OMNeT++
+5.0</p>
+</div>
+</section>
+<section id="installing-omnet">
+<h2>Installing OMNeT++</h2>
+<p>Download the OMNeT++ source code from <a class="reference external" href="https://omnetpp.org">https://omnetpp.org</a>. Make sure you select the Windows-specific archive, named
+<code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1-windows-x86_64.zip</span></code>.</p>
+<p>The package is self-contained: in addition to OMNeT++ files it includes a C++ compiler, a command-line build
+environment, and all libraries and programs required by OMNeT++.</p>
+<p>Copy the OMNeT++ archive to the directory where you want to install it. Choose a directory whose full path <strong>does not
+contain any space</strong>; for example, do not put OMNeT++ under <em>Program Files</em>.</p>
+<p>Extract the zip file. To do so, right-click the zip file in Windows Explorer, and select <em>Extract All</em> from the menu.
+You can also use external programs like Winzip or 7zip.</p>
+<p>When you look into the new <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> directory, should see directories named <code class="docutils literal notranslate"><span class="pre">doc</span></code>, <code class="docutils literal notranslate"><span class="pre">images</span></code>,
+<code class="docutils literal notranslate"><span class="pre">include</span></code>, <code class="docutils literal notranslate"><span class="pre">tools</span></code>, etc., and files named <code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code>, <code class="docutils literal notranslate"><span class="pre">configure</span></code>, <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>, and others.</p>
+</section>
+<section id="configuring-and-building-omnet">
+<h2>Configuring and Building OMNeT++</h2>
+<p>Start <code class="docutils literal notranslate"><span class="pre">mingwenv.cmd</span></code> in the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1</span></code> directory by double-clicking it in Windows Explorer. It will bring
+up a console with the MSYS <em>bash</em> shell, where the path is already set to include the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/bin</span></code>
+directory. On the first start of the shell, you may need to wait for the extraction of the <code class="docutils literal notranslate"><span class="pre">tools</span></code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to start simulations from outside the shell as well (for example from Explorer), you need to add
+OMNeT++’s <code class="docutils literal notranslate"><span class="pre">bin</span></code> directory and also the <code class="docutils literal notranslate"><span class="pre">bin</span></code> directories in the tools folder to the path; instructions are
+provided later.</p>
+</div>
+<p>First, check the contents of the <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> file to make sure it contains the settings you need. In most cases
+you don’t need to change anything.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">notepad</span> <span class="n">configure</span><span class="o">.</span><span class="n">user</span>
+</pre></div>
+</div>
+<p>Then enter the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make
+</pre></div>
+</div>
+<p>The build process will create both debug and release binaries.</p>
+</section>
+<section id="verifying-the-installation">
+<h2>Verifying the Installation</h2>
+<p>You should now test all samples and check they run correctly. As an example, the <em>aloha</em> example is started by entering
+the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd samples/aloha
+$ ./aloha
+</pre></div>
+</div>
+<p>By default, the samples will run using the graphical Qtenv environment. You should see GUI windows and dialogs.</p>
+</section>
+<section id="starting-the-ide">
+<h2>Starting the IDE</h2>
+<p>OMNeT++ comes with an Eclipse-based Simulation IDE. You should be able to start the IDE by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ omnetpp
+</pre></div>
+</div>
+<p>We recommend that you start the IDE from the command-line. You can also create a shortcut for starting the IDE. To do so,
+locate the <code class="docutils literal notranslate"><span class="pre">opp_ide.exe</span></code> program in the <code class="docutils literal notranslate"><span class="pre">omnetpp-6.0.1/ide</span></code> directory in Windows Explorer, right-click it, and
+choose <em>Send To &gt; Desktop (create shortcut)</em> from the menu. You can right-click the taskbar icon while the IDE is
+running, and select <em>Pin this program to taskbar</em> from the context menu.</p>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables</h2>
+<p>In general OMNeT++ requires that certain environment variables are set. Always use the
+the provided shell window to start the IDE or your simulations.</p>
+</section>
+<section id="reconfiguring-the-libraries">
+<h2>Reconfiguring the Libraries</h2>
+<p>If you need to recompile the OMNeT++ components with different flags (e.g. different optimization), then change the
+top-level OMNeT++ directory, edit <code class="docutils literal notranslate"><span class="pre">configure.user</span></code> accordingly, then type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make clean
+$ make
+</pre></div>
+</div>
+<p>If you want to recompile just a single library, then change to the directory of the library (e.g. <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">src/sim</span></code>) and
+type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make clean
+$ make
+</pre></div>
+</div>
+<p>By default, libraries are compiled in both debug and release mode. If you want to make release or debug builds only,
+use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=release
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make MODE=debug
+</pre></div>
+</div>
+<p>By default, shared libraries will be created. If you want to build static libraries, set <code class="docutils literal notranslate"><span class="pre">SHARED_LIBS=no</span></code> in
+<code class="docutils literal notranslate"><span class="pre">configure.user</span></code> and re-configure your project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The built libraries and programs are immediately copied to the <code class="docutils literal notranslate"><span class="pre">lib/</span></code> and <code class="docutils literal notranslate"><span class="pre">bin/</span></code> subdirs.</p>
+</div>
+</section>
+<section id="portability-issues">
+<h2>Portability Issues</h2>
+<p>OMNeT++ has been tested with both the gcc and the clang compiler from the MinGW-w64 package.</p>
+<p>Microsoft Visual C++ is not supported in the Academic Edition.</p>
+</section>
+<section id="additional-packages">
+<h2>Additional Packages</h2>
+<section id="mpi">
+<h3>MPI</h3>
+<p>MPI is only needed if you would like to run parallel simulations.</p>
+<p>There are several MPI implementations for Windows, and OMNeT++ does not mandate any specific one. We recommend
+DeinoMPI, which can be downloaded from <a class="reference external" href="http://mpi.deino.net">http://mpi.deino.net</a>.</p>
+<p>After installing DeinoMPI, adjust the <code class="docutils literal notranslate"><span class="pre">MPI_DIR</span></code> setting in OMNeT++’s <code class="docutils literal notranslate"><span class="pre">configure.user</span></code>, and reconfigure and
+recompile OMNeT++:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure
+$ make cleanall
+$ make
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In general, if you would like to run parallel simulations, we recommend that you use Linux, macOS, or another
+unix-like platform.</p>
+</div>
+</section>
+<section id="akaroa">
+<h3>Akaroa</h3>
+<p>Akaroa 2.7.9, which is the latest version at the time of writing, does not support Windows. You may try to port it using
+the porting guide from the Akaroa distribution.</p>
+</section>
+</section>
+</section>
+<section id="windows-using-windows-subsystem-for-linux-wsl-version-2">
+<h1>Windows - Using Windows Subsystem for Linux (WSL) version 2</h1>
+<p>WSL 2 supports running a full Linux distribution on a Windows machine. Running OMNeT++ in WSL 2 has certain advantages
+and disadvantages compared to running OMNeT++ natively on Windows:</p>
+<p>Advantages:</p>
+<ul class="simple">
+<li><p>You will probably see significant speedup on certain tasks (like compilation) compared to the native Windows
+(MinGW64) toolchain, because the compiler toolchain and the filesystem (ext4) is much faster in WSL 2 than their
+Windows equivalents.</p></li>
+<li><p>The native MinGW64 toolchain on Windows is basically a mini (Unix-like) system, emulated on top of Windows. Because
+of the emulation, it may have incompatibilities and limitations compared to the Linux tools. You will have fewer
+issues and surprises when running OMNeT++ on Linux.</p></li>
+</ul>
+<p>Disadvantages:</p>
+<ul class="simple">
+<li><p>WSL 2 does not (yet) support running Linux GUI applications. This means that you must install and run an X Server
+process on Windows to be able to use any GUI tools (i.e. IDE, Qtenv, etc.) from OMNeT++.</p></li>
+<li><p>Because of a limitation of the available X Server software, 3D acceleration is not working. You will not be able to
+use the OMNeT++ OpenSceneGraph and osgEarth integration in this setup and it is recommended to explicitly disable
+these features when you build OMNeT++.</p></li>
+</ul>
+<section id="wsl-2-requirements">
+<h2>WSL 2 Requirements</h2>
+<p>Installing OMNeT++ on WSL 2 is supported on Windows 10 version 1903 (build 18362.1049) or later. Note especially the
+minor build number. Your Windows version must have at least 1049 as a minor build number.</p>
+</section>
+<section id="enabling-wsl-2-on-windows">
+<h2>Enabling WSL 2 on Windows</h2>
+<p>Open a PowerShell with Administrator privileges. On newer versions of Windows, you can install the WSL subsystem by
+typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="o">--</span><span class="n">install</span>
+</pre></div>
+</div>
+<p>Alternatively, if your system does not have a <code class="docutils literal notranslate"><span class="pre">wsl</span></code> command, use the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dism</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">online</span> <span class="o">/</span><span class="n">enable</span><span class="o">-</span><span class="n">feature</span> <span class="o">/</span><span class="n">featurename</span><span class="p">:</span><span class="n">Microsoft</span><span class="o">-</span><span class="n">Windows</span><span class="o">-</span><span class="n">Subsystem</span><span class="o">-</span><span class="n">Linux</span> <span class="o">/</span><span class="nb">all</span> <span class="o">/</span><span class="n">norestart</span>
+<span class="n">dism</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">online</span> <span class="o">/</span><span class="n">enable</span><span class="o">-</span><span class="n">feature</span> <span class="o">/</span><span class="n">featurename</span><span class="p">:</span><span class="n">VirtualMachinePlatform</span> <span class="o">/</span><span class="nb">all</span> <span class="o">/</span><span class="n">norestart</span>
+</pre></div>
+</div>
+<p>After a successful installation, reboot your computer and open an Administrator PowerShell again to set the default WSL
+version to 2.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span><span class="o">.</span><span class="n">exe</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">version</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We recommend installing and using the Windows Terminal application, which is available at
+<a class="reference external" href="https://www.microsoft.com/store/productId/9N0DX20HK701">https://www.microsoft.com/store/productId/9N0DX20HK701</a></p>
+</div>
+</section>
+<section id="installing-an-ubuntu-distribution">
+<h2>Installing an Ubuntu distribution</h2>
+<p>As a next step, you must install a Linux distribution from the Microsoft Store. We recommend using Ubuntu 20.04 from
+<a class="reference external" href="https://www.microsoft.com/store/productId/9n6svws3rx71">https://www.microsoft.com/store/productId/9n6svws3rx71</a>.</p>
+<p>Once the installation is done, run the distro and finish the setup process by setting up a user name and password. At
+this point, you could install OMNeT++, but GUI programs would not work.</p>
+</section>
+<section id="install-vcxserver">
+<h2>Install VcXserver</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is ongoing work (called WSLg <a class="reference external" href="https://github.com/microsoft/wslg">https://github.com/microsoft/wslg</a>) to make Linux GUI applications work on
+Windows by default. On later versions of Windows (21H2+) you may be able to skip the whole X Server installation step.</p>
+</div>
+<p>To use GUI programs from Linux, you must install an X Server application from: <a class="reference external" href="https://sourceforge.net/projects/vcxsrv/">https://sourceforge.net/projects/vcxsrv/</a></p>
+<p>Start the installation and make sure that you:</p>
+<ul class="simple">
+<li><p>select “Disable access control”</p></li>
+<li><p>set display number to 0</p></li>
+<li><p>check “Private networks, such as my home or work network” and click “Allow access” when the Windows Defender Firewall
+asks for permission.</p></li>
+</ul>
+<p>Open the Windows Terminal and launch the Ubuntu distribution from the dropdown menu. Add the following line to the
+<code class="docutils literal notranslate"><span class="pre">/etc/bash.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk &#39;{print $2}&#39;):0.0
+</pre></div>
+</div>
+<p>This will ensure that Linux programs will always find the X Server process running on Windows. Exit from the Ubuntu
+shell, and restart it to make sure that the change was applied correctly. Check if</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $DISPLAY
+</pre></div>
+</div>
+<p>displays the correct IP address of the Windows machine.</p>
+<p>In the future, make sure that the X Server is always running when you want to run Linux GUI programs by either making
+the X Server automatically start or launching it manually.</p>
+</section>
+<section id="install-omnet-linux">
+<h2>Install OMNeT++ Linux</h2>
+<p>At this point, you have a fully functional Linux environment that can run GUI apps. You can go on and follow the Ubuntu
+specific installation steps to finally install OMNeT++ on your system.</p>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;1992-2021, András Varga and OpenSim Ltd..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/installguide/ch-windows-omnetpp.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
