@@ -9,6 +9,7 @@ using namespace omnetpp;
 Define_Module(Planner);
 
 Tactic* Planner::Plan() {
+    
     MacroTactic* pMacroTactic = new MacroTactic;
     Model* pModel = getModel(); 
 
@@ -21,26 +22,30 @@ Tactic* Planner::Plan() {
         std::vector< std::tuple<std::string, double> > qualityAttributes = (*option)->getQualityAttributes();
         for (std::vector< std::tuple<std::string, double> >::iterator attribute = qualityAttributes.begin() ; attribute != qualityAttributes.end(); ++attribute){
             if(get<0>(*attribute) == "utility"){
-                //std:: cout << get<0>(*attribute) <<std::endl;
                 if(get<1>(*attribute)>=bestUtility)bestOption = (*option);
             }
         }
     }
-    int currentServer = pModel->getActiveServers();
-    std:: cout << bestOption->getServerNum() <<std::endl;
+    
+    std::cout <<bestOption->getDimmer() <<std::endl;
 
-    if(currentServer > bestOption->getServerNum()){
+    int currentServer = pModel->getActiveServers();
+    double currentDimmer = pModel->getDimmerFactor();
+    bool isServerBooting = pModel->getServers() > pModel->getActiveServers();
+
+    if(!isServerBooting
+                && currentServer > bestOption->getServerNum()){
         for(int i = 0; i < currentServer - bestOption->getServerNum() ; i++){
                 pMacroTactic->addTactic(new RemoveServerTactic);
         }
-    }else if(currentServer < bestOption->getServerNum()){
+    }else if(!isServerBooting
+                && currentServer < bestOption->getServerNum()){
         for(int i = 0; i < bestOption->getServerNum() - currentServer; i++){
                 pMacroTactic->addTactic(new AddServerTactic);
         }
     }
 
-
-    pMacroTactic->addTactic(new SetDimmerTactic(bestOption->getDimmer()));
+    if(currentDimmer != bestOption->getDimmer())pMacroTactic->addTactic(new SetDimmerTactic(bestOption->getDimmer()));
 
     return pMacroTactic;
 }

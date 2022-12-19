@@ -16,16 +16,11 @@ void AdaptationGoal::initialize(int stage){
         serverCost = par("serverCost");
         optRevenue = par("optRevenue");
         utility = par("utility");
-        serverCostCoefficient = par("serverCostCoefficient");
-        optRevenueCoefficient = par("optRevenueCoefficient");
-        
 
         addAdaptationGoal("allowedResponseTime",allowedResponseTime);
         addAdaptationGoal("serverCost",serverCost);
         addAdaptationGoal("optRevenue",optRevenue);
         addAdaptationGoal("utility",utility);
-        addAdaptationGoal("serverCostCoefficient",serverCostCoefficient);
-        addAdaptationGoal("optRevenueCoefficient",optRevenueCoefficient);
 
     }
 }

@@ -22,7 +22,7 @@ void BaseAnalyser::initialize(int stage)
         analysisTimeSignal = registerSignal(SIG_ANALYSIS_TIME);
 
     } else {
-
+        /*
         // Create the event object we'll use for timing -- just any ordinary message.
         periodEvent = new cMessage("analyserPeriod");
         periodEvent->setSchedulingPriority(ANLYSER_PRIO);
@@ -37,6 +37,7 @@ void BaseAnalyser::initialize(int stage)
                 * pModel->getEvaluationPeriod();
 
         scheduleAt(adaptationWarmup + pModel->getEvaluationPeriod(), periodEvent);
+        */
     }
 }
 

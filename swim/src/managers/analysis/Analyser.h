@@ -11,6 +11,7 @@
 #include "managers/monitor/SimpleMonitor.h"
 #include "MacroOption.h"
 #include "Option.h"
+#include "ModelVerifier.h"
 
 /**
  * Adaptation Analyser
@@ -28,6 +29,7 @@ class Analyser : public BaseAnalyser,omnetpp::cListener{
         AdaptationGoal * pAdaptationGoal;
         QualityModel * pQualityModel;
         MacroOption * pMacroOption;
+        ModelVerifier * pModelVerifier;
         void readGoals();
         void readModels();
 

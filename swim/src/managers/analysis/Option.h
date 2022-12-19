@@ -23,6 +23,7 @@ class Option{
         std::vector< std::tuple<std::string, double> > getQualityAttributes();
 
         void configureQualityAttribute(QualityModel * pQualityModel);
+        void setQualityAttribute(std::string key, double value);
 
         void setServerNum(int serverNum);
         void setDimmer(double dimmer);

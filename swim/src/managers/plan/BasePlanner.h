@@ -19,8 +19,7 @@ class BasePlanner : public omnetpp::cSimpleModule, omnetpp::cListener
     Model* pModel;
 
 protected:
-    omnetpp::cMessage *periodEvent; // pointer to the event object which we'll use for timing
-    omnetpp::cMessage *decisionCompleteEvent; // event for notifying of decision completion
+omnetpp::cMessage *decisionCompleteEvent; // event for notifying of decision completion
 
   Tactic* pTactic;
   MacroOption * pMacroOption;

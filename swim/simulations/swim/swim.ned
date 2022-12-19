@@ -48,6 +48,22 @@ network SWIM
         double dimmerMargin @mutable = default(0.0);
         double responseTimeThreshold @mutable @unit(s) = default(1s);
         double maxServiceRate;
+
+
+
+        int serverLowerLimit = default(3); 
+        int serverUpperLimit = default(3); 
+        double dimmerLowerLimit = default(0.8);
+        double dimmerUpperLimit = default(1.0);
+        int serverStep = default(1);
+        double dimmerStep = default(0.1);
+
+
+        double responseTimeCoefficient = default(1.0);
+        double serverCostCoefficient = default(1.0);
+        double revenueCoefficient = default(1.0);
+        double normalRevenueCoefficient = default(1.0);
+        double optRevenueCoefficient = default(1.5);
         
     submodules:
         sink: Sink {
