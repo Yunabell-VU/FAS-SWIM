@@ -33,9 +33,9 @@ Tactic* Planner::Plan() {
         for(int i = 0; i < currentServer - bestOption->getServerNum() ; i++){
                 pMacroTactic->addTactic(new RemoveServerTactic);
         }
-    }else{
+    }else if(currentServer < bestOption->getServerNum()){
         for(int i = 0; i < bestOption->getServerNum() - currentServer; i++){
-                pMacroTactic->addTactic(new RemoveServerTactic);
+                pMacroTactic->addTactic(new AddServerTactic);
         }
     }
 
