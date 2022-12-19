@@ -1,0 +1,5 @@
+**/results/
+/.computed/
+/out/
+/gcc-debug/
+.DS_Store
