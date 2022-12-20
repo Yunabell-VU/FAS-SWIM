@@ -10,7 +10,7 @@ cleanall: checkmakefiles
 	rm -f src/Makefile
 
 makefiles:
-	cd src && opp_makemake -f --deep -o swim -I. -I../libs/boost_1_80_0 -Imodel/pladaptMock -I../../queueinglib -L../libs/boost_1_80_0/stage/lib -L../../queueinglib/ -lqueueinglib -lboost_serialization -lboost_system -lboost_filesystem -lpthread
+	cd src && opp_makemake -f --deep -o swim -I. -I../libs/boost_1_80_0 -I../libs/include -Imodel/pladaptMock -I../../queueinglib -L../libs/boost_1_80_0/stage/lib -L../../queueinglib/ -lqueueinglib -lboost_serialization -lboost_system -lboost_filesystem -lpthread
 												
 checkmakefiles:
 	@if [ ! -f src/Makefile ]; then \

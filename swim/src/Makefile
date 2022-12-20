@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for swim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -o swim -I. -I../libs/boost_1_80_0 -Imodel/pladaptMock -I../../queueinglib -L../libs/boost_1_80_0/stage/lib -L../../queueinglib/ -lqueueinglib -lboost_serialization -lboost_system -lboost_filesystem -lpthread
+#  opp_makemake -f --deep -o swim -I. -I../libs/boost_1_80_0 -I../libs/include -Imodel/pladaptMock -I../../queueinglib -L../libs/boost_1_80_0/stage/lib -L../../queueinglib/ -lqueueinglib -lboost_serialization -lboost_system -lboost_filesystem -lpthread
 #
 
 # Name of target to be created (-o option)
@@ -19,7 +19,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(QTENV_LIBS) $(CMDENV_LIBS)
 #USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH = -I. -I../libs/boost_1_80_0 -Imodel/pladaptMock -I../../queueinglib
+INCLUDE_PATH = -I. -I../libs/boost_1_80_0 -I../libs/include -Imodel/pladaptMock -I../../queueinglib
 
 # Additional object and library files to link with
 EXTRA_OBJS =

@@ -35,6 +35,12 @@ void ModelVerifier::verifyAdaptationOptions(MacroOption * macroOption){
 
 // ML Function
 double ModelVerifier::predictResponseTime(int serverNum, double dimmer, double arrivalRate){
+    // Example path
+    const auto model = fdeep::load_model("/Users/thhugh/Desktop/SAS/FAS-SWIM/FAS-SWIM/swim/src/managers/analysis/fdeep_model.json");
+    const auto result = model.predict(
+        {fdeep::tensor(fdeep::tensor_shape(static_cast<std::size_t>(4)),
+        std::vector<float>{1, 2, 3, 4})});
+    std::cout << fdeep::show_tensors(result) << std::endl;
     return 0;
 }
 

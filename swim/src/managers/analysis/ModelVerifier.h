@@ -2,6 +2,7 @@
 #define __MODELVERIFIER_H_
 
 #include <omnetpp.h>
+#include <fdeep/fdeep.hpp>
 #include <iostream>
 #include <tuple>
 #include <vector>
