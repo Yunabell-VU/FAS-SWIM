@@ -14,64 +14,84 @@ Dependency included in swim/libs/include
 ## Setting the examplar
 
 ### Omnetpp must first be compiled
-1. Compile Omnetpp 
-In the top-level OMNeT++ directory:
->./configure
-
-after configure file complete:
->make
-
-2. Setting Omnetpp environment variable, Apple Silicon need extra " arch -x86_64 /bin/zsh --login"
+1. Setting Omnetpp environment variable, Apple Silicon need extra " arch -x86_64 /bin/zsh --login"
 
 Apple Silicon:
-> cd omnetpp-6.0.1                       
+```shell
+cd omnetpp-6.0.1                       
+
 arch -x86_64 /bin/zsh --login
+```
 
 then:
->source setenv
+```shell
+source setenv
+```
 
 Linux:
->cd omnetpp-6.0.1
+```shell
+cd omnetpp-6.0.1 
 source setenv
+```
+
+2. Compile Omnetpp 
+In the top-level OMNeT++ directory:
+```shell
+./configure
+```
+
+after configure file complete:
+```shell
+make
+```
 
 ### Queueinglib must be compiled after Omnetpp 
 3. Compile queueinglib
->cd ../queueinglib
+```shell
+cd ../queueinglib
 make
 cd ..
+```
 
 4. Compile FAS-SWIM source code:
->cd swim
+```shell
+cd swim
 make cleanall && make makefiles && make
-
+```
 
 ## Running the simulation
 .sh file locates in swim/simulations/swim
 
-> cd simulations/swim;
-./run.sh Reactive 1
+```shell
+ cd simulations/swim
 
+./run.sh Reactive 1
+```
 
 
 ## Configure the simulation
-System configurtions are in swim/simulations/swim/swim.ini
+System configurtions are in `swim/simulations/swim/swim.ini`
 
 
 
 
-Simulation parameters are in swim/simulations/swim/swim.ned
+Simulation parameters are in `swim/simulations/swim/swim.ned`
 
 Adaptation option parameters:
+```C++
 int serverLowerLimit = default(3); 
 int serverUpperLimit = default(3); 
 double dimmerLowerLimit = default(0.8);
 double dimmerUpperLimit = default(1.0);
 int serverStep = default(1);
 double dimmerStep = default(0.1);
+```
 
 Coefficient parameters:
+```C++
 double responseTimeCoefficient = default(1.0);
 double serverCostCoefficient = default(1.0);
 double revenueCoefficient = default(1.0);
 double normalRevenueCoefficient = default(1.0);
 double optRevenueCoefficient = default(1.5);
+```
