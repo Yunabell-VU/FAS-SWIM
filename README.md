@@ -56,7 +56,9 @@ cd ..
 4. Compile FAS-SWIM source code:
 ```shell
 cd swim
-make cleanall && make makefiles && make
+make cleanall
+make makefiles
+make
 ```
 
 ## Running the simulation
