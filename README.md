@@ -9,6 +9,7 @@ Detailed informaiton about installing and running omnetpp go see:
     ~/FAS-SWIM/FAS-SWIM/omnetpp-6.0.1/doc/InstallGuide.pdf
 
 This examplar use frugally-deep as pipeline to run Python trained model in C++
+https://github.com/Dobiasd/frugally-deep
 Dependency included in swim/libs/include
 
 ## Setting the examplar
