@@ -45,7 +45,7 @@ double ModelVerifier::predictResponseTime(int serverNum, double dimmer, double a
     //     {fdeep::tensor(fdeep::tensor_shape(static_cast<std::size_t>(4)),
     //                    std::vector<float>{1, 2, 3, 4})});
     // std::cout << fdeep::show_tensors(result) << std::endl;
-    float r = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 4));
+    float r = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2));
     return r;
 }
 
@@ -85,10 +85,10 @@ void ModelVerifier::writeOptionQuality(int serverNum, double responseTime, doubl
 
     double utility = RT_PRE * RT_CO + SERVER_PRE * SERVER_COST_CO + REVENUE_PRE * REVENUE_CO;
 
-    std::cout << "Server Number: " << serverNum << " max server: " << pModel->getMaxServers() << std::endl;
-    // std::cout << "response time: " << RT_PRE << std::endl;
+    // std::cout << "Server Number: " << serverNum << " max server: " << pModel->getMaxServers() << std::endl;
+    // // std::cout << "response time: " << RT_PRE << std::endl;
 
-    std::cout << "utility Verified: " << utility << std::endl;
+    // std::cout << "utility Verified: " << utility << std::endl;
 
     option->setQualityAttribute("allowedResponseTime", responseTime);
     option->setQualityAttribute("serverCost", SERVER_PRE * SERVER_COST_CO);

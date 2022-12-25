@@ -26,13 +26,21 @@ Tactic *Planner::Plan()
             if (get<0>(*attribute) == "utility")
             {
                 if (get<1>(*attribute) >= bestUtility)
+                {
                     bestOption = (*option);
-                // std::cout << "utility score: " << get<1>(*attribute) << std::endl;
+                    bestUtility = get<1>(*attribute);
+                }
+
+                std::cout << "utility score: " << get<1>(*attribute) << std::endl;
             }
         }
     }
 
     std::cout << "dimmer: " << bestOption->getDimmer() << std::endl;
+    std::cout << "Server Number: " << bestOption->getServerNum() << std::endl;
+    // std::cout << "response time: " << RT_PRE << std::endl;
+
+    std::cout << "utility : " << bestUtility << std::endl;
 
     int currentServer = pModel->getActiveServers();
     double currentDimmer = pModel->getDimmerFactor();
