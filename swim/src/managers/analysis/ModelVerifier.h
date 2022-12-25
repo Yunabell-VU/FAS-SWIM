@@ -10,7 +10,6 @@
 #include "Option.h"
 #include "UtilityScorer.h"
 
-
 #define RT_CO omnetpp::getSimulation()->getSystemModule()->par("responseTimeCoefficient").doubleValue()
 #define SERVER_COST_CO omnetpp::getSimulation()->getSystemModule()->par("serverCostCoefficient").doubleValue()
 #define REVENUE_CO omnetpp::getSimulation()->getSystemModule()->par("revenueCoefficient").doubleValue()
@@ -27,25 +26,25 @@
 /**
  * Adapatation Option Quality Model Verifier
  */
-class ModelVerifier: public omnetpp::cSimpleModule{
+class ModelVerifier : public omnetpp::cSimpleModule
+{
 
-    protected:
-        typedef std::list<Option*> OptionList;
+protected:
+    typedef std::list<Option *> OptionList;
 
-        Model* pModel;
-    public:
+    Model *pModel;
 
-        void verifyAdaptationOptions(MacroOption * macroOption);
-        void writeOptionQuality(int serverNum,double responseTime, double dimmer, double arrivalRate,Option* option);
-        double predictResponseTime(int serverNum, double dimmer, double arrivalRate);
+public:
+    void verifyAdaptationOptions(MacroOption *macroOption);
+    void writeOptionQuality(int serverNum, double responseTime, double dimmer, double arrivalRate, Option *option);
+    double predictResponseTime(int serverNum, double dimmer, double arrivalRate);
 
-        void initialize(int stage);
+    void initialize(int stage);
 
-        ModelVerifier();
-        virtual ~ModelVerifier();
+    ModelVerifier();
+    virtual ~ModelVerifier();
 
-        double getAccruedUtility(int serverNum, double responseTime, double dimmer,double arrivalRate, Model * model);
-        
+    double getAccruedUtility(int serverNum, double responseTime, double dimmer, double arrivalRate, Model *model);
 };
 
 #endif

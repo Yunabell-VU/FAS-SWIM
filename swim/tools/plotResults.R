@@ -239,6 +239,8 @@ plotResults <- function(config, folder="SWIM", run, saveAs=NULL, instantaneousUt
   # important for ploting activeServers over servers
   md$variable <- factor(md$variable, unique(as.character(md$variable)))
   
+  write.csv(md, "dataset.csv")
+
   pltRequests <- ggplot(md, aes(x=time,y=value)) +
     geom_line(data=subset(md, variable=="requestRate")) +
     ylab('requests/s')
