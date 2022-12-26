@@ -1,0 +1,12 @@
+** Event #0   t=0   Elapsed: 3e-05s (0m 00s)  0% completed  (0% total)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 8   present: 7   in FES: 5
+** Event #256   t=3.036236498225   Elapsed: 2.95937s (0m 02s)  0% completed  (0% total)
+     Speed:     ev/sec=86.844   simsec/sec=1.02599   ev/simsec=84.6443
+     Messages:  created: 43   present: 15   in FES: 6
+** Event #512   t=5.60522832413   Elapsed: 5.52973s (0m 05s)  0% completed  (0% total)
+     Speed:     ev/sec=99.5968   simsec/sec=0.999467   ev/simsec=99.65
+     Messages:  created: 74   present: 12   in FES: 6
+** Event #768   t=8.312006132461   Elapsed: 8.23649s (0m 08s)  0% completed  (0% total)
+     Speed:     ev/sec=94.5781   simsec/sec=1.00001   ev/simsec=94.5774
+     Messages:  created: 107   present: 16   in FES: 6

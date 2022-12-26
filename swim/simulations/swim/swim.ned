@@ -59,9 +59,9 @@ network SWIM
         double dimmerStep = default(0.1);
 
 
-        double responseTimeCoefficient = default(0.3);
-        double serverCostCoefficient = default(0.4);
-        double revenueCoefficient = default(0.3);
+        double responseTimeCoefficient = default(0.5);
+        double serverCostCoefficient = default(0.3);
+        double revenueCoefficient = default(0.2);
         double normalRevenueCoefficient = default(0.8);
         double optRevenueCoefficient = default(1);
         

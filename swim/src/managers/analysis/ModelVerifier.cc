@@ -40,11 +40,11 @@ double ModelVerifier::predictResponseTime(int serverNum, double dimmer, double a
 {
     // Example path
     // Need to change to the local absolute path of fdeep_model.json
-    // const auto model = fdeep::load_model("/Users/yunabell/Desktop/FAS-SWIM/swim/src/managers/analysis/fdeep_model.json");
-    // const auto result = model.predict(
-    //     {fdeep::tensor(fdeep::tensor_shape(static_cast<std::size_t>(4)),
-    //                    std::vector<float>{1, 2, 3, 4})});
-    // std::cout << fdeep::show_tensors(result) << std::endl;
+    const auto model = fdeep::load_model("/Users/yunabell/Desktop/FAS-SWIM/swim/src/managers/analysis/fdeep_model.json");
+    const auto result = model.predict(
+        {fdeep::tensor(fdeep::tensor_shape(static_cast<std::size_t>(4)),
+                       std::vector<float>{static_cast<float>(serverNum), static_cast<float>(dimmer), static_cast<float>(arrivalRate)})});
+    std::cout << fdeep::show_tensors(result) << std::endl;
     float r = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 2));
     return r;
 }
